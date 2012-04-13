@@ -443,16 +443,10 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
         imageName = [imageInfo.imageName lastPathComponent];
         baseAddress = imageInfo.imageBaseAddress;
         pcOffset = frameInfo.instructionPointer - imageInfo.imageBaseAddress;
+        NSString *imagePath = [imageInfo.imageName stringByStandardizingPath];
+        NSString *appBundleContentsPath = [[report.processInfo.processPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent]; 
       
-        /* If the OS version of the crash report is identical to the current os version
-         * then don't check for symbols if this is the executable.
-         * The app executable should be symbolicated using the dSYM instead */
-
-//        You can fetch the symbol name in the formatter via PLCrashReportStackFrameInfo.symbolName property -- it will be nil if no symbol name is available.
-//        
-//        The crash reporter doesn't filter out symbol names from the main binary, but you can do so by filtering on the binary names.
-        
-        if (![imageInfo.imageName isEqual: report.processInfo.processPath]) {
+        if (![imagePath isEqual: report.processInfo.processPath] && ![imagePath hasPrefix:appBundleContentsPath]) {
           symbol = frameInfo.symbolName;
           pcOffset = frameInfo.instructionPointer - frameInfo.symbolStart;
         }
