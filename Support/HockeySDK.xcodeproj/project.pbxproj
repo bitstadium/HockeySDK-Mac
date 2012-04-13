@@ -1,0 +1,377 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1E9358FF1523866300F51DBD /* CrashReporter.framework in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DC0152357A500067A5C /* CrashReporter.framework */; };
+		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
+		1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		1EE1E0021524BA9200C0DA76 /* CNSHockeyManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
+		1EF09DB51523579100067A5C /* CNSHockeyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DAE1523579100067A5C /* CNSHockeyManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1EF09DB61523579100067A5C /* CNSHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* CNSHockeyManager.m */; };
+		1EF09DBC1523579A00067A5C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DB81523579A00067A5C /* InfoPlist.strings */; };
+		1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */; };
+		1EF09DC1152357A500067A5C /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09DC0152357A500067A5C /* CrashReporter.framework */; };
+		1EF09DD4152371DC00067A5C /* CNSCrashReportUI.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DCD152371DC00067A5C /* CNSCrashReportUI.nib */; };
+		1EF09DD5152371DC00067A5C /* CNSCrashReportManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DCE152371DC00067A5C /* CNSCrashReportManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1EF09DD6152371DC00067A5C /* CNSCrashReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DCF152371DC00067A5C /* CNSCrashReportManager.m */; };
+		1EF09DD7152371DC00067A5C /* CNSCrashReportUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DD0152371DC00067A5C /* CNSCrashReportUI.h */; };
+		1EF09DD8152371DC00067A5C /* CNSCrashReportUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD1152371DC00067A5C /* CNSCrashReportUI.m */; };
+		1EF09DD9152371DC00067A5C /* CNSCrashReportTextFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DD2152371DC00067A5C /* CNSCrashReportTextFormatter.h */; };
+		1EF09DDA152371DC00067A5C /* CNSCrashReportTextFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD3152371DC00067A5C /* CNSCrashReportTextFormatter.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportManagerDelegate.h; sourceTree = "<group>"; };
+		1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSHockeyManagerDelegate.h; sourceTree = "<group>"; };
+		1EF09D8C1523574200067A5C /* HockeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HockeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1EF09D8F1523574200067A5C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		1EF09D921523574200067A5C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		1EF09D931523574200067A5C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		1EF09D941523574200067A5C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1EF09DAE1523579100067A5C /* CNSHockeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSHockeyManager.h; sourceTree = "<group>"; };
+		1EF09DAF1523579100067A5C /* CNSHockeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSHockeyManager.m; sourceTree = "<group>"; };
+		1EF09DB91523579A00067A5C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1EF09DBA1523579A00067A5C /* HockeySDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HockeySDK-Info.plist"; sourceTree = "<group>"; };
+		1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HockeySDK-Prefix.pch"; sourceTree = "<group>"; };
+		1EF09DC0152357A500067A5C /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
+		1EF09DCD152371DC00067A5C /* CNSCrashReportUI.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CNSCrashReportUI.nib; sourceTree = "<group>"; };
+		1EF09DCE152371DC00067A5C /* CNSCrashReportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportManager.h; sourceTree = "<group>"; };
+		1EF09DCF152371DC00067A5C /* CNSCrashReportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSCrashReportManager.m; sourceTree = "<group>"; };
+		1EF09DD0152371DC00067A5C /* CNSCrashReportUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportUI.h; sourceTree = "<group>"; };
+		1EF09DD1152371DC00067A5C /* CNSCrashReportUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSCrashReportUI.m; sourceTree = "<group>"; };
+		1EF09DD2152371DC00067A5C /* CNSCrashReportTextFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportTextFormatter.h; sourceTree = "<group>"; };
+		1EF09DD3152371DC00067A5C /* CNSCrashReportTextFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSCrashReportTextFormatter.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1EF09D881523574200067A5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */,
+				1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */,
+				1EF09DC1152357A500067A5C /* CrashReporter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1EF09D801523574200067A5C = {
+			isa = PBXGroup;
+			children = (
+				1EF09DA81523579100067A5C /* Classes */,
+				1EF09DB71523579A00067A5C /* Resources */,
+				1EF09DBF152357A500067A5C /* Vendor */,
+				1EF09D8E1523574200067A5C /* Frameworks */,
+				1EF09D8D1523574200067A5C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1EF09D8D1523574200067A5C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1EF09D8C1523574200067A5C /* HockeySDK.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1EF09D8E1523574200067A5C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1EF09D8F1523574200067A5C /* Cocoa.framework */,
+				1EF09D911523574200067A5C /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1EF09D911523574200067A5C /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1EF09D921523574200067A5C /* AppKit.framework */,
+				1EF09D931523574200067A5C /* CoreData.framework */,
+				1EF09D941523574200067A5C /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		1EF09DA81523579100067A5C /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				1EF09DCC152371DC00067A5C /* CrashReporting */,
+				1EF09DAE1523579100067A5C /* CNSHockeyManager.h */,
+				1EF09DAF1523579100067A5C /* CNSHockeyManager.m */,
+				1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */,
+			);
+			name = Classes;
+			path = ../Classes;
+			sourceTree = "<group>";
+		};
+		1EF09DB71523579A00067A5C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1EF09DB81523579A00067A5C /* InfoPlist.strings */,
+				1EF09DBA1523579A00067A5C /* HockeySDK-Info.plist */,
+				1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */,
+			);
+			name = Resources;
+			path = ../Resources;
+			sourceTree = "<group>";
+		};
+		1EF09DBF152357A500067A5C /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				1EF09DC0152357A500067A5C /* CrashReporter.framework */,
+			);
+			name = Vendor;
+			path = ../Vendor;
+			sourceTree = "<group>";
+		};
+		1EF09DCC152371DC00067A5C /* CrashReporting */ = {
+			isa = PBXGroup;
+			children = (
+				1EF09DCD152371DC00067A5C /* CNSCrashReportUI.nib */,
+				1EF09DCE152371DC00067A5C /* CNSCrashReportManager.h */,
+				1EF09DCF152371DC00067A5C /* CNSCrashReportManager.m */,
+				1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */,
+				1EF09DD0152371DC00067A5C /* CNSCrashReportUI.h */,
+				1EF09DD1152371DC00067A5C /* CNSCrashReportUI.m */,
+				1EF09DD2152371DC00067A5C /* CNSCrashReportTextFormatter.h */,
+				1EF09DD3152371DC00067A5C /* CNSCrashReportTextFormatter.m */,
+			);
+			path = CrashReporting;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		1EF09D891523574200067A5C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1EF09DB51523579100067A5C /* CNSHockeyManager.h in Headers */,
+				1EF09DD5152371DC00067A5C /* CNSCrashReportManager.h in Headers */,
+				1EE1E0021524BA9200C0DA76 /* CNSHockeyManagerDelegate.h in Headers */,
+				1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */,
+				1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */,
+				1EF09DD7152371DC00067A5C /* CNSCrashReportUI.h in Headers */,
+				1EF09DD9152371DC00067A5C /* CNSCrashReportTextFormatter.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		1EF09D8B1523574200067A5C /* HockeySDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1EF09DA11523574200067A5C /* Build configuration list for PBXNativeTarget "HockeySDK" */;
+			buildPhases = (
+				1EF09D871523574200067A5C /* Sources */,
+				1EF09D881523574200067A5C /* Frameworks */,
+				1EF09D891523574200067A5C /* Headers */,
+				1EF09D8A1523574200067A5C /* Resources */,
+				1EF09DC2152357DD00067A5C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HockeySDK;
+			productName = HockeySDK;
+			productReference = 1EF09D8C1523574200067A5C /* HockeySDK.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1EF09D821523574200067A5C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 1EF09D851523574200067A5C /* Build configuration list for PBXProject "HockeySDK" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 1EF09D801523574200067A5C;
+			productRefGroup = 1EF09D8D1523574200067A5C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1EF09D8B1523574200067A5C /* HockeySDK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1EF09D8A1523574200067A5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1EF09DBC1523579A00067A5C /* InfoPlist.strings in Resources */,
+				1EF09DD4152371DC00067A5C /* CNSCrashReportUI.nib in Resources */,
+				1E9358FF1523866300F51DBD /* CrashReporter.framework in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1EF09DC2152357DD00067A5C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -change \"@loader_path/../Frameworks/CrashReporter.framework/Versions/A/CrashReporter\"  \"@loader_path/Resources/CrashReporter.framework/Versions/A/CrashReporter\" \"$TARGET_BUILD_DIR/HockeySDK.framework/Versions/A/HockeySDK\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1EF09D871523574200067A5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1EF09DB61523579100067A5C /* CNSHockeyManager.m in Sources */,
+				1EF09DD6152371DC00067A5C /* CNSCrashReportManager.m in Sources */,
+				1EF09DD8152371DC00067A5C /* CNSCrashReportUI.m in Sources */,
+				1EF09DDA152371DC00067A5C /* CNSCrashReportTextFormatter.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1EF09DB81523579A00067A5C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1EF09DB91523579A00067A5C /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1EF09D9F1523574200067A5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		1EF09DA01523574200067A5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		1EF09DA21523574200067A5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Vendor\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "../Resources/HockeySDK-Prefix.pch";
+				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		1EF09DA31523574200067A5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Vendor\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "../Resources/HockeySDK-Prefix.pch";
+				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1EF09D851523574200067A5C /* Build configuration list for PBXProject "HockeySDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1EF09D9F1523574200067A5C /* Debug */,
+				1EF09DA01523574200067A5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1EF09DA11523574200067A5C /* Build configuration list for PBXNativeTarget "HockeySDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1EF09DA21523574200067A5C /* Debug */,
+				1EF09DA31523574200067A5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1EF09D821523574200067A5C /* Project object */;
+}
