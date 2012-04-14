@@ -49,14 +49,15 @@
   NSString      *_companyName;
   NSString      *_applicationName;
   
-  NSMutableString   *_consoleContent;
+  NSMutableString   *_logContent;
   NSString          *_crashLogContent;
+  NSString          *_crashFile;
   
   BOOL showComments;
   BOOL showDetails;
 }
 
-- (id)initWithManager:(CNSCrashReportManager *)crashReportManager crashReport:(NSString *)crashReport companyName:(NSString *)companyName applicationName:(NSString *)applicationName;
+- (id)initWithManager:(CNSCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName;
 
 - (void) askCrashReportDetails;
 

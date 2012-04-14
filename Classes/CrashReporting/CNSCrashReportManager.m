@@ -81,6 +81,7 @@
     _crashReportUI = nil;
     _fileManager = [[NSFileManager alloc] init];
     
+    _crashIdenticalCurrentVersion = YES;
     _submissionURL = @"https://rink.hockeyapp.net/";
     
     _crashFile = nil;
@@ -126,6 +127,7 @@
   
   for (NSUInteger i=0; i < [_crashFiles count]; i++) {		
     [_fileManager removeItemAtPath:[_crashFiles objectAtIndex:i] error:&error];
+    [_fileManager removeItemAtPath:[[_crashFiles objectAtIndex:i] stringByAppendingString:@".meta"] error:&error];
   }
   [_crashFiles removeAllObjects];
   
@@ -216,21 +218,30 @@
     }
 
     if (crashReport && !error) {        
-      NSString* description = @"";
-    
-      if (_delegate && [_delegate respondsToSelector:@selector(crashReportDescription)]) {
-        description = [_delegate crashReportDescription];
+      NSString *log = @"";
+      
+      if (_delegate && [_delegate respondsToSelector:@selector(crashReportLog)]) {
+        log = [_delegate crashReportLog];
       }
 
-      if (self.autoSubmitCrashReport) {
-        [self sendReportCrash:crashReport crashNotes:description];
-      } else {
-        _crashReportUI = [[CNSCrashReportUI alloc] initWithManager:self crashReport:crashReport companyName:_companyName applicationName:[self applicationName]];
+      if (!self.autoSubmitCrashReport && [self hasNonApprovedCrashReports]) {
+        _crashReportUI = [[CNSCrashReportUI alloc] initWithManager:self
+                                                   crashReportFile:_crashFile
+                                                       crashReport:crashReport
+                                                        logContent:log
+                                                       companyName:_companyName
+                                                   applicationName:[self applicationName]];
         
         [_crashReportUI askCrashReportDetails];
+      } else {
+        [self sendReportCrash:crashReport crashDescription:nil];
       }
     } else {
-      returnToApp = YES;
+      if (![self hasNonApprovedCrashReports]) {
+        [self _performSendingCrashReports];
+      } else {
+        returnToApp = YES;
+      }
     }
   } else {
     returnToApp = YES;
@@ -288,7 +299,21 @@
 
 #pragma mark - PLCrashReporter based
 
-#pragma mark - GetCrashData
+- (BOOL)hasNonApprovedCrashReports {
+  if (_crashReportMechanism != CrashReportMechanismPLCrashReporter) return NO;
+  
+  NSDictionary *approvedCrashReports = [[NSUserDefaults standardUserDefaults] dictionaryForKey: kHockeySDKApprovedCrashReports];
+  
+  if (!approvedCrashReports || [approvedCrashReports count] == 0) return YES;
+  
+  for (NSUInteger i=0; i < [_crashFiles count]; i++) {
+    NSString *filename = [_crashFiles objectAtIndex:i];
+    
+    if (![approvedCrashReports objectForKey:filename]) return YES;
+  }
+  
+  return NO;
+}
 
 - (BOOL) hasPendingCrashReport {
   if (!_crashReportActivated) return NO;
@@ -326,7 +351,7 @@
       
       while ((file = [dirEnum nextObject])) {
         NSDictionary *fileAttributes = [_fileManager attributesOfItemAtPath:[_crashesDir stringByAppendingPathComponent:file] error:&error];
-        if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 && ![file isEqualToString:@".DS_Store"]) {
+        if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 && ![file isEqualToString:@".DS_Store"] && ![file hasSuffix:@".meta"]) {
           [_crashFiles addObject:[_crashesDir stringByAppendingPathComponent: file]];
         }
       }
@@ -385,41 +410,108 @@
   [self returnToMainApplication];
 }
 
+- (void)_performSendingCrashReports {
+  NSMutableDictionary *approvedCrashReports = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] dictionaryForKey: kHockeySDKApprovedCrashReports]];
+  
+  NSError *error = NULL;
+		
+  NSMutableString *crashes = nil;
+  _crashIdenticalCurrentVersion = NO;
+  
+  for (NSUInteger i=0; i < [_crashFiles count]; i++) {
+    NSString *filename = [_crashFiles objectAtIndex:i];
+    NSData *crashData = [NSData dataWithContentsOfFile:filename];
+		
+    if ([crashData length] > 0) {
+      PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
+			
+      if (report == nil) {
+        NSLog(@"Could not parse crash report");
+        continue;
+      }
+      
+      NSString *crashLogString = [CNSCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
+                     
+      if ([report.applicationInfo.applicationVersion compare:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
+        _crashIdenticalCurrentVersion = YES;
+      }
+			
+      if (crashes == nil) {
+        crashes = [NSMutableString string];
+      }
+      
+      NSMutableDictionary *metaDict = [NSKeyedUnarchiver unarchiveObjectWithFile:[_crashFile stringByAppendingString:@".meta"]];
+      
+      NSString *userid = [metaDict valueForKey:@"userid"] ?: @"";
+      NSString *contact = [metaDict valueForKey:@"contact"] ?: @"";
+      NSString *log = [metaDict valueForKey:@"log"] ?: @"";
+      NSString *description = [metaDict valueForKey:@"description"] ?: @"";
+      
+      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><bundleidentifier>%s</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><logdata><![CDATA[%@]]></logdata><log><![CDATA[%@]]></log></crash>",
+       [[self applicationName] UTF8String],
+       report.applicationInfo.applicationIdentifier,
+       report.systemInfo.operatingSystemVersion,
+       [self applicationVersion],
+       report.applicationInfo.applicationVersion,
+       [self modelVersion],
+       userid,
+       contact,
+       [description stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,description.length)],
+       [log stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,log.length)],
+       [crashLogString stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,crashLogString.length)]
+                       ];
 
-- (void) sendReportCrash:(NSString*)crashReport crashNotes:(NSString *)crashNotes {
-  NSString *userid = @"";
-  NSString *contact = @"";
-  
-  if ([self delegate] != nil && [[self delegate] respondsToSelector:@selector(crashReportUserID)]) {
-    userid = [[self delegate] crashReportUserID] ?: @"";
+      // store this crash report as user approved, so if it fails it will retry automatically
+      [approvedCrashReports setObject:[NSNumber numberWithBool:YES] forKey:[_crashFiles objectAtIndex:i]];
+    } else {
+      // we cannot do anything with this report, so delete it
+      [_fileManager removeItemAtPath:filename error:&error];
+      [_fileManager removeItemAtPath:[NSString stringWithFormat:@"%@.meta", filename] error:&error];
+    }
   }
+	
+  [[NSUserDefaults standardUserDefaults] setObject:approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
+  [[NSUserDefaults standardUserDefaults] synchronize];
   
-  if ([self delegate] != nil && [[self delegate] respondsToSelector:@selector(crashReportContact)]) {
-    contact = [[self delegate] crashReportContact] ?: @"";
-  }
-  
-  SInt32 versionMajor, versionMinor, versionBugFix;
-  if (Gestalt(gestaltSystemVersionMajor, &versionMajor) != noErr) versionMajor = 0;
-  if (Gestalt(gestaltSystemVersionMinor, &versionMinor) != noErr)  versionMinor= 0;
-  if (Gestalt(gestaltSystemVersionBugFix, &versionBugFix) != noErr) versionBugFix = 0;
-  
-  NSString* xml = [NSString stringWithFormat:@"<crash><applicationname>%s</applicationname><bundleidentifier>%s</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><log><![CDATA[%@]]></log></crash>",
-                   [[self applicationName] UTF8String],
-                   [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] UTF8String],
-                   [NSString stringWithFormat:@"%i.%i.%i", versionMajor, versionMinor, versionBugFix],
-                   [self applicationVersion],
-                   [self applicationVersion],
-                   [self modelVersion],
-                   userid,
-                   contact,
-                   crashNotes,
-                   crashReport
-                   ];
-
-    
   [self returnToMainApplication];
+
+  if (crashes != nil) {
+    NSLog(@"Sending crash reports:\n%@", crashes);
+    [self _postXML:[NSString stringWithFormat:@"<crashes>%@</crashes>", crashes]];
+  }  
+}
+
+- (void) sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
+  // add notes and delegate results to the latest crash report
   
-  [self _postXML:[NSString stringWithFormat:@"<crashes>%@</crashes>", xml]];
+  if (_crashReportMechanism == CrashReportMechanismPLCrashReporter) {
+    NSMutableDictionary *metaDict = [[[NSMutableDictionary alloc] init] autorelease];
+    NSString *userid = @"";
+    NSString *contact = @"";
+    NSString *log = @"";
+    
+    if (!crashDescription) crashDescription = @"";
+    [metaDict setValue:crashDescription forKey:@"description"];
+    
+    if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportUserID)]) {
+      userid = [self.delegate crashReportUserID] ?: @"";
+      [metaDict setValue:userid forKey:@"userid"];
+    }
+    
+    if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportContact)]) {
+      contact = [self.delegate crashReportContact] ?: @"";
+      [metaDict setValue:contact forKey:@"contact"];
+    }
+    
+    if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportLog)]) {
+      log = [self.delegate crashReportLog] ?: @"";
+      [metaDict setValue:log forKey:@"log"];
+    }
+    
+    [NSKeyedArchiver archiveRootObject:metaDict toFile:[NSString stringWithFormat:@"%@.meta", _crashFile]];    
+  }
+  
+  [self _performSendingCrashReports];
 }
 
 
@@ -438,7 +530,7 @@
                                    ]
               ]];
   
-  [request setValue:@"Quincy/Mac" forHTTPHeaderField:@"User-Agent"];
+  [request setValue:SDK_NAME forHTTPHeaderField:@"User-Agent"];
   [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
   [request setTimeoutInterval: 15];
   [request setHTTPMethod:@"POST"];

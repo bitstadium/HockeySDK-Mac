@@ -42,14 +42,16 @@ const CGFloat kDetailsHeight = 285;
 
 @implementation CNSCrashReportUI
 
-- (id)initWithManager:(CNSCrashReportManager *)crashReportManager crashReport:(NSString *)crashReport companyName:(NSString *)companyName applicationName:(NSString *)applicationName {
+- (id)initWithManager:(CNSCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName {
   
   self = [super initWithWindowNibName: @"CNSCrashReportUI"];
   
   if ( self != nil) {
     _xml = nil;
     _crashReportManager = crashReportManager;
+    _crashFile = [crashReportFile copy];
     _crashLogContent = [crashReport copy];
+    _logContent = [logContent copy];
     _companyName = [companyName copy];
     _applicationName = applicationName;
     [self setShowComments: YES];
@@ -132,9 +134,7 @@ const CGFloat kDetailsHeight = 285;
 }
 
 - (void) _sendReportAfterDelay {
-  NSString *notes = [NSString stringWithFormat:@"Comments:\n%@\n\nConsole:\n%@", [descriptionTextField stringValue], _consoleContent];
-  
-  [_crashReportManager sendReportCrash:_crashLogContent crashNotes:notes];
+  [_crashReportManager sendReportCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
   [_crashLogContent release];
   _crashLogContent = nil;
 }
@@ -145,7 +145,7 @@ const CGFloat kDetailsHeight = 285;
   [[self window] makeFirstResponder: nil];
   
   [self performSelector:@selector(_sendReportAfterDelay) withObject:nil afterDelay:0.01];
-    
+  
   [self endCrashReporter];
   [NSApp stopModal];
 }
@@ -157,8 +157,12 @@ const CGFloat kDetailsHeight = 285;
   [[descriptionTextField cell] setPlaceholderString:NSLocalizedString(@"Please describe any steps needed to trigger the problem", @"User description placeholder")];
   [noteText setStringValue:NSLocalizedString(@"No personal information will be sent with this report.", @"Note text")];
   
-  [crashLogTextView setString:[NSString stringWithFormat:@"%@", _crashLogContent]];
+  NSString *logTextViewContent = [_crashLogContent copy];
   
+  if (_logContent)
+    logTextViewContent = [NSString stringWithFormat:@"%@\n\n%@", logTextViewContent, _logContent];
+  
+  [crashLogTextView setString:logTextViewContent];
   
   NSBeep();
   [NSApp runModalForWindow:[self window]];
@@ -166,8 +170,9 @@ const CGFloat kDetailsHeight = 285;
 
 
 - (void)dealloc {
+  [_crashFile release]; _crashFile = nil;
   [_crashLogContent release]; _crashLogContent = nil;
-  [_consoleContent release]; _consoleContent = nil;
+  [_logContent release]; _logContent = nil;
   [_companyName release]; _companyName = nil;
   _crashReportManager = nil;
   

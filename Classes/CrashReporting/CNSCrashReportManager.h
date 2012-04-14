@@ -69,6 +69,7 @@ typedef enum CrashReportMechanism {
 {
   NSFileManager *_fileManager;
 
+  BOOL _crashIdenticalCurrentVersion;
   BOOL _crashReportActivated;
   CrashReportMechanism _crashReportMechanism;
   
@@ -118,6 +119,6 @@ typedef enum CrashReportMechanism {
 - (void) startManager;
 
 - (void) cancelReport;
-- (void) sendReportCrash:(NSString*)crashReport crashNotes:(NSString *)crashNotes ;
+- (void) sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription ;
 
 @end
