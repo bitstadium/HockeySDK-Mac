@@ -447,7 +447,7 @@
       NSString *log = [metaDict valueForKey:@"log"] ?: @"";
       NSString *description = [metaDict valueForKey:@"description"] ?: @"";
       
-      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><bundleidentifier>%s</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><logdata><![CDATA[%@]]></logdata><log><![CDATA[%@]]></log></crash>",
+      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><logdata><![CDATA[%@]]></logdata><log><![CDATA[%@]]></log></crash>",
        [[self applicationName] UTF8String],
        report.applicationInfo.applicationIdentifier,
        report.systemInfo.operatingSystemVersion,
