@@ -220,8 +220,8 @@
     if (crashReport && !error) {        
       NSString *log = @"";
       
-      if (_delegate && [_delegate respondsToSelector:@selector(crashReportLog)]) {
-        log = [_delegate crashReportLog];
+      if (_delegate && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
+        log = [_delegate crashReportApplicationLog];
       }
 
       if (!self.autoSubmitCrashReport && [self hasNonApprovedCrashReports]) {
