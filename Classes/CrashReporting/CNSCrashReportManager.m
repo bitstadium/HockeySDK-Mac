@@ -34,7 +34,7 @@
 #import "CNSCrashReportTextFormatter.h"
 
 #define SDK_NAME @"HockeySDK-Mac"
-#define SDK_VERSION @"0.5"
+#define SDK_VERSION @"0.5.1"
 
 #define CRASHREPORT_MAX_CONSOLE_SIZE 50000
 
