@@ -503,8 +503,8 @@
       [metaDict setValue:contact forKey:@"contact"];
     }
     
-    if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportLog)]) {
-      log = [self.delegate crashReportLog] ?: @"";
+    if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
+      log = [self.delegate crashReportApplicationLog] ?: @"";
       [metaDict setValue:log forKey:@"log"];
     }
     
