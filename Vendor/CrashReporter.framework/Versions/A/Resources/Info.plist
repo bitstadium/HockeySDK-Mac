@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>CrashReporter</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.CrashReporter</string>
+	<string>coop.plausible.CrashReporter</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
