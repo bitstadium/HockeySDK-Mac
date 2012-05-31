@@ -243,13 +243,22 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
     if (report.exceptionInfo != nil && report.exceptionInfo.stackFrames != nil && [report.exceptionInfo.stackFrames count] > 0) {
         PLCrashReportExceptionInfo *exception = report.exceptionInfo;
         
-        /* Create the pseudo-thread header. We use the named thread format to mark this thread */
-        [text appendString: @"Last Exception Backtrace:\n"];
-        
         /* Write out the frames */
+        NSUInteger numberBlankStackFrames = 0;
+        
         for (NSUInteger frame_idx = 0; frame_idx < [exception.stackFrames count]; frame_idx++) {
             PLCrashReportStackFrameInfo *frameInfo = [exception.stackFrames objectAtIndex: frame_idx];
-            [text appendString: [self formatStackFrame: frameInfo frameIndex: frame_idx report: report]];
+            NSString *formattedStackFrame = [self formatStackFrame: frameInfo frameIndex: frame_idx - numberBlankStackFrames report: report];
+            if (formattedStackFrame) {
+                if (frame_idx - numberBlankStackFrames == 0) {
+                    /* Create the pseudo-thread header. We use the named thread format to mark this thread */
+                    [text appendString: @"Last Exception Backtrace:\n"];
+                }
+                
+                [text appendString: formattedStackFrame];
+            } else {
+                numberBlankStackFrames++;
+            }
         }
         [text appendString: @"\n\n"];
     }
@@ -258,15 +267,28 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
     PLCrashReportThreadInfo *crashed_thread = nil;
     NSInteger maxThreadNum = 0;
     for (PLCrashReportThreadInfo *thread in report.threads) {
-        if (thread.crashed) {
-            [text appendFormat: @"Thread %ld Crashed:\n", (long) thread.threadNumber];
-            crashed_thread = thread;
-        } else {
-            [text appendFormat: @"Thread %ld:\n", (long) thread.threadNumber];
-        }
+        
+        /* Write out the frames */
+        NSUInteger numberBlankStackFrames = 0;
+        
         for (NSUInteger frame_idx = 0; frame_idx < [thread.stackFrames count]; frame_idx++) {
             PLCrashReportStackFrameInfo *frameInfo = [thread.stackFrames objectAtIndex: frame_idx];
-            [text appendString: [self formatStackFrame: frameInfo frameIndex: frame_idx report: report]];
+            NSString *formattedStackFrame = [self formatStackFrame: frameInfo frameIndex: frame_idx report: report];
+            if (formattedStackFrame) {
+                if (frame_idx - numberBlankStackFrames == 0) {
+                    /* Create the thread header. */
+                    if (thread.crashed) {
+                        [text appendFormat: @"Thread %ld Crashed:\n", (long) thread.threadNumber];
+                        crashed_thread = thread;
+                    } else {
+                        [text appendFormat: @"Thread %ld:\n", (long) thread.threadNumber];
+                    }
+                }
+                
+                [text appendString: formattedStackFrame];
+            } else {
+                numberBlankStackFrames++;
+            }
         }
         [text appendString: @"\n"];
 
@@ -452,6 +474,11 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
         }
     }
   
+    /* The frame has nothing useful, so return nil so it can be filtered out */
+    if (frameInfo.instructionPointer == 0 && baseAddress == 0 && pcOffset == 0) {
+        return nil;
+    }
+    
     /* Make sure UTF8/16 characters are handled correctly */
     NSInteger offset = 0;
     NSInteger index = 0;
