@@ -522,7 +522,7 @@
   NSString *boundary = @"----FOO";
   
   request = [NSMutableURLRequest requestWithURL:
-             [NSURL URLWithString:[NSString stringWithFormat:@"%@api/2/apps/%@/crashes?sdk=%@&sdk_version=%@",
+             [NSURL URLWithString:[NSString stringWithFormat:@"%@api/2/apps/%@/crashes?sdk=%@&sdk_version=%@&feedbackEnabled=no",
                                    _submissionURL,
                                    [self.appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
                                    SDK_NAME,
