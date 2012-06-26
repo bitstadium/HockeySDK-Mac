@@ -1,3 +1,6 @@
+// 
+//  Author: Andreas Linde <mail@andreaslinde.de>
+// 
 //  Copyright 2012 Codenauts UG (haftungsbeschränkt). All rights reserved.
 //  See LICENSE.txt for author information.
 //
