@@ -77,6 +77,7 @@
 - (id) init {
   if ((self = [super init])) {
     _crashReportMechanism = CrashReportMechanismPLCrashReporter;
+    _exceptionInterceptionEnabled = NO;
     _serverResult = CrashReportStatusUnknown;
     _crashReportUI = nil;
     _fileManager = [[NSFileManager alloc] init];
@@ -339,8 +340,13 @@
       [self handleCrashReport];
     }
     
+    PLCrashReporterOptions options = 0;
+    if (_exceptionInterceptionEnabled) {
+      options = PLCrashReporterOptionCaptureRunLoopExceptions;
+    }
+    
     // Enable the Crash Reporter
-    if (![crashReporter enableCrashReporterAndReturnError: &error])
+    if (![crashReporter enableCrashReporterWithOptions:options andReturnError: &error])
       NSLog(@"Warning: Could not enable crash reporter: %@", error);
     
     if ([_crashFiles count] == 0 && [_fileManager fileExistsAtPath: _crashesDir]) {

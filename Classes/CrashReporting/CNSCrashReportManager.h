@@ -71,6 +71,7 @@ typedef enum CrashReportMechanism {
 
   BOOL _crashIdenticalCurrentVersion;
   BOOL _crashReportActivated;
+  BOOL _exceptionInterceptionEnabled;
   CrashReportMechanism _crashReportMechanism;
   
   CrashReportStatus _serverResult;
@@ -103,8 +104,11 @@ typedef enum CrashReportMechanism {
 // The HockeyApp app identifier (required)
 @property (nonatomic, retain) NSString *appIdentifier;
 
-// submission URL defines where to send the crash reports to (required)
+// defines the crash reporting mechanism, default to PLCrashReporter
 @property (nonatomic) CrashReportMechanism crashReportMechanism;
+
+// defines if PLCrashReporter Exception Interception should be used, default to NO
+@property (nonatomic) BOOL exceptionInterceptionEnabled;
 
 // defines the company name to be shown in the crash reporting dialog
 @property (nonatomic, retain) NSString *companyName;
