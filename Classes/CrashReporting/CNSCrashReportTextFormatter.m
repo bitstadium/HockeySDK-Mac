@@ -154,11 +154,15 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
     }
 
     {
+        NSString *reportGUID = @"[TODO]";
+        if (report.hasReportInfo && report.reportInfo.reportGUID != nil)
+            reportGUID = report.reportInfo.reportGUID;
+      
         NSString *hardwareModel = @"???";
         if (report.hasMachineInfo && report.machineInfo.modelName != nil)
             hardwareModel = report.machineInfo.modelName;
 
-        [text appendFormat: @"Incident Identifier: [TODO]\n"];
+        [text appendFormat: @"Incident Identifier: %@\n", reportGUID];
         [text appendFormat: @"CrashReporter Key:   [TODO]\n"];
         [text appendFormat: @"Hardware Model:      %@\n", hardwareModel];
     }
