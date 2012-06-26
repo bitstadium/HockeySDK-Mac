@@ -140,18 +140,14 @@ const CGFloat kDetailsHeight = 285;
   [_crashReportManager cancelReport];
 }
 
-- (void) _sendReportAfterDelay {
-  [_crashReportManager sendReportCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
-  [_crashLogContent release];
-  _crashLogContent = nil;
-}
-
 - (IBAction) submitReport:(id)sender {
   [submitButton setEnabled:NO];
   
   [[self window] makeFirstResponder: nil];
   
-  [self performSelector:@selector(_sendReportAfterDelay) withObject:nil afterDelay:0.01];
+  [_crashReportManager sendReportCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
+  [_crashLogContent release];
+  _crashLogContent = nil;
   
   [self endCrashReporter];
   [NSApp stopModal];

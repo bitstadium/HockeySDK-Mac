@@ -473,12 +473,15 @@
   [[NSUserDefaults standardUserDefaults] setObject:approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
   [[NSUserDefaults standardUserDefaults] synchronize];
   
-  [self returnToMainApplication];
-
   if (crashes != nil) {
     NSLog(@"Sending crash reports:\n%@", crashes);
     [self _postXML:[NSString stringWithFormat:@"<crashes>%@</crashes>", crashes]];
-  }  
+  }
+
+  // Only return to main application, if crash is send
+  // Scenario: Crash on app start would never be send!
+  
+  [self returnToMainApplication];
 }
 
 - (void) sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
