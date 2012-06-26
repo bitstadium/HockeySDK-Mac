@@ -57,6 +57,7 @@
 @implementation CNSCrashReportManager
 
 @synthesize crashReportMechanism = _crashReportMechanism;
+@synthesize exceptionInterceptionEnabled = _exceptionInterceptionEnabled;
 @synthesize delegate = _delegate;
 @synthesize appIdentifier = _appIdentifier;
 @synthesize companyName = _companyName;
