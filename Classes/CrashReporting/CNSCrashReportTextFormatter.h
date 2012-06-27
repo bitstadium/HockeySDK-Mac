@@ -48,6 +48,12 @@ typedef enum {
 } CNSCrashReportTextFormat;
 
 
+// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
+#define kCNSBinaryImageKeyUUID @"uuid"
+#define kCNSBinaryImageKeyArch @"arch"
+#define kCNSBinaryImageKeyType @"type"
+
+
 @interface CNSCrashReportTextFormatter : NSObject <PLCrashReportFormatter> {
 @private
     /** Text output format. */
@@ -58,6 +64,7 @@ typedef enum {
 }
 
 + (NSString *) stringValueForCrashReport: (PLCrashReport *) report withTextFormat: (CNSCrashReportTextFormat) textFormat;
++ (NSArray *) arrayOfAppUUIDsForCrashReport: (PLCrashReport *) report;
 
 - (id) initWithTextFormat: (CNSCrashReportTextFormat) textFormat stringEncoding: (NSStringEncoding) stringEncoding;
 

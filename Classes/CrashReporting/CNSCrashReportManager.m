@@ -46,6 +46,7 @@
 - (void) handleCrashReport;
 - (BOOL) hasPendingCrashReport;
 - (void)_cleanCrashReports;
+- (NSString *) extractAppUUIDs:(PLCrashReport *)report;
 
 - (void) _postXML:(NSString*)xml;
 - (void) searchCrashLogFile:(NSString *)path;
@@ -192,6 +193,23 @@
   }
   
   return modelString;
+}
+
+- (NSString *) extractAppUUIDs:(PLCrashReport *)report {  
+  NSMutableString *uuidString = [NSMutableString string];
+  NSArray *uuidArray = [CNSCrashReportTextFormatter arrayOfAppUUIDsForCrashReport:report];
+  
+  for (NSDictionary *element in uuidArray) {
+    if ([element objectForKey:kCNSBinaryImageKeyUUID] && [element objectForKey:kCNSBinaryImageKeyArch] && [element objectForKey:kCNSBinaryImageKeyUUID]) {
+      [uuidString appendFormat:@"<uuid type=\"%@\" arch=\"%@\">%@</uuid>",
+       [element objectForKey:kCNSBinaryImageKeyType],
+       [element objectForKey:kCNSBinaryImageKeyArch],
+       [element objectForKey:kCNSBinaryImageKeyUUID]
+       ];
+    }
+  }
+  
+  return uuidString;
 }
 
 - (void) returnToMainApplication {
@@ -358,8 +376,9 @@
       NSString *log = [metaDict valueForKey:@"log"] ?: @"";
       NSString *description = [metaDict valueForKey:@"description"] ?: @"";
       
-      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><logdata><![CDATA[%@]]></logdata><log><![CDATA[%@]]></log></crash>",
+      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><logdata><![CDATA[%@]]></logdata><log><![CDATA[%@]]></log></crash>",
        [[self applicationName] UTF8String],
+       [self extractAppUUIDs:report],
        report.applicationInfo.applicationIdentifier,
        report.systemInfo.operatingSystemVersion,
        [self applicationVersion],

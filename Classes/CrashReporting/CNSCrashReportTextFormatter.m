@@ -417,6 +417,85 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
 }
 
 /**
+ * Returns an array of app UUIDs and their architecture
+ * As a dictionary for each element
+ *
+ * @param report The report to format.
+ *
+ * @return Returns the formatted result on success, or nil if an error occurs.
+ */
++ (NSArray *) arrayOfAppUUIDsForCrashReport: (PLCrashReport *) report {
+	NSMutableArray* appUUIDs = [NSMutableArray array];
+  
+  /* Images. The iPhone crash report format sorts these in ascending order, by the base address */
+  for (PLCrashReportBinaryImageInfo *imageInfo in [report.images sortedArrayUsingFunction: binaryImageSort context: nil]) {
+    NSString *uuid;
+    /* Fetch the UUID if it exists */
+    if (imageInfo.hasImageUUID)
+      uuid = imageInfo.imageUUID;
+    else
+      uuid = @"???";
+    
+    /* Determine the architecture string */
+    NSString *archName = @"???";
+    if (imageInfo.codeType != nil && imageInfo.codeType.typeEncoding == PLCrashReportProcessorTypeEncodingMach) {
+      switch (imageInfo.codeType.type) {
+        case CPU_TYPE_ARM:
+          /* Apple includes subtype for ARM binaries. */
+          switch (imageInfo.codeType.subtype) {
+            case CPU_SUBTYPE_ARM_V6:
+              archName = @"armv6";
+              break;
+              
+            case CPU_SUBTYPE_ARM_V7:
+              archName = @"armv7";
+              break;
+              
+            default:
+              archName = @"arm-unknown";
+              break;
+          }
+          break;
+          
+        case CPU_TYPE_X86:
+          archName = @"i386";
+          break;
+          
+        case CPU_TYPE_X86_64:
+          archName = @"x86_64";
+          break;
+          
+        case CPU_TYPE_POWERPC:
+          archName = @"powerpc";
+          break;
+          
+        default:
+          // Use the default archName value (initialized above).
+          break;
+      }
+    }
+    
+    /* Determine if this is the app executable or app specific framework */
+    NSString *imagePath = [imageInfo.imageName stringByStandardizingPath];
+    NSString *appBundleContentsPath = [[report.processInfo.processPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent]; 
+    NSString *imageType = @"";
+    
+    if ([imageInfo.imageName isEqual: report.processInfo.processPath]) {
+      imageType = @"app";
+    } else {
+      imageType = @"framework";
+    }
+    
+    if ([imagePath isEqual: report.processInfo.processPath] || [imagePath hasPrefix:appBundleContentsPath]) {
+      [appUUIDs addObject:[NSDictionary dictionaryWithObjectsAndKeys:uuid, kCNSBinaryImageKeyUUID, archName, kCNSBinaryImageKeyArch, imageType, kCNSBinaryImageKeyType, nil]];
+    }
+  }
+  
+  
+  return appUUIDs;
+}
+
+/**
  * Initialize with the request string encoding and output format.
  *
  * @param textFormat Format to use for the generated text crash report.
