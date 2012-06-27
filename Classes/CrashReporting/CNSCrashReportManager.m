@@ -56,7 +56,6 @@
 
 @implementation CNSCrashReportManager
 
-@synthesize crashReportMechanism = _crashReportMechanism;
 @synthesize exceptionInterceptionEnabled = _exceptionInterceptionEnabled;
 @synthesize delegate = _delegate;
 @synthesize appIdentifier = _appIdentifier;
@@ -77,7 +76,6 @@
 
 - (id) init {
   if ((self = [super init])) {
-    _crashReportMechanism = CrashReportMechanismPLCrashReporter;
     _exceptionInterceptionEnabled = NO;
     _serverResult = CrashReportStatusUnknown;
     _crashReportUI = nil;
@@ -207,17 +205,11 @@
   if ([self hasPendingCrashReport]) {
     NSError* error = nil;
     NSString *crashReport = nil;
-    if (_crashReportMechanism == CrashReportMechanismPLCrashReporter) {
-      _crashFile = [_crashFiles lastObject];
-      NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
-      PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
-      crashReport = [CNSCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
-    } else {
-      NSString *crashLogs = [NSString stringWithContentsOfFile:_crashFile encoding:NSUTF8StringEncoding error:&error];
-      if (!error) {
-        crashReport = [[crashLogs componentsSeparatedByString: @"**********\n\n"] lastObject];
-      }
-    }
+
+    _crashFile = [_crashFiles lastObject];
+    NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
+    PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
+    crashReport = [CNSCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
 
     if (crashReport && !error) {        
       NSString *log = @"";
@@ -254,56 +246,9 @@
 }
 
 
-#pragma mark - Mac OS X based
-
-- (void) searchCrashLogFile:(NSString *)path {  
-  NSError* error;
-  NSMutableArray* filesWithModificationDate = [NSMutableArray array];
-  NSArray* crashLogFiles = [_fileManager contentsOfDirectoryAtPath:path error:&error];
-  NSEnumerator* filesEnumerator = [crashLogFiles objectEnumerator];
-  NSString* crashFile;
-  while((crashFile = [filesEnumerator nextObject])) {
-    NSString* crashLogPath = [path stringByAppendingPathComponent:crashFile];
-    NSDate* modDate = [[_fileManager attributesOfItemAtPath:crashLogPath error:&error] fileModificationDate];
-    [filesWithModificationDate addObject:[NSDictionary dictionaryWithObjectsAndKeys:crashFile,@"name",crashLogPath,@"path",modDate,@"modDate",nil]];
-  }
-  
-  NSSortDescriptor* dateSortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"modDate" ascending:YES] autorelease];
-  NSArray* sortedFiles = [filesWithModificationDate sortedArrayUsingDescriptors:[NSArray arrayWithObject:dateSortDescriptor]];
-  
-  NSPredicate* filterPredicate = [NSPredicate predicateWithFormat:@"name BEGINSWITH %@", [self applicationName]];
-  NSArray* filteredFiles = [sortedFiles filteredArrayUsingPredicate:filterPredicate];
-  
-  _crashFile = [[[filteredFiles valueForKeyPath:@"path"] lastObject] copy];
-}
-
-#pragma mark - setter
-
-- (void)storeLastCrashDate:(NSDate *) date {
-  [[NSUserDefaults standardUserDefaults] setValue:date forKey:@"CrashReportSender.lastCrashDate"];
-  [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSDate *)loadLastCrashDate {
-  NSDate *date = [[NSUserDefaults standardUserDefaults] valueForKey:@"CrashReportSender.lastCrashDate"];
-  return date ?: [NSDate distantPast];
-}
-
-- (void)storeAppVersion:(NSString *) version {
-  [[NSUserDefaults standardUserDefaults] setValue:version forKey:@"CrashReportSender.appVersion"];
-  [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSString *)loadAppVersion {
-  NSString *appVersion = [[NSUserDefaults standardUserDefaults] valueForKey:@"CrashReportSender.appVersion"];
-  return appVersion ?: nil;
-}
-
 #pragma mark - PLCrashReporter based
 
 - (BOOL)hasNonApprovedCrashReports {
-  if (_crashReportMechanism != CrashReportMechanismPLCrashReporter) return NO;
-  
   NSDictionary *approvedCrashReports = [[NSUserDefaults standardUserDefaults] dictionaryForKey: kHockeySDKApprovedCrashReports];
   
   if (!approvedCrashReports || [approvedCrashReports count] == 0) return YES;
@@ -320,93 +265,52 @@
 - (BOOL) hasPendingCrashReport {
   if (!_crashReportActivated) return NO;
   
-  if (_crashReportMechanism == CrashReportMechanismPLCrashReporter) {
+  _crashFiles = [[NSMutableArray alloc] init];
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+  _crashesDir = [[NSString stringWithFormat:@"%@", [[paths objectAtIndex:0] stringByAppendingPathComponent:@"/crashes/"]] retain];
+  
+  if (![_fileManager fileExistsAtPath:_crashesDir]) {
+    NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
+    NSError *theError = NULL;
     
-    _crashFiles = [[NSMutableArray alloc] init];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    _crashesDir = [[NSString stringWithFormat:@"%@", [[paths objectAtIndex:0] stringByAppendingPathComponent:@"/crashes/"]] retain];
-    
-    if (![_fileManager fileExistsAtPath:_crashesDir]) {
-      NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
-      NSError *theError = NULL;
-      
-      [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
-    }
-    
-    PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+    [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
+  }
+  
+  PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+  NSError *error = NULL;
+  
+  // Check if we previously crashed
+  if ([crashReporter hasPendingCrashReport]) {
+    [self handleCrashReport];
+  }
+  
+  PLCrashReporterOptions options = 0;
+  if (_exceptionInterceptionEnabled) {
+    options = PLCrashReporterOptionCaptureRunLoopExceptions;
+  }
+  
+  // Enable the Crash Reporter
+  if (![crashReporter enableCrashReporterWithOptions:options andReturnError: &error])
+    NSLog(@"Warning: Could not enable crash reporter: %@", error);
+  
+  if ([_crashFiles count] == 0 && [_fileManager fileExistsAtPath: _crashesDir]) {
+    NSString *file = nil;
     NSError *error = NULL;
     
-    // Check if we previously crashed
-    if ([crashReporter hasPendingCrashReport]) {
-      [self handleCrashReport];
-    }
+    NSDirectoryEnumerator *dirEnum = [_fileManager enumeratorAtPath: _crashesDir];
     
-    PLCrashReporterOptions options = 0;
-    if (_exceptionInterceptionEnabled) {
-      options = PLCrashReporterOptionCaptureRunLoopExceptions;
-    }
-    
-    // Enable the Crash Reporter
-    if (![crashReporter enableCrashReporterWithOptions:options andReturnError: &error])
-      NSLog(@"Warning: Could not enable crash reporter: %@", error);
-    
-    if ([_crashFiles count] == 0 && [_fileManager fileExistsAtPath: _crashesDir]) {
-      NSString *file = nil;
-      NSError *error = NULL;
-      
-      NSDirectoryEnumerator *dirEnum = [_fileManager enumeratorAtPath: _crashesDir];
-      
-      while ((file = [dirEnum nextObject])) {
-        NSDictionary *fileAttributes = [_fileManager attributesOfItemAtPath:[_crashesDir stringByAppendingPathComponent:file] error:&error];
-        if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 && ![file isEqualToString:@".DS_Store"] && ![file hasSuffix:@".meta"]) {
-          [_crashFiles addObject:[_crashesDir stringByAppendingPathComponent: file]];
-        }
+    while ((file = [dirEnum nextObject])) {
+      NSDictionary *fileAttributes = [_fileManager attributesOfItemAtPath:[_crashesDir stringByAppendingPathComponent:file] error:&error];
+      if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 && ![file isEqualToString:@".DS_Store"] && ![file hasSuffix:@".meta"]) {
+        [_crashFiles addObject:[_crashesDir stringByAppendingPathComponent: file]];
       }
     }
-    
-    if ([_crashFiles count] > 0) {
-      return YES;
-    } else
-      return NO;
-  } else {
-    BOOL returnValue = NO;
-    
-    NSString *appVersion = [self loadAppVersion];
-    NSDate *lastCrashDate = [self loadLastCrashDate];
-    
-    if (!appVersion || ![appVersion isEqualToString:[self applicationVersion]] || [lastCrashDate isEqualToDate:[NSDate distantPast]]) {
-      [self storeAppVersion:[self applicationVersion]];
-      [self storeLastCrashDate:[NSDate date]];
-      return NO;
-    }
-    
-    NSArray* libraryDirectories = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, TRUE);
-    // Snow Leopard is having the log files in another location
-    [self searchCrashLogFile:[[libraryDirectories lastObject] stringByAppendingPathComponent:@"Logs/DiagnosticReports"]];
-    if (_crashFile == nil) {
-      [self searchCrashLogFile:[[libraryDirectories lastObject] stringByAppendingPathComponent:@"Logs/CrashReporter"]];
-      if (_crashFile == nil) {
-        NSString *sandboxFolder = [NSString stringWithFormat:@"/Containers/%@/Data/Library", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
-        if ([[libraryDirectories lastObject] rangeOfString:sandboxFolder].location != NSNotFound) {
-          NSString *libFolderName = [[libraryDirectories lastObject] stringByReplacingOccurrencesOfString:sandboxFolder withString:@""];
-          [self searchCrashLogFile:[libFolderName stringByAppendingPathComponent:@"Logs/DiagnosticReports"]];
-        }
-      }
-    }
-    
-    if (_crashFile) {
-      NSError* error;
-      
-      NSDate *crashLogModificationDate = [[_fileManager attributesOfItemAtPath:_crashFile error:&error] fileModificationDate];
-      unsigned long long crashLogFileSize = [[_fileManager attributesOfItemAtPath:_crashFile error:&error] fileSize];
-      if ([crashLogModificationDate compare: lastCrashDate] == NSOrderedDescending && crashLogFileSize > 0) {
-        [self storeLastCrashDate:crashLogModificationDate];
-        returnValue = YES;
-      }
-    }
-    
-    return returnValue;
   }
+  
+  if ([_crashFiles count] > 0)
+    return YES;
+  else
+    return NO;
 }
 
 
@@ -494,32 +398,30 @@
 - (void) sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
   // add notes and delegate results to the latest crash report
   
-  if (_crashReportMechanism == CrashReportMechanismPLCrashReporter) {
-    NSMutableDictionary *metaDict = [[[NSMutableDictionary alloc] init] autorelease];
-    NSString *userid = @"";
-    NSString *contact = @"";
-    NSString *log = @"";
-    
-    if (!crashDescription) crashDescription = @"";
-    [metaDict setValue:crashDescription forKey:@"description"];
-    
-    if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportUserID)]) {
-      userid = [self.delegate crashReportUserID] ?: @"";
-      [metaDict setValue:userid forKey:@"userid"];
-    }
-    
-    if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportContact)]) {
-      contact = [self.delegate crashReportContact] ?: @"";
-      [metaDict setValue:contact forKey:@"contact"];
-    }
-    
-    if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
-      log = [self.delegate crashReportApplicationLog] ?: @"";
-      [metaDict setValue:log forKey:@"log"];
-    }
-    
-    [NSKeyedArchiver archiveRootObject:metaDict toFile:[NSString stringWithFormat:@"%@.meta", _crashFile]];    
+  NSMutableDictionary *metaDict = [[[NSMutableDictionary alloc] init] autorelease];
+  NSString *userid = @"";
+  NSString *contact = @"";
+  NSString *log = @"";
+  
+  if (!crashDescription) crashDescription = @"";
+  [metaDict setValue:crashDescription forKey:@"description"];
+  
+  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportUserID)]) {
+    userid = [self.delegate crashReportUserID] ?: @"";
+    [metaDict setValue:userid forKey:@"userid"];
   }
+  
+  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportContact)]) {
+    contact = [self.delegate crashReportContact] ?: @"";
+    [metaDict setValue:contact forKey:@"contact"];
+  }
+  
+  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
+    log = [self.delegate crashReportApplicationLog] ?: @"";
+    [metaDict setValue:log forKey:@"log"];
+  }
+  
+  [NSKeyedArchiver archiveRootObject:metaDict toFile:[NSString stringWithFormat:@"%@.meta", _crashFile]];    
   
   [self _performSendingCrashReports];
 }
