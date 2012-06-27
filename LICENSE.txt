@@ -1,12 +1,7 @@
 ## Authors
 
-Andreas Linde <andy@buzzworks.de>
-Stanley Rost <soryu2@gmail.com>
-Fabian Kreiser <fabian@fabian-kreiser.com>
-Tobias Höhmann
-FutureTap
+Andreas Linde <mail@andreaslinde.de>
 Kent Sutherland
-Peter Steinberger <me@petersteinberger.com>
 Thomas Dohmke <thomas@dohmke.de>
 
 ## Licenses
