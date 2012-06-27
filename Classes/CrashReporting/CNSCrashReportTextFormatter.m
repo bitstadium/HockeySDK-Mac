@@ -187,8 +187,14 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
             processId = [[NSNumber numberWithUnsignedInteger: report.processInfo.processID] stringValue];
             
             /* Process Path */
-            if (report.processInfo.processPath != nil)
+            if (report.processInfo.processPath != nil) {
                 processPath = report.processInfo.processPath;
+                
+                /* Remove username from the path */
+                processPath = [processPath stringByAbbreviatingWithTildeInPath];
+                if ([[processPath substringToIndex:1] isEqualToString:@"~"])
+                    processPath = [NSString stringWithFormat:@"/Users/USER%@", [processPath substringFromIndex:1]];
+            }
             
             /* Parent Process Name */
             if (report.processInfo.parentProcessName != nil)
@@ -401,6 +407,11 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
         } else {
             fmt = @"%10#" PRIx64 " - %10#" PRIx64 " %@%@ %@  <%@> %@\n";
         }
+      
+        /* Remove username from the image path */
+        NSString *imageName = [imageInfo.imageName stringByAbbreviatingWithTildeInPath];
+        if ([[imageName substringToIndex:1] isEqualToString:@"~"])
+            imageName = [NSString stringWithFormat:@"/Users/USER%@", [imageName substringFromIndex:1]];
 
         [text appendFormat: fmt,
                             imageInfo.imageBaseAddress,
@@ -409,7 +420,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
                             [imageInfo.imageName lastPathComponent],
                             archName,
                             uuid,
-                            imageInfo.imageName];
+                            imageName];
     }
     
 
