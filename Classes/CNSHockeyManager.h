@@ -53,6 +53,10 @@
 // only for debug or beta versions of your app!
 - (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled delegate:(id)newDelegate;
 
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName delegate:(id)newDelegate;
+
 - (void)configureWithIdentifier:(NSString *)appIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled delegate:(id)delegate;
+
+- (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id)delegate;
 
 @end

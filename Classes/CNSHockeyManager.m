@@ -91,8 +91,18 @@
 }
 
 
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName delegate:(id)newDelegate {
+  [self configureWithIdentifier:newAppIdentifier companyName:newCompanyName exceptionInterceptionEnabled:NO delegate:newDelegate];
+}
+
+
 - (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled delegate:(id)newDelegate {
   [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:exceptionInterceptionEnabled delegate:newDelegate];
+}
+
+
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier delegate:(id)newDelegate {
+  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:NO delegate:newDelegate];
 }
 
 
