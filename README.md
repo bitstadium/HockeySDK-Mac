@@ -57,7 +57,7 @@ We propose the following method to set version numbers in your beta versions:
 2. Unzip the file. A HockeySDK.framework package is extracted
 
 3. Link the HockeySDK-Mac framework to your target:
-   - Drag Sparkle.framework into the Frameworks folder of your Xcode project.
+   - Drag HockeySDK.framework into the Frameworks folder of your Xcode project.
    - Be sure to check the “copy items into the destination group’s folder” box in the sheet that appears.
    - Make sure the box is checked for your app’s target in the sheet’s Add to targets list.
 4. Now we’ll make sure the framework is copied into your app bundle:
