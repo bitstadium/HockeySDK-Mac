@@ -75,9 +75,9 @@ We propose the following method to set version numbers in your beta versions:
 
 1. Open your `AppDelegate.h` file.
 
-2. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/CNSHockeyManagerDelegate.h></code></pre>
+2. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/CNSCrashReportManagerDelegate.h></code></pre>
 
-3. Add the following protocol to your AppDelegate: <pre><code>CNSHockeyManagerDelegate</code></pre>
+3. Add the following protocol to your AppDelegate: <pre><code>CNSCrashReportManagerDelegate</code></pre>
 
 4. Open your `AppDelegate.m` file.
 
@@ -97,12 +97,14 @@ This allows the SDK to present a crash dialog on the next startup before the mai
         
 6. Search for the method `application:didFinishLaunchingWithOptions:`
 
-7. Add the following line:
+7. Add the following lines:
 
-        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" delegate:self];
+        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company"];
+        [[CNSHockeyManager sharedHockeyManager] setCrashReportdelegate:self];
 If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, use the following line:
 
-        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" exceptionInterceptionEnabled:YES delegate:self];
+        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" exceptionInterceptionEnabled:YES];
+        [[CNSHockeyManager sharedHockeyManager] setCrashReportdelegate:self];
 They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
 
     Alternatively you can also subclass `NSWindow` or `NSApplication` to catch the exceptions like this:
