@@ -213,8 +213,11 @@
 }
 
 - (void) returnToMainApplication {
-  if ( self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindow)])
+  if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindow)]) {
     [self.delegate showMainApplicationWindow];
+  } else {
+    NSLog(@"Warning: Required CNSCrashReportManagerDelegate is not set!");
+  }
 }
 
 - (void) startManager {

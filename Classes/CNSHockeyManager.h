@@ -22,16 +22,16 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-
-#import "CNSHockeyManagerDelegate.h"
+@protocol CNSCrashReportManagerDelegate;
 
 @interface CNSHockeyManager : NSObject {
 @private
-  id _delegate;
   NSString *_appIdentifier;
   NSString *_companyName;
   
   BOOL _loggingEnabled;
+
+  id<CNSCrashReportManagerDelegate> _crashReportdelegate;
 }
 
 #pragma mark - Public Properties
@@ -43,6 +43,8 @@
 // Default: NO
 @property (nonatomic, assign, getter=isLoggingEnabled) BOOL loggingEnabled;
 
+// Crash reporting module delegate
+@property (nonatomic, assign) id <CNSCrashReportManagerDelegate> crashReportdelegate;
 
 #pragma mark - Public Methods
 
@@ -51,12 +53,12 @@
 
 // Configure HockeyApp with a single app identifier and delegate; use this
 // only for debug or beta versions of your app!
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled delegate:(id)newDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName delegate:(id)newDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName;
 
-- (void)configureWithIdentifier:(NSString *)appIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled delegate:(id)delegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled;
 
-- (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id)delegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier;
 
 @end

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
 		1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		1EE1E0021524BA9200C0DA76 /* CNSHockeyManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
 		1EF09DB51523579100067A5C /* CNSHockeyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DAE1523579100067A5C /* CNSHockeyManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09DB61523579100067A5C /* CNSHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* CNSHockeyManager.m */; };
@@ -41,7 +40,6 @@
 
 /* Begin PBXFileReference section */
 		1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportManagerDelegate.h; sourceTree = "<group>"; };
-		1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSHockeyManagerDelegate.h; sourceTree = "<group>"; };
 		1EF09D8C1523574200067A5C /* HockeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HockeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EF09D8F1523574200067A5C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1EF09D921523574200067A5C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -120,7 +118,6 @@
 				1EF09DCC152371DC00067A5C /* CrashReporting */,
 				1EF09DAE1523579100067A5C /* CNSHockeyManager.h */,
 				1EF09DAF1523579100067A5C /* CNSHockeyManager.m */,
-				1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -170,7 +167,6 @@
 			files = (
 				1EF09DB51523579100067A5C /* CNSHockeyManager.h in Headers */,
 				1EF09DD5152371DC00067A5C /* CNSCrashReportManager.h in Headers */,
-				1EE1E0021524BA9200C0DA76 /* CNSHockeyManagerDelegate.h in Headers */,
 				1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */,
 				1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */,
 				1EF09DD7152371DC00067A5C /* CNSCrashReportUI.h in Headers */,

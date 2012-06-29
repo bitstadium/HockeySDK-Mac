@@ -37,6 +37,8 @@
 
 @synthesize appIdentifier = _appIdentifier;
 @synthesize loggingEnabled = _loggingEnabled;
+@synthesize crashReportdelegate = _crashReportdelegate;
+
 
 #pragma mark - Public Class Methods
 
@@ -67,7 +69,6 @@
 
 - (void)dealloc {
   [_appIdentifier release], _appIdentifier = nil;
-  _delegate = nil;
   
   [super dealloc];
 }
@@ -78,8 +79,7 @@
 
 #pragma mark - Public Instance Methods (Configuration)
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled delegate:(id)newDelegate {
-  _delegate = newDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
 
   [_appIdentifier release];
   _appIdentifier = [newAppIdentifier copy];
@@ -91,18 +91,23 @@
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName delegate:(id)newDelegate {
-  [self configureWithIdentifier:newAppIdentifier companyName:newCompanyName exceptionInterceptionEnabled:NO delegate:newDelegate];
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName {
+  [self configureWithIdentifier:newAppIdentifier companyName:newCompanyName exceptionInterceptionEnabled:NO];
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled delegate:(id)newDelegate {
-  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:exceptionInterceptionEnabled delegate:newDelegate];
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
+  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:exceptionInterceptionEnabled];
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier delegate:(id)newDelegate {
-  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:NO delegate:newDelegate];
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier{
+  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:NO];
+}
+
+
+- (void)setCrashReportdelegate:(id<CNSCrashReportManagerDelegate>)crashReportdelegate {
+  [[CNSCrashReportManager sharedCrashReportManager] setDelegate:crashReportdelegate];
 }
 
 
@@ -112,7 +117,6 @@
   [[CNSCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
   [[CNSCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
   [[CNSCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
-  [[CNSCrashReportManager sharedCrashReportManager] setDelegate:_delegate];
   [[CNSCrashReportManager sharedCrashReportManager] startManager];
 }
 
