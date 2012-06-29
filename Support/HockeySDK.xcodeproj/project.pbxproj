@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1E9358FF1523866300F51DBD /* CrashReporter.framework in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DC0152357A500067A5C /* CrashReporter.framework */; };
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
 		1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1EE1E0021524BA9200C0DA76 /* CNSHockeyManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -24,7 +23,21 @@
 		1EF09DD8152371DC00067A5C /* CNSCrashReportUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD1152371DC00067A5C /* CNSCrashReportUI.m */; };
 		1EF09DD9152371DC00067A5C /* CNSCrashReportTextFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DD2152371DC00067A5C /* CNSCrashReportTextFormatter.h */; };
 		1EF09DDA152371DC00067A5C /* CNSCrashReportTextFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD3152371DC00067A5C /* CNSCrashReportTextFormatter.m */; };
+		4C7E213E159C902900D02AD1 /* CrashReporter.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1EF09DC0152357A500067A5C /* CrashReporter.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4C7E213C159C900B00D02AD1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4C7E213E159C902900D02AD1 /* CrashReporter.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportManagerDelegate.h; sourceTree = "<group>"; };
@@ -172,11 +185,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EF09DA11523574200067A5C /* Build configuration list for PBXNativeTarget "HockeySDK" */;
 			buildPhases = (
+				1EF09D8A1523574200067A5C /* Resources */,
 				1EF09D871523574200067A5C /* Sources */,
 				1EF09D881523574200067A5C /* Frameworks */,
+				4C7E213C159C900B00D02AD1 /* CopyFiles */,
 				1EF09D891523574200067A5C /* Headers */,
-				1EF09D8A1523574200067A5C /* Resources */,
-				1EF09DC2152357DD00067A5C /* ShellScript */,
+				1EF09DC2152357DD00067A5C /* Change CrashReporter framework load path */,
 			);
 			buildRules = (
 			);
@@ -219,25 +233,25 @@
 			files = (
 				1EF09DBC1523579A00067A5C /* InfoPlist.strings in Resources */,
 				1EF09DD4152371DC00067A5C /* CNSCrashReportUI.nib in Resources */,
-				1E9358FF1523866300F51DBD /* CrashReporter.framework in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1EF09DC2152357DD00067A5C /* ShellScript */ = {
+		1EF09DC2152357DD00067A5C /* Change CrashReporter framework load path */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Change CrashReporter framework load path";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "install_name_tool -change \"@loader_path/../Frameworks/CrashReporter.framework/Versions/A/CrashReporter\"  \"@loader_path/Resources/CrashReporter.framework/Versions/A/CrashReporter\" \"$TARGET_BUILD_DIR/HockeySDK.framework/Versions/A/HockeySDK\"";
+			shellScript = "install_name_tool -change \"@loader_path/../Frameworks/CrashReporter.framework/Versions/A/CrashReporter\"  \"@loader_path/Frameworks/CrashReporter.framework/Versions/A/CrashReporter\" \"$TARGET_BUILD_DIR/HockeySDK.framework/Versions/A/HockeySDK\"\n\nif [ ! -e \"$TARGET_BUILD_DIR/HockeySDK.framework/Frameworks\" ];\nthen \n    cd \"$TARGET_BUILD_DIR/HockeySDK.framework\"\n    ln -s \"Versions/A/Frameworks\" \"Frameworks\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
