@@ -110,6 +110,7 @@
 
 - (void)configureCrashReportManager:(BOOL)exceptionInterceptionEnabled {
   [[CNSCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
+  [[CNSCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
   [[CNSCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
   [[CNSCrashReportManager sharedCrashReportManager] setDelegate:_delegate];
   [[CNSCrashReportManager sharedCrashReportManager] startManager];
