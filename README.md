@@ -4,6 +4,16 @@ his document describes how to integrate the HockeySDK-Mac into your app. The SDK
 
 ## Release Notes
 
+Version 0.9.3 (RC 3):
+
+- Fixed double PLCrashReporter in HockeySDK-Mac framework
+
+Version 0.9.2 (RC 2):
+
+- Cleaned up protocols, initialization slightly changed, please check the readme file!
+- Fixed company name not appearing in the user interface
+- Moved PLCrashReporter framework into the HockeySDK-Mac frameworks folder
+
 Version 0.9.0 (RC 1):
 
 - Fixed memory leak
