@@ -4,6 +4,11 @@ his document describes how to integrate the HockeySDK-Mac into your app. The SDK
 
 ## Release Notes
 
+Version 0.9.4 (RC 4):
+
+- Update SDK initializer to be less error prone
+- Add german localization (Beware, button sizes are not automatically adjusted if you add other languages!)
+
 Version 0.9.3 (RC 3):
 
 - Fixed double PLCrashReporter in HockeySDK-Mac framework
