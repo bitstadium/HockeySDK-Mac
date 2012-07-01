@@ -30,8 +30,6 @@
   NSString *_companyName;
   
   BOOL _loggingEnabled;
-
-  id<CNSCrashReportManagerDelegate> _crashReportManagerDelegate;
 }
 
 #pragma mark - Public Properties
@@ -43,9 +41,6 @@
 // Default: NO
 @property (nonatomic, assign, getter=isLoggingEnabled) BOOL loggingEnabled;
 
-// Crash reporting module delegate
-@property (nonatomic, assign) id <CNSCrashReportManagerDelegate> crashReportManagerDelegate;
-
 #pragma mark - Public Methods
 
 // Returns the shared manager object
@@ -53,12 +48,12 @@
 
 // Configure HockeyApp with a single app identifier and delegate; use this
 // only for debug or beta versions of your app!
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>) crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>) crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>) crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>) crashReportManagerDelegate;
 
 @end

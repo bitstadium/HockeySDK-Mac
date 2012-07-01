@@ -29,7 +29,7 @@
 
 @interface CNSHockeyManager ()
 
-- (void)configureCrashReportManager:(BOOL)enableExceptionInterception;
+- (void)configureCrashReportManager:(BOOL)enableExceptionInterception crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate;
 
 @end
 
@@ -37,7 +37,6 @@
 
 @synthesize appIdentifier = _appIdentifier;
 @synthesize loggingEnabled = _loggingEnabled;
-@synthesize crashReportManagerDelegate = _crashReportManagerDelegate;
 
 
 #pragma mark - Public Class Methods
@@ -79,7 +78,7 @@
 
 #pragma mark - Public Instance Methods (Configuration)
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
 
   [_appIdentifier release];
   _appIdentifier = [newAppIdentifier copy];
@@ -87,36 +86,32 @@
   [_companyName release];
   _companyName = [newCompanyName copy];
 
-  [self configureCrashReportManager:exceptionInterceptionEnabled];
+  [self configureCrashReportManager:exceptionInterceptionEnabled crashReportManagerDelegate:crashReportManagerDelegate];
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName {
-  [self configureWithIdentifier:newAppIdentifier companyName:newCompanyName exceptionInterceptionEnabled:NO];
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
+  [self configureWithIdentifier:newAppIdentifier companyName:newCompanyName exceptionInterceptionEnabled:NO crashReportManagerDelegate:crashReportManagerDelegate];
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
-  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:exceptionInterceptionEnabled];
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
+  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:exceptionInterceptionEnabled crashReportManagerDelegate:crashReportManagerDelegate];
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier{
-  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:NO];
-}
-
-
-- (void)setCrashReportManagerDelegate:(id<CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
-  [[CNSCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate{
+  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:NO crashReportManagerDelegate:crashReportManagerDelegate];
 }
 
 
 #pragma mark - Private Instance Methods
 
-- (void)configureCrashReportManager:(BOOL)exceptionInterceptionEnabled {
+- (void)configureCrashReportManager:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
   [[CNSCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
   [[CNSCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
   [[CNSCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
+  [[CNSCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
   [[CNSCrashReportManager sharedCrashReportManager] startManager];
 }
 
