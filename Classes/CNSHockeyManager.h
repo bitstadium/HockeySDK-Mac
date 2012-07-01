@@ -31,7 +31,7 @@
   
   BOOL _loggingEnabled;
 
-  id<CNSCrashReportManagerDelegate> _crashReportdelegate;
+  id<CNSCrashReportManagerDelegate> _crashReportManagerDelegate;
 }
 
 #pragma mark - Public Properties
@@ -44,7 +44,7 @@
 @property (nonatomic, assign, getter=isLoggingEnabled) BOOL loggingEnabled;
 
 // Crash reporting module delegate
-@property (nonatomic, assign) id <CNSCrashReportManagerDelegate> crashReportdelegate;
+@property (nonatomic, assign) id <CNSCrashReportManagerDelegate> crashReportManagerDelegate;
 
 #pragma mark - Public Methods
 

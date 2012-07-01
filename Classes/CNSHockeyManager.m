@@ -37,7 +37,7 @@
 
 @synthesize appIdentifier = _appIdentifier;
 @synthesize loggingEnabled = _loggingEnabled;
-@synthesize crashReportdelegate = _crashReportdelegate;
+@synthesize crashReportManagerDelegate = _crashReportManagerDelegate;
 
 
 #pragma mark - Public Class Methods
@@ -106,8 +106,8 @@
 }
 
 
-- (void)setCrashReportdelegate:(id<CNSCrashReportManagerDelegate>)crashReportdelegate {
-  [[CNSCrashReportManager sharedCrashReportManager] setDelegate:crashReportdelegate];
+- (void)setCrashReportManagerDelegate:(id<CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
+  [[CNSCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
 }
 
 
