@@ -114,12 +114,10 @@ This allows the SDK to present a crash dialog on the next startup before the mai
 
 7. Add the following lines:
 
-        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company"];
-        [[CNSHockeyManager sharedHockeyManager] setCrashReportdelegate:self];
+        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" crashReportManagerDelegate:self];
 If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, use the following line:
 
-        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" exceptionInterceptionEnabled:YES];
-        [[CNSHockeyManager sharedHockeyManager] setCrashReportdelegate:self];
+        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" exceptionInterceptionEnabled:YES crashReportManagerDelegate:self];
 They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
 
     Alternatively you can also subclass `NSWindow` or `NSApplication` to catch the exceptions like this:
