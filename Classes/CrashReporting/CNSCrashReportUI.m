@@ -32,6 +32,7 @@
 #import <sys/sysctl.h>
 #import <CrashReporter/CrashReporter.h>
 
+
 @interface CNSCrashReportUI(private)
 - (void) askCrashReportDetails;
 - (void) endCrashReporter;
@@ -155,10 +156,19 @@ const CGFloat kDetailsHeight = 285;
 
 
 - (void) askCrashReportDetails {
-  [[self window] setTitle:[NSString stringWithFormat:NSLocalizedString(@"Problem Report for %@", @"Window title"), _applicationName]];
+  [[self window] setTitle:[NSString stringWithFormat:CNSLocalizedString(@"WindowTitle", @""), _applicationName]];
   
-  [[descriptionTextField cell] setPlaceholderString:NSLocalizedString(@"Please describe any steps needed to trigger the problem", @"User description placeholder")];
-  [noteText setStringValue:NSLocalizedString(@"No personal information will be sent with this report.", @"Note text")];
+  [introductionTextFieldCell setTitle:[NSString stringWithFormat:CNSLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
+  [commentsTextFieldCell setTitle:CNSLocalizedString(@"CommentsDisclosureTitle", @"")];
+  [problemDescriptionTextFieldCell setTitle:CNSLocalizedString(@"ProblemDetailsTitle", @"")];
+
+  [[descriptionTextField cell] setPlaceholderString:CNSLocalizedString(@"UserDescriptionPlaceholder", @"")];
+  [noteText setStringValue:CNSLocalizedString(@"PrivacyNote", @"")];
+  
+  [showButton setTitle:CNSLocalizedString(@"ShowDetailsButtonTitle", @"")];
+  [hideButton setTitle:CNSLocalizedString(@"HideDetailsButtonTitle", @"")];
+  [cancelButton setTitle:CNSLocalizedString(@"CancelButtonTitle", @"")];
+  [submitButton setTitle:CNSLocalizedString(@"SendButtonTitle", @"")];
   
   NSString *logTextViewContent = [_crashLogContent copy];
   

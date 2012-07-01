@@ -35,8 +35,12 @@
   IBOutlet NSTextField  *descriptionTextField;
   IBOutlet NSTextView   *crashLogTextView;
 
+  IBOutlet NSTextFieldCell *introductionTextFieldCell;
+  IBOutlet NSTextFieldCell *commentsTextFieldCell;
+  IBOutlet NSTextFieldCell *problemDescriptionTextFieldCell;
+  
   IBOutlet NSTextField  *noteText;
-
+  
   IBOutlet NSButton   *showButton;
   IBOutlet NSButton   *hideButton;
   IBOutlet NSButton   *cancelButton;

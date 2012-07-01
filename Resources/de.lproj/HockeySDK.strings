@@ -1,0 +1,38 @@
+/* 
+ Localizable.strings
+ HockeySDK
+ 
+ Created by Andreas Linde on 01.07.12.
+ Copyright (c) 2012 Codenauts UG (haftungsbeschränkt). All rights reserved.
+ */
+
+/* Window title string, with placeholder for the AppName */
+"WindowTitle" = "Problembericht für %@";
+
+/* Introduction text, with app name placeholder first and company placeholder second */
+"IntroductionText" = "%@ wurde beim letzten Programmlauf unerwartet beendet. Möchten Sie einen Problembericht an %@ senden?";
+
+/* Comments Disclosure Text */
+"CommentsDisclosureTitle" = "Kommentare";
+
+/* User description placeholder */
+"UserDescriptionPlaceholder" = "Bitte beschreiben Sie hier die Schritte welche zu dem Problem geführt haben";
+
+/* Problems Details Box  Title */
+"ProblemDetailsTitle" = "Problem details and system configuration";
+
+/* Privacy note text */
+"PrivacyNote" = "Es werden keine personenbezogene Informationen mit diesem Bericht verschickt.";
+
+/* Show Details Button */
+"ShowDetailsButtonTitle" = "Details ein";
+
+/* HIde Details Button */
+"HideDetailsButtonTitle" = "Details aus";
+
+/* Cancel Button */
+"CancelButtonTitle" = "Abbrechen";
+
+/* Send Button */
+"SendButtonTitle" = "Senden";
+

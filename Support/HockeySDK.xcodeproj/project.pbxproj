@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E413D9315A0BB8800620BFE /* HockeySDK.strings */; };
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
 		1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
@@ -39,6 +40,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1E413D9215A0BB8800620BFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E413D9415A0BB9000620BFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1E413D9515A0BB9700620BFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportManagerDelegate.h; sourceTree = "<group>"; };
 		1EF09D8C1523574200067A5C /* HockeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HockeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EF09D8F1523574200067A5C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -129,6 +133,7 @@
 				1EF09DB81523579A00067A5C /* InfoPlist.strings */,
 				1EF09DBA1523579A00067A5C /* HockeySDK-Info.plist */,
 				1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */,
+				1E413D9315A0BB8800620BFE /* HockeySDK.strings */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -211,6 +216,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				de,
 			);
 			mainGroup = 1EF09D801523574200067A5C;
 			productRefGroup = 1EF09D8D1523574200067A5C /* Products */;
@@ -229,6 +235,7 @@
 			files = (
 				1EF09DBC1523579A00067A5C /* InfoPlist.strings in Resources */,
 				1EF09DD4152371DC00067A5C /* CNSCrashReportUI.nib in Resources */,
+				1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,10 +273,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		1E413D9315A0BB8800620BFE /* HockeySDK.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1E413D9215A0BB8800620BFE /* en */,
+				1E413D9515A0BB9700620BFE /* de */,
+			);
+			name = HockeySDK.strings;
+			sourceTree = "<group>";
+		};
 		1EF09DB81523579A00067A5C /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				1EF09DB91523579A00067A5C /* en */,
+				1E413D9415A0BB9000620BFE /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
