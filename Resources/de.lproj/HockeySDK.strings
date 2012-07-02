@@ -25,10 +25,10 @@
 "PrivacyNote" = "Es werden keine personenbezogene Informationen mit diesem Bericht verschickt.";
 
 /* Show Details Button */
-"ShowDetailsButtonTitle" = "Details ein";
+"ShowDetailsButtonTitle" = "Details einblenden";
 
 /* HIde Details Button */
-"HideDetailsButtonTitle" = "Details aus";
+"HideDetailsButtonTitle" = "Details ausblenden";
 
 /* Cancel Button */
 "CancelButtonTitle" = "Abbrechen";

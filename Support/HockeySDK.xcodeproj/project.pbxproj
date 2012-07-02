@@ -13,7 +13,6 @@
 		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
 		1EF09DB51523579100067A5C /* CNSHockeyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DAE1523579100067A5C /* CNSHockeyManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09DB61523579100067A5C /* CNSHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* CNSHockeyManager.m */; };
-		1EF09DBC1523579A00067A5C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DB81523579A00067A5C /* InfoPlist.strings */; };
 		1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */; };
 		1EF09DC1152357A500067A5C /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09DC0152357A500067A5C /* CrashReporter.framework */; };
 		1EF09DD4152371DC00067A5C /* CNSCrashReportUI.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DCD152371DC00067A5C /* CNSCrashReportUI.nib */; };
@@ -41,8 +40,12 @@
 
 /* Begin PBXFileReference section */
 		1E413D9215A0BB8800620BFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HockeySDK.strings; sourceTree = "<group>"; };
-		1E413D9415A0BB9000620BFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1E413D9515A0BB9700620BFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E015A1C47700C0816F /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E215A1C49400C0816F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E315A1C4A700C0816F /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E415A1C4BF00C0816F /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E515A1C4D100C0816F /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportManagerDelegate.h; sourceTree = "<group>"; };
 		1EF09D8C1523574200067A5C /* HockeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HockeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EF09D8F1523574200067A5C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -51,7 +54,6 @@
 		1EF09D941523574200067A5C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1EF09DAE1523579100067A5C /* CNSHockeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSHockeyManager.h; sourceTree = "<group>"; };
 		1EF09DAF1523579100067A5C /* CNSHockeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSHockeyManager.m; sourceTree = "<group>"; };
-		1EF09DB91523579A00067A5C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1EF09DBA1523579A00067A5C /* HockeySDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HockeySDK-Info.plist"; sourceTree = "<group>"; };
 		1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HockeySDK-Prefix.pch"; sourceTree = "<group>"; };
 		1EF09DC0152357A500067A5C /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
@@ -130,7 +132,6 @@
 		1EF09DB71523579A00067A5C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				1EF09DB81523579A00067A5C /* InfoPlist.strings */,
 				1EF09DBA1523579A00067A5C /* HockeySDK-Info.plist */,
 				1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */,
 				1E413D9315A0BB8800620BFE /* HockeySDK.strings */,
@@ -217,6 +218,11 @@
 			knownRegions = (
 				en,
 				de,
+				fi,
+				fr,
+				it,
+				nb,
+				sv,
 			);
 			mainGroup = 1EF09D801523574200067A5C;
 			productRefGroup = 1EF09D8D1523574200067A5C /* Products */;
@@ -233,7 +239,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EF09DBC1523579A00067A5C /* InfoPlist.strings in Resources */,
 				1EF09DD4152371DC00067A5C /* CNSCrashReportUI.nib in Resources */,
 				1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */,
 			);
@@ -278,17 +283,13 @@
 			children = (
 				1E413D9215A0BB8800620BFE /* en */,
 				1E413D9515A0BB9700620BFE /* de */,
+				1E66F5E015A1C47700C0816F /* fi */,
+				1E66F5E215A1C49400C0816F /* fr */,
+				1E66F5E315A1C4A700C0816F /* it */,
+				1E66F5E415A1C4BF00C0816F /* nb */,
+				1E66F5E515A1C4D100C0816F /* sv */,
 			);
 			name = HockeySDK.strings;
-			sourceTree = "<group>";
-		};
-		1EF09DB81523579A00067A5C /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1EF09DB91523579A00067A5C /* en */,
-				1E413D9415A0BB9000620BFE /* de */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
