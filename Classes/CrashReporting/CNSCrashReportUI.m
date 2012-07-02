@@ -156,6 +156,8 @@ const CGFloat kDetailsHeight = 285;
 
 
 - (void) askCrashReportDetails {
+#define DISTANCE_BETWEEN_BUTTONS		3
+  
   [[self window] setTitle:[NSString stringWithFormat:CNSLocalizedString(@"WindowTitle", @""), _applicationName]];
   
   [introductionTextFieldCell setTitle:[NSString stringWithFormat:CNSLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
@@ -170,6 +172,34 @@ const CGFloat kDetailsHeight = 285;
   [cancelButton setTitle:CNSLocalizedString(@"CancelButtonTitle", @"")];
   [submitButton setTitle:CNSLocalizedString(@"SendButtonTitle", @"")];
   
+  // adjust button sizes
+  NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys: [submitButton font], NSFontAttributeName, nil];
+  NSSize titleSize = [[submitButton title] sizeWithAttributes: attrs];
+	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
+	NSRect submitBtnBox = [submitButton frame];
+	submitBtnBox.origin.x += submitBtnBox.size.width -titleSize.width;
+	submitBtnBox.size.width = titleSize.width;
+	[submitButton setFrame: submitBtnBox];
+  
+  titleSize = [[cancelButton title] sizeWithAttributes: attrs];
+	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
+	NSRect cancelBtnBox = [cancelButton frame];
+	cancelBtnBox.origin.x = submitBtnBox.origin.x -DISTANCE_BETWEEN_BUTTONS -titleSize.width;
+	cancelBtnBox.size.width = titleSize.width;
+	[cancelButton setFrame: cancelBtnBox];
+
+  titleSize = [[showButton title] sizeWithAttributes: attrs];
+	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
+	NSRect showBtnBox = [showButton frame];
+	showBtnBox.size.width = titleSize.width;
+	[showButton setFrame: showBtnBox];
+
+  titleSize = [[hideButton title] sizeWithAttributes: attrs];
+	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
+	NSRect hideBtnBox = [hideButton frame];
+	hideBtnBox.size.width = titleSize.width;
+	[hideButton setFrame: showBtnBox];
+    
   NSString *logTextViewContent = [_crashLogContent copy];
   
   if (_logContent)
