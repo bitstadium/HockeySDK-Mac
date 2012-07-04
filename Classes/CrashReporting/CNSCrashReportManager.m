@@ -34,7 +34,7 @@
 #import "CNSCrashReportTextFormatter.h"
 
 #define SDK_NAME @"HockeySDK-Mac"
-#define SDK_VERSION @"0.9.4"
+#define SDK_VERSION @"0.9.5"
 
 @interface CNSCrashReportManager()<NSXMLParserDelegate>
 @end
