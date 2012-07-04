@@ -110,6 +110,6 @@ typedef enum CrashReportStatus {
 - (void) startManager;
 
 - (void) cancelReport;
-- (void) sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription ;
+- (void) sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
 
 @end

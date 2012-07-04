@@ -63,13 +63,13 @@
 
 - (id)initWithManager:(CNSCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName;
 
-- (void) askCrashReportDetails;
+- (void)askCrashReportDetails;
 
-- (IBAction) cancelReport:(id)sender;
-- (IBAction) submitReport:(id)sender;
-- (IBAction) showDetails:(id)sender;
-- (IBAction) hideDetails:(id)sender;
-- (IBAction) showComments:(id)sender;
+- (IBAction)cancelReport:(id)sender;
+- (IBAction)submitReport:(id)sender;
+- (IBAction)showDetails:(id)sender;
+- (IBAction)hideDetails:(id)sender;
+- (IBAction)showComments:(id)sender;
 
 - (BOOL)showComments;
 - (void)setShowComments:(BOOL)value;

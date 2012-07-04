@@ -37,9 +37,8 @@
 // Invoked before a crash report will be sent
 // 
 // Return cadditional application specific log data the crashreport should contain, empty by default.
-// The string will automatically be wrapped into <[DATA[ ]]>, so make sure you don't do that in your string.
 // 
 // Default: empty
--(NSString *) crashReportApplicationLog;
+-(NSString *)crashReportApplicationLog;
 
 @end

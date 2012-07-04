@@ -52,8 +52,8 @@
 
 - (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>) crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>) crashReportManagerDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>) crashReportManagerDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate;
 
 @end
