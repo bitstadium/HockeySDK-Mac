@@ -36,8 +36,6 @@
 #define SDK_NAME @"HockeySDK-Mac"
 #define SDK_VERSION @"0.9.4"
 
-#define CRASHREPORT_MAX_CONSOLE_SIZE 50000
-
 @interface CNSCrashReportManager()<NSXMLParserDelegate>
 @end
 
@@ -138,37 +136,6 @@
   [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kHockeySDKApprovedCrashReports];
   [[NSUserDefaults standardUserDefaults] synchronize];    
 }
-
-
-- (NSString *) consoleContent {
-  // get the console log
-  NSError* error = nil;
-  NSMutableString *content = [[NSMutableString alloc] initWithString:@""];
-  
-  NSEnumerator *theEnum = [[[NSString stringWithContentsOfFile:@"/private/var/log/system.log" encoding:NSUTF8StringEncoding error:&error] componentsSeparatedByString: @"\n"] objectEnumerator];
-  NSString* currentObject;
-  NSMutableArray* applicationStrings = [NSMutableArray array];
-  
-  NSString* searchString = [[self applicationName] stringByAppendingString:@"["];
-  while ( (currentObject = [theEnum nextObject]) ) {
-    if ([currentObject rangeOfString:searchString].location != NSNotFound)
-      [applicationStrings addObject: currentObject];
-  }
-  
-  NSInteger i;
-  for(i = ((NSInteger)[applicationStrings count])-1; (i>=0 && i>((NSInteger)[applicationStrings count])-100); i--) {
-    [content appendString:[applicationStrings objectAtIndex:i]];
-    [content appendString:@"\n"];
-  }
-  
-  // Now limit the content to CRASHREPORTSENDER_MAX_CONSOLE_SIZE (default: 50kByte)
-  if ([content length] > CRASHREPORT_MAX_CONSOLE_SIZE) {
-    content = (NSMutableString *)[content substringWithRange:NSMakeRange([content length]-CRASHREPORT_MAX_CONSOLE_SIZE-1, CRASHREPORT_MAX_CONSOLE_SIZE)]; 
-  }
-  
-  return [content autorelease];
-}
-
 
 - (NSString *) modelVersion {
   NSString * modelString  = nil;
