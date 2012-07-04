@@ -28,7 +28,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "CNSCrashReportManagerDelegate.h"
+#import <HockeySDK/CNSCrashReportManagerDelegate.h>
 
 // flags if the crashlog analyzer is started. since this may theoretically crash we need to track it
 #define kHockeySDKAnalyzerStarted @"HockeySDKCrashReportAnalyzerStarted"

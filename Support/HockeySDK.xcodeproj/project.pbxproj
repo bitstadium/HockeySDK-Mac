@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E413D9315A0BB8800620BFE /* HockeySDK.strings */; };
+		1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7F5A2315A46249001081FC /* HockeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
 		1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
@@ -46,6 +47,7 @@
 		1E66F5E315A1C4A700C0816F /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E66F5E415A1C4BF00C0816F /* nb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E66F5E515A1C4D100C0816F /* sv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E7F5A2315A46249001081FC /* HockeySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDK.h; sourceTree = "<group>"; };
 		1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportManagerDelegate.h; sourceTree = "<group>"; };
 		1EF09D8C1523574200067A5C /* HockeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HockeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EF09D8F1523574200067A5C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -134,6 +136,7 @@
 			children = (
 				1EF09DBA1523579A00067A5C /* HockeySDK-Info.plist */,
 				1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */,
+				1E7F5A2315A46249001081FC /* HockeySDK.h */,
 				1E413D9315A0BB8800620BFE /* HockeySDK.strings */,
 			);
 			name = Resources;
@@ -171,6 +174,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */,
 				1EF09DB51523579100067A5C /* CNSHockeyManager.h in Headers */,
 				1EF09DD5152371DC00067A5C /* CNSCrashReportManager.h in Headers */,
 				1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */,
