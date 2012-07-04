@@ -402,7 +402,15 @@
       NSString *log = [metaDict valueForKey:@"log"] ?: @"";
       NSString *description = [metaDict valueForKey:@"description"] ?: @"";
       
-      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><logdata><![CDATA[%@]]></logdata><log><![CDATA[%@]]></log></crash>",
+      if ([log length] > 0) {
+        if ([description length] > 0) {
+          description = [NSString stringWithFormat:@"%@\n\nLog:\n%@", description, log];
+        } else {
+          description = [NSString stringWithFormat:@"Log:\n%@", log];
+        }
+      }
+      
+      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><log><![CDATA[%@]]></log></crash>",
        [[self applicationName] UTF8String],
        [self extractAppUUIDs:report],
        report.applicationInfo.applicationIdentifier,
@@ -413,7 +421,6 @@
        userid,
        contact,
        [description stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,description.length)],
-       [log stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,log.length)],
        [crashLogString stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,crashLogString.length)]
                        ];
 
