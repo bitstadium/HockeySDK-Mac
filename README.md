@@ -4,6 +4,12 @@ his document describes how to integrate the HockeySDK-Mac into your app. The SDK
 
 ## Release Notes
 
+Version 0.9.5 (RC 5):
+
+- Add multiple localizations (Finnish, French, Italian, Norwegian, Swedish. Thanks Markus!)
+- UI now automatically resizes the buttons to fit the localized strings
+- Move CNSCrashReporterManagerDelegate to public headers of the framework
+
 Version 0.9.4 (RC 4):
 
 - Update SDK initializer to be less error prone
