@@ -32,9 +32,33 @@
 #import <sys/sysctl.h>
 #import <CrashReporter/CrashReporter.h>
 #import "CNSCrashReportTextFormatter.h"
+#import <objc/runtime.h>
 
 #define SDK_NAME @"HockeySDK-Mac"
 #define SDK_VERSION @"0.9.5"
+
+/**
+ * @internal
+ *
+ * The overridden version of sendEvent: in NSApplication
+ */
+@class NSEvent;
+
+@interface NSObject (HockeySDK_PrivateAdditions)
+- (void)hockeysdk_catching_sendEvent: (NSEvent *) theEvent;
+@end
+
+@implementation NSObject (HockeySDK_PrivateAdditions)
+
+- (void)hockeysdk_catching_sendEvent:(NSEvent *)theEvent {
+  @try {
+    /* In a swizzled method, calling the swizzled selector actually calls the
+     original method. */
+    [self hockeysdk_catching_sendEvent:theEvent];
+  } @catch (NSException *exception) {
+    (NSGetUncaughtExceptionHandler())(exception);
+  }
+}
 
 @end
 
@@ -47,6 +71,7 @@
 - (NSString *)applicationVersionString;
 - (NSString *)applicationVersion;
 
+- (BOOL)trapRunLoopExceptions;
 
 - (void)handleCrashReport;
 - (BOOL)hasPendingCrashReport;
@@ -127,6 +152,29 @@
 
 
 #pragma mark - Private
+
+/**
+ * Swizzle -[NSApplication sendEvent:] to capture exceptions in the run loop.
+ */
+- (BOOL)trapRunLoopExceptions {
+  Class cls = NSClassFromString(@"NSApplication");
+  
+  if (!cls)
+    return NO;
+  
+  SEL origSel = @selector(sendEvent:), altSel = @selector(plcrashreporter_catching_sendEvent:);
+  Method origMethod = class_getInstanceMethod(cls, origSel),
+  altMethod = class_getInstanceMethod(cls, altSel);
+  
+  if (!origMethod || !altMethod)
+    return NO;
+  
+  class_addMethod(cls, origSel, class_getMethodImplementation(cls, origSel), method_getTypeEncoding(origMethod));
+  class_addMethod(cls, altSel, class_getMethodImplementation(cls, altSel), method_getTypeEncoding(altMethod));
+  method_exchangeImplementations(class_getInstanceMethod(cls, origSel), class_getInstanceMethod(cls, altSel));
+  return YES;
+}
+
 
 - (void)cleanCrashReports {
   NSError *error = NULL;
@@ -279,14 +327,15 @@
     [self handleCrashReport];
   }
   
-  PLCrashReporterOptions options = 0;
-  if (_exceptionInterceptionEnabled) {
-    options = PLCrashReporterOptionCaptureRunLoopExceptions;
-  }
-  
   // Enable the Crash Reporter
-  if (![crashReporter enableCrashReporterWithOptions:options andReturnError: &error])
+  if (![crashReporter enableCrashReporterAndReturnError:&error])
     NSLog(@"Warning: Could not enable crash reporter: %@", error);
+  
+  /* Enable run-loop exception trapping if requested */
+  if (_exceptionInterceptionEnabled) {
+    if (![self trapRunLoopExceptions])
+      NSLog(@"Warning: Could not enable run-loop exception trapping!");
+  }
   
   if ([_crashFiles count] == 0 && [_fileManager fileExistsAtPath: _crashesDir]) {
     NSString *file = nil;
