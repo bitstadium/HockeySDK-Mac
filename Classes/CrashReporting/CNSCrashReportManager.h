@@ -57,11 +57,7 @@ typedef enum CrashReportStatus {
 
 @class CNSCrashReportUI;
 
-@interface CNSCrashReportManager : NSObject
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6) 
- <NSXMLParserDelegate>
-#endif
-{
+@interface CNSCrashReportManager : NSObject {
   NSFileManager *_fileManager;
 
   BOOL _crashIdenticalCurrentVersion;

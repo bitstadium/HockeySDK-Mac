@@ -38,6 +38,9 @@
 
 #define CRASHREPORT_MAX_CONSOLE_SIZE 50000
 
+@interface CNSCrashReportManager()<NSXMLParserDelegate>
+@end
+
 @interface CNSCrashReportManager(private)
 - (NSString *) applicationName;
 - (NSString *) applicationVersionString;
