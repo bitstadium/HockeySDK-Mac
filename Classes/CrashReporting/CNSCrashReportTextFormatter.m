@@ -37,9 +37,9 @@
 
 @interface CNSCrashReportTextFormatter (PrivateAPI)
 NSInteger binaryImageSort(id binary1, id binary2, void *context);
-+ (NSString *) formatStackFrame: (PLCrashReportStackFrameInfo *) frameInfo 
-                     frameIndex: (NSUInteger) frameIndex
-                         report: (PLCrashReport *) report;
++ (NSString *)formatStackFrame:(PLCrashReportStackFrameInfo *)frameInfo 
+                    frameIndex:(NSUInteger)frameIndex
+                        report:(PLCrashReport *)report;
 @end
 
 
@@ -58,7 +58,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
  *
  * @return Returns the formatted result on success, or nil if an error occurs.
  */
-+ (NSString *) stringValueForCrashReport: (PLCrashReport *) report withTextFormat: (CNSCrashReportTextFormat) textFormat {
++ (NSString *)stringValueForCrashReport:(PLCrashReport *)report withTextFormat:(CNSCrashReportTextFormat)textFormat {
 	NSMutableString* text = [NSMutableString string];
 	boolean_t lp64 = true; // quiesce GCC uninitialized value warning
     
@@ -435,7 +435,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
  *
  * @return Returns the formatted result on success, or nil if an error occurs.
  */
-+ (NSArray *) arrayOfAppUUIDsForCrashReport: (PLCrashReport *) report {
++ (NSArray *)arrayOfAppUUIDsForCrashReport:(PLCrashReport *)report {
 	NSMutableArray* appUUIDs = [NSMutableArray array];
   
   /* Images. The iPhone crash report format sorts these in ascending order, by the base address */
@@ -512,7 +512,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
  * @param textFormat Format to use for the generated text crash report.
  * @param stringEncoding Encoding to use when writing to the output stream.
  */
-- (id) initWithTextFormat: (CNSCrashReportTextFormat) textFormat stringEncoding: (NSStringEncoding) stringEncoding {
+- (id)initWithTextFormat:(CNSCrashReportTextFormat)textFormat stringEncoding:(NSStringEncoding)stringEncoding {
     if ((self = [super init]) == nil)
         return nil;
     
@@ -523,7 +523,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
 }
 
 // from PLCrashReportFormatter protocol
-- (NSData *) formatReport: (PLCrashReport *) report error: (NSError **) outError {
+- (NSData *)formatReport: (PLCrashReport *) report error: (NSError **) outError {
     NSString *text = [PLCrashReportTextFormatter stringValueForCrashReport: report withTextFormat: _textFormat];
     return [text dataUsingEncoding: _stringEncoding allowLossyConversion: YES];
 }
@@ -543,9 +543,9 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
  *
  * @return Returns a formatted frame line.
  */
-+ (NSString *) formatStackFrame: (PLCrashReportStackFrameInfo *) frameInfo 
-                     frameIndex: (NSUInteger) frameIndex
-                         report: (PLCrashReport *) report
++ (NSString *)formatStackFrame: (PLCrashReportStackFrameInfo *) frameInfo 
+                    frameIndex: (NSUInteger) frameIndex
+                        report: (PLCrashReport *) report
 {
     /* Base image address containing instrumention pointer, offset of the IP from that base
      * address, and the associated image name */

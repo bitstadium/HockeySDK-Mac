@@ -36,23 +36,27 @@
 #define SDK_NAME @"HockeySDK-Mac"
 #define SDK_VERSION @"0.9.5"
 
-@interface CNSCrashReportManager()<NSXMLParserDelegate>
 @end
 
-@interface CNSCrashReportManager(private)
-- (NSString *) applicationName;
-- (NSString *) applicationVersionString;
-- (NSString *) applicationVersion;
+@interface CNSCrashReportManager () <NSXMLParserDelegate>
+@end
 
-- (void) handleCrashReport;
-- (BOOL) hasPendingCrashReport;
-- (void)_cleanCrashReports;
-- (NSString *) extractAppUUIDs:(PLCrashReport *)report;
 
-- (void) _postXML:(NSString*)xml;
-- (void) searchCrashLogFile:(NSString *)path;
+@interface CNSCrashReportManager (private)
+- (NSString *)applicationName;
+- (NSString *)applicationVersionString;
+- (NSString *)applicationVersion;
 
-- (void) returnToMainApplication;
+
+- (void)handleCrashReport;
+- (BOOL)hasPendingCrashReport;
+- (void)cleanCrashReports;
+- (NSString *)extractAppUUIDs:(PLCrashReport *)report;
+
+- (void)postXML:(NSString*)xml;
+- (void)searchCrashLogFile:(NSString *)path;
+
+- (void)returnToMainApplication;
 @end
 
 
@@ -76,7 +80,7 @@
   return crashReportManager;
 }
 
-- (id) init {
+- (id)init {
   if ((self = [super init])) {
     _exceptionInterceptionEnabled = NO;
     _serverResult = CrashReportStatusUnknown;
@@ -124,7 +128,7 @@
 
 #pragma mark - Private
 
-- (void)_cleanCrashReports {
+- (void)cleanCrashReports {
   NSError *error = NULL;
   
   for (NSUInteger i=0; i < [_crashFiles count]; i++) {		
@@ -137,7 +141,7 @@
   [[NSUserDefaults standardUserDefaults] synchronize];    
 }
 
-- (NSString *) modelVersion {
+- (NSString *)modelVersion {
   NSString * modelString  = nil;
   int        modelInfo[2] = { CTL_HW, HW_MODEL };
   size_t     modelSize;
@@ -165,7 +169,7 @@
   return modelString;
 }
 
-- (NSString *) extractAppUUIDs:(PLCrashReport *)report {  
+- (NSString *)extractAppUUIDs:(PLCrashReport *)report {  
   NSMutableString *uuidString = [NSMutableString string];
   NSArray *uuidArray = [CNSCrashReportTextFormatter arrayOfAppUUIDsForCrashReport:report];
   
@@ -182,7 +186,7 @@
   return uuidString;
 }
 
-- (void) returnToMainApplication {
+- (void)returnToMainApplication {
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindow)]) {
     [self.delegate showMainApplicationWindow];
   } else {
@@ -190,7 +194,7 @@
   }
 }
 
-- (void) startManager {
+- (void)startManager {
   BOOL returnToApp = NO;
   
   if ([self hasPendingCrashReport]) {
@@ -223,7 +227,7 @@
       }
     } else {
       if (![self hasNonApprovedCrashReports]) {
-        [self _performSendingCrashReports];
+        [self performSendingCrashReports];
       } else {
         returnToApp = YES;
       }
@@ -253,7 +257,7 @@
   return NO;
 }
 
-- (BOOL) hasPendingCrashReport {
+- (BOOL)hasPendingCrashReport {
   if (!_crashReportActivated) return NO;
   
   _crashFiles = [[NSMutableArray alloc] init];
@@ -307,12 +311,12 @@
 
 #pragma mark - CNSCrashReportManagerDelegate
 
-- (void) cancelReport {
-  [self _cleanCrashReports];
+- (void)cancelReport {
+  [self cleanCrashReports];
   [self returnToMainApplication];
 }
 
-- (void)_performSendingCrashReports {
+- (void)performSendingCrashReports {
   NSMutableDictionary *approvedCrashReports = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] dictionaryForKey: kHockeySDKApprovedCrashReports]];
   
   NSError *error = NULL;
@@ -378,7 +382,7 @@
   
   if (crashes != nil) {
     NSLog(@"Sending crash reports:\n%@", crashes);
-    [self _postXML:[NSString stringWithFormat:@"<crashes>%@</crashes>", crashes]];
+    [self postXML:[NSString stringWithFormat:@"<crashes>%@</crashes>", crashes]];
   }
 
   // Only return to main application, if crash is send
@@ -387,7 +391,7 @@
   [self returnToMainApplication];
 }
 
-- (void) sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
+- (void)sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
   // add notes and delegate results to the latest crash report
   
   NSMutableDictionary *metaDict = [[[NSMutableDictionary alloc] init] autorelease];
@@ -415,13 +419,13 @@
   
   [NSKeyedArchiver archiveRootObject:metaDict toFile:[NSString stringWithFormat:@"%@.meta", _crashFile]];    
   
-  [self _performSendingCrashReports];
+  [self performSendingCrashReports];
 }
 
 
 #pragma mark - Networking
 
-- (void)_postXML:(NSString*)xml {
+- (void)postXML:(NSString*)xml {
   NSMutableURLRequest *request = nil;
   NSString *boundary = @"----FOO";
   
@@ -464,7 +468,7 @@
   _statusCode = [response statusCode];
   
   if (_statusCode >= 200 && _statusCode < 400 && responseData != nil && [responseData length] > 0) {
-    [self _cleanCrashReports];
+    [self cleanCrashReports];
 
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:responseData];
     // Set self as the delegate of the parser so that it will receive the parser delegate methods callbacks.
@@ -519,7 +523,7 @@
 
 #pragma mark - GetterSetter
 
-- (NSString *) applicationName {
+- (NSString *)applicationName {
   NSString *applicationName = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleExecutable"];
   
   if (!applicationName)
@@ -529,7 +533,7 @@
 }
 
 
-- (NSString*) applicationVersionString {
+- (NSString*)applicationVersionString {
   NSString* string = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleShortVersionString"];
   
   if (!string)
@@ -538,7 +542,7 @@
   return string;
 }
 
-- (NSString *) applicationVersion {
+- (NSString *)applicationVersion {
   NSString* string = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleVersion"];
   
   if (!string)
@@ -553,7 +557,7 @@
 //
 // Called to handle a pending crash report.
 //
-- (void) handleCrashReport {
+- (void)handleCrashReport {
   PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
   NSError *error = NULL;
 	

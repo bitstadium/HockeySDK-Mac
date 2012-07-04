@@ -87,7 +87,7 @@ typedef enum CrashReportStatus {
 
 }
 
-- (NSString*) modelVersion;
+- (NSString *)modelVersion;
 
 + (CNSCrashReportManager *)sharedCrashReportManager;
 
@@ -107,9 +107,9 @@ typedef enum CrashReportStatus {
 // if NO, the user will be asked if the crash report can be submitted (default)
 @property (nonatomic, assign, getter=isAutoSubmitCrashReport) BOOL autoSubmitCrashReport;
 
-- (void) startManager;
+- (void)startManager;
 
-- (void) cancelReport;
-- (void) sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
+- (void)cancelReport;
+- (void)sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
 
 @end

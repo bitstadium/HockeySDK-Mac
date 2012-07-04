@@ -77,12 +77,12 @@ const CGFloat kDetailsHeight = 285;
 }
 
 
-- (void) endCrashReporter {
+- (void)endCrashReporter {
   [self close];
 }
 
 
-- (IBAction) showComments: (id) sender {
+- (IBAction)showComments: (id) sender {
   NSRect windowFrame = [[self window] frame];
   
   if ([sender intValue]) {
@@ -107,7 +107,7 @@ const CGFloat kDetailsHeight = 285;
 }
 
 
-- (IBAction) showDetails:(id)sender {
+- (IBAction)showDetails:(id)sender {
   NSRect windowFrame = [[self window] frame];
   
   windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height + kDetailsHeight);
@@ -121,7 +121,7 @@ const CGFloat kDetailsHeight = 285;
 }
 
 
-- (IBAction) hideDetails:(id)sender {
+- (IBAction)hideDetails:(id)sender {
   NSRect windowFrame = [[self window] frame];
   
   [self setShowDetails:NO];
@@ -134,14 +134,14 @@ const CGFloat kDetailsHeight = 285;
 }
 
 
-- (IBAction) cancelReport:(id)sender {
+- (IBAction)cancelReport:(id)sender {
   [self endCrashReporter];
   [NSApp stopModal];
   
   [_crashReportManager cancelReport];
 }
 
-- (IBAction) submitReport:(id)sender {
+- (IBAction)submitReport:(id)sender {
   [submitButton setEnabled:NO];
   
   [[self window] makeFirstResponder: nil];
@@ -155,7 +155,7 @@ const CGFloat kDetailsHeight = 285;
 }
 
 
-- (void) askCrashReportDetails {
+- (void)askCrashReportDetails {
 #define DISTANCE_BETWEEN_BUTTONS		3
   
   [[self window] setTitle:[NSString stringWithFormat:CNSLocalizedString(@"WindowTitle", @""), _applicationName]];
