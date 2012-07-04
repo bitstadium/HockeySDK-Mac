@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E413D9315A0BB8800620BFE /* HockeySDK.strings */; };
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
-		1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
 		1EF09DB51523579100067A5C /* CNSHockeyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DAE1523579100067A5C /* CNSHockeyManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09DB61523579100067A5C /* CNSHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* CNSHockeyManager.m */; };
