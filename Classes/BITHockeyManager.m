@@ -108,11 +108,19 @@
 #pragma mark - Private Instance Methods
 
 - (void)configureCrashReportManager:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
-  [[BITCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
-  [[BITCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
-  [[BITCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
-  [[BITCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
-  [[BITCrashReportManager sharedCrashReportManager] startManager];
+	NSCharacterSet *hexSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdef"];
+	NSCharacterSet *inStringSet = [NSCharacterSet characterSetWithCharactersInString:_appIdentifier];
+	BOOL validAppID = ([_appIdentifier length] == 32) && ([hexSet isSupersetOfSet:inStringSet]);
+  
+	if (validAppID) {
+    [[BITCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
+    [[BITCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
+    [[BITCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
+    [[BITCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
+    [[BITCrashReportManager sharedCrashReportManager] startManager];
+  } else {
+    NSLog(@"ERROR: The app identifier is invalid! Please use the HockeyApp app identifier you find on the apps website on HockeyApp! The SDK is disabled!");
+  }
 }
 
 @end
