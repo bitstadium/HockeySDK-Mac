@@ -119,7 +119,7 @@
     [[BITCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
     [[BITCrashReportManager sharedCrashReportManager] startManager];
   } else {
-    NSLog(@"ERROR: The app identifier is invalid! Please use the HockeyApp app identifier you find on the apps website on HockeyApp! The SDK is disabled!");
+    HockeySDKLog(@"ERROR: The app identifier is invalid! Please use the HockeyApp app identifier you find on the apps website on HockeyApp! The SDK is disabled!");
   }
 }
 

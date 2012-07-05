@@ -239,7 +239,7 @@
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindow)]) {
     [self.delegate showMainApplicationWindow];
   } else {
-    NSLog(@"Warning: Required BITCrashReportManagerDelegate is not set!");
+    NSLog(@"ERROR: Required BITCrashReportManagerDelegate is not set!");
   }
 }
 
@@ -382,7 +382,7 @@
       PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
 			
       if (report == nil) {
-        NSLog(@"Could not parse crash report");
+        HockeySDKLog(@"ERROR: Could not parse crash report");
         continue;
       }
       
@@ -438,7 +438,6 @@
   [[NSUserDefaults standardUserDefaults] synchronize];
   
   if (crashes != nil) {
-    NSLog(@"Sending crash reports:\n%@", crashes);
     [self postXML:[NSString stringWithFormat:@"<crashes>%@</crashes>", crashes]];
   }
 
@@ -631,7 +630,7 @@
     NSString *cacheFilename = [NSString stringWithFormat: @"%.0f", [NSDate timeIntervalSinceReferenceDate]];
     
     if (crashData == nil) {
-      NSLog(@"Could not load crash report: %@", error);
+      HockeySDKLog(@"Warning: Could not load crash report: %@", error);
     } else {
       [crashData writeToFile:[_crashesDir stringByAppendingPathComponent: cacheFilename] atomically:YES];
     }
