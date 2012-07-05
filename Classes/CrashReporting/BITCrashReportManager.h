@@ -34,7 +34,7 @@
 // flags if the crashlog analyzer is started. since this may theoretically crash we need to track it
 #define kHockeySDKAnalyzerStarted @"HockeySDKCrashReportAnalyzerStarted"
 
-// flags if the QuincyKit is activated at all
+// flags if the crashreporter is activated at all
 #define kHockeySDKCrashReportActivated @"HockeySDKCrashReportActivated"
 
 // flags if the crashreporter should automatically send crashes without asking the user again
