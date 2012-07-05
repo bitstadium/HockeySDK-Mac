@@ -29,7 +29,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import <HockeySDK/CNSCrashReportManagerDelegate.h>
+#import <HockeySDK/BITCrashReportManagerDelegate.h>
 
 // flags if the crashlog analyzer is started. since this may theoretically crash we need to track it
 #define kHockeySDKAnalyzerStarted @"HockeySDKCrashReportAnalyzerStarted"
@@ -56,9 +56,9 @@ typedef enum CrashReportStatus {
   CrashReportStatusAvailable = 3,
 } CrashReportStatus;
 
-@class CNSCrashReportUI;
+@class BITCrashReportUI;
 
-@interface CNSCrashReportManager : NSObject {
+@interface BITCrashReportManager : NSObject {
   NSFileManager *_fileManager;
 
   BOOL _crashIdenticalCurrentVersion;
@@ -70,7 +70,7 @@ typedef enum CrashReportStatus {
     
   NSMutableString   *_contentOfProperty;
 
-  id<CNSCrashReportManagerDelegate> _delegate;
+  id<BITCrashReportManagerDelegate> _delegate;
 
   NSString   *_appIdentifier;
   NSString   *_submissionURL;
@@ -82,7 +82,7 @@ typedef enum CrashReportStatus {
   NSMutableArray *_crashFiles;
   NSString       *_crashesDir;
   
-  CNSCrashReportUI *_crashReportUI;
+  BITCrashReportUI *_crashReportUI;
 
   int _analyzerStarted;
 
@@ -90,7 +90,7 @@ typedef enum CrashReportStatus {
 
 - (NSString *)modelVersion;
 
-+ (CNSCrashReportManager *)sharedCrashReportManager;
++ (BITCrashReportManager *)sharedCrashReportManager;
 
 // The HockeyApp app identifier (required)
 @property (nonatomic, retain) NSString *appIdentifier;
@@ -102,7 +102,7 @@ typedef enum CrashReportStatus {
 @property (nonatomic, retain) NSString *companyName;
 
 // delegate is required
-@property (nonatomic, assign) id <CNSCrashReportManagerDelegate> delegate;
+@property (nonatomic, assign) id <BITCrashReportManagerDelegate> delegate;
 
 // if YES, the crash report will be submitted without asking the user
 // if NO, the user will be asked if the crash report can be submitted (default)

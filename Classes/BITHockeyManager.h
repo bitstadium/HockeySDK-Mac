@@ -22,9 +22,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-@protocol CNSCrashReportManagerDelegate;
+@protocol BITCrashReportManagerDelegate;
 
-@interface CNSHockeyManager : NSObject {
+@interface BITHockeyManager : NSObject {
 @private
   NSString *_appIdentifier;
   NSString *_companyName;
@@ -44,16 +44,16 @@
 #pragma mark - Public Methods
 
 // Returns the shared manager object
-+ (CNSHockeyManager *)sharedHockeyManager;
++ (BITHockeyManager *)sharedHockeyManager;
 
 // Configure HockeyApp with a single app identifier and delegate; use this
 // only for debug or beta versions of your app!
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>) crashReportManagerDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>) crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>) crashReportManagerDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>) crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate;
 
 @end

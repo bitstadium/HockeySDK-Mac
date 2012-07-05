@@ -24,9 +24,8 @@
 
 
 #import <Foundation/Foundation.h>
-#import <CrashReporter/CrashReporter.h>
 
-@protocol CNSCrashReportManagerDelegate <NSObject>
+@protocol BITCrashReportManagerDelegate <NSObject>
 
 @required
 

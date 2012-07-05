@@ -33,9 +33,9 @@
 
 #import "CrashReporter/CrashReporter.h"
 
-#import "CNSCrashReportTextFormatter.h"
+#import "BITCrashReportTextFormatter.h"
 
-@interface CNSCrashReportTextFormatter (PrivateAPI)
+@interface BITCrashReportTextFormatter (PrivateAPI)
 NSInteger binaryImageSort(id binary1, id binary2, void *context);
 + (NSString *)formatStackFrame:(PLCrashReportStackFrameInfo *)frameInfo 
                     frameIndex:(NSUInteger)frameIndex
@@ -46,7 +46,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
 /**
  * Formats PLCrashReport data as human-readable text.
  */
-@implementation CNSCrashReportTextFormatter
+@implementation BITCrashReportTextFormatter
 
 
 /**
@@ -531,7 +531,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
 @end
 
 
-@implementation CNSCrashReportTextFormatter (PrivateAPI)
+@implementation BITCrashReportTextFormatter (PrivateAPI)
 
 
 /**

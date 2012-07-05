@@ -35,7 +35,7 @@
 		</object>
 		<array class="NSMutableArray" key="IBDocument.RootObjects" id="557403926">
 			<object class="NSCustomObject" id="265051856">
-				<string key="NSClassName">CNSCrashReportUI</string>
+				<string key="NSClassName">BITCrashReportUI</string>
 			</object>
 			<object class="NSCustomObject" id="827796767">
 				<string key="NSClassName">FirstResponder</string>
@@ -1114,7 +1114,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<object class="IBPartialClassDescription">
-					<string key="className">CNSCrashReportUI</string>
+					<string key="className">BITCrashReportUI</string>
 					<string key="superclassName">NSWindowController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="cancelReport:">id</string>
@@ -1201,7 +1201,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/CNSCrashReportUI.h</string>
+						<string key="minorKey">./Classes/BITCrashReportUI.h</string>
 					</object>
 				</object>
 			</array>

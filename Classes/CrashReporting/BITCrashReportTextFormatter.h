@@ -54,7 +54,7 @@ typedef enum {
 #define kCNSBinaryImageKeyType @"type"
 
 
-@interface CNSCrashReportTextFormatter : NSObject <PLCrashReportFormatter> {
+@interface BITCrashReportTextFormatter : NSObject <PLCrashReportFormatter> {
 @private
     /** Text output format. */
     CNSCrashReportTextFormat _textFormat;

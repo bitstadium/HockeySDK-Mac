@@ -28,13 +28,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "CNSCrashReportUI.h"
-#import "CNSCrashReportManager.h"
+#import "BITCrashReportUI.h"
+#import "BITCrashReportManager.h"
 #import <sys/sysctl.h>
 #import <CrashReporter/CrashReporter.h>
 
 
-@interface CNSCrashReportUI(private)
+@interface BITCrashReportUI(private)
 - (void) askCrashReportDetails;
 - (void) endCrashReporter;
 @end
@@ -42,9 +42,9 @@
 const CGFloat kCommentsHeight = 105;
 const CGFloat kDetailsHeight = 285;
 
-@implementation CNSCrashReportUI
+@implementation BITCrashReportUI
 
-- (id)initWithManager:(CNSCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName {
+- (id)initWithManager:(BITCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName {
   
   self = [super initWithWindowNibName: @"CNSCrashReportUI"];
   

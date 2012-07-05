@@ -22,6 +22,6 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <HockeySDK/CNSHockeyManager.h>
-#import <HockeySDK/CNSCrashReportManager.h>
-#import <HockeySDK/CNSCrashReporterManagerDelegate.h>
+#import <HockeySDK/BITHockeyManager.h>
+#import <HockeySDK/BITCrashReportManager.h>
+#import <HockeySDK/BITCrashReportManagerDelegate.h>

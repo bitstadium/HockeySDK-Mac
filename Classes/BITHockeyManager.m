@@ -22,18 +22,18 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "CNSHockeyManager.h"
+#import "BITHockeyManager.h"
 
-#import "CNSCrashReportManager.h"
-#import "CNSCrashReportManagerDelegate.h"
+#import "BITCrashReportManager.h"
+#import "BITCrashReportManagerDelegate.h"
 
-@interface CNSHockeyManager ()
+@interface BITHockeyManager ()
 
-- (void)configureCrashReportManager:(BOOL)enableExceptionInterception crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate;
+- (void)configureCrashReportManager:(BOOL)enableExceptionInterception crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate;
 
 @end
 
-@implementation CNSHockeyManager
+@implementation BITHockeyManager
 
 @synthesize appIdentifier = _appIdentifier;
 @synthesize loggingEnabled = _loggingEnabled;
@@ -42,12 +42,12 @@
 #pragma mark - Public Class Methods
 
 #if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
-+ (CNSHockeyManager *)sharedHockeyManager {   
-  static CNSHockeyManager *sharedInstance = nil;
++ (BITHockeyManager *)sharedHockeyManager {   
+  static BITHockeyManager *sharedInstance = nil;
   static dispatch_once_t pred;
   
   dispatch_once(&pred, ^{
-    sharedInstance = [CNSHockeyManager alloc];
+    sharedInstance = [BITHockeyManager alloc];
     sharedInstance = [sharedInstance init];
   });
   
@@ -78,7 +78,7 @@
 
 #pragma mark - Public Instance Methods (Configuration)
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
 
   [_appIdentifier release];
   _appIdentifier = [newAppIdentifier copy];
@@ -90,29 +90,29 @@
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
   [self configureWithIdentifier:newAppIdentifier companyName:newCompanyName exceptionInterceptionEnabled:NO crashReportManagerDelegate:crashReportManagerDelegate];
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
   [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:exceptionInterceptionEnabled crashReportManagerDelegate:crashReportManagerDelegate];
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate{
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate{
   [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:NO crashReportManagerDelegate:crashReportManagerDelegate];
 }
 
 
 #pragma mark - Private Instance Methods
 
-- (void)configureCrashReportManager:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <CNSCrashReportManagerDelegate>)crashReportManagerDelegate {
-  [[CNSCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
-  [[CNSCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
-  [[CNSCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
-  [[CNSCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
-  [[CNSCrashReportManager sharedCrashReportManager] startManager];
+- (void)configureCrashReportManager:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
+  [[BITCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
+  [[BITCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
+  [[BITCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
+  [[BITCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
+  [[BITCrashReportManager sharedCrashReportManager] startManager];
 }
 
 @end

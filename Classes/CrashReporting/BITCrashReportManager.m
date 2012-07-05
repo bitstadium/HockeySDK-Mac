@@ -28,11 +28,11 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "CNSCrashReportManager.h"
-#import "CNSCrashReportUI.h"
+#import "BITCrashReportManager.h"
+#import "BITCrashReportUI.h"
 #import <sys/sysctl.h>
 #import <CrashReporter/CrashReporter.h>
-#import "CNSCrashReportTextFormatter.h"
+#import "BITCrashReportTextFormatter.h"
 #import <objc/runtime.h>
 
 #define SDK_NAME @"HockeySDK-Mac"
@@ -63,11 +63,11 @@
 
 @end
 
-@interface CNSCrashReportManager () <NSXMLParserDelegate>
+@interface BITCrashReportManager () <NSXMLParserDelegate>
 @end
 
 
-@interface CNSCrashReportManager (private)
+@interface BITCrashReportManager (private)
 - (NSString *)applicationName;
 - (NSString *)applicationVersionString;
 - (NSString *)applicationVersion;
@@ -86,7 +86,7 @@
 @end
 
 
-@implementation CNSCrashReportManager
+@implementation BITCrashReportManager
 
 @synthesize exceptionInterceptionEnabled = _exceptionInterceptionEnabled;
 @synthesize delegate = _delegate;
@@ -96,11 +96,11 @@
 
 #pragma mark - Init
 
-+ (CNSCrashReportManager *)sharedCrashReportManager {
-  static CNSCrashReportManager *crashReportManager = nil;
++ (BITCrashReportManager *)sharedCrashReportManager {
+  static BITCrashReportManager *crashReportManager = nil;
   
   if (crashReportManager == nil) {
-    crashReportManager = [[CNSCrashReportManager alloc] init];
+    crashReportManager = [[BITCrashReportManager alloc] init];
   }
   
   return crashReportManager;
@@ -220,7 +220,7 @@
 
 - (NSString *)extractAppUUIDs:(PLCrashReport *)report {  
   NSMutableString *uuidString = [NSMutableString string];
-  NSArray *uuidArray = [CNSCrashReportTextFormatter arrayOfAppUUIDsForCrashReport:report];
+  NSArray *uuidArray = [BITCrashReportTextFormatter arrayOfAppUUIDsForCrashReport:report];
   
   for (NSDictionary *element in uuidArray) {
     if ([element objectForKey:kCNSBinaryImageKeyUUID] && [element objectForKey:kCNSBinaryImageKeyArch] && [element objectForKey:kCNSBinaryImageKeyUUID]) {
@@ -239,7 +239,7 @@
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindow)]) {
     [self.delegate showMainApplicationWindow];
   } else {
-    NSLog(@"Warning: Required CNSCrashReportManagerDelegate is not set!");
+    NSLog(@"Warning: Required BITCrashReportManagerDelegate is not set!");
   }
 }
 
@@ -253,7 +253,7 @@
     _crashFile = [_crashFiles lastObject];
     NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
     PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
-    crashReport = [CNSCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
+    crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
 
     if (crashReport && !error) {        
       NSString *log = @"";
@@ -263,7 +263,7 @@
       }
 
       if (!self.autoSubmitCrashReport && [self hasNonApprovedCrashReports]) {
-        _crashReportUI = [[CNSCrashReportUI alloc] initWithManager:self
+        _crashReportUI = [[BITCrashReportUI alloc] initWithManager:self
                                                    crashReportFile:_crashFile
                                                        crashReport:crashReport
                                                         logContent:log
@@ -359,7 +359,7 @@
 }
 
 
-#pragma mark - CNSCrashReportManagerDelegate
+#pragma mark - Crash Report Processing
 
 - (void)cancelReport {
   [self cleanCrashReports];
@@ -386,7 +386,7 @@
         continue;
       }
       
-      NSString *crashLogString = [CNSCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
+      NSString *crashLogString = [BITCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
                      
       if ([report.applicationInfo.applicationVersion compare:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
         _crashIdenticalCurrentVersion = YES;

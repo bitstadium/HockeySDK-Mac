@@ -30,9 +30,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class CNSCrashReportManager;
+@class BITCrashReportManager;
 
-@interface CNSCrashReportUI : NSWindowController {
+@interface BITCrashReportUI : NSWindowController {
   IBOutlet NSTextField  *descriptionTextField;
   IBOutlet NSTextView   *crashLogTextView;
 
@@ -47,7 +47,7 @@
   IBOutlet NSButton   *cancelButton;
   IBOutlet NSButton   *submitButton;
   
-  CNSCrashReportManager   *_crashReportManager;
+  BITCrashReportManager   *_crashReportManager;
   
   NSString      *_xml;
   
@@ -62,7 +62,7 @@
   BOOL showDetails;
 }
 
-- (id)initWithManager:(CNSCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName;
+- (id)initWithManager:(BITCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName;
 
 - (void)askCrashReportDetails;
 
