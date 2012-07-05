@@ -159,19 +159,19 @@ const CGFloat kDetailsHeight = 285;
 - (void)askCrashReportDetails {
 #define DISTANCE_BETWEEN_BUTTONS		3
   
-  [[self window] setTitle:[NSString stringWithFormat:CNSLocalizedString(@"WindowTitle", @""), _applicationName]];
+  [[self window] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"WindowTitle", @""), _applicationName]];
   
-  [introductionTextFieldCell setTitle:[NSString stringWithFormat:CNSLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
-  [commentsTextFieldCell setTitle:CNSLocalizedString(@"CommentsDisclosureTitle", @"")];
-  [problemDescriptionTextFieldCell setTitle:CNSLocalizedString(@"ProblemDetailsTitle", @"")];
+  [introductionTextFieldCell setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
+  [commentsTextFieldCell setTitle:HockeySDKLocalizedString(@"CommentsDisclosureTitle", @"")];
+  [problemDescriptionTextFieldCell setTitle:HockeySDKLocalizedString(@"ProblemDetailsTitle", @"")];
 
-  [[descriptionTextField cell] setPlaceholderString:CNSLocalizedString(@"UserDescriptionPlaceholder", @"")];
-  [noteText setStringValue:CNSLocalizedString(@"PrivacyNote", @"")];
+  [[descriptionTextField cell] setPlaceholderString:HockeySDKLocalizedString(@"UserDescriptionPlaceholder", @"")];
+  [noteText setStringValue:HockeySDKLocalizedString(@"PrivacyNote", @"")];
   
-  [showButton setTitle:CNSLocalizedString(@"ShowDetailsButtonTitle", @"")];
-  [hideButton setTitle:CNSLocalizedString(@"HideDetailsButtonTitle", @"")];
-  [cancelButton setTitle:CNSLocalizedString(@"CancelButtonTitle", @"")];
-  [submitButton setTitle:CNSLocalizedString(@"SendButtonTitle", @"")];
+  [showButton setTitle:HockeySDKLocalizedString(@"ShowDetailsButtonTitle", @"")];
+  [hideButton setTitle:HockeySDKLocalizedString(@"HideDetailsButtonTitle", @"")];
+  [cancelButton setTitle:HockeySDKLocalizedString(@"CancelButtonTitle", @"")];
+  [submitButton setTitle:HockeySDKLocalizedString(@"SendButtonTitle", @"")];
   
   // adjust button sizes
   NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys: [submitButton font], NSFontAttributeName, nil];

@@ -7,4 +7,4 @@
 #endif
 
 #define HOCKEYSDK_BUNDLE [NSBundle bundleWithIdentifier:@"de.codenauts.HockeySDK"]
-#define CNSLocalizedString(key,comment) NSLocalizedStringFromTableInBundle(key, @"HockeySDK", HOCKEYSDK_BUNDLE, comment)
+#define HockeySDKLocalizedString(key,comment) NSLocalizedStringFromTableInBundle(key, @"HockeySDK", HOCKEYSDK_BUNDLE, comment)
