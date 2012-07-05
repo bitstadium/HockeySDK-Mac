@@ -1,7 +1,7 @@
 // 
 //  Author: Andreas Linde <mail@andreaslinde.de>
 // 
-//  Copyright 2012 Codenauts UG (haftungsbeschränkt). All rights reserved.
+//  Copyright (c) 2012 HockeyApp, Bit Stadium GmbH. All rights reserved.
 //  See LICENSE.txt for author information.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
