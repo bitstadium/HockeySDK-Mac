@@ -29,7 +29,7 @@
  */
 
 #import "BITCrashReportUI.h"
-#import "BITCrashReportManager.h"
+#import <HockeySDK/HockeySDK.h>
 #import <sys/sysctl.h>
 #import <CrashReporter/CrashReporter.h>
 

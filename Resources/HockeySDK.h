@@ -25,3 +25,9 @@
 #import <HockeySDK/BITHockeyManager.h>
 #import <HockeySDK/BITCrashReportManager.h>
 #import <HockeySDK/BITCrashReportManagerDelegate.h>
+
+#ifndef HOCKEYSDK_BUNDLE
+#define HOCKEYSDK_BUNDLE [NSBundle bundleWithIdentifier:@"de.codenauts.HockeySDK"]
+#define HockeySDKLocalizedString(key,comment) NSLocalizedStringFromTableInBundle(key, @"HockeySDK", HOCKEYSDK_BUNDLE, comment)
+#define HockeySDKLog(fmt, ...) do { if([BITHockeyManager sharedHockeyManager].isLoggingEnabled) { NSLog((@"[HockeySDK] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__); }} while(0)
+#endif

@@ -32,6 +32,7 @@
 #import "BITCrashReportUI.h"
 #import <sys/sysctl.h>
 #import <CrashReporter/CrashReporter.h>
+#import <HockeySDK/HockeySDK.h>
 #import "BITCrashReportTextFormatter.h"
 #import <objc/runtime.h>
 

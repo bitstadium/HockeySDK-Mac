@@ -23,6 +23,7 @@
 //  THE SOFTWARE.
 
 #import "BITHockeyManager.h"
+#import <HockeySDK/HockeySDK.h>
 
 #import "BITCrashReportManager.h"
 #import "BITCrashReportManagerDelegate.h"
