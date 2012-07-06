@@ -31,7 +31,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "CrashReporter/CrashReporter.h"
+#import <CrashReporter/CrashReporter.h>
 
 #import "BITCrashReportTextFormatter.h"
 
@@ -58,7 +58,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
  *
  * @return Returns the formatted result on success, or nil if an error occurs.
  */
-+ (NSString *)stringValueForCrashReport:(PLCrashReport *)report withTextFormat:(CNSCrashReportTextFormat)textFormat {
++ (NSString *)stringValueForCrashReport:(PLCrashReport *)report {
 	NSMutableString* text = [NSMutableString string];
 	boolean_t lp64 = true; // quiesce GCC uninitialized value warning
     
@@ -498,34 +498,12 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
     }
     
     if ([imagePath isEqual: report.processInfo.processPath] || [imagePath hasPrefix:appBundleContentsPath]) {
-      [appUUIDs addObject:[NSDictionary dictionaryWithObjectsAndKeys:uuid, kCNSBinaryImageKeyUUID, archName, kCNSBinaryImageKeyArch, imageType, kCNSBinaryImageKeyType, nil]];
+      [appUUIDs addObject:[NSDictionary dictionaryWithObjectsAndKeys:uuid, kBITBinaryImageKeyUUID, archName, kBITBinaryImageKeyArch, imageType, kBITBinaryImageKeyType, nil]];
     }
   }
   
   
   return appUUIDs;
-}
-
-/**
- * Initialize with the request string encoding and output format.
- *
- * @param textFormat Format to use for the generated text crash report.
- * @param stringEncoding Encoding to use when writing to the output stream.
- */
-- (id)initWithTextFormat:(CNSCrashReportTextFormat)textFormat stringEncoding:(NSStringEncoding)stringEncoding {
-    if ((self = [super init]) == nil)
-        return nil;
-    
-    _textFormat = textFormat;
-    _stringEncoding = stringEncoding;
-
-    return self;
-}
-
-// from PLCrashReportFormatter protocol
-- (NSData *)formatReport: (PLCrashReport *) report error: (NSError **) outError {
-    NSString *text = [PLCrashReportTextFormatter stringValueForCrashReport: report withTextFormat: _textFormat];
-    return [text dataUsingEncoding: _stringEncoding allowLossyConversion: YES];
 }
 		 
 @end

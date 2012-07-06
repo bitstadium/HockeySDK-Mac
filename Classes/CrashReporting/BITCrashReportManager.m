@@ -225,11 +225,11 @@
   NSArray *uuidArray = [BITCrashReportTextFormatter arrayOfAppUUIDsForCrashReport:report];
   
   for (NSDictionary *element in uuidArray) {
-    if ([element objectForKey:kCNSBinaryImageKeyUUID] && [element objectForKey:kCNSBinaryImageKeyArch] && [element objectForKey:kCNSBinaryImageKeyUUID]) {
+    if ([element objectForKey:kBITBinaryImageKeyUUID] && [element objectForKey:kBITBinaryImageKeyArch] && [element objectForKey:kBITBinaryImageKeyUUID]) {
       [uuidString appendFormat:@"<uuid type=\"%@\" arch=\"%@\">%@</uuid>",
-       [element objectForKey:kCNSBinaryImageKeyType],
-       [element objectForKey:kCNSBinaryImageKeyArch],
-       [element objectForKey:kCNSBinaryImageKeyUUID]
+       [element objectForKey:kBITBinaryImageKeyType],
+       [element objectForKey:kBITBinaryImageKeyArch],
+       [element objectForKey:kBITBinaryImageKeyUUID]
        ];
     }
   }
@@ -255,7 +255,7 @@
     _crashFile = [_crashFiles lastObject];
     NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
     PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
-    crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
+    crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report];
 
     if (crashReport && !error) {        
       NSString *log = @"";
@@ -388,7 +388,7 @@
         continue;
       }
       
-      NSString *crashLogString = [BITCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
+      NSString *crashLogString = [BITCrashReportTextFormatter stringValueForCrashReport:report];
                      
       if ([report.applicationInfo.applicationVersion compare:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
         _crashIdenticalCurrentVersion = YES;
