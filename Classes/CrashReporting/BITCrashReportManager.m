@@ -107,7 +107,7 @@
 - (id)init {
   if ((self = [super init])) {
     _exceptionInterceptionEnabled = NO;
-    _serverResult = CrashReportStatusUnknown;
+    _serverResult = HockeyCrashReportStatusUnknown;
     _crashReportUI = nil;
     _fileManager = [[NSFileManager alloc] init];
     
@@ -511,7 +511,7 @@
   [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [request setHTTPBody:postBody];
   
-  _serverResult = CrashReportStatusUnknown;
+  _serverResult = HockeyCrashReportStatusUnknown;
   _statusCode = 200;
   
   NSHTTPURLResponse *response = nil;

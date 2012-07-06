@@ -43,18 +43,27 @@
 // stores the set of crashreports that have been approved but aren't sent yet
 #define kHockeySDKApprovedCrashReports @"HockeySDKApprovedCrashReports"
 
+// hockey api error domain
+typedef enum {
+  HockeyErrorUnknown,
+  HockeyAPIAppVersionRejected,
+  HockeyAPIReceivedEmptyResponse,
+  HockeyAPIErrorWithStatusCode
+} HockeyErrorReason;
+static NSString *kHockeyErrorDomain = @"HockeyErrorDomain";
 
-typedef enum CrashAlertType {
-  CrashAlertTypeSend = 0,
-  CrashAlertTypeFeedback = 1,
-} CrashAlertType;
 
-typedef enum CrashReportStatus {  
-  CrashReportStatusUnknown = 0,
-  CrashReportStatusAssigned = 1,
-  CrashReportStatusSubmitted = 2,
-  CrashReportStatusAvailable = 3,
-} CrashReportStatus;
+typedef enum HockeyCrashAlertType {
+  HockeyCrashAlertTypeSend = 0,
+  HockeyCrashAlertTypeFeedback = 1,
+} HockeyCrashAlertType;
+
+typedef enum HockeyCrashReportStatus {  
+  HockeyCrashReportStatusUnknown = 0,
+  HockeyCrashReportStatusAssigned = 1,
+  HockeyCrashReportStatusSubmitted = 2,
+  HockeyCrashReportStatusAvailable = 3,
+} HockeyCrashReportStatus;
 
 @class BITCrashReportUI;
 
@@ -65,7 +74,7 @@ typedef enum CrashReportStatus {
   BOOL _crashReportActivated;
   BOOL _exceptionInterceptionEnabled;
   
-  CrashReportStatus _serverResult;
+  HockeyCrashReportStatus _serverResult;
   NSInteger         _statusCode;
     
   NSMutableString   *_contentOfProperty;
