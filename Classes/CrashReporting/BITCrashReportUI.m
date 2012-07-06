@@ -143,6 +143,9 @@ const CGFloat kDetailsHeight = 285;
 }
 
 - (IBAction)submitReport:(id)sender {
+  [showButton setEnabled:NO];
+  [hideButton setEnabled:NO];
+  [cancelButton setEnabled:NO];
   [submitButton setEnabled:NO];
   
   [[self window] makeFirstResponder: nil];

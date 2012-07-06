@@ -515,48 +515,36 @@
   _serverResult = HockeyCrashReportStatusUnknown;
   _statusCode = 200;
   
-  _responseData = [[NSMutableData alloc] init];
+  if (_timeIntervalCrashInLastSessionOccured > -1 && _timeIntervalCrashInLastSessionOccured <= _maxTimeIntervalOfCrashForReturnMainApplicationDelay) {
+    // send synchronously, so any code in applicationDidFinishLaunching after initialization that might have caused the crash, won't be executed before the crash was successfully send.
+    HockeySDKLog(@"Info: Sending crash reports synchronously.");
+    NSHTTPURLResponse *response = nil;
+    NSError *error = nil;
     
-  _urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    NSData *synchronousResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
-  if (_timeIntervalCrashInLastSessionOccured == -1 || _timeIntervalCrashInLastSessionOccured > _maxTimeIntervalOfCrashForReturnMainApplicationDelay) {
-    HockeySDKLog(@"Info: Returning to main application while sending.");
-    [self returnToMainApplication];
-  } else if (!_urlConnection) {
-    HockeySDKLog(@"Info: Sending crash reports could not start!");
-    [self returnToMainApplication];
+    _responseData = [[NSMutableData alloc] initWithData:synchronousResponseData];
+    _statusCode = [response statusCode];
+    
+    [self processServerResult];
   } else {
-    HockeySDKLog(@"Info: Sending crash reports started.");
+    
+    _responseData = [[NSMutableData alloc] init];
+    
+    _urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+
+    if (!_urlConnection) {
+      HockeySDKLog(@"Info: Sending crash reports could not start!");
+      [self returnToMainApplication];
+    } else {
+      HockeySDKLog(@"Info: Returning to main application while sending.");
+      [self returnToMainApplication];
+    }
   }
 }
 
 
-#pragma mark NSURLConnection Delegate
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-  if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-    _statusCode = [(NSHTTPURLResponse *)response statusCode];
-  }
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-  [_responseData appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-  HockeySDKLog(@"ERROR: %@", [error localizedDescription]);
-  
-  [_responseData release];
-  _responseData = nil;	
-  [_urlConnection release];
-  _urlConnection = nil;
-  
-  if (_timeIntervalCrashInLastSessionOccured != -1 && _timeIntervalCrashInLastSessionOccured <= _maxTimeIntervalOfCrashForReturnMainApplicationDelay) {
-    [self returnToMainApplication];
-  }
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+- (void)processServerResult {
   NSError *error = nil;
   
   if (_statusCode >= 200 && _statusCode < 400 && _responseData != nil && [_responseData length] > 0) {
@@ -594,12 +582,38 @@
   
   [_responseData release];
   _responseData = nil;  
+
+  [self returnToMainApplication];
+}
+
+#pragma mark NSURLConnection Delegate
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+  if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+    _statusCode = [(NSHTTPURLResponse *)response statusCode];
+  }
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+  [_responseData appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+  HockeySDKLog(@"ERROR: %@", [error localizedDescription]);
+  
+  [_responseData release];
+  _responseData = nil;	
   [_urlConnection release];
   _urlConnection = nil;
+  
+  [self returnToMainApplication];
+}
 
-  if (_timeIntervalCrashInLastSessionOccured != -1 && _timeIntervalCrashInLastSessionOccured <= _maxTimeIntervalOfCrashForReturnMainApplicationDelay) {
-    [self returnToMainApplication];
-  }
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+  [_urlConnection release];
+  _urlConnection = nil;
+  
+  [self processServerResult];
 }
 
 
