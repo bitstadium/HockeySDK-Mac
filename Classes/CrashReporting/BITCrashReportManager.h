@@ -82,8 +82,6 @@ typedef enum HockeyCrashReportStatus {
   NSURLConnection   *_urlConnection;
   NSMutableData     *_responseData;
 
-  NSMutableString   *_contentOfProperty;
-
   id<BITCrashReportManagerDelegate> _delegate;
 
   NSString   *_appIdentifier;
