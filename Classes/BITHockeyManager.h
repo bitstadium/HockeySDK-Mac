@@ -32,7 +32,7 @@
   BOOL _loggingEnabled;
   BOOL _exceptionInterceptionEnabled;
   
-  NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay
+  NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 }
 
 #pragma mark - Public Properties
