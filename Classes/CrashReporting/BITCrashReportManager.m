@@ -161,7 +161,7 @@
   if (!cls)
     return NO;
   
-  SEL origSel = @selector(sendEvent:), altSel = @selector(plcrashreporter_catching_sendEvent:);
+  SEL origSel = @selector(sendEvent:), altSel = @selector(hockeysdk_catching_sendEvent:);
   Method origMethod = class_getInstanceMethod(cls, origSel),
   altMethod = class_getInstanceMethod(cls, altSel);
   
