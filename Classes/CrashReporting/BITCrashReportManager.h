@@ -117,6 +117,7 @@ typedef enum HockeyCrashReportStatus {
 // if NO, the user will be asked if the crash report can be submitted (default)
 @property (nonatomic, assign, getter=isAutoSubmitCrashReport) BOOL autoSubmitCrashReport;
 
+- (void)returnToMainApplication;
 - (void)startManager;
 
 - (void)cancelReport;
