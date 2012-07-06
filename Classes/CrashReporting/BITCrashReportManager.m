@@ -64,9 +64,6 @@
 
 @end
 
-@interface BITCrashReportManager () <NSXMLParserDelegate>
-@end
-
 
 @interface BITCrashReportManager (private)
 - (NSString *)applicationName;
@@ -527,53 +524,12 @@
   if (_statusCode >= 200 && _statusCode < 400 && responseData != nil && [responseData length] > 0) {
     [self cleanCrashReports];
 
-    NSXMLParser *parser = [[NSXMLParser alloc] initWithData:responseData];
-    // Set self as the delegate of the parser so that it will receive the parser delegate methods callbacks.
-    [parser setDelegate:self];
-    // Depending on the XML document you're parsing, you may want to enable these features of NSXMLParser.
-    [parser setShouldProcessNamespaces:NO];
-    [parser setShouldReportNamespacePrefixes:NO];
-    [parser setShouldResolveExternalEntities:NO];
-    
-    [parser parse];
-    
-    [parser release];
-  }
-}
-
-
-#pragma mark - NSXMLParser
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-  if (qName) {
-    elementName = qName;
-  }
-  
-  if ([elementName isEqualToString:@"result"]) {
-    _contentOfProperty = [NSMutableString string];
-  }
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-  if (qName) {
-    elementName = qName;
-  }
-  
-  if ([elementName isEqualToString:@"result"]) {
-    if ([_contentOfProperty intValue] > _serverResult) {
-      _serverResult = [_contentOfProperty intValue];
-    }
-  }
-}
-
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-  if (_contentOfProperty) {
-    // If the current element is one whose content we care about, append 'string'
-    // to the property that holds the content of the current element.
-    if (string != nil) {
-      [_contentOfProperty appendString:string];
-    }
+    // HockeyApp uses PList XML format
+    NSMutableDictionary *response = [NSPropertyListSerialization propertyListFromData:_responseData
+                                                                     mutabilityOption:NSPropertyListMutableContainersAndLeaves
+                                                                               format:nil
+                                                                     errorDescription:NULL];
+    HockeySDKLog(@"Received API response: %@", response);
   }
 }
 
