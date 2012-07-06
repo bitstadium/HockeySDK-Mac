@@ -109,7 +109,7 @@ typedef enum HockeyCrashReportStatus {
 // The HockeyApp app identifier (required)
 @property (nonatomic, retain) NSString *appIdentifier;
 
-// defines if PLCrashReporter Exception Interception should be used, default to NO
+// defines if Uncaught Exception Interception should be used, default to NO
 @property (nonatomic) BOOL exceptionInterceptionEnabled;
 
 // defines the company name to be shown in the crash reporting dialog

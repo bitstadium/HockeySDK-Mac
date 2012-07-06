@@ -34,7 +34,7 @@
 @synthesize appIdentifier = _appIdentifier;
 @synthesize loggingEnabled = _loggingEnabled;
 @synthesize exceptionInterceptionEnabled = _exceptionInterceptionEnabled;
-
+@synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
 #pragma mark - Public Class Methods
 
@@ -92,12 +92,17 @@
 }
 
 
+- (void)setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:(NSTimeInterval)maxTimeIntervalOfCrashForReturnMainApplicationDelay {
+  [[BITCrashReportManager sharedCrashReportManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:maxTimeIntervalOfCrashForReturnMainApplicationDelay];
+}
+
+
 - (void)startManager {
 	NSCharacterSet *hexSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdef"];
 	NSCharacterSet *inStringSet = [NSCharacterSet characterSetWithCharactersInString:_appIdentifier];
 	BOOL validAppID = ([_appIdentifier length] == 32) && ([hexSet isSupersetOfSet:inStringSet]);
   
-	if (!validAppID) {
+	if (validAppID) {
     [[BITCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
     [[BITCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
     [[BITCrashReportManager sharedCrashReportManager] startManager];

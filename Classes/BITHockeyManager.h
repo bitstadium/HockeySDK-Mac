@@ -31,6 +31,8 @@
   
   BOOL _loggingEnabled;
   BOOL _exceptionInterceptionEnabled;
+  
+  NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay
 }
 
 #pragma mark - Public Properties
@@ -45,7 +47,10 @@
 // Enable catching uncaught exceptions and let them crash the app and get a crash report
 //
 // Default: NO
-@property (nonatomic, assign, getter=isLoggingEnabled) BOOL exceptionInterceptionEnabled;
+@property (nonatomic, assign, getter=sExceptionInterceptionEnabled) BOOL exceptionInterceptionEnabled;
+
+// Defines the maximum time interval after the app start and the crash, that will cause showing the app window after sending is complete instead of with the start of the sending process. Default is 5 seconds.
+@property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
 #pragma mark - Public Methods
 
