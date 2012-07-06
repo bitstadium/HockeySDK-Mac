@@ -28,16 +28,12 @@
 #import "BITCrashReportManager.h"
 #import "BITCrashReportManagerDelegate.h"
 
-@interface BITHockeyManager ()
-
-- (void)configureCrashReportManager:(BOOL)enableExceptionInterception crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate;
-
-@end
 
 @implementation BITHockeyManager
 
 @synthesize appIdentifier = _appIdentifier;
 @synthesize loggingEnabled = _loggingEnabled;
+@synthesize exceptionInterceptionEnabled = _exceptionInterceptionEnabled;
 
 
 #pragma mark - Public Class Methods
@@ -79,7 +75,7 @@
 
 #pragma mark - Public Instance Methods (Configuration)
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
 
   [_appIdentifier release];
   _appIdentifier = [newAppIdentifier copy];
@@ -87,43 +83,29 @@
   [_companyName release];
   _companyName = [newCompanyName copy];
 
-  [self configureCrashReportManager:exceptionInterceptionEnabled crashReportManagerDelegate:crashReportManagerDelegate];
+  [[BITCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
-  [self configureWithIdentifier:newAppIdentifier companyName:newCompanyName exceptionInterceptionEnabled:NO crashReportManagerDelegate:crashReportManagerDelegate];
+- (void)setExceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
+  [[BITCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
 }
 
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
-  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:exceptionInterceptionEnabled crashReportManagerDelegate:crashReportManagerDelegate];
-}
-
-
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate{
-  [self configureWithIdentifier:newAppIdentifier companyName:@"" exceptionInterceptionEnabled:NO crashReportManagerDelegate:crashReportManagerDelegate];
-}
-
-
-#pragma mark - Private Instance Methods
-
-- (void)configureCrashReportManager:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
+- (void)startManager {
 	NSCharacterSet *hexSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdef"];
 	NSCharacterSet *inStringSet = [NSCharacterSet characterSetWithCharactersInString:_appIdentifier];
 	BOOL validAppID = ([_appIdentifier length] == 32) && ([hexSet isSupersetOfSet:inStringSet]);
   
-	if (validAppID) {
+	if (!validAppID) {
     [[BITCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
     [[BITCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
-    [[BITCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
-    [[BITCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
     [[BITCrashReportManager sharedCrashReportManager] startManager];
   } else {
     NSLog(@"ERROR: The app identifier is invalid! Please use the HockeyApp app identifier you find on the apps website on HockeyApp! The SDK is disabled!");
-    [[BITCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
     [[BITCrashReportManager sharedCrashReportManager] returnToMainApplication];
   }
 }
+
 
 @end

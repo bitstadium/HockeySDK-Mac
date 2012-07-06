@@ -30,6 +30,7 @@
   NSString *_companyName;
   
   BOOL _loggingEnabled;
+  BOOL _exceptionInterceptionEnabled;
 }
 
 #pragma mark - Public Properties
@@ -41,6 +42,11 @@
 // Default: NO
 @property (nonatomic, assign, getter=isLoggingEnabled) BOOL loggingEnabled;
 
+// Enable catching uncaught exceptions and let them crash the app and get a crash report
+//
+// Default: NO
+@property (nonatomic, assign, getter=isLoggingEnabled) BOOL exceptionInterceptionEnabled;
+
 #pragma mark - Public Methods
 
 // Returns the shared manager object
@@ -48,12 +54,8 @@
 
 // Configure HockeyApp with a single app identifier and delegate; use this
 // only for debug or beta versions of your app!
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>) crashReportManagerDelegate;
-
 - (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>) crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier exceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate;
-
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate;
+- (void)startManager;
 
 @end
