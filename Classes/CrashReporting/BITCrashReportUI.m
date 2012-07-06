@@ -80,6 +80,7 @@ const CGFloat kDetailsHeight = 285;
 
 - (void)endCrashReporter {
   [self close];
+  [NSApp stopModal];
 }
 
 
@@ -137,7 +138,6 @@ const CGFloat kDetailsHeight = 285;
 
 - (IBAction)cancelReport:(id)sender {
   [self endCrashReporter];
-  [NSApp stopModal];
   
   [_crashReportManager cancelReport];
 }
@@ -152,7 +152,6 @@ const CGFloat kDetailsHeight = 285;
   _crashLogContent = nil;
   
   [self endCrashReporter];
-  [NSApp stopModal];
 }
 
 

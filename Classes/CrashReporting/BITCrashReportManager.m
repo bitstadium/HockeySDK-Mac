@@ -91,6 +91,7 @@
 @synthesize appIdentifier = _appIdentifier;
 @synthesize companyName = _companyName;
 @synthesize autoSubmitCrashReport = _autoSubmitCrashReport;
+@synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
 #pragma mark - Init
 
@@ -114,6 +115,9 @@
     _crashIdenticalCurrentVersion = YES;
     _submissionURL = @"https://rink.hockeyapp.net/";
     
+    _timeIntervalCrashInLastSessionOccured = -1;
+    _maxTimeIntervalOfCrashForReturnMainApplicationDelay = 5;
+
     _crashFile = nil;
     _crashFiles = nil;
     
@@ -437,12 +441,9 @@
   
   if (crashes != nil) {
     [self postXML:[NSString stringWithFormat:@"<crashes>%@</crashes>", crashes]];
+  } else {
+    [self returnToMainApplication];
   }
-
-  // Only return to main application, if crash is send
-  // Scenario: Crash on app start would never be send!
-  
-  [self returnToMainApplication];
 }
 
 - (void)sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
@@ -514,23 +515,90 @@
   _serverResult = HockeyCrashReportStatusUnknown;
   _statusCode = 200;
   
-  NSHTTPURLResponse *response = nil;
+  _responseData = [[NSMutableData alloc] init];
+    
+  _urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+  if (_timeIntervalCrashInLastSessionOccured == -1 || _timeIntervalCrashInLastSessionOccured > _maxTimeIntervalOfCrashForReturnMainApplicationDelay) {
+    HockeySDKLog(@"Info: Returning to main application while sending.");
+    [self returnToMainApplication];
+  } else if (!_urlConnection) {
+    HockeySDKLog(@"Info: Sending crash reports could not start!");
+    [self returnToMainApplication];
+  } else {
+    HockeySDKLog(@"Info: Sending crash reports started.");
+  }
+}
+
+
+#pragma mark NSURLConnection Delegate
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+  if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+    _statusCode = [(NSHTTPURLResponse *)response statusCode];
+  }
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+  [_responseData appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+  HockeySDKLog(@"ERROR: %@", [error localizedDescription]);
+  
+  [_responseData release];
+  _responseData = nil;	
+  [_urlConnection release];
+  _urlConnection = nil;
+  
+  if (_timeIntervalCrashInLastSessionOccured != -1 && _timeIntervalCrashInLastSessionOccured <= _maxTimeIntervalOfCrashForReturnMainApplicationDelay) {
+    [self returnToMainApplication];
+  }
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
   NSError *error = nil;
   
-  NSData *responseData = nil;
-  responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-  _statusCode = [response statusCode];
-  
-  if (_statusCode >= 200 && _statusCode < 400 && responseData != nil && [responseData length] > 0) {
+  if (_statusCode >= 200 && _statusCode < 400 && _responseData != nil && [_responseData length] > 0) {
     [self cleanCrashReports];
-
+    
     // HockeyApp uses PList XML format
-    NSMutableDictionary *response = [NSPropertyListSerialization propertyListFromData:responseData
+    NSMutableDictionary *response = [NSPropertyListSerialization propertyListFromData:_responseData
                                                                      mutabilityOption:NSPropertyListMutableContainersAndLeaves
                                                                                format:nil
                                                                      errorDescription:NULL];
     HockeySDKLog(@"Received API response: %@", response);
-    _serverResult = (HockeyCrashReportStatus)[[response objectForKey:@"status"] intValue];
+    
+    _serverResult = (HockeyCrashReportStatus)[[response objectForKey:@"status"] intValue];    
+  } else if (_statusCode == 400) {
+    [self cleanCrashReports];
+    
+    error = [NSError errorWithDomain:kHockeyErrorDomain
+                                code:HockeyAPIAppVersionRejected
+                            userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"The server rejected receiving crash reports for this app version!", NSLocalizedDescriptionKey, nil]];
+    
+    HockeySDKLog(@"ERROR: %@", [error localizedDescription]);
+  } else {
+    if (_responseData == nil || [_responseData length] == 0) {
+      error = [NSError errorWithDomain:kHockeyErrorDomain
+                                  code:HockeyAPIReceivedEmptyResponse
+                              userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Sending failed with an empty response!", NSLocalizedDescriptionKey, nil]];
+    } else {
+      error = [NSError errorWithDomain:kHockeyErrorDomain
+                                  code:HockeyAPIErrorWithStatusCode
+                              userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Sending failed with status code: %i", _statusCode], NSLocalizedDescriptionKey, nil]];
+    }
+    
+    HockeySDKLog(@"ERROR: %@", [error localizedDescription]);
+  }
+  
+  [_responseData release];
+  _responseData = nil;  
+  [_urlConnection release];
+  _urlConnection = nil;
+
+  if (_timeIntervalCrashInLastSessionOccured != -1 && _timeIntervalCrashInLastSessionOccured <= _maxTimeIntervalOfCrashForReturnMainApplicationDelay) {
+    [self returnToMainApplication];
   }
 }
 
@@ -591,6 +659,13 @@
       HockeySDKLog(@"Warning: Could not load crash report: %@", error);
     } else {
       [crashData writeToFile:[_crashesDir stringByAppendingPathComponent: cacheFilename] atomically:YES];
+      
+      // get the startup timestamp from the crash report, and the file timestamp to calculate the timeinterval when the crash happened after startup
+      PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
+      
+      if (report.systemInfo.timestamp && report.applicationInfo.applicationStartupTimestamp) {
+        _timeIntervalCrashInLastSessionOccured = [report.systemInfo.timestamp timeIntervalSinceDate:report.applicationInfo.applicationStartupTimestamp];
+      }
     }
   }
 	

@@ -74,9 +74,14 @@ typedef enum HockeyCrashReportStatus {
   BOOL _crashReportActivated;
   BOOL _exceptionInterceptionEnabled;
   
+  NSTimeInterval _timeIntervalCrashInLastSessionOccured;
+  NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
+  
   HockeyCrashReportStatus _serverResult;
   NSInteger         _statusCode;
-    
+  NSURLConnection   *_urlConnection;
+  NSMutableData     *_responseData;
+
   NSMutableString   *_contentOfProperty;
 
   id<BITCrashReportManagerDelegate> _delegate;
@@ -116,6 +121,9 @@ typedef enum HockeyCrashReportStatus {
 // if YES, the crash report will be submitted without asking the user
 // if NO, the user will be asked if the crash report can be submitted (default)
 @property (nonatomic, assign, getter=isAutoSubmitCrashReport) BOOL autoSubmitCrashReport;
+
+// Defines the maximum time interval after the app start and the crash, that will cause showing the app window after sending is complete instead of with the start of the sending process. Default is 5 seconds.
+@property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
 - (void)returnToMainApplication;
 - (void)startManager;
