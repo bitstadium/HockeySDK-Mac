@@ -525,11 +525,12 @@
     [self cleanCrashReports];
 
     // HockeyApp uses PList XML format
-    NSMutableDictionary *response = [NSPropertyListSerialization propertyListFromData:_responseData
+    NSMutableDictionary *response = [NSPropertyListSerialization propertyListFromData:responseData
                                                                      mutabilityOption:NSPropertyListMutableContainersAndLeaves
                                                                                format:nil
                                                                      errorDescription:NULL];
     HockeySDKLog(@"Received API response: %@", response);
+    _serverResult = (HockeyCrashReportStatus)[[response objectForKey:@"status"] intValue];
   }
 }
 
