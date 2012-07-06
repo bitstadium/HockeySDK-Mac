@@ -263,7 +263,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "install_name_tool -change \"@loader_path/../Frameworks/CrashReporter.framework/Versions/A/CrashReporter\"  \"@loader_path/Frameworks/CrashReporter.framework/Versions/A/CrashReporter\" \"$TARGET_BUILD_DIR/HockeySDK.framework/Versions/A/HockeySDK\"\n\nif [ ! -e \"$TARGET_BUILD_DIR/HockeySDK.framework/Frameworks\" ];\nthen \n    cd \"$TARGET_BUILD_DIR/HockeySDK.framework\"\n    ln -s \"Versions/A/Frameworks\" \"Frameworks\"\nfi";
+			shellScript = "install_name_tool -change \"@loader_path/../Frameworks/CrashReporter.framework/Versions/A/CrashReporter\"  \"@loader_path/Frameworks/CrashReporter.framework/Versions/A/CrashReporter\" \"$TARGET_BUILD_DIR/HockeySDK.framework/Versions/A/HockeySDK\"\n\nif [ ! -e \"$TARGET_BUILD_DIR/HockeySDK.framework/Frameworks\" ];\nthen \n    cd \"$TARGET_BUILD_DIR/HockeySDK.framework\"\n    ln -s \"Versions/Current/Frameworks\" \"Frameworks\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
