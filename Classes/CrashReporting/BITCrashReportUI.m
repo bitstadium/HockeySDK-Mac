@@ -46,7 +46,7 @@ const CGFloat kDetailsHeight = 285;
 
 - (id)initWithManager:(BITCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName {
   
-  self = [super initWithWindowNibName: @"CNSCrashReportUI"];
+  self = [super initWithWindowNibName: @"BITCrashReportUI"];
   
   if ( self != nil) {
     _xml = nil;
