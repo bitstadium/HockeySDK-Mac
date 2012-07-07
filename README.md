@@ -12,6 +12,7 @@ Version 0.9.6 (RC 6):
 - Removed the delegates to get userid and contact, replaced with username and useremail properties
 - Validate app identifier and disable the SDK if it is obviously invalid
 - Use proper sandbox safe directories for crash caches and sdk settings
+- Fixed symlink error of the framework
 - Adjust namespace from CNS (Codenauts) to BIT (Bit Stadium).
 - Updated bundle identifiers
 - Update copyright information to use Bit Stadium GmbH
