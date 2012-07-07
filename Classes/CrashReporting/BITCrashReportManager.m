@@ -189,7 +189,6 @@
 
 - (void)saveSettings {
   NSString *error = nil;
-  HockeySDKLog(@"Test writing SDK values. %@", error);
 
   NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:2];
   [rootObj setObject:_approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
@@ -208,7 +207,6 @@
 - (void)loadSettings {
   NSString *error = nil;
   NSPropertyListFormat format;
-  HockeySDKLog(@"Test reading SDK values. %@", error);
   
   if (![_fileManager fileExistsAtPath:_settingsFile])
     return;
