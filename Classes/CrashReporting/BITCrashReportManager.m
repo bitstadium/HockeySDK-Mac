@@ -333,7 +333,47 @@
 }
 
 
-#pragma mark - PLCrashReporter based
+#pragma mark - PLCrashReporter
+
+// Called to handle a pending crash report.
+- (void)handleCrashReport {
+  PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+  NSError *error = NULL;
+	
+  [self loadSettings];
+  
+  // check if the next call ran successfully the last time
+  if (!_analyzerStarted) {
+    // mark the start of the routine
+    _analyzerStarted = YES;
+    [self saveSettings];
+    
+    // Try loading the crash report
+    NSData *crashData = [[[NSData alloc] initWithData:[crashReporter loadPendingCrashReportDataAndReturnError: &error]] autorelease];
+    
+    NSString *cacheFilename = [NSString stringWithFormat: @"%.0f", [NSDate timeIntervalSinceReferenceDate]];
+    
+    if (crashData == nil) {
+      HockeySDKLog(@"Warning: Could not load crash report: %@", error);
+    } else {
+      [crashData writeToFile:[_crashesDir stringByAppendingPathComponent: cacheFilename] atomically:YES];
+      
+      // get the startup timestamp from the crash report, and the file timestamp to calculate the timeinterval when the crash happened after startup
+      PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
+      
+      if (report.systemInfo.timestamp && report.applicationInfo.applicationStartupTimestamp) {
+        _timeIntervalCrashInLastSessionOccured = [report.systemInfo.timestamp timeIntervalSinceDate:report.applicationInfo.applicationStartupTimestamp];
+      }
+    }
+  }
+	
+  // Purge the report
+  // mark the end of the routine
+  _analyzerStarted = NO;
+  [self saveSettings];
+  
+  [crashReporter purgePendingCrashReport];
+}
 
 - (BOOL)hasNonApprovedCrashReports {
   if (!_approvedCrashReports || [_approvedCrashReports count] == 0) return YES;
@@ -743,52 +783,6 @@
     string = [[[NSBundle mainBundle] infoDictionary] valueForKey: @"CFBundleVersion"];
   
   return string;
-}
-
-
-#pragma mark - PLCrashReporter
-
-//
-// Called to handle a pending crash report.
-//
-- (void)handleCrashReport {
-  PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
-  NSError *error = NULL;
-	
-  [self loadSettings];
-  
-  // check if the next call ran successfully the last time
-  if (!_analyzerStarted) {
-    // mark the start of the routine
-    _analyzerStarted = YES;
-    [self saveSettings];
-    
-    // Try loading the crash report
-    NSData *crashData = [[[NSData alloc] initWithData:[crashReporter loadPendingCrashReportDataAndReturnError: &error]] autorelease];
-    
-    NSString *cacheFilename = [NSString stringWithFormat: @"%.0f", [NSDate timeIntervalSinceReferenceDate]];
-    
-    if (crashData == nil) {
-      HockeySDKLog(@"Warning: Could not load crash report: %@", error);
-    } else {
-      [crashData writeToFile:[_crashesDir stringByAppendingPathComponent: cacheFilename] atomically:YES];
-      
-      // get the startup timestamp from the crash report, and the file timestamp to calculate the timeinterval when the crash happened after startup
-      PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
-      
-      if (report.systemInfo.timestamp && report.applicationInfo.applicationStartupTimestamp) {
-        _timeIntervalCrashInLastSessionOccured = [report.systemInfo.timestamp timeIntervalSinceDate:report.applicationInfo.applicationStartupTimestamp];
-      }
-    }
-  }
-	
-  // Purge the report
-  // mark the end of the routine
-  _analyzerStarted = NO;
-  [self saveSettings];
-  
-  [crashReporter purgePendingCrashReport];
-  return;
 }
 
 @end
