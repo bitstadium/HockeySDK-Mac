@@ -34,14 +34,18 @@
 // flags if the crashlog analyzer is started. since this may theoretically crash we need to track it
 #define kHockeySDKAnalyzerStarted @"HockeySDKCrashReportAnalyzerStarted"
 
+// stores the set of crashreports that have been approved but aren't sent yet
+#define kHockeySDKApprovedCrashReports @"HockeySDKApprovedCrashReports"
+
+
 // flags if the crashreporter is activated at all
+// set this as bool in user defaults e.g. in the settings, if you want to let the user be able to deactivate it
 #define kHockeySDKCrashReportActivated @"HockeySDKCrashReportActivated"
 
 // flags if the crashreporter should automatically send crashes without asking the user again
+// set this as bool in user defaults e.g. in the settings, if you want to let the user be able to set this on or off
 #define kHockeySDKAutomaticallySendCrashReports @"HockeySDKAutomaticallySendCrashReports"
 
-// stores the set of crashreports that have been approved but aren't sent yet
-#define kHockeySDKApprovedCrashReports @"HockeySDKApprovedCrashReports"
 
 // hockey api error domain
 typedef enum {
@@ -93,11 +97,12 @@ typedef enum HockeyCrashReportStatus {
   
   NSMutableArray *_crashFiles;
   NSString       *_crashesDir;
+  NSString       *_settingsFile;
   
   BITCrashReportUI *_crashReportUI;
 
-  int _analyzerStarted;
-
+  BOOL                _analyzerStarted;
+  NSMutableDictionary *_approvedCrashReports;
 }
 
 - (NSString *)modelVersion;

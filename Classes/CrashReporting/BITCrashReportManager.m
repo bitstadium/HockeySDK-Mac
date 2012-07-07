@@ -118,8 +118,12 @@
     _timeIntervalCrashInLastSessionOccured = -1;
     _maxTimeIntervalOfCrashForReturnMainApplicationDelay = 5;
 
+    _approvedCrashReports = [[NSMutableDictionary alloc] init];
+    _analyzerStarted = NO;
+    
     _crashFile = nil;
     _crashFiles = nil;
+    _crashesDir = nil;
     
     self.delegate = nil;
     self.companyName = @"";
@@ -132,6 +136,27 @@
       _crashReportActivated = YES;
       [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:kHockeySDKCrashReportActivated];
     }
+
+    testValue = [[NSUserDefaults standardUserDefaults] stringForKey:kHockeySDKAutomaticallySendCrashReports];
+    if (testValue) {
+      _autoSubmitCrashReport = [[NSUserDefaults standardUserDefaults] boolForKey:kHockeySDKAutomaticallySendCrashReports];
+    } else {
+      _autoSubmitCrashReport = NO;
+      [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:NO] forKey:kHockeySDKAutomaticallySendCrashReports];
+    }
+    
+    if (_crashReportActivated) {
+      NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+      _crashesDir = [[NSString stringWithFormat:@"%@", [[paths objectAtIndex:0] stringByAppendingPathComponent:@"/crashes/"]] retain];
+      _settingsFile = [_crashesDir stringByAppendingPathComponent:@"HockeyCrashReport.plist"];
+      
+      if (![_fileManager fileExistsAtPath:_crashesDir]) {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
+        NSError *theError = NULL;
+      
+        [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
+      }
+    }
   }
   return self;
 }
@@ -139,6 +164,9 @@
 - (void)dealloc {
   _delegate = nil;
 
+  [_responseData release]; _responseData = nil;
+  
+  [_appIdentifier release]; _appIdentifier = nil;
   [_companyName release]; _companyName = nil;
 
   [_fileManager release]; _fileManager = nil;
@@ -147,14 +175,59 @@
   
   [_crashFiles release]; _crashFiles = nil;
   [_crashesDir release]; _crashesDir = nil;
+  [_settingsFile release]; _settingsFile = nil;
   
   [_crashReportUI release]; _crashReportUI= nil;
+  
+  [_approvedCrashReports release]; _approvedCrashReports = nil;
   
   [super dealloc];
 }
 
 
 #pragma mark - Private
+
+- (void)saveSettings {
+  NSString *error = nil;
+  HockeySDKLog(@"Test writing SDK values. %@", error);
+
+  NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:2];
+  [rootObj setObject:_approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
+  [rootObj setObject:[NSNumber numberWithBool:_analyzerStarted] forKey:kHockeySDKAnalyzerStarted];
+  
+  NSData *plist = [NSPropertyListSerialization dataFromPropertyList:(id)rootObj
+                                                        format:NSPropertyListBinaryFormat_v1_0
+                                              errorDescription:&error];
+  if (plist) {
+    [plist writeToFile:_settingsFile atomically:YES];
+  } else {
+    HockeySDKLog(@"ERROR: Writing settings. %@", error);
+  }
+}
+
+- (void)loadSettings {
+  NSString *error = nil;
+  NSPropertyListFormat format;
+  HockeySDKLog(@"Test reading SDK values. %@", error);
+  
+  if (![_fileManager fileExistsAtPath:_settingsFile])
+    return;
+  
+  NSData *plist = [NSData dataWithContentsOfFile:_settingsFile];
+  if (plist) {
+    NSDictionary *rootObj = (NSDictionary *)[NSPropertyListSerialization
+                                          propertyListFromData:plist
+                                          mutabilityOption:NSPropertyListMutableContainersAndLeaves
+                                          format:&format
+                                          errorDescription:&error];
+
+    [_approvedCrashReports setDictionary:[rootObj objectForKey:kHockeySDKApprovedCrashReports]];
+    _analyzerStarted = [(NSNumber *)[rootObj objectForKey:kHockeySDKAnalyzerStarted] boolValue];
+  } else {
+    HockeySDKLog(@"ERROR: Reading settings. %@", error);
+  }
+}
+
 
 /**
  * Swizzle -[NSApplication sendEvent:] to capture exceptions in the run loop.
@@ -187,9 +260,9 @@
     [_fileManager removeItemAtPath:[[_crashFiles objectAtIndex:i] stringByAppendingString:@".meta"] error:&error];
   }
   [_crashFiles removeAllObjects];
+  [_approvedCrashReports removeAllObjects];
   
-  [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kHockeySDKApprovedCrashReports];
-  [[NSUserDefaults standardUserDefaults] synchronize];    
+  [self saveSettings];
 }
 
 - (NSString *)modelVersion {
@@ -251,7 +324,9 @@
   if ([self hasPendingCrashReport]) {
     NSError* error = nil;
     NSString *crashReport = nil;
-
+    
+    [self loadSettings];
+    
     _crashFile = [_crashFiles lastObject];
     NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
     PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
@@ -295,14 +370,12 @@
 #pragma mark - PLCrashReporter based
 
 - (BOOL)hasNonApprovedCrashReports {
-  NSDictionary *approvedCrashReports = [[NSUserDefaults standardUserDefaults] dictionaryForKey: kHockeySDKApprovedCrashReports];
-  
-  if (!approvedCrashReports || [approvedCrashReports count] == 0) return YES;
+  if (!_approvedCrashReports || [_approvedCrashReports count] == 0) return YES;
   
   for (NSUInteger i=0; i < [_crashFiles count]; i++) {
     NSString *filename = [_crashFiles objectAtIndex:i];
     
-    if (![approvedCrashReports objectForKey:filename]) return YES;
+    if (![_approvedCrashReports objectForKey:filename]) return YES;
   }
   
   return NO;
@@ -312,15 +385,6 @@
   if (!_crashReportActivated) return NO;
   
   _crashFiles = [[NSMutableArray alloc] init];
-  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-  _crashesDir = [[NSString stringWithFormat:@"%@", [[paths objectAtIndex:0] stringByAppendingPathComponent:@"/crashes/"]] retain];
-  
-  if (![_fileManager fileExistsAtPath:_crashesDir]) {
-    NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
-    NSError *theError = NULL;
-    
-    [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
-  }
   
   PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
   NSError *error = NULL;
@@ -348,7 +412,7 @@
     
     while ((file = [dirEnum nextObject])) {
       NSDictionary *fileAttributes = [_fileManager attributesOfItemAtPath:[_crashesDir stringByAppendingPathComponent:file] error:&error];
-      if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 && ![file isEqualToString:@".DS_Store"] && ![file hasSuffix:@".meta"]) {
+      if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 && ![file isEqualToString:@".DS_Store"] && ![file hasSuffix:@".meta"] && ![file hasSuffix:@".plist"]) {
         [_crashFiles addObject:[_crashesDir stringByAppendingPathComponent: file]];
       }
     }
@@ -368,9 +432,46 @@
   [self returnToMainApplication];
 }
 
-- (void)performSendingCrashReports {
-  NSMutableDictionary *approvedCrashReports = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] dictionaryForKey: kHockeySDKApprovedCrashReports]];
+- (void)sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
+  // add notes and delegate results to the latest crash report
   
+  NSMutableDictionary *metaDict = [NSMutableDictionary dictionaryWithCapacity:4];
+  NSString *userid = @"";
+  NSString *contact = @"";
+  NSString *log = @"";
+  NSString *error = nil;
+  
+  if (!crashDescription) crashDescription = @"";
+  [metaDict setObject:crashDescription forKey:@"description"];
+  
+  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportUserID)]) {
+    userid = [self.delegate crashReportUserID] ?: @"";
+  }
+  [metaDict setObject:userid forKey:@"userid"];
+  
+  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportContact)]) {
+    contact = [self.delegate crashReportContact] ?: @"";
+  }
+  [metaDict setObject:contact forKey:@"contact"];
+  
+  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
+    log = [self.delegate crashReportApplicationLog] ?: @"";
+  }
+  [metaDict setObject:log forKey:@"log"];
+  
+  NSData *plist = [NSPropertyListSerialization dataFromPropertyList:(id)metaDict
+                                                             format:NSPropertyListBinaryFormat_v1_0
+                                                   errorDescription:&error];
+  if (plist) {
+    [plist writeToFile:[NSString stringWithFormat:@"%@.meta", _crashFile] atomically:YES];
+  } else {
+    HockeySDKLog(@"ERROR: Writing crash meta data. %@", error);
+  }
+  
+  [self performSendingCrashReports];
+}
+
+- (void)performSendingCrashReports {
   NSError *error = NULL;
 		
   NSMutableString *crashes = nil;
@@ -397,13 +498,30 @@
       if (crashes == nil) {
         crashes = [NSMutableString string];
       }
+
+      NSString *userid = @"";
+      NSString *contact = @"";
+      NSString *log = @"";
+      NSString *description = @"";
+
+      NSString *error = nil;
+      NSPropertyListFormat format;
       
-      NSMutableDictionary *metaDict = [NSKeyedUnarchiver unarchiveObjectWithFile:[_crashFile stringByAppendingString:@".meta"]];
-      
-      NSString *userid = [metaDict valueForKey:@"userid"] ?: @"";
-      NSString *contact = [metaDict valueForKey:@"contact"] ?: @"";
-      NSString *log = [metaDict valueForKey:@"log"] ?: @"";
-      NSString *description = [metaDict valueForKey:@"description"] ?: @"";
+      NSData *plist = [NSData dataWithContentsOfFile:[_crashFile stringByAppendingString:@".meta"]];
+      if (plist) {
+        NSDictionary *metaDict = (NSDictionary *)[NSPropertyListSerialization
+                                                  propertyListFromData:plist
+                                                  mutabilityOption:NSPropertyListMutableContainersAndLeaves
+                                                  format:&format
+                                                  errorDescription:&error];
+        
+        userid = [metaDict objectForKey:@"userid"] ?: @"";
+        contact = [metaDict objectForKey:@"contact"] ?: @"";
+        log = [metaDict objectForKey:@"log"] ?: @"";
+        description = [metaDict objectForKey:@"description"] ?: @"";
+      } else {
+        HockeySDKLog(@"ERROR: Reading crash meta data. %@", error);
+      }
       
       if ([log length] > 0) {
         if ([description length] > 0) {
@@ -428,7 +546,7 @@
                        ];
 
       // store this crash report as user approved, so if it fails it will retry automatically
-      [approvedCrashReports setObject:[NSNumber numberWithBool:YES] forKey:[_crashFiles objectAtIndex:i]];
+      [_approvedCrashReports setObject:[NSNumber numberWithBool:YES] forKey:[_crashFiles objectAtIndex:i]];
     } else {
       // we cannot do anything with this report, so delete it
       [_fileManager removeItemAtPath:filename error:&error];
@@ -436,45 +554,13 @@
     }
   }
 	
-  [[NSUserDefaults standardUserDefaults] setObject:approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  [self saveSettings];
   
   if (crashes != nil) {
     [self postXML:[NSString stringWithFormat:@"<crashes>%@</crashes>", crashes]];
   } else {
     [self returnToMainApplication];
   }
-}
-
-- (void)sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
-  // add notes and delegate results to the latest crash report
-  
-  NSMutableDictionary *metaDict = [[[NSMutableDictionary alloc] init] autorelease];
-  NSString *userid = @"";
-  NSString *contact = @"";
-  NSString *log = @"";
-  
-  if (!crashDescription) crashDescription = @"";
-  [metaDict setValue:crashDescription forKey:@"description"];
-  
-  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportUserID)]) {
-    userid = [self.delegate crashReportUserID] ?: @"";
-    [metaDict setValue:userid forKey:@"userid"];
-  }
-  
-  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportContact)]) {
-    contact = [self.delegate crashReportContact] ?: @"";
-    [metaDict setValue:contact forKey:@"contact"];
-  }
-  
-  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
-    log = [self.delegate crashReportApplicationLog] ?: @"";
-    [metaDict setValue:log forKey:@"log"];
-  }
-  
-  [NSKeyedArchiver archiveRootObject:metaDict toFile:[NSString stringWithFormat:@"%@.meta", _crashFile]];    
-  
-  [self performSendingCrashReports];
 }
 
 
@@ -658,11 +744,10 @@
   NSError *error = NULL;
 	
   // check if the next call ran successfully the last time
-  if (_analyzerStarted == 0) {
+  if (!_analyzerStarted) {
     // mark the start of the routine
-    _analyzerStarted = 1;
-    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_analyzerStarted] forKey:kHockeySDKAnalyzerStarted];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    _analyzerStarted = YES;
+    [self saveSettings];
     
     // Try loading the crash report
     NSData *crashData = [[[NSData alloc] initWithData:[crashReporter loadPendingCrashReportDataAndReturnError: &error]] autorelease];
@@ -685,9 +770,8 @@
 	
   // Purge the report
   // mark the end of the routine
-  _analyzerStarted = 0;
-  [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_analyzerStarted] forKey:kHockeySDKAnalyzerStarted];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  _analyzerStarted = NO;
+  [self saveSettings];
   
   [crashReporter purgePendingCrashReport];
   return;
