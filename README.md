@@ -4,6 +4,19 @@ his document describes how to integrate the HockeySDK-Mac into your app. The SDK
 
 ## Release Notes
 
+Version 0.9.6 (RC 6):
+
+- IMPORTANT: Initialization methods and class names changed! Please check the *Setup* section in the *README*. Sorry for that.
+- Optimize sending of crash reports. Crash reports will be send synchronously if the app crashes within a customizable time interval (default 5s)
+- Added option to ask the user for name and email in the UI
+- Removed the delegates to get userid and contact, replaced with username and useremail properties
+- Validate app identifier and disable the SDK if it is obviously invalid
+- Use proper sandbox safe directories for crash caches and sdk settings
+- Adjust namespace from CNS (Codenauts) to BIT (Bit Stadium).
+- Updated bundle identifiers
+- Update copyright information to use Bit Stadium GmbH
+- Some internal optimizations
+
 Version 0.9.5 (RC 5):
 
 - Add multiple localizations (Finnish, French, Italian, Norwegian, Swedish. Thanks Markus!)
@@ -96,13 +109,13 @@ We propose the following method to set version numbers in your beta versions:
 
 1. Open your `AppDelegate.h` file.
 
-2. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/CNSCrashReportManagerDelegate.h></code></pre>
+2. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/BITCrashReportManagerDelegate.h></code></pre>
 
-3. Add the following protocol to your AppDelegate: <pre><code>CNSCrashReportManagerDelegate</code></pre>
+3. Add the following protocol to your AppDelegate: <pre><code>BITCrashReportManagerDelegate</code></pre>
 
 4. Open your `AppDelegate.m` file.
 
-5. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/CNSHockeyManager.h></code></pre>
+5. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/HockeySDK.h></code></pre>
 
 6. In your `appDelegate` change the invocation of the main window to the following structure
 
@@ -120,10 +133,17 @@ This allows the SDK to present a crash dialog on the next startup before the mai
 
 7. Add the following lines:
 
-        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" crashReportManagerDelegate:self];
-If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, use the following line:
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" crashReportManagerDelegate:self];
+        [[BITHockeyManager sharedHockeyManager] startManager];        
+If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, add the following line before `startManager`:
 
-        [[CNSHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" exceptionInterceptionEnabled:YES crashReportManagerDelegate:self];
+        [[BITHockeyManager sharedHockeyManager] setExceptionInterceptionEnabled:YES];
+For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously to make sure crash reports are being received, use the following line:
+
+        [[BITHockeyManager sharedHockeyManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:<NewTimeInterval>];
+In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
+
+        [[BITHockeyManager sharedHockeyManager] setLoggingEnabled:YES];
 They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
 
     Alternatively you can also subclass `NSWindow` or `NSApplication` to catch the exceptions like this:
@@ -177,7 +197,7 @@ Once you have your app ready for beta testing or even to submit it to the App St
 
 6. You should see a folder named dSYMs which contains your dSYM bundle. If you use Safari, just drag this file from Finder and drop it on to the corresponding drop zone in HockeyApp. If you use another browser, copy the file to a different location, then right-click it and choose Compress "YourApp.dSYM". The file will be compressed as a .zip file. Drag & drop this file to HockeyApp. 
 
-As an easier alternative for step 5 and 6, you can use our [HockeyMac](https://github.com/codenauts/HockeyMac) app to upload the complete archive in one step.
+As an easier alternative for step 5 and 6, you can use our [HockeyMac](https://github.com/BitStadium/HockeyMac) app to upload the complete archive in one step.
 
 ## Checklist if Crashes Do Not Appear in HockeyApp
 
