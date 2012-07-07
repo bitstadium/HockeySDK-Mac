@@ -318,54 +318,6 @@
   }
 }
 
-- (void)startManager {
-  BOOL returnToApp = NO;
-  
-  if ([self hasPendingCrashReport]) {
-    NSError* error = nil;
-    NSString *crashReport = nil;
-    
-    [self loadSettings];
-    
-    _crashFile = [_crashFiles lastObject];
-    NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
-    PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
-    crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report];
-
-    if (crashReport && !error) {        
-      NSString *log = @"";
-      
-      if (_delegate && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
-        log = [_delegate crashReportApplicationLog];
-      }
-
-      if (!self.autoSubmitCrashReport && [self hasNonApprovedCrashReports]) {
-        _crashReportUI = [[BITCrashReportUI alloc] initWithManager:self
-                                                   crashReportFile:_crashFile
-                                                       crashReport:crashReport
-                                                        logContent:log
-                                                       companyName:_companyName
-                                                   applicationName:[self applicationName]];
-        
-        [_crashReportUI askCrashReportDetails];
-      } else {
-        [self sendReportCrash:crashReport crashDescription:nil];
-      }
-    } else {
-      if (![self hasNonApprovedCrashReports]) {
-        [self performSendingCrashReports];
-      } else {
-        returnToApp = YES;
-      }
-    }
-  } else {
-    returnToApp = YES;
-  }
-  
-  if (returnToApp)
-    [self returnToMainApplication];
-}
-
 
 #pragma mark - PLCrashReporter based
 
@@ -426,6 +378,54 @@
 
 
 #pragma mark - Crash Report Processing
+
+- (void)startManager {
+  BOOL returnToApp = NO;
+  
+  if ([self hasPendingCrashReport]) {
+    NSError* error = nil;
+    NSString *crashReport = nil;
+    
+    [self loadSettings];
+    
+    _crashFile = [_crashFiles lastObject];
+    NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
+    PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
+    crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report];
+    
+    if (crashReport && !error) {        
+      NSString *log = @"";
+      
+      if (_delegate && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
+        log = [_delegate crashReportApplicationLog];
+      }
+      
+      if (!self.autoSubmitCrashReport && [self hasNonApprovedCrashReports]) {
+        _crashReportUI = [[BITCrashReportUI alloc] initWithManager:self
+                                                   crashReportFile:_crashFile
+                                                       crashReport:crashReport
+                                                        logContent:log
+                                                       companyName:_companyName
+                                                   applicationName:[self applicationName]];
+        
+        [_crashReportUI askCrashReportDetails];
+      } else {
+        [self sendReportCrash:crashReport crashDescription:nil];
+      }
+    } else {
+      if (![self hasNonApprovedCrashReports]) {
+        [self performSendingCrashReports];
+      } else {
+        returnToApp = YES;
+      }
+    }
+  } else {
+    returnToApp = YES;
+  }
+  
+  if (returnToApp)
+    [self returnToMainApplication];
+}
 
 - (void)cancelReport {
   [self cleanCrashReports];
