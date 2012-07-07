@@ -31,6 +31,7 @@
   
   BOOL _loggingEnabled;
   BOOL _exceptionInterceptionEnabled;
+  BOOL _askUserDetails;
   
   NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 }
@@ -48,6 +49,12 @@
 //
 // Default: NO
 @property (nonatomic, assign, getter=sExceptionInterceptionEnabled) BOOL exceptionInterceptionEnabled;
+
+
+// defines if the user interface should ask for name and email
+//
+// Default: NO
+@property (nonatomic, assign) BOOL askUserDetails;
 
 // Defines the maximum time interval after the app start and the crash, that will cause showing the app window after sending is complete instead of with the start of the sending process. Default is 5 seconds.
 @property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;

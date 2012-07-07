@@ -12,6 +12,12 @@
 /* Introduction text, with app name placeholder first and company placeholder second */
 "IntroductionText" = "%@ wurde beim letzten Programmlauf unerwartet beendet. Möchten Sie einen Problembericht an %@ senden?";
 
+/* Name Text Title */
+"NameTextTitle" = "Name";
+
+/* Email Text Title */
+"EmailTextTitle" = "Email";
+
 /* Comments Disclosure Text */
 "CommentsDisclosureTitle" = "Kommentare";
 

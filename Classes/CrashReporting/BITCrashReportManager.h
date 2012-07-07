@@ -37,6 +37,12 @@
 // stores the set of crashreports that have been approved but aren't sent yet
 #define kHockeySDKApprovedCrashReports @"HockeySDKApprovedCrashReports"
 
+// stores the user name entered in the UI
+#define kHockeySDKUserName @"HockeySDKUserName"
+
+// stores the user email address entered in the UI
+#define kHockeySDKUserEmail @"HockeySDKUserEmail"
+
 
 // flags if the crashreporter is activated at all
 // set this as bool in user defaults e.g. in the settings, if you want to let the user be able to deactivate it
@@ -92,6 +98,10 @@ typedef enum HockeyCrashReportStatus {
   NSString   *_submissionURL;
   NSString   *_companyName;
   BOOL       _autoSubmitCrashReport;
+  BOOL       _askUserDetails;
+  
+  NSString   *_userName;
+  NSString   *_userEmail;
   
   NSString   *_crashFile;
   
@@ -113,10 +123,19 @@ typedef enum HockeyCrashReportStatus {
 @property (nonatomic, retain) NSString *appIdentifier;
 
 // defines if Uncaught Exception Interception should be used, default to NO
-@property (nonatomic) BOOL exceptionInterceptionEnabled;
+@property (nonatomic, assign) BOOL exceptionInterceptionEnabled;
+
+// defines if the user interface should ask for name and email, default to NO
+@property (nonatomic, assign) BOOL askUserDetails;
 
 // defines the company name to be shown in the crash reporting dialog
 @property (nonatomic, retain) NSString *companyName;
+
+// defines the users name or user id
+@property (nonatomic, copy) NSString *userName;
+
+// defines the users email address
+@property (nonatomic, copy) NSString *userEmail;
 
 // delegate is required
 @property (nonatomic, assign) id <BITCrashReportManagerDelegate> delegate;

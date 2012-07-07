@@ -33,15 +33,21 @@
 @class BITCrashReportManager;
 
 @interface BITCrashReportUI : NSWindowController {
+  IBOutlet NSTextField  *nameTextField;
+  IBOutlet NSTextField  *emailTextField;
   IBOutlet NSTextField  *descriptionTextField;
   IBOutlet NSTextView   *crashLogTextView;
+  
+  IBOutlet NSTextField  *nameTextFieldTitle;
+  IBOutlet NSTextField  *emailTextFieldTitle;
 
-  IBOutlet NSTextFieldCell *introductionTextFieldCell;
-  IBOutlet NSTextFieldCell *commentsTextFieldCell;
-  IBOutlet NSTextFieldCell *problemDescriptionTextFieldCell;
+  IBOutlet NSTextField  *introductionText;
+  IBOutlet NSTextField  *commentsTextFieldTitle;
+  IBOutlet NSTextField  *problemDescriptionTextFieldTitle;
   
   IBOutlet NSTextField  *noteText;
   
+  IBOutlet NSButton   *disclosureButton;
   IBOutlet NSButton   *showButton;
   IBOutlet NSButton   *hideButton;
   IBOutlet NSButton   *cancelButton;
@@ -49,20 +55,28 @@
   
   BITCrashReportManager   *_crashReportManager;
   
-  NSString      *_xml;
-  
   NSString      *_companyName;
   NSString      *_applicationName;
   
   NSMutableString   *_logContent;
+  NSString          *_userName;
+  NSString          *_userEmail;
   NSString          *_crashLogContent;
   NSString          *_crashFile;
   
+  BOOL showUserDetails;
   BOOL showComments;
   BOOL showDetails;
 }
 
-- (id)initWithManager:(BITCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName;
+// defines the users name or user id
+@property (nonatomic, retain) NSString *userName;
+
+// defines the users email address
+@property (nonatomic, retain) NSString *userEmail;
+
+
+- (id)initWithManager:(BITCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails;
 
 - (void)askCrashReportDetails;
 
@@ -71,6 +85,9 @@
 - (IBAction)showDetails:(id)sender;
 - (IBAction)hideDetails:(id)sender;
 - (IBAction)showComments:(id)sender;
+
+- (BOOL)showUserDetails;
+- (void)setShowUserDetails:(BOOL)value;
 
 - (BOOL)showComments;
 - (void)setShowComments:(BOOL)value;

@@ -36,22 +36,6 @@
 
 // Invoked before a crash report will be sent
 // 
-// Return a userid or similar which the crashreport should contain
-// Maximum length: 255 chars
-// 
-// Default: empty
-- (NSString *)crashReportUserID;
-
-// Invoked before a crash report will be sent
-// 
-// Return contact data, e.g. an email address, for the crash report
-// Maximum length: 255 chars
-// 
-// Default: empty
--(NSString *)crashReportContact;
-
-// Invoked before a crash report will be sent
-// 
 // Return cadditional application specific log data the crashreport should contain, empty by default.
 // 
 // Default: empty

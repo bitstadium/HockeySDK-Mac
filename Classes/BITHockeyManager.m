@@ -34,6 +34,7 @@
 @synthesize appIdentifier = _appIdentifier;
 @synthesize loggingEnabled = _loggingEnabled;
 @synthesize exceptionInterceptionEnabled = _exceptionInterceptionEnabled;
+@synthesize askUserDetails = _askUserDetails;
 @synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
 #pragma mark - Public Class Methods
@@ -89,6 +90,11 @@
 
 - (void)setExceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
   [[BITCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
+}
+
+
+- (void)setAskUserDetails:(BOOL)askUserDetails {
+  [[BITCrashReportManager sharedCrashReportManager] setAskUserDetails:askUserDetails];
 }
 
 

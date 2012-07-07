@@ -39,29 +39,54 @@
 - (void) endCrashReporter;
 @end
 
+const CGFloat kUserHeight = 50;
 const CGFloat kCommentsHeight = 105;
 const CGFloat kDetailsHeight = 285;
 
 @implementation BITCrashReportUI
 
-- (id)initWithManager:(BITCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName {
+@synthesize userName = _userName;
+@synthesize userEmail = _userEmail;
+
+
+- (id)initWithManager:(BITCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
   
   self = [super initWithWindowNibName: @"BITCrashReportUI"];
   
   if ( self != nil) {
-    _xml = nil;
     _crashReportManager = crashReportManager;
     _crashFile = [crashReportFile copy];
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
     _companyName = [companyName copy];
     _applicationName = applicationName;
+    _userName = @"";
+    _userEmail = @"";
     [self setShowComments: YES];
     [self setShowDetails: NO];
+    [self setShowUserDetails:askUserDetails];
     
     NSRect windowFrame = [[self window] frame];
     windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height - kDetailsHeight);
     windowFrame.origin.y -= kDetailsHeight;
+    
+    if (!askUserDetails) {
+      windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height - kUserHeight);
+      windowFrame.origin.y -= kUserHeight;
+      
+      NSRect frame = commentsTextFieldTitle.frame;
+      frame.origin.y += kUserHeight;
+      commentsTextFieldTitle.frame = frame;
+
+      frame = disclosureButton.frame;
+      frame.origin.y += kUserHeight;
+      disclosureButton.frame = frame;
+
+      frame = descriptionTextField.frame;
+      frame.origin.y += kUserHeight;
+      descriptionTextField.frame = frame;
+    }
+    
     [[self window] setFrame: windowFrame
                     display: YES
                     animate: NO];
@@ -150,6 +175,11 @@ const CGFloat kDetailsHeight = 285;
   
   [[self window] makeFirstResponder: nil];
   
+  if (showUserDetails) {
+    _crashReportManager.userName = [nameTextField stringValue];
+    _crashReportManager.userEmail = [emailTextField stringValue];
+  }
+  
   [_crashReportManager sendReportCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
   [_crashLogContent release];
   _crashLogContent = nil;
@@ -161,11 +191,17 @@ const CGFloat kDetailsHeight = 285;
 - (void)askCrashReportDetails {
 #define DISTANCE_BETWEEN_BUTTONS		3
   
+  [[nameTextField cell] setTitle:_userName];
+  [[emailTextField cell] setTitle:_userEmail];
+  
   [[self window] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"WindowTitle", @""), _applicationName]];
   
-  [introductionTextFieldCell setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
-  [commentsTextFieldCell setTitle:HockeySDKLocalizedString(@"CommentsDisclosureTitle", @"")];
-  [problemDescriptionTextFieldCell setTitle:HockeySDKLocalizedString(@"ProblemDetailsTitle", @"")];
+  [[nameTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"NameTextTitle", @"")];
+  [[emailTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"EmailTextTitle", @"")];
+    
+  [[introductionText cell] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
+  [[commentsTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"CommentsDisclosureTitle", @"")];
+  [[problemDescriptionTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"ProblemDetailsTitle", @"")];
 
   [[descriptionTextField cell] setPlaceholderString:HockeySDKLocalizedString(@"UserDescriptionPlaceholder", @"")];
   [noteText setStringValue:HockeySDKLocalizedString(@"PrivacyNote", @"")];
@@ -219,10 +255,24 @@ const CGFloat kDetailsHeight = 285;
   [_crashFile release]; _crashFile = nil;
   [_crashLogContent release]; _crashLogContent = nil;
   [_logContent release]; _logContent = nil;
+  [_applicationName release]; _applicationName = nil;
   [_companyName release]; _companyName = nil;
+  [_userName release]; _userName = nil;
+  [_userEmail release]; _userEmail = nil;
+  
   _crashReportManager = nil;
   
   [super dealloc];
+}
+
+
+- (BOOL)showUserDetails {
+  return showUserDetails;
+}
+
+
+- (void)setShowUserDetails:(BOOL)value {
+  showUserDetails = value;
 }
 
 

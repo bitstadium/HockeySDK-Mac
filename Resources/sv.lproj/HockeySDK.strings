@@ -12,6 +12,12 @@
 /* Introduction text, with app name placeholder first and company placeholder second */
 "IntroductionText" = "%@ slutade tvärt att fungera förra gången. Vill du skicka en felrapport till %@?";
 
+/* Name Text Title */
+"NameTextTitle" = "Namn";
+
+/* Email Text Title */
+"EmailTextTitle" = "E-post";
+
 /* Comments Disclosure Text */
 "CommentsDisclosureTitle" = "Kommentarer";
 

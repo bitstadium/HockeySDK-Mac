@@ -90,7 +90,10 @@
 @synthesize delegate = _delegate;
 @synthesize appIdentifier = _appIdentifier;
 @synthesize companyName = _companyName;
+@synthesize userName = _userName;
+@synthesize userEmail = _userEmail;
 @synthesize autoSubmitCrashReport = _autoSubmitCrashReport;
+@synthesize askUserDetails = _askUserDetails;
 @synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
 #pragma mark - Init
@@ -111,6 +114,7 @@
     _serverResult = HockeyCrashReportStatusUnknown;
     _crashReportUI = nil;
     _fileManager = [[NSFileManager alloc] init];
+    _askUserDetails = YES;
     
     _crashIdenticalCurrentVersion = YES;
     _submissionURL = @"https://rink.hockeyapp.net/";
@@ -120,6 +124,9 @@
 
     _approvedCrashReports = [[NSMutableDictionary alloc] init];
     _analyzerStarted = NO;
+    
+    _userName = @"";
+    _userEmail = @"";
     
     _crashFile = nil;
     _crashFiles = nil;
@@ -148,7 +155,7 @@
     if (_crashReportActivated) {
       NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
       _crashesDir = [[NSString stringWithFormat:@"%@", [[paths objectAtIndex:0] stringByAppendingPathComponent:@"/crashes/"]] retain];
-      _settingsFile = [_crashesDir stringByAppendingPathComponent:@"HockeyCrashReport.plist"];
+      _settingsFile = [[_crashesDir stringByAppendingPathComponent:@"HockeyCrashReport.plist"] retain];
       
       if (![_fileManager fileExistsAtPath:_crashesDir]) {
         NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
@@ -170,6 +177,9 @@
   [_companyName release]; _companyName = nil;
 
   [_fileManager release]; _fileManager = nil;
+  
+  [_userName release]; _userName = nil;
+  [_userEmail release]; _userEmail = nil;
 
   [_crashFile release]; _crashFile = nil;
   
@@ -191,7 +201,10 @@
   NSString *error = nil;
 
   NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:2];
-  [rootObj setObject:_approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
+  [rootObj setObject:_userName forKey:kHockeySDKUserName];
+  [rootObj setObject:_userEmail forKey:kHockeySDKUserEmail];
+  if (_approvedCrashReports && [_approvedCrashReports count] > 0)
+    [rootObj setObject:_approvedCrashReports forKey:kHockeySDKUserEmail];
   [rootObj setObject:[NSNumber numberWithBool:_analyzerStarted] forKey:kHockeySDKAnalyzerStarted];
   
   NSData *plist = [NSPropertyListSerialization dataFromPropertyList:(id)rootObj
@@ -219,8 +232,11 @@
                                           format:&format
                                           errorDescription:&error];
 
-    [_approvedCrashReports setDictionary:[rootObj objectForKey:kHockeySDKApprovedCrashReports]];
+    if ([rootObj objectForKey:kHockeySDKApprovedCrashReports])
+      [_approvedCrashReports setDictionary:[rootObj objectForKey:kHockeySDKApprovedCrashReports]];
     _analyzerStarted = [(NSNumber *)[rootObj objectForKey:kHockeySDKAnalyzerStarted] boolValue];
+    _userName = [rootObj objectForKey:kHockeySDKUserName] ?: @"";
+    _userEmail = [rootObj objectForKey:kHockeySDKUserEmail] ?: @"";
   } else {
     HockeySDKLog(@"ERROR: Reading settings. %@", error);
   }
@@ -384,8 +400,6 @@
     NSError* error = nil;
     NSString *crashReport = nil;
     
-    [self loadSettings];
-    
     _crashFile = [_crashFiles lastObject];
     NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
     PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
@@ -404,7 +418,11 @@
                                                        crashReport:crashReport
                                                         logContent:log
                                                        companyName:_companyName
-                                                   applicationName:[self applicationName]];
+                                                   applicationName:[self applicationName]
+                                                    askUserDetails:_askUserDetails];
+        
+        [_crashReportUI setUserName:_userName];
+        [_crashReportUI setUserEmail:_userEmail];
         
         [_crashReportUI askCrashReportDetails];
       } else {
@@ -434,23 +452,14 @@
   // add notes and delegate results to the latest crash report
   
   NSMutableDictionary *metaDict = [NSMutableDictionary dictionaryWithCapacity:4];
-  NSString *userid = @"";
-  NSString *contact = @"";
   NSString *log = @"";
   NSString *error = nil;
   
   if (!crashDescription) crashDescription = @"";
   [metaDict setObject:crashDescription forKey:@"description"];
   
-  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportUserID)]) {
-    userid = [self.delegate crashReportUserID] ?: @"";
-  }
-  [metaDict setObject:userid forKey:@"userid"];
-  
-  if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportContact)]) {
-    contact = [self.delegate crashReportContact] ?: @"";
-  }
-  [metaDict setObject:contact forKey:@"contact"];
+  [metaDict setObject:_userName forKey:@"username"];
+  [metaDict setObject:_userEmail forKey:@"useremail"];
   
   if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
     log = [self.delegate crashReportApplicationLog] ?: @"";
@@ -513,8 +522,8 @@
                                                   format:&format
                                                   errorDescription:&error];
         
-        userid = [metaDict objectForKey:@"userid"] ?: @"";
-        contact = [metaDict objectForKey:@"contact"] ?: @"";
+        userid = [metaDict objectForKey:@"username"] ?: @"";
+        contact = [metaDict objectForKey:@"useremail"] ?: @"";
         log = [metaDict objectForKey:@"log"] ?: @"";
         description = [metaDict objectForKey:@"description"] ?: @"";
       } else {
@@ -703,6 +712,11 @@
 
 #pragma mark - GetterSetter
 
+- (void)setUsername:(NSString *)username andEmail:(NSString *)email {
+  _userName = username;
+  _userName = email;
+}
+
 - (NSString *)applicationName {
   NSString *applicationName = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleExecutable"];
   
@@ -741,6 +755,8 @@
   PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
   NSError *error = NULL;
 	
+  [self loadSettings];
+  
   // check if the next call ran successfully the last time
   if (!_analyzerStarted) {
     // mark the start of the routine

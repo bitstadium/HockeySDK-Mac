@@ -12,6 +12,12 @@
 /* Introduction text, with app name placeholder first and company placeholder second */
 "IntroductionText" = "%@ päättyi odottamatta, kun sitä käytettiin viimeksi. Haluatko lähettää virheraportin kohteeseen %@?";
 
+/* Name Text Title */
+"NameTextTitle" = "Nimi";
+
+/* Email Text Title */
+"EmailTextTitle" = "Sähköposti";
+
 /* Comments Disclosure Text */
 "CommentsDisclosureTitle" = "Kommentit";
 
