@@ -9,6 +9,7 @@ Thomas Dohmke <thomas@dohmke.de>
 The Hockey SDK is provided under the following license:
 
 	The MIT License
+	Copyright (c) 2012 HockeyApp, Bit Stadium GmbH. All rights reserved.
 	Copyright (c) 2011-2012 Codenauts UG (haftungsbeschränkt). All rights reserved.
 	
 	Permission is hereby granted, free of charge, to any person
