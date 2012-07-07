@@ -153,16 +153,30 @@
     }
     
     if (_crashReportActivated) {
+      // temporary directory for crashes grabbed from PLCrashReporter
       NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-      _crashesDir = [[NSString stringWithFormat:@"%@", [[paths objectAtIndex:0] stringByAppendingPathComponent:@"/crashes/"]] retain];
-      _settingsFile = [[_crashesDir stringByAppendingPathComponent:@"HockeyCrashReport.plist"] retain];
-      
+      NSString *cacheDir = [paths objectAtIndex: 0];
+      _crashesDir = [[[cacheDir stringByAppendingPathComponent: HOCKEYSDK_IDENTIFIER] stringByAppendingPathComponent: [[NSBundle mainBundle] bundleIdentifier]] retain];
+
       if (![_fileManager fileExistsAtPath:_crashesDir]) {
         NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
         NSError *theError = NULL;
       
         [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
       }
+      
+      // crash reporting specific settings
+      paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+      NSString *settingsDir = [[[paths objectAtIndex: 0] stringByAppendingPathComponent:HOCKEYSDK_IDENTIFIER] stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
+
+      if (![_fileManager fileExistsAtPath:settingsDir]) {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
+        NSError *theError = NULL;
+        
+        [_fileManager createDirectoryAtPath:settingsDir withIntermediateDirectories: YES attributes: attributes error: &theError];
+      }
+
+      _settingsFile = [[settingsDir stringByAppendingPathComponent:@"CrashReporting.plist"] retain];
     }
   }
   return self;
@@ -418,7 +432,7 @@
     
     while ((file = [dirEnum nextObject])) {
       NSDictionary *fileAttributes = [_fileManager attributesOfItemAtPath:[_crashesDir stringByAppendingPathComponent:file] error:&error];
-      if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 && ![file isEqualToString:@".DS_Store"] && ![file hasSuffix:@".meta"] && ![file hasSuffix:@".plist"]) {
+      if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 && ![file isEqualToString:@".DS_Store"] && ![file hasSuffix:@".meta"]) {
         [_crashFiles addObject:[_crashesDir stringByAppendingPathComponent: file]];
       }
     }
