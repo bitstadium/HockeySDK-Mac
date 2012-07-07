@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>de.codenauts.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>net.hockeyapp.sdk.mac</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -23,7 +23,7 @@
 	<key>CFBundleVersion</key>
 	<string>8</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2012 Codenauts UG (haftungsbeschränkt). All rights reserved.</string>
+	<string>Copyright © 2012 HockeyApp, Bit Stadium GmbH. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 </dict>
