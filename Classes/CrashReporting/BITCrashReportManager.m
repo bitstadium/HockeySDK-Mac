@@ -37,7 +37,7 @@
 #import <objc/runtime.h>
 
 #define SDK_NAME @"HockeySDK-Mac"
-#define SDK_VERSION @"0.9.5"
+#define SDK_VERSION @"1.0"
 
 /**
  * @internal
