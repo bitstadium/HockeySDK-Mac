@@ -1,4 +1,4 @@
-his document describes how to integrate the HockeySDK-Mac into your app. The SDK has one main feature:
+This document describes how to integrate the HockeySDK-Mac into your app. The SDK has one main feature:
 
 **Collect crash reports:** If your app crashes, a crash log with the same format as from the Apple Crash Reporter is written to the device's storage. If the user starts the app again, he is asked to submit the crash report to HockeyApp.
 
