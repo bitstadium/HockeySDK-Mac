@@ -117,7 +117,7 @@
     _askUserDetails = YES;
     
     _crashIdenticalCurrentVersion = YES;
-    _submissionURL = @"https://rink.hockeyapp.net/";
+    _submissionURL = @"https://sdk.hockeyapp.net/";
     
     _timeIntervalCrashInLastSessionOccured = -1;
     _maxTimeIntervalOfCrashForReturnMainApplicationDelay = 5;
