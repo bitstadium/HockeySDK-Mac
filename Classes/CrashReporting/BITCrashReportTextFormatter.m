@@ -6,7 +6,7 @@
  *
  * Copyright (c) 2008-2012 Plausible Labs Cooperative, Inc.
  * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
- * Copyright (c) 2012 Codenauts UG (haftungsbeschränkt)
+ * Copyright (c) 2012 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -31,22 +31,22 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "CrashReporter/CrashReporter.h"
+#import <CrashReporter/CrashReporter.h>
 
-#import "CNSCrashReportTextFormatter.h"
+#import "BITCrashReportTextFormatter.h"
 
-@interface CNSCrashReportTextFormatter (PrivateAPI)
+@interface BITCrashReportTextFormatter (PrivateAPI)
 NSInteger binaryImageSort(id binary1, id binary2, void *context);
-+ (NSString *) formatStackFrame: (PLCrashReportStackFrameInfo *) frameInfo 
-                     frameIndex: (NSUInteger) frameIndex
-                         report: (PLCrashReport *) report;
++ (NSString *)formatStackFrame:(PLCrashReportStackFrameInfo *)frameInfo 
+                    frameIndex:(NSUInteger)frameIndex
+                        report:(PLCrashReport *)report;
 @end
 
 
 /**
  * Formats PLCrashReport data as human-readable text.
  */
-@implementation CNSCrashReportTextFormatter
+@implementation BITCrashReportTextFormatter
 
 
 /**
@@ -58,7 +58,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
  *
  * @return Returns the formatted result on success, or nil if an error occurs.
  */
-+ (NSString *) stringValueForCrashReport: (PLCrashReport *) report withTextFormat: (CNSCrashReportTextFormat) textFormat {
++ (NSString *)stringValueForCrashReport:(PLCrashReport *)report {
 	NSMutableString* text = [NSMutableString string];
 	boolean_t lp64 = true; // quiesce GCC uninitialized value warning
     
@@ -154,11 +154,15 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
     }
 
     {
+        NSString *reportGUID = @"[TODO]";
+        if (report.hasReportInfo && report.reportInfo.reportGUID != nil)
+            reportGUID = report.reportInfo.reportGUID;
+      
         NSString *hardwareModel = @"???";
         if (report.hasMachineInfo && report.machineInfo.modelName != nil)
             hardwareModel = report.machineInfo.modelName;
 
-        [text appendFormat: @"Incident Identifier: [TODO]\n"];
+        [text appendFormat: @"Incident Identifier: %@\n", reportGUID];
         [text appendFormat: @"CrashReporter Key:   [TODO]\n"];
         [text appendFormat: @"Hardware Model:      %@\n", hardwareModel];
     }
@@ -183,8 +187,14 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
             processId = [[NSNumber numberWithUnsignedInteger: report.processInfo.processID] stringValue];
             
             /* Process Path */
-            if (report.processInfo.processPath != nil)
+            if (report.processInfo.processPath != nil) {
                 processPath = report.processInfo.processPath;
+                
+                /* Remove username from the path */
+                processPath = [processPath stringByAbbreviatingWithTildeInPath];
+                if ([[processPath substringToIndex:1] isEqualToString:@"~"])
+                    processPath = [NSString stringWithFormat:@"/Users/USER%@", [processPath substringFromIndex:1]];
+            }
             
             /* Parent Process Name */
             if (report.processInfo.parentProcessName != nil)
@@ -243,13 +253,22 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
     if (report.exceptionInfo != nil && report.exceptionInfo.stackFrames != nil && [report.exceptionInfo.stackFrames count] > 0) {
         PLCrashReportExceptionInfo *exception = report.exceptionInfo;
         
-        /* Create the pseudo-thread header. We use the named thread format to mark this thread */
-        [text appendString: @"Last Exception Backtrace:\n"];
-        
         /* Write out the frames */
+        NSUInteger numberBlankStackFrames = 0;
+        
         for (NSUInteger frame_idx = 0; frame_idx < [exception.stackFrames count]; frame_idx++) {
             PLCrashReportStackFrameInfo *frameInfo = [exception.stackFrames objectAtIndex: frame_idx];
-            [text appendString: [self formatStackFrame: frameInfo frameIndex: frame_idx report: report]];
+            NSString *formattedStackFrame = [self formatStackFrame: frameInfo frameIndex: frame_idx - numberBlankStackFrames report: report];
+            if (formattedStackFrame) {
+                if (frame_idx - numberBlankStackFrames == 0) {
+                    /* Create the pseudo-thread header. We use the named thread format to mark this thread */
+                    [text appendString: @"Last Exception Backtrace:\n"];
+                }
+                
+                [text appendString: formattedStackFrame];
+            } else {
+                numberBlankStackFrames++;
+            }
         }
         [text appendString: @"\n\n"];
     }
@@ -258,15 +277,28 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
     PLCrashReportThreadInfo *crashed_thread = nil;
     NSInteger maxThreadNum = 0;
     for (PLCrashReportThreadInfo *thread in report.threads) {
-        if (thread.crashed) {
-            [text appendFormat: @"Thread %ld Crashed:\n", (long) thread.threadNumber];
-            crashed_thread = thread;
-        } else {
-            [text appendFormat: @"Thread %ld:\n", (long) thread.threadNumber];
-        }
+        
+        /* Write out the frames */
+        NSUInteger numberBlankStackFrames = 0;
+        
         for (NSUInteger frame_idx = 0; frame_idx < [thread.stackFrames count]; frame_idx++) {
             PLCrashReportStackFrameInfo *frameInfo = [thread.stackFrames objectAtIndex: frame_idx];
-            [text appendString: [self formatStackFrame: frameInfo frameIndex: frame_idx report: report]];
+            NSString *formattedStackFrame = [self formatStackFrame: frameInfo frameIndex: frame_idx report: report];
+            if (formattedStackFrame) {
+                if (frame_idx - numberBlankStackFrames == 0) {
+                    /* Create the thread header. */
+                    if (thread.crashed) {
+                        [text appendFormat: @"Thread %ld Crashed:\n", (long) thread.threadNumber];
+                        crashed_thread = thread;
+                    } else {
+                        [text appendFormat: @"Thread %ld:\n", (long) thread.threadNumber];
+                    }
+                }
+                
+                [text appendString: formattedStackFrame];
+            } else {
+                numberBlankStackFrames++;
+            }
         }
         [text appendString: @"\n"];
 
@@ -375,6 +407,11 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
         } else {
             fmt = @"%10#" PRIx64 " - %10#" PRIx64 " %@%@ %@  <%@> %@\n";
         }
+      
+        /* Remove username from the image path */
+        NSString *imageName = [imageInfo.imageName stringByAbbreviatingWithTildeInPath];
+        if ([[imageName substringToIndex:1] isEqualToString:@"~"])
+            imageName = [NSString stringWithFormat:@"/Users/USER%@", [imageName substringFromIndex:1]];
 
         [text appendFormat: fmt,
                             imageInfo.imageBaseAddress,
@@ -383,7 +420,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
                             [imageInfo.imageName lastPathComponent],
                             archName,
                             uuid,
-                            imageInfo.imageName];
+                            imageName];
     }
     
 
@@ -391,31 +428,88 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
 }
 
 /**
- * Initialize with the request string encoding and output format.
+ * Returns an array of app UUIDs and their architecture
+ * As a dictionary for each element
  *
- * @param textFormat Format to use for the generated text crash report.
- * @param stringEncoding Encoding to use when writing to the output stream.
+ * @param report The report to format.
+ *
+ * @return Returns the formatted result on success, or nil if an error occurs.
  */
-- (id) initWithTextFormat: (CNSCrashReportTextFormat) textFormat stringEncoding: (NSStringEncoding) stringEncoding {
-    if ((self = [super init]) == nil)
-        return nil;
++ (NSArray *)arrayOfAppUUIDsForCrashReport:(PLCrashReport *)report {
+	NSMutableArray* appUUIDs = [NSMutableArray array];
+  
+  /* Images. The iPhone crash report format sorts these in ascending order, by the base address */
+  for (PLCrashReportBinaryImageInfo *imageInfo in [report.images sortedArrayUsingFunction: binaryImageSort context: nil]) {
+    NSString *uuid;
+    /* Fetch the UUID if it exists */
+    if (imageInfo.hasImageUUID)
+      uuid = imageInfo.imageUUID;
+    else
+      uuid = @"???";
     
-    _textFormat = textFormat;
-    _stringEncoding = stringEncoding;
-
-    return self;
-}
-
-// from PLCrashReportFormatter protocol
-- (NSData *) formatReport: (PLCrashReport *) report error: (NSError **) outError {
-    NSString *text = [PLCrashReportTextFormatter stringValueForCrashReport: report withTextFormat: _textFormat];
-    return [text dataUsingEncoding: _stringEncoding allowLossyConversion: YES];
+    /* Determine the architecture string */
+    NSString *archName = @"???";
+    if (imageInfo.codeType != nil && imageInfo.codeType.typeEncoding == PLCrashReportProcessorTypeEncodingMach) {
+      switch (imageInfo.codeType.type) {
+        case CPU_TYPE_ARM:
+          /* Apple includes subtype for ARM binaries. */
+          switch (imageInfo.codeType.subtype) {
+            case CPU_SUBTYPE_ARM_V6:
+              archName = @"armv6";
+              break;
+              
+            case CPU_SUBTYPE_ARM_V7:
+              archName = @"armv7";
+              break;
+              
+            default:
+              archName = @"arm-unknown";
+              break;
+          }
+          break;
+          
+        case CPU_TYPE_X86:
+          archName = @"i386";
+          break;
+          
+        case CPU_TYPE_X86_64:
+          archName = @"x86_64";
+          break;
+          
+        case CPU_TYPE_POWERPC:
+          archName = @"powerpc";
+          break;
+          
+        default:
+          // Use the default archName value (initialized above).
+          break;
+      }
+    }
+    
+    /* Determine if this is the app executable or app specific framework */
+    NSString *imagePath = [imageInfo.imageName stringByStandardizingPath];
+    NSString *appBundleContentsPath = [[report.processInfo.processPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent]; 
+    NSString *imageType = @"";
+    
+    if ([imageInfo.imageName isEqual: report.processInfo.processPath]) {
+      imageType = @"app";
+    } else {
+      imageType = @"framework";
+    }
+    
+    if ([imagePath isEqual: report.processInfo.processPath] || [imagePath hasPrefix:appBundleContentsPath]) {
+      [appUUIDs addObject:[NSDictionary dictionaryWithObjectsAndKeys:uuid, kBITBinaryImageKeyUUID, archName, kBITBinaryImageKeyArch, imageType, kBITBinaryImageKeyType, nil]];
+    }
+  }
+  
+  
+  return appUUIDs;
 }
 		 
 @end
 
 
-@implementation CNSCrashReportTextFormatter (PrivateAPI)
+@implementation BITCrashReportTextFormatter (PrivateAPI)
 
 
 /**
@@ -427,9 +521,9 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
  *
  * @return Returns a formatted frame line.
  */
-+ (NSString *) formatStackFrame: (PLCrashReportStackFrameInfo *) frameInfo 
-                     frameIndex: (NSUInteger) frameIndex
-                         report: (PLCrashReport *) report
++ (NSString *)formatStackFrame: (PLCrashReportStackFrameInfo *) frameInfo 
+                    frameIndex: (NSUInteger) frameIndex
+                        report: (PLCrashReport *) report
 {
     /* Base image address containing instrumention pointer, offset of the IP from that base
      * address, and the associated image name */
@@ -443,21 +537,20 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
         imageName = [imageInfo.imageName lastPathComponent];
         baseAddress = imageInfo.imageBaseAddress;
         pcOffset = frameInfo.instructionPointer - imageInfo.imageBaseAddress;
+        NSString *imagePath = [imageInfo.imageName stringByStandardizingPath];
+        NSString *appBundleContentsPath = [[report.processInfo.processPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent]; 
       
-        /* If the OS version of the crash report is identical to the current os version
-         * then don't check for symbols if this is the executable.
-         * The app executable should be symbolicated using the dSYM instead */
-
-//        You can fetch the symbol name in the formatter via PLCrashReportStackFrameInfo.symbolName property -- it will be nil if no symbol name is available.
-//        
-//        The crash reporter doesn't filter out symbol names from the main binary, but you can do so by filtering on the binary names.
-        
-        if (![imageInfo.imageName isEqual: report.processInfo.processPath]) {
+        if (![imagePath isEqual: report.processInfo.processPath] && ![imagePath hasPrefix:appBundleContentsPath]) {
           symbol = frameInfo.symbolName;
           pcOffset = frameInfo.instructionPointer - frameInfo.symbolStart;
         }
     }
   
+    /* The frame has nothing useful, so return nil so it can be filtered out */
+    if (frameInfo.instructionPointer == 0 && baseAddress == 0 && pcOffset == 0) {
+        return nil;
+    }
+    
     /* Make sure UTF8/16 characters are handled correctly */
     NSInteger offset = 0;
     NSInteger index = 0;

@@ -1,4 +1,7 @@
-//  Copyright 2012 Codenauts UG (haftungsbeschränkt). All rights reserved.
+// 
+//  Author: Andreas Linde <mail@andreaslinde.de>
+// 
+//  Copyright (c) 2012 HockeyApp, Bit Stadium GmbH. All rights reserved.
 //  See LICENSE.txt for author information.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,16 +22,18 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+@protocol BITCrashReportManagerDelegate;
 
-#import "CNSHockeyManagerDelegate.h"
-
-@interface CNSHockeyManager : NSObject {
+@interface BITHockeyManager : NSObject {
 @private
-  id _delegate;
   NSString *_appIdentifier;
   NSString *_companyName;
   
   BOOL _loggingEnabled;
+  BOOL _exceptionInterceptionEnabled;
+  BOOL _askUserDetails;
+  
+  NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 }
 
 #pragma mark - Public Properties
@@ -40,16 +45,29 @@
 // Default: NO
 @property (nonatomic, assign, getter=isLoggingEnabled) BOOL loggingEnabled;
 
+// Enable catching uncaught exceptions and let them crash the app and get a crash report
+//
+// Default: NO
+@property (nonatomic, assign, getter=sExceptionInterceptionEnabled) BOOL exceptionInterceptionEnabled;
+
+
+// defines if the user interface should ask for name and email
+//
+// Default: NO
+@property (nonatomic, assign) BOOL askUserDetails;
+
+// Defines the maximum time interval after the app start and the crash, that will cause showing the app window after sending is complete instead of with the start of the sending process. Default is 5 seconds.
+@property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
 #pragma mark - Public Methods
 
 // Returns the shared manager object
-+ (CNSHockeyManager *)sharedHockeyManager;
++ (BITHockeyManager *)sharedHockeyManager;
 
 // Configure HockeyApp with a single app identifier and delegate; use this
 // only for debug or beta versions of your app!
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName delegate:(id)newDelegate;
+- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>) crashReportManagerDelegate;
 
-- (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id)delegate;
+- (void)startManager;
 
 @end

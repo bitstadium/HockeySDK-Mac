@@ -7,46 +7,65 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1E9358FF1523866300F51DBD /* CrashReporter.framework in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DC0152357A500067A5C /* CrashReporter.framework */; };
+		1E20566E15A5F61F008FC20A /* BITCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* BITCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E413D9315A0BB8800620BFE /* HockeySDK.strings */; };
+		1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7F5A2315A46249001081FC /* HockeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
-		1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		1EE1E0021524BA9200C0DA76 /* CNSHockeyManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
-		1EF09DB51523579100067A5C /* CNSHockeyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DAE1523579100067A5C /* CNSHockeyManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1EF09DB61523579100067A5C /* CNSHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* CNSHockeyManager.m */; };
-		1EF09DBC1523579A00067A5C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DB81523579A00067A5C /* InfoPlist.strings */; };
+		1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DAE1523579100067A5C /* BITHockeyManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1EF09DB61523579100067A5C /* BITHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* BITHockeyManager.m */; };
 		1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */; };
 		1EF09DC1152357A500067A5C /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09DC0152357A500067A5C /* CrashReporter.framework */; };
-		1EF09DD4152371DC00067A5C /* CNSCrashReportUI.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DCD152371DC00067A5C /* CNSCrashReportUI.nib */; };
-		1EF09DD5152371DC00067A5C /* CNSCrashReportManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DCE152371DC00067A5C /* CNSCrashReportManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1EF09DD6152371DC00067A5C /* CNSCrashReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DCF152371DC00067A5C /* CNSCrashReportManager.m */; };
-		1EF09DD7152371DC00067A5C /* CNSCrashReportUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DD0152371DC00067A5C /* CNSCrashReportUI.h */; };
-		1EF09DD8152371DC00067A5C /* CNSCrashReportUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD1152371DC00067A5C /* CNSCrashReportUI.m */; };
-		1EF09DD9152371DC00067A5C /* CNSCrashReportTextFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DD2152371DC00067A5C /* CNSCrashReportTextFormatter.h */; };
-		1EF09DDA152371DC00067A5C /* CNSCrashReportTextFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD3152371DC00067A5C /* CNSCrashReportTextFormatter.m */; };
+		1EF09DD4152371DC00067A5C /* BITCrashReportUI.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DCD152371DC00067A5C /* BITCrashReportUI.nib */; };
+		1EF09DD5152371DC00067A5C /* BITCrashReportManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DCE152371DC00067A5C /* BITCrashReportManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1EF09DD6152371DC00067A5C /* BITCrashReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DCF152371DC00067A5C /* BITCrashReportManager.m */; };
+		1EF09DD7152371DC00067A5C /* BITCrashReportUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DD0152371DC00067A5C /* BITCrashReportUI.h */; };
+		1EF09DD8152371DC00067A5C /* BITCrashReportUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD1152371DC00067A5C /* BITCrashReportUI.m */; };
+		1EF09DD9152371DC00067A5C /* BITCrashReportTextFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */; };
+		1EF09DDA152371DC00067A5C /* BITCrashReportTextFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */; };
+		4C7E213E159C902900D02AD1 /* CrashReporter.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1EF09DC0152357A500067A5C /* CrashReporter.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4C7E213C159C900B00D02AD1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4C7E213E159C902900D02AD1 /* CrashReporter.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportManagerDelegate.h; sourceTree = "<group>"; };
-		1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSHockeyManagerDelegate.h; sourceTree = "<group>"; };
+		1E413D9215A0BB8800620BFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E413D9515A0BB9700620BFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E015A1C47700C0816F /* fi */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E215A1C49400C0816F /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E315A1C4A700C0816F /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E415A1C4BF00C0816F /* nb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E66F5E515A1C4D100C0816F /* sv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/HockeySDK.strings; sourceTree = "<group>"; };
+		1E7F5A2315A46249001081FC /* HockeySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDK.h; sourceTree = "<group>"; };
+		1EE1DFFE1524B3D600C0DA76 /* BITCrashReportManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportManagerDelegate.h; sourceTree = "<group>"; };
 		1EF09D8C1523574200067A5C /* HockeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HockeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EF09D8F1523574200067A5C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1EF09D921523574200067A5C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		1EF09D931523574200067A5C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		1EF09D941523574200067A5C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1EF09DAE1523579100067A5C /* CNSHockeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSHockeyManager.h; sourceTree = "<group>"; };
-		1EF09DAF1523579100067A5C /* CNSHockeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSHockeyManager.m; sourceTree = "<group>"; };
-		1EF09DB91523579A00067A5C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1EF09DAE1523579100067A5C /* BITHockeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITHockeyManager.h; sourceTree = "<group>"; };
+		1EF09DAF1523579100067A5C /* BITHockeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHockeyManager.m; sourceTree = "<group>"; };
 		1EF09DBA1523579A00067A5C /* HockeySDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HockeySDK-Info.plist"; sourceTree = "<group>"; };
 		1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HockeySDK-Prefix.pch"; sourceTree = "<group>"; };
 		1EF09DC0152357A500067A5C /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
-		1EF09DCD152371DC00067A5C /* CNSCrashReportUI.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CNSCrashReportUI.nib; sourceTree = "<group>"; };
-		1EF09DCE152371DC00067A5C /* CNSCrashReportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportManager.h; sourceTree = "<group>"; };
-		1EF09DCF152371DC00067A5C /* CNSCrashReportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSCrashReportManager.m; sourceTree = "<group>"; };
-		1EF09DD0152371DC00067A5C /* CNSCrashReportUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportUI.h; sourceTree = "<group>"; };
-		1EF09DD1152371DC00067A5C /* CNSCrashReportUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSCrashReportUI.m; sourceTree = "<group>"; };
-		1EF09DD2152371DC00067A5C /* CNSCrashReportTextFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSCrashReportTextFormatter.h; sourceTree = "<group>"; };
-		1EF09DD3152371DC00067A5C /* CNSCrashReportTextFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSCrashReportTextFormatter.m; sourceTree = "<group>"; };
+		1EF09DCD152371DC00067A5C /* BITCrashReportUI.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = BITCrashReportUI.nib; sourceTree = "<group>"; };
+		1EF09DCE152371DC00067A5C /* BITCrashReportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportManager.h; sourceTree = "<group>"; };
+		1EF09DCF152371DC00067A5C /* BITCrashReportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportManager.m; sourceTree = "<group>"; };
+		1EF09DD0152371DC00067A5C /* BITCrashReportUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportUI.h; sourceTree = "<group>"; };
+		1EF09DD1152371DC00067A5C /* BITCrashReportUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportUI.m; sourceTree = "<group>"; };
+		1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportTextFormatter.h; sourceTree = "<group>"; };
+		1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportTextFormatter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,9 +124,8 @@
 			isa = PBXGroup;
 			children = (
 				1EF09DCC152371DC00067A5C /* CrashReporting */,
-				1EF09DAE1523579100067A5C /* CNSHockeyManager.h */,
-				1EF09DAF1523579100067A5C /* CNSHockeyManager.m */,
-				1EE1E0011524BA9200C0DA76 /* CNSHockeyManagerDelegate.h */,
+				1EF09DAE1523579100067A5C /* BITHockeyManager.h */,
+				1EF09DAF1523579100067A5C /* BITHockeyManager.m */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -116,9 +134,10 @@
 		1EF09DB71523579A00067A5C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				1EF09DB81523579A00067A5C /* InfoPlist.strings */,
 				1EF09DBA1523579A00067A5C /* HockeySDK-Info.plist */,
 				1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */,
+				1E7F5A2315A46249001081FC /* HockeySDK.h */,
+				1E413D9315A0BB8800620BFE /* HockeySDK.strings */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -136,14 +155,14 @@
 		1EF09DCC152371DC00067A5C /* CrashReporting */ = {
 			isa = PBXGroup;
 			children = (
-				1EF09DCD152371DC00067A5C /* CNSCrashReportUI.nib */,
-				1EF09DCE152371DC00067A5C /* CNSCrashReportManager.h */,
-				1EF09DCF152371DC00067A5C /* CNSCrashReportManager.m */,
-				1EE1DFFE1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h */,
-				1EF09DD0152371DC00067A5C /* CNSCrashReportUI.h */,
-				1EF09DD1152371DC00067A5C /* CNSCrashReportUI.m */,
-				1EF09DD2152371DC00067A5C /* CNSCrashReportTextFormatter.h */,
-				1EF09DD3152371DC00067A5C /* CNSCrashReportTextFormatter.m */,
+				1EF09DCD152371DC00067A5C /* BITCrashReportUI.nib */,
+				1EF09DCE152371DC00067A5C /* BITCrashReportManager.h */,
+				1EF09DCF152371DC00067A5C /* BITCrashReportManager.m */,
+				1EE1DFFE1524B3D600C0DA76 /* BITCrashReportManagerDelegate.h */,
+				1EF09DD0152371DC00067A5C /* BITCrashReportUI.h */,
+				1EF09DD1152371DC00067A5C /* BITCrashReportUI.m */,
+				1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */,
+				1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */,
 			);
 			path = CrashReporting;
 			sourceTree = "<group>";
@@ -155,13 +174,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EF09DB51523579100067A5C /* CNSHockeyManager.h in Headers */,
-				1EF09DD5152371DC00067A5C /* CNSCrashReportManager.h in Headers */,
-				1EE1E0021524BA9200C0DA76 /* CNSHockeyManagerDelegate.h in Headers */,
-				1EE1DFFF1524B3D600C0DA76 /* CNSCrashReportManagerDelegate.h in Headers */,
+				1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */,
+				1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */,
+				1EF09DD5152371DC00067A5C /* BITCrashReportManager.h in Headers */,
 				1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */,
-				1EF09DD7152371DC00067A5C /* CNSCrashReportUI.h in Headers */,
-				1EF09DD9152371DC00067A5C /* CNSCrashReportTextFormatter.h in Headers */,
+				1EF09DD7152371DC00067A5C /* BITCrashReportUI.h in Headers */,
+				1EF09DD9152371DC00067A5C /* BITCrashReportTextFormatter.h in Headers */,
+				1E20566E15A5F61F008FC20A /* BITCrashReportManagerDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,11 +191,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EF09DA11523574200067A5C /* Build configuration list for PBXNativeTarget "HockeySDK" */;
 			buildPhases = (
+				1EF09D8A1523574200067A5C /* Resources */,
 				1EF09D871523574200067A5C /* Sources */,
 				1EF09D881523574200067A5C /* Frameworks */,
+				4C7E213C159C900B00D02AD1 /* CopyFiles */,
 				1EF09D891523574200067A5C /* Headers */,
-				1EF09D8A1523574200067A5C /* Resources */,
-				1EF09DC2152357DD00067A5C /* ShellScript */,
+				1EF09DC2152357DD00067A5C /* Change CrashReporter framework load path */,
 			);
 			buildRules = (
 			);
@@ -201,6 +221,12 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				de,
+				fi,
+				fr,
+				it,
+				nb,
+				sv,
 			);
 			mainGroup = 1EF09D801523574200067A5C;
 			productRefGroup = 1EF09D8D1523574200067A5C /* Products */;
@@ -217,27 +243,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EF09DBC1523579A00067A5C /* InfoPlist.strings in Resources */,
-				1EF09DD4152371DC00067A5C /* CNSCrashReportUI.nib in Resources */,
-				1E9358FF1523866300F51DBD /* CrashReporter.framework in Resources */,
+				1EF09DD4152371DC00067A5C /* BITCrashReportUI.nib in Resources */,
+				1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1EF09DC2152357DD00067A5C /* ShellScript */ = {
+		1EF09DC2152357DD00067A5C /* Change CrashReporter framework load path */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Change CrashReporter framework load path";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "install_name_tool -change \"@loader_path/../Frameworks/CrashReporter.framework/Versions/A/CrashReporter\"  \"@loader_path/Resources/CrashReporter.framework/Versions/A/CrashReporter\" \"$TARGET_BUILD_DIR/HockeySDK.framework/Versions/A/HockeySDK\"";
+			shellScript = "install_name_tool -change \"@loader_path/../Frameworks/CrashReporter.framework/Versions/A/CrashReporter\"  \"@loader_path/Frameworks/CrashReporter.framework/Versions/A/CrashReporter\" \"$TARGET_BUILD_DIR/HockeySDK.framework/Versions/A/HockeySDK\"\n\nif [ ! -e \"$TARGET_BUILD_DIR/HockeySDK.framework/Frameworks\" ];\nthen \n    cd \"$TARGET_BUILD_DIR/HockeySDK.framework\"\n    ln -s \"Versions/Current/Frameworks\" \"Frameworks\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -246,22 +272,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EF09DB61523579100067A5C /* CNSHockeyManager.m in Sources */,
-				1EF09DD6152371DC00067A5C /* CNSCrashReportManager.m in Sources */,
-				1EF09DD8152371DC00067A5C /* CNSCrashReportUI.m in Sources */,
-				1EF09DDA152371DC00067A5C /* CNSCrashReportTextFormatter.m in Sources */,
+				1EF09DB61523579100067A5C /* BITHockeyManager.m in Sources */,
+				1EF09DD6152371DC00067A5C /* BITCrashReportManager.m in Sources */,
+				1EF09DD8152371DC00067A5C /* BITCrashReportUI.m in Sources */,
+				1EF09DDA152371DC00067A5C /* BITCrashReportTextFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		1EF09DB81523579A00067A5C /* InfoPlist.strings */ = {
+		1E413D9315A0BB8800620BFE /* HockeySDK.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1EF09DB91523579A00067A5C /* en */,
+				1E413D9215A0BB8800620BFE /* en */,
+				1E413D9515A0BB9700620BFE /* de */,
+				1E66F5E015A1C47700C0816F /* fi */,
+				1E66F5E215A1C49400C0816F /* fr */,
+				1E66F5E315A1C4A700C0816F /* it */,
+				1E66F5E415A1C4BF00C0816F /* nb */,
+				1E66F5E515A1C4D100C0816F /* sv */,
 			);
-			name = InfoPlist.strings;
+			name = HockeySDK.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -287,7 +319,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
@@ -307,7 +339,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx;
 			};
 			name = Release;
