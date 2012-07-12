@@ -4,6 +4,10 @@ his document describes how to integrate the HockeySDK-Mac into your app. The SDK
 
 ## Release Notes
 
+Version 1.0:
+
+- Update URL to send crash reports to https://sdk.hockeyapp.net/
+
 Version 0.9.6 (RC 6):
 
 - IMPORTANT: Initialization methods and class names changed! Please check the *Setup* section in the *README*. Sorry for that.
