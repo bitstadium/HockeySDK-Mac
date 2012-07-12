@@ -114,13 +114,19 @@ We propose the following method to set version numbers in your beta versions:
 
 1. Open your `AppDelegate.h` file.
 
-2. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/BITCrashReportManagerDelegate.h></code></pre>
+2. Add the following line at the top of the file below your own #import statements:
 
-3. Add the following protocol to your AppDelegate: <pre><code>BITCrashReportManagerDelegate</code></pre>
+        #import <HockeySDK/BITCrashReportManagerDelegate.h>
+
+3. Add the following protocol to your AppDelegate: 
+
+        BITCrashReportManagerDelegate
 
 4. Open your `AppDelegate.m` file.
 
-5. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/HockeySDK.h></code></pre>
+5. Add the following line at the top of the file below your own #import statements:
+
+        #import <HockeySDK/HockeySDK.h>
 
 6. In your `appDelegate` change the invocation of the main window to the following structure
 
