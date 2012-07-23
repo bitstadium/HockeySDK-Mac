@@ -553,6 +553,7 @@
         continue;
       }
       
+      NSString *crashUUID = report.reportInfo.reportGUID ?: @"";
       NSString *crashLogString = [BITCrashReportTextFormatter stringValueForCrashReport:report];
                      
       if ([report.applicationInfo.applicationVersion compare:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
@@ -595,13 +596,14 @@
         }
       }
       
-      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><log><![CDATA[%@]]></log></crash>",
+      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><uuid>%@</uuid><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><log><![CDATA[%@]]></log></crash>",
        [[self applicationName] UTF8String],
        [self extractAppUUIDs:report],
        report.applicationInfo.applicationIdentifier,
        report.systemInfo.operatingSystemVersion,
        [self applicationVersion],
        report.applicationInfo.applicationVersion,
+       crashUUID,
        [self modelVersion],
        userid,
        contact,
