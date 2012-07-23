@@ -547,6 +547,9 @@
 			
       if (report == nil) {
         HockeySDKLog(@"ERROR: Could not parse crash report");
+        // we cannot do anything with this report, so delete it
+        [_fileManager removeItemAtPath:filename error:&error];
+        [_fileManager removeItemAtPath:[NSString stringWithFormat:@"%@.meta", filename] error:&error];
         continue;
       }
       
