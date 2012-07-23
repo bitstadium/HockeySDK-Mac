@@ -572,7 +572,7 @@
       NSString *error = nil;
       NSPropertyListFormat format;
       
-      NSData *plist = [NSData dataWithContentsOfFile:[_crashFile stringByAppendingString:@".meta"]];
+      NSData *plist = [NSData dataWithContentsOfFile:[filename stringByAppendingString:@".meta"]];
       if (plist) {
         NSDictionary *metaDict = (NSDictionary *)[NSPropertyListSerialization
                                                   propertyListFromData:plist
@@ -612,7 +612,7 @@
                        ];
 
       // store this crash report as user approved, so if it fails it will retry automatically
-      [_approvedCrashReports setObject:[NSNumber numberWithBool:YES] forKey:[_crashFiles objectAtIndex:i]];
+      [_approvedCrashReports setObject:[NSNumber numberWithBool:YES] forKey:filename];
     } else {
       // we cannot do anything with this report, so delete it
       [_fileManager removeItemAtPath:filename error:&error];
