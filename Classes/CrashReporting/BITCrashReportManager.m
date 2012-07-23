@@ -214,11 +214,11 @@
 - (void)saveSettings {
   NSString *error = nil;
 
-  NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:2];
+  NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:4];
   [rootObj setObject:_userName forKey:kHockeySDKUserName];
   [rootObj setObject:_userEmail forKey:kHockeySDKUserEmail];
   if (_approvedCrashReports && [_approvedCrashReports count] > 0)
-    [rootObj setObject:_approvedCrashReports forKey:kHockeySDKUserEmail];
+    [rootObj setObject:_approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
   [rootObj setObject:[NSNumber numberWithBool:_analyzerStarted] forKey:kHockeySDKAnalyzerStarted];
   
   NSData *plist = [NSPropertyListSerialization dataFromPropertyList:(id)rootObj
