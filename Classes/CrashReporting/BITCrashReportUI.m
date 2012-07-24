@@ -97,9 +97,11 @@ const CGFloat kDetailsHeight = 285;
 
 
 - (void)awakeFromNib {
-	crashLogTextView.editable = NO;
-	crashLogTextView.selectable = NO;
-	crashLogTextView.automaticSpellingCorrectionEnabled = NO;
+  [crashLogTextView setEditable:NO];
+  [crashLogTextView setSelectable:NO];
+  if ([crashLogTextView respondsToSelector:@selector(automaticSpellingCorrectionEnabled:)]) {
+    [crashLogTextView setAutomaticSpellingCorrectionEnabled:NO];
+  }
 }
 
 
