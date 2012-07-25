@@ -129,7 +129,7 @@
     _userEmail = @"";
     
     _crashFile = nil;
-    _crashFiles = nil;
+    _crashFiles = [[NSMutableArray alloc] init];
     _crashesDir = nil;
     
     self.delegate = nil;
@@ -152,22 +152,36 @@
       [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:NO] forKey:kHockeySDKAutomaticallySendCrashReports];
     }
     
-    if (_crashReportActivated) {
-      NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    
+    // temporary directory for crashes grabbed from PLCrashReporter
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cacheDir = [paths objectAtIndex: 0];
+    _crashesDir = [[[cacheDir stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:HOCKEYSDK_IDENTIFIER] retain];
+    
+    if (![_fileManager fileExistsAtPath:_crashesDir]) {
+      NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
+      NSError *theError = NULL;
       
-      // temporary directory for crashes grabbed from PLCrashReporter
-      NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-      NSString *cacheDir = [paths objectAtIndex: 0];
-      _crashesDir = [[[cacheDir stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:HOCKEYSDK_IDENTIFIER] retain];
-
-      if (![_fileManager fileExistsAtPath:_crashesDir]) {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
-        NSError *theError = NULL;
+      [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
+    }
+    
+    _settingsFile = [[_crashesDir stringByAppendingPathComponent:HOCKEYSDK_SETTINGS] retain];
       
-        [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
+    // on the very first startup this will always be initialized, since the default value for _crashReportActivated is YES
+    // but we do it anyway, to be able to initialize PLCrashReporter as early as possible
+    if (_crashReportActivated) {      
+      PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+      NSError *error = NULL;
+      
+      // Check if we previously crashed
+      if ([crashReporter hasPendingCrashReport]) {
+        [self handleCrashReport];
       }
       
-      _settingsFile = [[_crashesDir stringByAppendingPathComponent:HOCKEYSDK_SETTINGS] retain];
+      // Enable the Crash Reporter
+      if (![crashReporter enableCrashReporterAndReturnError:&error])
+        NSLog(@"Warning: Could not enable crash reporter: %@", error);
     }
   }
   return self;
@@ -394,28 +408,8 @@
 
 - (BOOL)hasPendingCrashReport {
   if (!_crashReportActivated) return NO;
-  
-  _crashFiles = [[NSMutableArray alloc] init];
-  
-  PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
-  NSError *error = NULL;
-  
-  // Check if we previously crashed
-  if ([crashReporter hasPendingCrashReport]) {
-    [self handleCrashReport];
-  }
-  
-  // Enable the Crash Reporter
-  if (![crashReporter enableCrashReporterAndReturnError:&error])
-    NSLog(@"Warning: Could not enable crash reporter: %@", error);
-  
-  /* Enable run-loop exception trapping if requested */
-  if (_exceptionInterceptionEnabled) {
-    if (![self trapRunLoopExceptions])
-      NSLog(@"Warning: Could not enable run-loop exception trapping!");
-  }
-  
-  if ([_crashFiles count] == 0 && [_fileManager fileExistsAtPath: _crashesDir]) {
+    
+  if ([_fileManager fileExistsAtPath: _crashesDir]) {
     NSString *file = nil;
     NSError *error = NULL;
     
@@ -732,7 +726,7 @@
   [self returnToMainApplication];
 }
 
-#pragma mark NSURLConnection Delegate
+#pragma mark - NSURLConnection Delegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
   if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -765,10 +759,16 @@
 
 #pragma mark - GetterSetter
 
-- (void)setUsername:(NSString *)username andEmail:(NSString *)email {
-  _userName = username;
-  _userName = email;
+- (void)setExceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
+  _exceptionInterceptionEnabled = exceptionInterceptionEnabled;
+  
+  /* Enable run-loop exception trapping if requested */
+  if (exceptionInterceptionEnabled) {
+    if (![self trapRunLoopExceptions])
+      NSLog(@"Warning: Could not enable run-loop exception trapping!");
+  }
 }
+
 
 - (NSString *)applicationName {
   NSString *applicationName = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleExecutable"];
