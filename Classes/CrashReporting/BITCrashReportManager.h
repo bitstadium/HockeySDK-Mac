@@ -102,9 +102,7 @@ typedef enum HockeyCrashReportStatus {
   
   NSString   *_userName;
   NSString   *_userEmail;
-  
-  NSString   *_crashFile;
-  
+    
   NSMutableArray *_crashFiles;
   NSString       *_crashesDir;
   NSString       *_settingsFile;
@@ -155,6 +153,6 @@ typedef enum HockeyCrashReportStatus {
 - (void)startManager;
 
 - (void)cancelReport;
-- (void)sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
+- (void)sendReportWithCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
 
 @end

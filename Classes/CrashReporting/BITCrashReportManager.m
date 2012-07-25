@@ -129,7 +129,6 @@
     _userName = @"";
     _userEmail = @"";
     
-    _crashFile = nil;
     _crashFiles = [[NSMutableArray alloc] init];
     _crashesDir = nil;
     
@@ -201,8 +200,6 @@
   
   [_userName release]; _userName = nil;
   [_userEmail release]; _userEmail = nil;
-
-  [_crashFile release]; _crashFile = nil;
   
   [_crashFiles release]; _crashFiles = nil;
   [_crashesDir release]; _crashesDir = nil;
@@ -444,8 +441,8 @@
     NSError* error = nil;
     NSString *crashReport = nil;
     
-    _crashFile = [_crashFiles lastObject];
-    NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
+    NSString *crashFile = [_crashFiles lastObject];
+    NSData *crashData = [NSData dataWithContentsOfFile: crashFile];
     PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
     crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report];
     
@@ -458,7 +455,7 @@
       
       if (!self.autoSubmitCrashReport && [self hasNonApprovedCrashReports]) {
         _crashReportUI = [[BITCrashReportUI alloc] initWithManager:self
-                                                   crashReportFile:_crashFile
+                                                   crashReportFile:crashFile
                                                        crashReport:crashReport
                                                         logContent:log
                                                        companyName:_companyName
@@ -470,7 +467,7 @@
         
         [_crashReportUI askCrashReportDetails];
       } else {
-        [self sendReportCrash:crashReport crashDescription:nil];
+        [self sendReportWithCrash:crashReport crashDescription:nil];
       }
     } else {
       if (![self hasNonApprovedCrashReports]) {
@@ -492,7 +489,7 @@
   [self returnToMainApplication];
 }
 
-- (void)sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
+- (void)sendReportWithCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
   // add notes and delegate results to the latest crash report
   
   NSMutableDictionary *metaDict = [NSMutableDictionary dictionaryWithCapacity:4];
@@ -514,7 +511,7 @@
                                                              format:NSPropertyListBinaryFormat_v1_0
                                                    errorDescription:&error];
   if (plist) {
-    [plist writeToFile:[NSString stringWithFormat:@"%@.meta", _crashFile] atomically:YES];
+    [plist writeToFile:[NSString stringWithFormat:@"%@.meta", crashFile] atomically:YES];
   } else {
     HockeySDKLog(@"ERROR: Writing crash meta data. %@", error);
   }

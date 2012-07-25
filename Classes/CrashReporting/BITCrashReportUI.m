@@ -182,7 +182,7 @@ const CGFloat kDetailsHeight = 285;
     _crashReportManager.userEmail = [emailTextField stringValue];
   }
   
-  [_crashReportManager sendReportCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
+  [_crashReportManager sendReportWithCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
   [_crashLogContent release];
   _crashLogContent = nil;
   
