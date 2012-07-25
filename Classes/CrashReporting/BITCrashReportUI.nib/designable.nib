@@ -119,7 +119,7 @@
 															<string key="NSFrameSize">{437, 14}</string>
 															<reference key="NSSuperview" ref="238729313"/>
 															<reference key="NSWindow"/>
-															<reference key="NSNextKeyView" ref="69401596"/>
+															<reference key="NSNextKeyView" ref="321879571"/>
 															<object class="NSTextContainer" key="NSTextContainer" id="567359698">
 																<object class="NSLayoutManager" key="NSLayoutManager">
 																	<object class="NSTextStorage" key="NSTextStorage">
@@ -238,7 +238,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 											<string key="NSFrame">{{0, 8}, {439, 255}}</string>
 											<reference key="NSSuperview" ref="511659880"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="321879571"/>
+											<reference key="NSNextKeyView" ref="238729313"/>
 											<int key="NSsFlags">133650</int>
 											<reference key="NSVScroller" ref="194183608"/>
 											<reference key="NSHScroller" ref="321879571"/>
@@ -316,8 +316,8 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSNextKeyView" ref="692549042"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="931466820">
-								<int key="NSCellFlags">-1805517311</int>
-								<int key="NSCellFlags2">272629824</int>
+								<int key="NSCellFlags">-1804468671</int>
+								<int key="NSCellFlags2">272630784</int>
 								<string key="NSContents"/>
 								<reference key="NSSupport" ref="113673234"/>
 								<string key="NSPlaceholderString">John Appleseed</string>
@@ -336,8 +336,8 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSNextKeyView" ref="182606009"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="100070324">
-								<int key="NSCellFlags">-1805517311</int>
-								<int key="NSCellFlags2">272629824</int>
+								<int key="NSCellFlags">-1804468671</int>
+								<int key="NSCellFlags2">272630784</int>
 								<string key="NSContents"/>
 								<reference key="NSSupport" ref="113673234"/>
 								<string key="NSPlaceholderString">email@domain.com</string>
@@ -572,7 +572,6 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="NSFrame">{{109, 20}, {445, 11}}</string>
 							<reference key="NSSuperview" ref="346017069"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="131703194">
 								<int key="NSCellFlags">-1541276159</int>
@@ -598,7 +597,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="828078923"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {2560, 1418}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1400, 878}}</string>
 				<string key="NSMinSize">{213, 129}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>

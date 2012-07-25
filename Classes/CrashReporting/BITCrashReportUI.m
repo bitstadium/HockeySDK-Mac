@@ -193,14 +193,21 @@ const CGFloat kDetailsHeight = 285;
 - (void)askCrashReportDetails {
 #define DISTANCE_BETWEEN_BUTTONS		3
   
-  [[nameTextField cell] setTitle:_userName];
-  [[emailTextField cell] setTitle:_userEmail];
   
   [[self window] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"WindowTitle", @""), _applicationName]];
   
   [[nameTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"NameTextTitle", @"")];
+  [[nameTextField cell] setTitle:_userName];
+  if ([[nameTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
+    [[nameTextField cell] setUsesSingleLineMode:YES];
+  }
+  
   [[emailTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"EmailTextTitle", @"")];
-    
+  [[emailTextField cell] setTitle:_userEmail];
+  if ([[emailTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
+    [[emailTextField cell] setUsesSingleLineMode:YES];
+  }
+
   [[introductionText cell] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
   [[commentsTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"CommentsDisclosureTitle", @"")];
   [[problemDescriptionTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"ProblemDetailsTitle", @"")];
