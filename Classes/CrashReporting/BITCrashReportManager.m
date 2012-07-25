@@ -67,7 +67,6 @@
 
 @interface BITCrashReportManager (private)
 - (NSString *)applicationName;
-- (NSString *)applicationVersionString;
 - (NSString *)applicationVersion;
 
 - (BOOL)trapRunLoopExceptions;
@@ -783,17 +782,8 @@
 }
 
 
-- (NSString*)applicationVersionString {
-  NSString* string = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleShortVersionString"];
-  
-  if (!string)
-    string = [[[NSBundle mainBundle] infoDictionary] valueForKey: @"CFBundleShortVersionString"];
-  
-  return string;
-}
-
 - (NSString *)applicationVersion {
-  NSString* string = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleVersion"];
+  NSString *string = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleVersion"];
   
   if (!string)
     string = [[[NSBundle mainBundle] infoDictionary] valueForKey: @"CFBundleVersion"];
