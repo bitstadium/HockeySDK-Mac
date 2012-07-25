@@ -713,7 +713,7 @@
     } else {
       error = [NSError errorWithDomain:kHockeyErrorDomain
                                   code:HockeyAPIErrorWithStatusCode
-                              userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Sending failed with status code: %i", _statusCode], NSLocalizedDescriptionKey, nil]];
+                              userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Sending failed with status code: %i", (int)_statusCode], NSLocalizedDescriptionKey, nil]];
     }
     
     HockeySDKLog(@"ERROR: %@", [error localizedDescription]);

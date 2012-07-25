@@ -119,7 +119,7 @@
 															<string key="NSFrameSize">{437, 14}</string>
 															<reference key="NSSuperview" ref="238729313"/>
 															<reference key="NSWindow"/>
-															<reference key="NSNextKeyView" ref="321879571"/>
+															<reference key="NSNextKeyView" ref="69401596"/>
 															<object class="NSTextContainer" key="NSTextContainer" id="567359698">
 																<object class="NSLayoutManager" key="NSLayoutManager">
 																	<object class="NSTextStorage" key="NSTextStorage">
@@ -238,7 +238,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 											<string key="NSFrame">{{0, 8}, {439, 255}}</string>
 											<reference key="NSSuperview" ref="511659880"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="238729313"/>
+											<reference key="NSNextKeyView" ref="321879571"/>
 											<int key="NSsFlags">133650</int>
 											<reference key="NSVScroller" ref="194183608"/>
 											<reference key="NSHScroller" ref="321879571"/>
@@ -572,6 +572,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="NSFrame">{{109, 20}, {445, 11}}</string>
 							<reference key="NSSuperview" ref="346017069"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="131703194">
 								<int key="NSCellFlags">-1541276159</int>
