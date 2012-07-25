@@ -95,6 +95,7 @@
 @synthesize autoSubmitCrashReport = _autoSubmitCrashReport;
 @synthesize askUserDetails = _askUserDetails;
 @synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
+@synthesize didCrashInLastSession = _didCrashInLastSession;
 
 #pragma mark - Init
 
@@ -124,6 +125,7 @@
 
     _approvedCrashReports = [[NSMutableDictionary alloc] init];
     _analyzerStarted = NO;
+    _didCrashInLastSession = NO;
     
     _userName = @"";
     _userEmail = @"";
@@ -176,6 +178,7 @@
       
       // Check if we previously crashed
       if ([crashReporter hasPendingCrashReport]) {
+        _didCrashInLastSession = YES;
         [self handleCrashReport];
       }
       
