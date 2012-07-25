@@ -102,15 +102,14 @@ typedef enum HockeyCrashReportStatus {
   
   NSString   *_userName;
   NSString   *_userEmail;
-  
-  NSString   *_crashFile;
-  
+    
   NSMutableArray *_crashFiles;
   NSString       *_crashesDir;
   NSString       *_settingsFile;
   
   BITCrashReportUI *_crashReportUI;
 
+  BOOL                _didCrashInLastSession;
   BOOL                _analyzerStarted;
   NSMutableDictionary *_approvedCrashReports;
 }
@@ -140,6 +139,9 @@ typedef enum HockeyCrashReportStatus {
 // delegate is required
 @property (nonatomic, assign) id <BITCrashReportManagerDelegate> delegate;
 
+// Indicates if the app crash in the previous session
+@property (nonatomic, readonly) BOOL didCrashInLastSession;
+
 // if YES, the crash report will be submitted without asking the user
 // if NO, the user will be asked if the crash report can be submitted (default)
 @property (nonatomic, assign, getter=isAutoSubmitCrashReport) BOOL autoSubmitCrashReport;
@@ -151,6 +153,6 @@ typedef enum HockeyCrashReportStatus {
 - (void)startManager;
 
 - (void)cancelReport;
-- (void)sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
+- (void)sendReportWithCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
 
 @end

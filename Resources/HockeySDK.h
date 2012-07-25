@@ -28,6 +28,7 @@
 
 #ifndef HOCKEYSDK_IDENTIFIER
 #define HOCKEYSDK_IDENTIFIER @"net.hockeyapp.sdk.mac"
+#define HOCKEYSDK_SETTINGS @"BITCrashManager.plist"
 #define HOCKEYSDK_BUNDLE [NSBundle bundleWithIdentifier:HOCKEYSDK_IDENTIFIER]
 #define HockeySDKLocalizedString(key,comment) NSLocalizedStringFromTableInBundle(key, @"HockeySDK", HOCKEYSDK_BUNDLE, comment)
 #define HockeySDKLog(fmt, ...) do { if([BITHockeyManager sharedHockeyManager].isLoggingEnabled) { NSLog((@"[HockeySDK] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__); }} while(0)

@@ -37,7 +37,7 @@
 #import <objc/runtime.h>
 
 #define SDK_NAME @"HockeySDK-Mac"
-#define SDK_VERSION @"0.9.5"
+#define SDK_VERSION @"1.0"
 
 /**
  * @internal
@@ -67,7 +67,6 @@
 
 @interface BITCrashReportManager (private)
 - (NSString *)applicationName;
-- (NSString *)applicationVersionString;
 - (NSString *)applicationVersion;
 
 - (BOOL)trapRunLoopExceptions;
@@ -95,6 +94,7 @@
 @synthesize autoSubmitCrashReport = _autoSubmitCrashReport;
 @synthesize askUserDetails = _askUserDetails;
 @synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
+@synthesize didCrashInLastSession = _didCrashInLastSession;
 
 #pragma mark - Init
 
@@ -124,12 +124,12 @@
 
     _approvedCrashReports = [[NSMutableDictionary alloc] init];
     _analyzerStarted = NO;
+    _didCrashInLastSession = NO;
     
     _userName = @"";
     _userEmail = @"";
     
-    _crashFile = nil;
-    _crashFiles = nil;
+    _crashFiles = [[NSMutableArray alloc] init];
     _crashesDir = nil;
     
     self.delegate = nil;
@@ -152,31 +152,37 @@
       [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:NO] forKey:kHockeySDKAutomaticallySendCrashReports];
     }
     
-    if (_crashReportActivated) {
-      // temporary directory for crashes grabbed from PLCrashReporter
-      NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-      NSString *cacheDir = [paths objectAtIndex: 0];
-      _crashesDir = [[[cacheDir stringByAppendingPathComponent: HOCKEYSDK_IDENTIFIER] stringByAppendingPathComponent: [[NSBundle mainBundle] bundleIdentifier]] retain];
-
-      if (![_fileManager fileExistsAtPath:_crashesDir]) {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
-        NSError *theError = NULL;
+    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    
+    // temporary directory for crashes grabbed from PLCrashReporter
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cacheDir = [paths objectAtIndex: 0];
+    _crashesDir = [[[cacheDir stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:HOCKEYSDK_IDENTIFIER] retain];
+    
+    if (![_fileManager fileExistsAtPath:_crashesDir]) {
+      NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
+      NSError *theError = NULL;
       
-        [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
+      [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
+    }
+    
+    _settingsFile = [[_crashesDir stringByAppendingPathComponent:HOCKEYSDK_SETTINGS] retain];
+      
+    // on the very first startup this will always be initialized, since the default value for _crashReportActivated is YES
+    // but we do it anyway, to be able to initialize PLCrashReporter as early as possible
+    if (_crashReportActivated) {      
+      PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+      NSError *error = NULL;
+      
+      // Check if we previously crashed
+      if ([crashReporter hasPendingCrashReport]) {
+        _didCrashInLastSession = YES;
+        [self handleCrashReport];
       }
       
-      // crash reporting specific settings
-      paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-      NSString *settingsDir = [[[paths objectAtIndex: 0] stringByAppendingPathComponent:HOCKEYSDK_IDENTIFIER] stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
-
-      if (![_fileManager fileExistsAtPath:settingsDir]) {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
-        NSError *theError = NULL;
-        
-        [_fileManager createDirectoryAtPath:settingsDir withIntermediateDirectories: YES attributes: attributes error: &theError];
-      }
-
-      _settingsFile = [[settingsDir stringByAppendingPathComponent:@"CrashReporting.plist"] retain];
+      // Enable the Crash Reporter
+      if (![crashReporter enableCrashReporterAndReturnError:&error])
+        NSLog(@"Warning: Could not enable crash reporter: %@", error);
     }
   }
   return self;
@@ -194,8 +200,6 @@
   
   [_userName release]; _userName = nil;
   [_userEmail release]; _userEmail = nil;
-
-  [_crashFile release]; _crashFile = nil;
   
   [_crashFiles release]; _crashFiles = nil;
   [_crashesDir release]; _crashesDir = nil;
@@ -214,11 +218,11 @@
 - (void)saveSettings {
   NSString *error = nil;
 
-  NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:2];
+  NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:4];
   [rootObj setObject:_userName forKey:kHockeySDKUserName];
   [rootObj setObject:_userEmail forKey:kHockeySDKUserEmail];
   if (_approvedCrashReports && [_approvedCrashReports count] > 0)
-    [rootObj setObject:_approvedCrashReports forKey:kHockeySDKUserEmail];
+    [rootObj setObject:_approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
   [rootObj setObject:[NSNumber numberWithBool:_analyzerStarted] forKey:kHockeySDKAnalyzerStarted];
   
   NSData *plist = [NSPropertyListSerialization dataFromPropertyList:(id)rootObj
@@ -403,28 +407,8 @@
 
 - (BOOL)hasPendingCrashReport {
   if (!_crashReportActivated) return NO;
-  
-  _crashFiles = [[NSMutableArray alloc] init];
-  
-  PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
-  NSError *error = NULL;
-  
-  // Check if we previously crashed
-  if ([crashReporter hasPendingCrashReport]) {
-    [self handleCrashReport];
-  }
-  
-  // Enable the Crash Reporter
-  if (![crashReporter enableCrashReporterAndReturnError:&error])
-    NSLog(@"Warning: Could not enable crash reporter: %@", error);
-  
-  /* Enable run-loop exception trapping if requested */
-  if (_exceptionInterceptionEnabled) {
-    if (![self trapRunLoopExceptions])
-      NSLog(@"Warning: Could not enable run-loop exception trapping!");
-  }
-  
-  if ([_crashFiles count] == 0 && [_fileManager fileExistsAtPath: _crashesDir]) {
+    
+  if ([_fileManager fileExistsAtPath: _crashesDir]) {
     NSString *file = nil;
     NSError *error = NULL;
     
@@ -432,7 +416,10 @@
     
     while ((file = [dirEnum nextObject])) {
       NSDictionary *fileAttributes = [_fileManager attributesOfItemAtPath:[_crashesDir stringByAppendingPathComponent:file] error:&error];
-      if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 && ![file isEqualToString:@".DS_Store"] && ![file hasSuffix:@".meta"]) {
+      if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 &&
+          ![file isEqualToString:@".DS_Store"] &&
+          ![file hasSuffix:@".meta"] &&
+          ![file hasSuffix:@".plist"]) {
         [_crashFiles addObject:[_crashesDir stringByAppendingPathComponent: file]];
       }
     }
@@ -454,8 +441,8 @@
     NSError* error = nil;
     NSString *crashReport = nil;
     
-    _crashFile = [_crashFiles lastObject];
-    NSData *crashData = [NSData dataWithContentsOfFile: _crashFile];
+    NSString *crashFile = [_crashFiles lastObject];
+    NSData *crashData = [NSData dataWithContentsOfFile: crashFile];
     PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
     crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report];
     
@@ -468,7 +455,7 @@
       
       if (!self.autoSubmitCrashReport && [self hasNonApprovedCrashReports]) {
         _crashReportUI = [[BITCrashReportUI alloc] initWithManager:self
-                                                   crashReportFile:_crashFile
+                                                   crashReportFile:crashFile
                                                        crashReport:crashReport
                                                         logContent:log
                                                        companyName:_companyName
@@ -480,7 +467,7 @@
         
         [_crashReportUI askCrashReportDetails];
       } else {
-        [self sendReportCrash:crashReport crashDescription:nil];
+        [self sendReportWithCrash:crashReport crashDescription:nil];
       }
     } else {
       if (![self hasNonApprovedCrashReports]) {
@@ -502,7 +489,7 @@
   [self returnToMainApplication];
 }
 
-- (void)sendReportCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
+- (void)sendReportWithCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription {
   // add notes and delegate results to the latest crash report
   
   NSMutableDictionary *metaDict = [NSMutableDictionary dictionaryWithCapacity:4];
@@ -524,7 +511,7 @@
                                                              format:NSPropertyListBinaryFormat_v1_0
                                                    errorDescription:&error];
   if (plist) {
-    [plist writeToFile:[NSString stringWithFormat:@"%@.meta", _crashFile] atomically:YES];
+    [plist writeToFile:[NSString stringWithFormat:@"%@.meta", crashFile] atomically:YES];
   } else {
     HockeySDKLog(@"ERROR: Writing crash meta data. %@", error);
   }
@@ -547,9 +534,13 @@
 			
       if (report == nil) {
         HockeySDKLog(@"ERROR: Could not parse crash report");
+        // we cannot do anything with this report, so delete it
+        [_fileManager removeItemAtPath:filename error:&error];
+        [_fileManager removeItemAtPath:[NSString stringWithFormat:@"%@.meta", filename] error:&error];
         continue;
       }
       
+      NSString *crashUUID = report.reportInfo.reportGUID ?: @"";
       NSString *crashLogString = [BITCrashReportTextFormatter stringValueForCrashReport:report];
                      
       if ([report.applicationInfo.applicationVersion compare:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
@@ -568,7 +559,7 @@
       NSString *error = nil;
       NSPropertyListFormat format;
       
-      NSData *plist = [NSData dataWithContentsOfFile:[_crashFile stringByAppendingString:@".meta"]];
+      NSData *plist = [NSData dataWithContentsOfFile:[filename stringByAppendingString:@".meta"]];
       if (plist) {
         NSDictionary *metaDict = (NSDictionary *)[NSPropertyListSerialization
                                                   propertyListFromData:plist
@@ -592,13 +583,14 @@
         }
       }
       
-      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><log><![CDATA[%@]]></log></crash>",
+      [crashes appendFormat:@"<crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><senderversion>%@</senderversion><version>%@</version><uuid>%@</uuid><platform>%@</platform><userid>%@</userid><contact>%@</contact><description><![CDATA[%@]]></description><log><![CDATA[%@]]></log></crash>",
        [[self applicationName] UTF8String],
        [self extractAppUUIDs:report],
        report.applicationInfo.applicationIdentifier,
        report.systemInfo.operatingSystemVersion,
        [self applicationVersion],
        report.applicationInfo.applicationVersion,
+       crashUUID,
        [self modelVersion],
        userid,
        contact,
@@ -607,7 +599,7 @@
                        ];
 
       // store this crash report as user approved, so if it fails it will retry automatically
-      [_approvedCrashReports setObject:[NSNumber numberWithBool:YES] forKey:[_crashFiles objectAtIndex:i]];
+      [_approvedCrashReports setObject:[NSNumber numberWithBool:YES] forKey:filename];
     } else {
       // we cannot do anything with this report, so delete it
       [_fileManager removeItemAtPath:filename error:&error];
@@ -721,7 +713,7 @@
     } else {
       error = [NSError errorWithDomain:kHockeyErrorDomain
                                   code:HockeyAPIErrorWithStatusCode
-                              userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Sending failed with status code: %i", _statusCode], NSLocalizedDescriptionKey, nil]];
+                              userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Sending failed with status code: %i", (int)_statusCode], NSLocalizedDescriptionKey, nil]];
     }
     
     HockeySDKLog(@"ERROR: %@", [error localizedDescription]);
@@ -733,7 +725,7 @@
   [self returnToMainApplication];
 }
 
-#pragma mark NSURLConnection Delegate
+#pragma mark - NSURLConnection Delegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
   if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -766,10 +758,16 @@
 
 #pragma mark - GetterSetter
 
-- (void)setUsername:(NSString *)username andEmail:(NSString *)email {
-  _userName = username;
-  _userName = email;
+- (void)setExceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
+  _exceptionInterceptionEnabled = exceptionInterceptionEnabled;
+  
+  /* Enable run-loop exception trapping if requested */
+  if (exceptionInterceptionEnabled) {
+    if (![self trapRunLoopExceptions])
+      NSLog(@"Warning: Could not enable run-loop exception trapping!");
+  }
 }
+
 
 - (NSString *)applicationName {
   NSString *applicationName = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleExecutable"];
@@ -781,17 +779,8 @@
 }
 
 
-- (NSString*)applicationVersionString {
-  NSString* string = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleShortVersionString"];
-  
-  if (!string)
-    string = [[[NSBundle mainBundle] infoDictionary] valueForKey: @"CFBundleShortVersionString"];
-  
-  return string;
-}
-
 - (NSString *)applicationVersion {
-  NSString* string = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleVersion"];
+  NSString *string = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleVersion"];
   
   if (!string)
     string = [[[NSBundle mainBundle] infoDictionary] valueForKey: @"CFBundleVersion"];

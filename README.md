@@ -1,8 +1,19 @@
-his document describes how to integrate the HockeySDK-Mac into your app. The SDK has one main feature:
+This document describes how to integrate the HockeySDK-Mac into your app. The SDK has one main feature:
 
 **Collect crash reports:** If your app crashes, a crash log with the same format as from the Apple Crash Reporter is written to the device's storage. If the user starts the app again, he is asked to submit the crash report to HockeyApp.
 
 ## Release Notes
+
+Version 1.0.1:
+
+- Fixed a App Store rejection cause (only happened if you don't submit with sandbox enabled!): settings data was written into ~/Library/net.hockeyapp.sdk.mac/, and is now written into ~/Library/Caches/<app bundle identifier>/net.hockeyapp.sdk.mac/ next to the queued crash reports
+- Fixed an issue writing the queued crashes into the wrong key in the settings file
+- Fixed reading the wrong meta data (application log data) for queued crash reports
+- Delete crash reports if they can not be processed (only might happen if there is an unknown PLCrashReporter issue)
+- Send unique UUID for the crash report to the server (so HockeyApp can identify duplicates in a future version)
+- Initialize PLCrashReporter as early as possible instead of waiting until the `startManager` call
+- Added new property `didCrashInLastSession`
+- Minor code cleanup
 
 Version 1.0:
 
@@ -112,17 +123,14 @@ We propose the following method to set version numbers in your beta versions:
 
 ## Setup HockeySDK-Mac
 
-1. Open your `AppDelegate.h` file.
+1. Open your `AppDelegate.m` file.
 
-2. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/BITCrashReportManagerDelegate.h></code></pre>
+2. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/HockeySDK.h></code></pre>
 
-3. Add the following protocol to your AppDelegate: <pre><code>BITCrashReportManagerDelegate</code></pre>
+3. Add the following protocol to your AppDelegate: `BITCrashReportManagerDelegate`:<pre><code>@interface AppDelegate() &lt;BITCrashReportManagerDelegate&gt; {}
+@end</code></pre>
 
-4. Open your `AppDelegate.m` file.
-
-5. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/HockeySDK.h></code></pre>
-
-6. In your `appDelegate` change the invocation of the main window to the following structure
+4. In your `appDelegate` change the invocation of the main window to the following structure 
 
         // this delegate method is required
         - (void) showMainApplicationWindow
@@ -132,24 +140,29 @@ We propose the following method to set version numbers in your beta versions:
             [window makeFirstResponder: nil];
             [window makeKeyAndOrderFront:nil];
         }
-This allows the SDK to present a crash dialog on the next startup before the main window gets initialized and possibly crash right away again.
-        
-6. Search for the method `application:didFinishLaunchingWithOptions:`
+    This allows the SDK to present a crash dialog on the next startup before the main window gets initialized and possibly crash right away again. Make sure the window doesn't automatically appear with it's nib settings!
 
-7. Add the following lines:
+    In case of document based apps do the following leave the implementation empty.
+        
+5. Search for the method `application:didFinishLaunchingWithOptions:`
+
+6. Add the following lines:
 
         [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" crashReportManagerDelegate:self];
-        [[BITHockeyManager sharedHockeyManager] startManager];        
-If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, add the following line before `startManager`:
+        [[BITHockeyManager sharedHockeyManager] startManager];
+        
+    In case of document based apps, invoke `startManager` at the end of applicationDidFInishLaunching, since otherwise you may loose the Apple events to restore, open untitled document etc.
+
+    If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, add the following line before `startManager`:
 
         [[BITHockeyManager sharedHockeyManager] setExceptionInterceptionEnabled:YES];
-For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously to make sure crash reports are being received, use the following line:
+    For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously to make sure crash reports are being received, use the following line:
 
         [[BITHockeyManager sharedHockeyManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:<NewTimeInterval>];
-In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
+    In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
 
         [[BITHockeyManager sharedHockeyManager] setLoggingEnabled:YES];
-They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
+    They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
 
     Alternatively you can also subclass `NSWindow` or `NSApplication` to catch the exceptions like this:
     
@@ -168,11 +181,11 @@ They will be treated with the default behavior given to uncaught exceptions. Use
          
         @end
     
-8. Replace `APP_IDENTIFIER` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier). 
+7. Replace `APP_IDENTIFIER` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier). 
 
-9. Implement delegate methods as mentioned below if you want to add custom data.
+8. Implement delegate methods as mentioned below if you want to add custom data.
 
-10. Done.
+9. Done.
 
 ## Optional Delegate Methods
 

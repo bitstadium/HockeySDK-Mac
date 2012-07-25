@@ -97,9 +97,11 @@ const CGFloat kDetailsHeight = 285;
 
 
 - (void)awakeFromNib {
-	crashLogTextView.editable = NO;
-	crashLogTextView.selectable = NO;
-	crashLogTextView.automaticSpellingCorrectionEnabled = NO;
+  [crashLogTextView setEditable:NO];
+  [crashLogTextView setSelectable:NO];
+  if ([crashLogTextView respondsToSelector:@selector(setAutomaticSpellingCorrectionEnabled:)]) {
+    [crashLogTextView setAutomaticSpellingCorrectionEnabled:NO];
+  }
 }
 
 
@@ -180,7 +182,7 @@ const CGFloat kDetailsHeight = 285;
     _crashReportManager.userEmail = [emailTextField stringValue];
   }
   
-  [_crashReportManager sendReportCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
+  [_crashReportManager sendReportWithCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
   [_crashLogContent release];
   _crashLogContent = nil;
   
@@ -191,14 +193,21 @@ const CGFloat kDetailsHeight = 285;
 - (void)askCrashReportDetails {
 #define DISTANCE_BETWEEN_BUTTONS		3
   
-  [[nameTextField cell] setTitle:_userName];
-  [[emailTextField cell] setTitle:_userEmail];
   
   [[self window] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"WindowTitle", @""), _applicationName]];
   
   [[nameTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"NameTextTitle", @"")];
+  [[nameTextField cell] setTitle:_userName];
+  if ([[nameTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
+    [[nameTextField cell] setUsesSingleLineMode:YES];
+  }
+  
   [[emailTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"EmailTextTitle", @"")];
-    
+  [[emailTextField cell] setTitle:_userEmail];
+  if ([[emailTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
+    [[emailTextField cell] setUsesSingleLineMode:YES];
+  }
+
   [[introductionText cell] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
   [[commentsTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"CommentsDisclosureTitle", @"")];
   [[problemDescriptionTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"ProblemDetailsTitle", @"")];
