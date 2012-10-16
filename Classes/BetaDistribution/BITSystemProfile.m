@@ -22,30 +22,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "BITSystemProfile.h"
 #import <sys/sysctl.h>
+#import "BITSystemProfile.h"
+#import "BITSystemProfilePrivate.h"
 
 @implementation BITSystemProfile
 
-+ (NSArray *)standardProfile {
-	NSMutableArray *profileArray = [NSMutableArray array];
-	NSArray *profileKeys = [NSArray arrayWithObjects:@"key", @"displayKey", @"value", @"displayValue", nil];
-  
-  NSString *uuid = [[self class] deviceIdentifier];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"udid", @"UDID", uuid, uuid, nil] forKeys:profileKeys]];
-  
-  NSString *app_version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"app_version", @"App Version", app_version, app_version, nil] forKeys:profileKeys]];
-  
-  NSString *os_version = [[self class] systemVersionString];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"os_version", @"OS Version", os_version, os_version, nil] forKeys:profileKeys]];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"os", @"OS", @"Mac OS", @"Mac OS", nil] forKeys:profileKeys]];
-  
-  NSString *model = [[self class] deviceModel];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"model", @"Model", model, model, nil] forKeys:profileKeys]];
-  
-  return profileArray;
-}
+@synthesize usageStartTimestamp = _usageStartTimestamp;
 
 + (NSString *)deviceIdentifier {
   char buffer[128];
@@ -93,6 +76,106 @@
 	}
   
 	return version;
+}
+
++ (BITSystemProfile *)sharedSystemProfile {
+  static BITSystemProfile *sharedInstance = nil;
+  static dispatch_once_t pred;
+  
+  dispatch_once(&pred, ^{
+    sharedInstance = [BITSystemProfile alloc];
+    sharedInstance = [sharedInstance init];
+  });
+  
+  return sharedInstance;
+}
+
+- (id)init {
+  if ((self = [super init])) {
+    _usageStartTimestamp = nil;
+  }
+  return self;
+}
+
+- (void)dealloc {
+  [_usageStartTimestamp release], _usageStartTimestamp = nil;
+  
+  [super dealloc];
+}
+
+- (void)startUsage {
+  self.usageStartTimestamp = [NSDate date];
+  
+  BOOL newVersion = NO;
+  
+  if (![[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString]) {
+    newVersion = YES;
+  } else {
+    if ([(NSString *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString] compare:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] != NSOrderedSame) {
+      newVersion = YES;
+    }
+  }
+  
+  if (newVersion) {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]] forKey:kBITUpdateDateOfVersionInstallation];
+    [[NSUserDefaults standardUserDefaults] setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:kBITUpdateUsageTimeForVersionString];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:0] forKey:kBITUpdateUsageTimeOfCurrentVersion];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
+}
+
+- (void)stopUsage {
+  double timeDifference = [[NSDate date] timeIntervalSinceReferenceDate] - [_usageStartTimestamp timeIntervalSinceReferenceDate];
+  double previousTimeDifference = [(NSNumber *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeOfCurrentVersion] doubleValue];
+  
+  [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:previousTimeDifference + timeDifference] forKey:kBITUpdateUsageTimeOfCurrentVersion];
+  [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSString *)currentUsageString {
+  double currentUsageTime = [[NSUserDefaults standardUserDefaults] doubleForKey:kBITUpdateUsageTimeOfCurrentVersion];
+  
+  if (currentUsageTime > 0) {
+    // round (up) to 1 minute
+    return [NSString stringWithFormat:@"%.0f", ceil(currentUsageTime / 60.0)*60];
+  }
+  else {
+    return @"0";
+  }
+}
+
+- (NSMutableArray *)systemData {
+	NSMutableArray *profileArray = [NSMutableArray array];
+	NSArray *keys = [self profileKeys];
+  
+  NSString *uuid = [[self class] deviceIdentifier];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"udid", @"UDID", uuid, uuid, nil] forKeys:keys]];
+  
+  NSString *app_version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"app_version", @"App Version", app_version, app_version, nil] forKeys:keys]];
+  
+  NSString *os_version = [[self class] systemVersionString];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"os_version", @"OS Version", os_version, os_version, nil] forKeys:keys]];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"os", @"OS", @"Mac OS", @"Mac OS", nil] forKeys:keys]];
+  
+  NSString *model = [[self class] deviceModel];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"model", @"Model", model, model, nil] forKeys:keys]];
+  
+  return profileArray;
+}
+
+- (NSMutableArray *)systemUsageData {
+  NSMutableArray *profileArray = [self systemData];
+	NSArray *keys = [self profileKeys];
+
+  NSString *usageTime = [self currentUsageString];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"usage_time", @"Usage Time", usageTime, usageTime, nil] forKeys:keys]];
+
+  return profileArray;
+}
+
+- (NSArray *)profileKeys {
+  return [NSArray arrayWithObjects:@"key", @"displayKey", @"value", @"displayValue", nil];
 }
 
 @end

@@ -22,19 +22,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#define kBITUpdateDateOfVersionInstallation	@"BITUpdateDateOfVersionInstallation"
+#define kBITUpdateUsageTimeOfCurrentVersion	@"BITUpdateUsageTimeOfCurrentVersion"
+#define kBITUpdateUsageTimeForVersionString	@"BITUpdateUsageTimeForVersionString"
 
-@interface BITSystemProfile : NSObject {
-  @private
-  NSDate *_usageStartTimestamp;
+@interface BITSystemProfile () {
 }
 
-+ (BITSystemProfile *)sharedSystemProfile;
-
-- (NSMutableArray *)systemData;
-- (NSMutableArray *)systemUsageData;
-
-- (void)startUsage;
-- (void)stopUsage;
+@property (nonatomic, copy) NSDate *usageStartTimestamp;
 
 @end
