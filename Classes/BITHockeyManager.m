@@ -52,11 +52,11 @@
   return sharedInstance;
 }
 #else
-+ (CNSHockeyManager *)sharedHockeyManager {
-  static CNSHockeyManager *hockeyManager = nil;
++ (BITHockeyManager *)sharedHockeyManager {
+  static BITHockeyManager *hockeyManager = nil;
   
   if (hockeyManager == nil) {
-    hockeyManager = [[CNSHockeyManager alloc] init];
+    hockeyManager = [[BITHockeyManager alloc] init];
   }
   
   return hockeyManager;

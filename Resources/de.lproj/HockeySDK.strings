@@ -25,7 +25,7 @@
 "UserDescriptionPlaceholder" = "Bitte beschreiben Sie hier die Schritte welche zu dem Problem geführt haben";
 
 /* Problems Details Box  Title */
-"ProblemDetailsTitle" = "Problem details and system configuration";
+"ProblemDetailsTitle" = "Problemdetails und Systemkonfiguration";
 
 /* Privacy note text */
 "PrivacyNote" = "Es werden keine personenbezogene Informationen mit diesem Bericht verschickt.";
