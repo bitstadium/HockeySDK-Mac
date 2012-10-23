@@ -4,7 +4,7 @@ This document describes how to integrate the HockeySDK-Mac into your app. The SD
 
 ## Release Notes
 
-Version 1.0.2b1:
+Version 1.0.2:
 
 - Include new PLCrashReporter version, which fixes a crash that can happen when the App/System is unloading images from a process
 
