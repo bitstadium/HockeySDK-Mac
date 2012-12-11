@@ -127,46 +127,53 @@ We propose the following method to set version numbers in your beta versions:
 
 ## Setup HockeySDK-Mac
 
-1. Open your `AppDelegate.m` file.
+1. Open your `AppDelegate.h` file.
 
-2. Add the following line at the top of the file below your own #import statements:<pre><code>#import <HockeySDK/HockeySDK.h></code></pre>
+2. Add the following line at the top of the file below your own #import statements:<pre><code>#import &lt;HockeySDK/HockeySDK.h&gt;</code></pre>
 
 3. Add the following protocol to your AppDelegate: `BITCrashReportManagerDelegate`:<pre><code>@interface AppDelegate() &lt;BITCrashReportManagerDelegate&gt; {}
 @end</code></pre>
 
-4. In your `appDelegate` change the invocation of the main window to the following structure 
+4. Switch to your `AppDelegate.m` file and add the following line at the top of the file below your own #import statements:<pre><code>#import &lt;HockeySDK/BITHockeyManager.h&gt;</code></pre>
+
+5. Search for the method `applicationDidFinishLaunching:(NSNotification *)aNotification`, or find where your application normally presents and activates its main/first window. (Note: If you are using NIBs, make sure to change the main window to NOT automatically show when the NIB is loaded!)
+
+   Replace whatever usually opens the main window with the following lines:
+
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" crashReportManagerDelegate:self];
+        [[BITHockeyManager sharedHockeyManager] startManager];
+
+    In case of document based apps, invoke `startManager` at the end of `applicationDidFinishLaunching`, since otherwise you may lose the Apple events to restore, open untitled document etc.
+    
+	If any crash report has been saved from the last time your application ran, `startManager` will present a dialog to allow the user to submit it. Once done, or if there are no crash logs, it will then call back to your `appDelegate` with `showMainApplicationWindow` (see step 7 below) to continue the process of getting your main window displayed.
+
+    This allows the SDK to present a crash dialog on the next startup before your main window gets initialized and possibly crashes right away again.
+
+6. Replace `APP_IDENTIFIER` in `configureWithIdentifier:` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier). 
+
+7. Your `appDelegate` is now a `BITCrashReportManagerDelegate`, so you must implement the required `showMainApplicationWindow` method like this:
 
         // this delegate method is required
         - (void) showMainApplicationWindow
         {
             // launch the main app window
-            // remember not to automatically show the main window if using NIBs
-            [window makeFirstResponder: nil];
-            [window makeKeyAndOrderFront:nil];
+            [myWindow makeFirstResponder: nil];
+            [myWindow makeKeyAndOrderFront: nil];
         }
-    This allows the SDK to present a crash dialog on the next startup before the main window gets initialized and possibly crash right away again. Make sure the window doesn't automatically appear with it's nib settings!
 
-    In case of document based apps do the following leave the implementation empty.
+    In case of NSDocument-based applications, leave the implementation empty.
         
-5. Search for the method `application:didFinishLaunchingWithOptions:`
+8. Set additional options and/or implement optional delegate methods as mentioned below if you want to add custom data to the crash reports.
 
-6. Add the following lines:
+9. Done.
 
-        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" crashReportManagerDelegate:self];
-        [[BITHockeyManager sharedHockeyManager] startManager];
-        
-    In case of document based apps, invoke `startManager` at the end of applicationDidFInishLaunching, since otherwise you may loose the Apple events to restore, open untitled document etc.
+## Additional Options
 
-    If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, add the following line before `startManager`:
+* If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, add the following line before `startManager`:
 
         [[BITHockeyManager sharedHockeyManager] setExceptionInterceptionEnabled:YES];
-    For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously to make sure crash reports are being received, use the following line:
 
-        [[BITHockeyManager sharedHockeyManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:<NewTimeInterval>];
-    In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
-
-        [[BITHockeyManager sharedHockeyManager] setLoggingEnabled:YES];
-    They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
+   They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
 
     Alternatively you can also subclass `NSWindow` or `NSApplication` to catch the exceptions like this:
     
@@ -184,13 +191,15 @@ We propose the following method to set version numbers in your beta versions:
         }
          
         @end
-    
-7. Replace `APP_IDENTIFIER` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier). 
 
-8. Implement delegate methods as mentioned below if you want to add custom data.
+* Crash reports are normally sent to our server asynchronously. If your application is crashing near startup, BITHockeyManager will send crash reports synchronously to make sure they are being received. For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously, use the following line:
 
-9. Done.
+        [[BITHockeyManager sharedHockeyManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:<NewTimeInterval>];
 
+* In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
+
+        [[BITHockeyManager sharedHockeyManager] setLoggingEnabled:YES];
+ 
 ## Optional Delegate Methods
 
 Besides the crash log, HockeyApp can show you fields with information about the user and an optional description. You can fill out these fields by implementing the following methods:
