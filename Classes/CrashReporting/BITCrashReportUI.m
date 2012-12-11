@@ -59,7 +59,7 @@ const CGFloat kDetailsHeight = 285;
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
     _companyName = [companyName copy];
-    _applicationName = applicationName;
+    _applicationName = [applicationName retain];
     _userName = @"";
     _userEmail = @"";
     [self setShowComments: YES];
@@ -248,7 +248,7 @@ const CGFloat kDetailsHeight = 285;
 	hideBtnBox.size.width = titleSize.width;
 	[hideButton setFrame: showBtnBox];
     
-  NSString *logTextViewContent = [_crashLogContent copy];
+  NSString *logTextViewContent = _crashLogContent;
   
   if (_logContent)
     logTextViewContent = [NSString stringWithFormat:@"%@\n\n%@", logTextViewContent, _logContent];
