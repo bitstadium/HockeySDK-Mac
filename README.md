@@ -4,6 +4,10 @@ This document describes how to integrate the HockeySDK-Mac into your app. The SD
 
 ## Release Notes
 
+Version 1.0.2:
+
+- Include new PLCrashReporter version, which fixes a crash that can happen when the App/System is unloading images from a process
+
 Version 1.0.1:
 
 - Fixed a App Store rejection cause (only happened if you don't submit with sandbox enabled!): settings data was written into ~/Library/net.hockeyapp.sdk.mac/, and is now written into ~/Library/Caches/<app bundle identifier>/net.hockeyapp.sdk.mac/ next to the queued crash reports
