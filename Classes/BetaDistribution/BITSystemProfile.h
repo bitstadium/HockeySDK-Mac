@@ -31,9 +31,13 @@
 
 + (BITSystemProfile *)sharedSystemProfile;
 
+- (NSMutableArray *)systemDataForBundle:(NSBundle *)bundle;
 - (NSMutableArray *)systemData;
+
+- (NSMutableArray *)systemUsageDataForBundle:(NSBundle *)bundle;
 - (NSMutableArray *)systemUsageData;
 
+- (void)startUsageForBundle:(NSBundle *)bundle;
 - (void)startUsage;
 - (void)stopUsage;
 
