@@ -39,6 +39,8 @@
 #define SDK_NAME @"HockeySDK-Mac"
 #define SDK_VERSION @"1.0"
 
+NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
+
 /**
  * @internal
  *
