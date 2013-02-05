@@ -255,8 +255,8 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     if ([rootObj objectForKey:kHockeySDKApprovedCrashReports])
       [_approvedCrashReports setDictionary:[rootObj objectForKey:kHockeySDKApprovedCrashReports]];
     _analyzerStarted = [(NSNumber *)[rootObj objectForKey:kHockeySDKAnalyzerStarted] boolValue];
-    _userName = [rootObj objectForKey:kHockeySDKUserName] ?: @"";
-    _userEmail = [rootObj objectForKey:kHockeySDKUserEmail] ?: @"";
+    self.userName = [rootObj objectForKey:kHockeySDKUserName] ?: @"";
+    self.userEmail = [rootObj objectForKey:kHockeySDKUserEmail] ?: @"";
   } else {
     HockeySDKLog(@"ERROR: Reading settings. %@", error);
   }
