@@ -128,8 +128,8 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     _analyzerStarted = NO;
     _didCrashInLastSession = NO;
     
-    _userName = @"";
-    _userEmail = @"";
+    self.userName = @"";
+    self.userEmail = @"";
     
     _crashFiles = [[NSMutableArray alloc] init];
     _crashesDir = nil;
@@ -200,9 +200,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
   [_fileManager release]; _fileManager = nil;
   
-  [_userName release]; _userName = nil;
-  [_userEmail release]; _userEmail = nil;
-  
+  self.userName = nil;
+  self.userEmail = nil;
+
   [_crashFiles release]; _crashFiles = nil;
   [_crashesDir release]; _crashesDir = nil;
   [_settingsFile release]; _settingsFile = nil;
@@ -221,8 +221,8 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   NSString *error = nil;
 
   NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:4];
-  [rootObj setObject:_userName forKey:kHockeySDKUserName];
-  [rootObj setObject:_userEmail forKey:kHockeySDKUserEmail];
+  [rootObj setObject:self.userName forKey:kHockeySDKUserName];
+  [rootObj setObject:self.userEmail forKey:kHockeySDKUserEmail];
   if (_approvedCrashReports && [_approvedCrashReports count] > 0)
     [rootObj setObject:_approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
   [rootObj setObject:[NSNumber numberWithBool:_analyzerStarted] forKey:kHockeySDKAnalyzerStarted];
@@ -255,8 +255,8 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     if ([rootObj objectForKey:kHockeySDKApprovedCrashReports])
       [_approvedCrashReports setDictionary:[rootObj objectForKey:kHockeySDKApprovedCrashReports]];
     _analyzerStarted = [(NSNumber *)[rootObj objectForKey:kHockeySDKAnalyzerStarted] boolValue];
-    _userName = [rootObj objectForKey:kHockeySDKUserName] ?: @"";
-    _userEmail = [rootObj objectForKey:kHockeySDKUserEmail] ?: @"";
+    self.userName = [rootObj objectForKey:kHockeySDKUserName] ?: @"";
+    self.userEmail = [rootObj objectForKey:kHockeySDKUserEmail] ?: @"";
   } else {
     HockeySDKLog(@"ERROR: Reading settings. %@", error);
   }
@@ -464,8 +464,8 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
                                                    applicationName:[self applicationName]
                                                     askUserDetails:_askUserDetails];
         
-        [_crashReportUI setUserName:_userName];
-        [_crashReportUI setUserEmail:_userEmail];
+        [_crashReportUI setUserName:self.userName];
+        [_crashReportUI setUserEmail:self.userEmail];
         
         [_crashReportUI askCrashReportDetails];
       } else {
@@ -501,8 +501,8 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   if (!crashDescription) crashDescription = @"";
   [metaDict setObject:crashDescription forKey:@"description"];
   
-  [metaDict setObject:_userName forKey:@"username"];
-  [metaDict setObject:_userEmail forKey:@"useremail"];
+  [metaDict setObject:self.userName forKey:@"username"];
+  [metaDict setObject:self.userEmail forKey:@"useremail"];
   
   if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
     log = [self.delegate crashReportApplicationLog] ?: @"";
