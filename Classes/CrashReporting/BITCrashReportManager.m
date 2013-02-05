@@ -467,7 +467,7 @@
         
         [_crashReportUI askCrashReportDetails];
       } else {
-        [self sendReportWithCrash:crashReport crashDescription:nil];
+        [self sendReportWithCrash:crashFile crashDescription:nil];
       }
     } else {
       if (![self hasNonApprovedCrashReports]) {
