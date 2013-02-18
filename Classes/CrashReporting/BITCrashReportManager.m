@@ -134,6 +134,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     _crashFiles = [[NSMutableArray alloc] init];
     _crashesDir = nil;
     
+    _invokedReturnToMainApplication = NO;
     self.delegate = nil;
     self.companyName = @"";
     
@@ -345,6 +346,12 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 }
 
 - (void)returnToMainApplication {
+  if (_invokedReturnToMainApplication) {
+    return;
+  }
+  
+  _invokedReturnToMainApplication = YES;
+  
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindow)]) {
     [self.delegate showMainApplicationWindow];
   } else {

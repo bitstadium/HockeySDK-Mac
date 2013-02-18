@@ -112,6 +112,8 @@ typedef enum HockeyCrashReportStatus {
   BOOL                _didCrashInLastSession;
   BOOL                _analyzerStarted;
   NSMutableDictionary *_approvedCrashReports;
+
+  BOOL       _invokedReturnToMainApplication;
 }
 
 - (NSString *)modelVersion;
