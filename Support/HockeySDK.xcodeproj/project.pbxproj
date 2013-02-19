@@ -24,6 +24,9 @@
 		1EF09DD9152371DC00067A5C /* BITCrashReportTextFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */; };
 		1EF09DDA152371DC00067A5C /* BITCrashReportTextFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */; };
 		4C7E213E159C902900D02AD1 /* CrashReporter.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1EF09DC0152357A500067A5C /* CrashReporter.framework */; };
+		4DD13AF4162CA7C400BF15E8 /* BITSystemProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4DD13AF5162CA7C400BF15E8 /* BITSystemProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */; };
+		4DD13AF7162CAA2200BF15E8 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DD13AF6162CAA2200BF15E8 /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +69,10 @@
 		1EF09DD1152371DC00067A5C /* BITCrashReportUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportUI.m; sourceTree = "<group>"; };
 		1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportTextFormatter.h; sourceTree = "<group>"; };
 		1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportTextFormatter.m; sourceTree = "<group>"; };
+		4D1F150F162D4A6F0047B9D9 /* BITSystemProfilePrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITSystemProfilePrivate.h; sourceTree = "<group>"; };
+		4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BITSystemProfile.h; path = BetaDistribution/BITSystemProfile.h; sourceTree = "<group>"; };
+		4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BITSystemProfile.m; path = BetaDistribution/BITSystemProfile.m; sourceTree = "<group>"; };
+		4DD13AF6162CAA2200BF15E8 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DD13AF7162CAA2200BF15E8 /* IOKit.framework in Frameworks */,
 				1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */,
 				1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */,
 				1EF09DC1152357A500067A5C /* CrashReporter.framework in Frameworks */,
@@ -85,6 +93,7 @@
 		1EF09D801523574200067A5C = {
 			isa = PBXGroup;
 			children = (
+				4DD13AF6162CAA2200BF15E8 /* IOKit.framework */,
 				1EF09DA81523579100067A5C /* Classes */,
 				1EF09DB71523579A00067A5C /* Resources */,
 				1EF09DBF152357A500067A5C /* Vendor */,
@@ -123,6 +132,7 @@
 		1EF09DA81523579100067A5C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4DD13AF0162CA7A800BF15E8 /* BetaDistribution */,
 				1EF09DCC152371DC00067A5C /* CrashReporting */,
 				1EF09DAE1523579100067A5C /* BITHockeyManager.h */,
 				1EF09DAF1523579100067A5C /* BITHockeyManager.m */,
@@ -167,6 +177,16 @@
 			path = CrashReporting;
 			sourceTree = "<group>";
 		};
+		4DD13AF0162CA7A800BF15E8 /* BetaDistribution */ = {
+			isa = PBXGroup;
+			children = (
+				4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */,
+				4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */,
+				4D1F150F162D4A6F0047B9D9 /* BITSystemProfilePrivate.h */,
+			);
+			name = BetaDistribution;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -178,6 +198,7 @@
 				1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */,
 				1EF09DD5152371DC00067A5C /* BITCrashReportManager.h in Headers */,
 				1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */,
+				4DD13AF4162CA7C400BF15E8 /* BITSystemProfile.h in Headers */,
 				1EF09DD7152371DC00067A5C /* BITCrashReportUI.h in Headers */,
 				1EF09DD9152371DC00067A5C /* BITCrashReportTextFormatter.h in Headers */,
 				1E20566E15A5F61F008FC20A /* BITCrashReportManagerDelegate.h in Headers */,
@@ -276,6 +297,7 @@
 				1EF09DD6152371DC00067A5C /* BITCrashReportManager.m in Sources */,
 				1EF09DD8152371DC00067A5C /* BITCrashReportUI.m in Sources */,
 				1EF09DDA152371DC00067A5C /* BITCrashReportTextFormatter.m in Sources */,
+				4DD13AF5162CA7C400BF15E8 /* BITSystemProfile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
