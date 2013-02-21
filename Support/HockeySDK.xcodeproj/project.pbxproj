@@ -93,7 +93,6 @@
 		1EF09D801523574200067A5C = {
 			isa = PBXGroup;
 			children = (
-				4DD13AF6162CAA2200BF15E8 /* IOKit.framework */,
 				1EF09DA81523579100067A5C /* Classes */,
 				1EF09DB71523579A00067A5C /* Resources */,
 				1EF09DBF152357A500067A5C /* Vendor */,
@@ -113,6 +112,7 @@
 		1EF09D8E1523574200067A5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4DD13AF6162CAA2200BF15E8 /* IOKit.framework */,
 				1EF09D8F1523574200067A5C /* Cocoa.framework */,
 				1EF09D911523574200067A5C /* Other Frameworks */,
 			);
