@@ -48,7 +48,7 @@
 // Enable catching uncaught exceptions and let them crash the app and get a crash report
 //
 // Default: NO
-@property (nonatomic, assign, getter=sExceptionInterceptionEnabled) BOOL exceptionInterceptionEnabled;
+@property (nonatomic, assign, getter=isExceptionInterceptionEnabled) BOOL exceptionInterceptionEnabled;
 
 
 // defines if the user interface should ask for name and email
