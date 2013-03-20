@@ -27,6 +27,7 @@
 @interface BITSystemProfile : NSObject {
   @private
   NSDate *_usageStartTimestamp;
+  NSInteger _startCounter;
 }
 
 + (BITSystemProfile *)sharedSystemProfile;

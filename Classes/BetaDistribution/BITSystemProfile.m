@@ -93,6 +93,7 @@
 - (id)init {
   if ((self = [super init])) {
     _usageStartTimestamp = nil;
+    _startCounter = 0;
   }
   return self;
 }
@@ -104,23 +105,28 @@
 }
 
 - (void)startUsageForBundle:(NSBundle *)bundle {
-  self.usageStartTimestamp = [NSDate date];
-  
-  BOOL newVersion = NO;
-  
-  if (![[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString]) {
-    newVersion = YES;
-  } else {
-    if ([(NSString *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString] compare:[bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] != NSOrderedSame) {
+  @synchronized(@"startstop") {
+    if (!self.usageStartTimestamp)
+      self.usageStartTimestamp = [NSDate date];
+    
+    _startCounter++;
+    
+    BOOL newVersion = NO;
+    
+    if (![[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString]) {
       newVersion = YES;
+    } else {
+      if ([(NSString *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString] compare:[bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] != NSOrderedSame) {
+        newVersion = YES;
+      }
     }
-  }
-  
-  if (newVersion) {
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]] forKey:kBITUpdateDateOfVersionInstallation];
-    [[NSUserDefaults standardUserDefaults] setObject:[bundle objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:kBITUpdateUsageTimeForVersionString];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:0] forKey:kBITUpdateUsageTimeOfCurrentVersion];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    if (newVersion) {
+      [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]] forKey:kBITUpdateDateOfVersionInstallation];
+      [[NSUserDefaults standardUserDefaults] setObject:[bundle objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:kBITUpdateUsageTimeForVersionString];
+      [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:0] forKey:kBITUpdateUsageTimeOfCurrentVersion];
+      [[NSUserDefaults standardUserDefaults] synchronize];
+    }
   }
 }
 
@@ -129,11 +135,21 @@
 }
 
 - (void)stopUsage {
-  double timeDifference = [[NSDate date] timeIntervalSinceReferenceDate] - [_usageStartTimestamp timeIntervalSinceReferenceDate];
-  double previousTimeDifference = [(NSNumber *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeOfCurrentVersion] doubleValue];
-  
-  [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:previousTimeDifference + timeDifference] forKey:kBITUpdateUsageTimeOfCurrentVersion];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  @synchronized(@"startstop") {
+    if (_startCounter > 0)
+      _startCounter--;
+    
+    if (!self.usageStartTimestamp)
+      return;
+    if (_startCounter > 0)
+      return;
+    
+    double timeDifference = [[NSDate date] timeIntervalSinceReferenceDate] - [self.usageStartTimestamp timeIntervalSinceReferenceDate];
+    double previousTimeDifference = [(NSNumber *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeOfCurrentVersion] doubleValue];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:previousTimeDifference + timeDifference] forKey:kBITUpdateUsageTimeOfCurrentVersion];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
 }
 
 - (NSString *)currentUsageString {
