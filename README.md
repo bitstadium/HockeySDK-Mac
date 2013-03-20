@@ -212,21 +212,48 @@ Crash reports are normally sent to our server asynchronously. If your applicatio
 
 ### Add analytics data to Sparkle setup
 
-Set the following additional Sparkle property:
+1. Set the following additional Sparkle property:
 
-    sparkleUpdater.sendsSystemProfile = YES;
+       sparkleUpdater.sendsSystemProfile = YES;
 
-and add the following Sparkle delegate method (don't forget to bind `SUUpdater` to your appDelegate!):
+2. Add the following Sparkle delegate method (don't forget to bind `SUUpdater` to your appDelegate!):
 
-    - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
-                     sendingSystemProfile:(BOOL)sendingProfile {
-      return [[BITSystemProfile sharedSystemProfile] systemUsageData];
-    }
+       - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
+                        sendingSystemProfile:(BOOL)sendingProfile {
+         return [[BITSystemProfile sharedSystemProfile] systemUsageData];
+       }
 
-If you want to track usage times, you have to add the following methods in your code, e.g. when a document is opened and closed. Another example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
+3. Initialize usage tracking depending on your needs.
 
-    [[BITSystemProfile sharedSystemProfile] startUsage];
-    [[BITSystemProfile sharedSystemProfile] stopUsage];
+    a. One example is to track usage when a document is opened
+
+           - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
+               …
+               [[BITSystemProfile sharedSystemProfile] startUsage];
+               …
+           }
+           
+       and stop tracking usage when a document is being closed.
+
+           - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
+               …
+               [[BITSystemProfile sharedSystemProfile] stopUsage];
+               …
+           }
+           
+       The SDK takes care if multiple documents are used. But this code doesn't consider when the app goes into background and will continue counting the time!
+    
+    b. Another example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
+
+           - (void)applicationWillFinishLaunching:(NSNotification *)aNotification
+               …      
+               NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+               BITSystemProfile *bsp = [BITSystemProfile sharedSystemProfile];
+               [dnc addObserver:bsp selector:@selector(startUsage) name:NSApplicationDidBecomeActiveNotification object:nil];
+               [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillTerminateNotification object:nil];
+               [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillResignActiveNotification object:nil];
+               …
+           };
 
 ### Show debug log messages
 
