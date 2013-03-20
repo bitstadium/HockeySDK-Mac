@@ -444,9 +444,13 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 #pragma mark - Crash Report Processing
 
 - (void)startManager {
+  HockeySDKLog(@"Info: Start CrashReportManager startManager");
+
   BOOL returnToApp = NO;
   
   if ([self hasPendingCrashReport]) {
+    HockeySDKLog(@"Info: Pending crash reports found.");
+    
     NSError* error = nil;
     NSString *crashReport = nil;
     
@@ -632,14 +636,18 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   NSMutableURLRequest *request = nil;
   NSString *boundary = @"----FOO";
   
-  request = [NSMutableURLRequest requestWithURL:
-             [NSURL URLWithString:[NSString stringWithFormat:@"%@api/2/apps/%@/crashes?sdk=%@&sdk_version=%@&feedbackEnabled=no",
-                                   _submissionURL,
-                                   [self.appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                                   SDK_NAME,
-                                   SDK_VERSION
-                                   ]
-              ]];
+  HockeySDKLog(@"Info: Crash XML:\n%@", xml);
+  
+  NSString *url = [NSString stringWithFormat:@"%@api/2/apps/%@/crashes?sdk=%@&sdk_version=%@&feedbackEnabled=no",
+                   _submissionURL,
+                   [self.appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+                   SDK_NAME,
+                   SDK_VERSION
+                   ];
+  
+  HockeySDKLog(@"Info: Sending report to %@", url);
+
+  request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
   
   [request setValue:SDK_NAME forHTTPHeaderField:@"User-Agent"];
   [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
