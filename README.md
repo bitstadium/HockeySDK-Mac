@@ -169,36 +169,70 @@ We propose the following method to set version numbers in your beta versions:
 
 ## Additional Options
 
-* If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, add the following line before `startManager`:
+### Catch additional exceptions
 
-        [[BITHockeyManager sharedHockeyManager] setExceptionInterceptionEnabled:YES];
+If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, add the following line before `startManager`:
 
-   They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
+    [[BITHockeyManager sharedHockeyManager] setExceptionInterceptionEnabled:YES];
+
+They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
 
     Alternatively you can also subclass `NSWindow` or `NSApplication` to catch the exceptions like this:
     
-        @implementation MyWindow
- 
-        - (void)sendEvent:(NSEvent *)theEvent
-        {
-            // Catch all exceptions and forward them to the crash reporter
-            @try {
-                [super sendEvent: theEvent];
-            }
-            @catch (NSException *exception) {
-                (NSGetUncaughtExceptionHandler())(exception);
-            }
+    @implementation MyWindow
+
+    - (void)sendEvent:(NSEvent *)theEvent
+    {
+        // Catch all exceptions and forward them to the crash reporter
+        @try {
+            [super sendEvent: theEvent];
         }
-         
-        @end
+        @catch (NSException *exception) {
+            (NSGetUncaughtExceptionHandler())(exception);
+        }
+    }
+        
+    @end
 
-* Crash reports are normally sent to our server asynchronously. If your application is crashing near startup, BITHockeyManager will send crash reports synchronously to make sure they are being received. For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously, use the following line:
+### Improved startup crashes handling
 
-        [[BITHockeyManager sharedHockeyManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:<NewTimeInterval>];
+Crash reports are normally sent to our server asynchronously. If your application is crashing near startup, BITHockeyManager will send crash reports synchronously to make sure they are being received. For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously, use the following line:
 
-* In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
+    [[BITHockeyManager sharedHockeyManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:<NewTimeInterval>];
 
-        [[BITHockeyManager sharedHockeyManager] setLoggingEnabled:YES];
+### Sparkle setup for beta distribution
+
+* Install the Sparkle SDK: http://sparkle.andymatuschak.org/
+  
+  As of today (03/2013), Sparkle doesn't support Mac sandboxes. If you require this, check out the following fork: 
+  
+* Set `SUFeedURL` to `https://rink.hockeyapp.net/api/2/apps/<APP_IDENTIFIER>` and replace `<APP_IDENTIFIER>` with the same value used to initialize the HockeySDK
+
+* Create a `.zip` file of your app bundle and upload that to HockeyApp.
+
+### Add analytics data to Sparkle setup
+
+Set the following additional Sparkle property:
+
+    sparkleUpdater.sendsSystemProfile = YES;
+
+and add the following Sparkle delegate method (don't forget to bind `SUUpdater` to your appDelegate!):
+
+    - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
+                     sendingSystemProfile:(BOOL)sendingProfile {
+      return [[BITSystemProfile sharedSystemProfile] systemUsageData];
+    }
+
+If you want to track usage times, you have to add the following methods in your code, e.g. when a document is opened and closed. Another example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
+
+    [[BITSystemProfile sharedSystemProfile] startUsage];
+    [[BITSystemProfile sharedSystemProfile] stopUsage];
+
+### Show debug log messages
+
+In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
+
+    [[BITHockeyManager sharedHockeyManager] setLoggingEnabled:YES];
  
 ## Optional Delegate Methods
 
@@ -229,6 +263,11 @@ Once you have your app ready for beta testing or even to submit it to the App St
 6. You should see a folder named dSYMs which contains your dSYM bundle. If you use Safari, just drag this file from Finder and drop it on to the corresponding drop zone in HockeyApp. If you use another browser, copy the file to a different location, then right-click it and choose Compress "YourApp.dSYM". The file will be compressed as a .zip file. Drag & drop this file to HockeyApp. 
 
 As an easier alternative for step 5 and 6, you can use our [HockeyMac](https://github.com/BitStadium/HockeyMac) app to upload the complete archive in one step.
+
+### Multiple dSYMs
+
+If your app is using multiple frameworks that are not statically linked, you can upload all dSYM packages to HockeyApp by creating a single `.zip` file with all the dSYM packages included and make sure the zip file has the extension `.dSYM.zip`.
+
 
 ## Checklist if Crashes Do Not Appear in HockeyApp
 
