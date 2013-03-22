@@ -225,35 +225,17 @@ Crash reports are normally sent to our server asynchronously. If your applicatio
 
 3. Initialize usage tracking depending on your needs.
 
-    a. One example is to track usage when a document is opened
+    On example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
 
-            - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
-                …
-                [[BITSystemProfile sharedSystemProfile] startUsage];
-                …
-            }
-           
-       and stop tracking usage when a document is being closed.
-
-           - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
-               …
-               [[BITSystemProfile sharedSystemProfile] stopUsage];
-               …
-           }
-           
-       The SDK takes care if multiple documents are used. But this code doesn't consider when the app goes into background and will continue counting the time!
-    
-    b. Another example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
-
-           - (void)applicationWillFinishLaunching:(NSNotification *)aNotification
-               …      
-               NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-               BITSystemProfile *bsp = [BITSystemProfile sharedSystemProfile];
-               [dnc addObserver:bsp selector:@selector(startUsage) name:NSApplicationDidBecomeActiveNotification object:nil];
-               [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillTerminateNotification object:nil];
-               [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillResignActiveNotification object:nil];
-               …
-           };
+        - (void)applicationWillFinishLaunching:(NSNotification *)aNotification
+            …      
+            NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+            BITSystemProfile *bsp = [BITSystemProfile sharedSystemProfile];
+            [dnc addObserver:bsp selector:@selector(startUsage) name:NSApplicationDidBecomeActiveNotification object:nil];
+            [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillTerminateNotification object:nil];
+            [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillResignActiveNotification object:nil];
+            …
+        };
 
 ### Show debug log messages
 
