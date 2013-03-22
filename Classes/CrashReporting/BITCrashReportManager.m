@@ -2,7 +2,7 @@
  * Author: Andreas Linde <mail@andreaslinde.de>
  *         Kent Sutherland
  *
- * Copyright (c) 2012 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH.
  * Copyright (c) 2011 Andreas Linde & Kent Sutherland.
  * All rights reserved.
  *
@@ -38,6 +38,8 @@
 
 #define SDK_NAME @"HockeySDK-Mac"
 #define SDK_VERSION @"1.0"
+
+NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 /**
  * @internal
@@ -126,12 +128,13 @@
     _analyzerStarted = NO;
     _didCrashInLastSession = NO;
     
-    _userName = @"";
-    _userEmail = @"";
+    self.userName = @"";
+    self.userEmail = @"";
     
     _crashFiles = [[NSMutableArray alloc] init];
     _crashesDir = nil;
     
+    _invokedReturnToMainApplication = NO;
     self.delegate = nil;
     self.companyName = @"";
     
@@ -198,9 +201,9 @@
 
   [_fileManager release]; _fileManager = nil;
   
-  [_userName release]; _userName = nil;
-  [_userEmail release]; _userEmail = nil;
-  
+  self.userName = nil;
+  self.userEmail = nil;
+
   [_crashFiles release]; _crashFiles = nil;
   [_crashesDir release]; _crashesDir = nil;
   [_settingsFile release]; _settingsFile = nil;
@@ -219,8 +222,8 @@
   NSString *error = nil;
 
   NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:4];
-  [rootObj setObject:_userName forKey:kHockeySDKUserName];
-  [rootObj setObject:_userEmail forKey:kHockeySDKUserEmail];
+  [rootObj setObject:self.userName forKey:kHockeySDKUserName];
+  [rootObj setObject:self.userEmail forKey:kHockeySDKUserEmail];
   if (_approvedCrashReports && [_approvedCrashReports count] > 0)
     [rootObj setObject:_approvedCrashReports forKey:kHockeySDKApprovedCrashReports];
   [rootObj setObject:[NSNumber numberWithBool:_analyzerStarted] forKey:kHockeySDKAnalyzerStarted];
@@ -253,8 +256,8 @@
     if ([rootObj objectForKey:kHockeySDKApprovedCrashReports])
       [_approvedCrashReports setDictionary:[rootObj objectForKey:kHockeySDKApprovedCrashReports]];
     _analyzerStarted = [(NSNumber *)[rootObj objectForKey:kHockeySDKAnalyzerStarted] boolValue];
-    _userName = [rootObj objectForKey:kHockeySDKUserName] ?: @"";
-    _userEmail = [rootObj objectForKey:kHockeySDKUserEmail] ?: @"";
+    self.userName = [rootObj objectForKey:kHockeySDKUserName] ?: @"";
+    self.userEmail = [rootObj objectForKey:kHockeySDKUserEmail] ?: @"";
   } else {
     HockeySDKLog(@"ERROR: Reading settings. %@", error);
   }
@@ -343,6 +346,12 @@
 }
 
 - (void)returnToMainApplication {
+  if (_invokedReturnToMainApplication) {
+    return;
+  }
+  
+  _invokedReturnToMainApplication = YES;
+  
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindow)]) {
     [self.delegate showMainApplicationWindow];
   } else {
@@ -435,9 +444,13 @@
 #pragma mark - Crash Report Processing
 
 - (void)startManager {
+  HockeySDKLog(@"Info: Start CrashReportManager startManager");
+
   BOOL returnToApp = NO;
   
   if ([self hasPendingCrashReport]) {
+    HockeySDKLog(@"Info: Pending crash reports found.");
+    
     NSError* error = nil;
     NSString *crashReport = nil;
     
@@ -462,12 +475,12 @@
                                                    applicationName:[self applicationName]
                                                     askUserDetails:_askUserDetails];
         
-        [_crashReportUI setUserName:_userName];
-        [_crashReportUI setUserEmail:_userEmail];
+        [_crashReportUI setUserName:self.userName];
+        [_crashReportUI setUserEmail:self.userEmail];
         
         [_crashReportUI askCrashReportDetails];
       } else {
-        [self sendReportWithCrash:crashReport crashDescription:nil];
+        [self sendReportWithCrash:crashFile crashDescription:nil];
       }
     } else {
       if (![self hasNonApprovedCrashReports]) {
@@ -499,8 +512,8 @@
   if (!crashDescription) crashDescription = @"";
   [metaDict setObject:crashDescription forKey:@"description"];
   
-  [metaDict setObject:_userName forKey:@"username"];
-  [metaDict setObject:_userEmail forKey:@"useremail"];
+  [metaDict setObject:self.userName forKey:@"username"];
+  [metaDict setObject:self.userEmail forKey:@"useremail"];
   
   if (_delegate != nil && [_delegate respondsToSelector:@selector(crashReportApplicationLog)]) {
     log = [self.delegate crashReportApplicationLog] ?: @"";
@@ -623,14 +636,18 @@
   NSMutableURLRequest *request = nil;
   NSString *boundary = @"----FOO";
   
-  request = [NSMutableURLRequest requestWithURL:
-             [NSURL URLWithString:[NSString stringWithFormat:@"%@api/2/apps/%@/crashes?sdk=%@&sdk_version=%@&feedbackEnabled=no",
-                                   _submissionURL,
-                                   [self.appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                                   SDK_NAME,
-                                   SDK_VERSION
-                                   ]
-              ]];
+  HockeySDKLog(@"Info: Crash XML:\n%@", xml);
+  
+  NSString *url = [NSString stringWithFormat:@"%@api/2/apps/%@/crashes?sdk=%@&sdk_version=%@&feedbackEnabled=no",
+                   _submissionURL,
+                   [self.appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+                   SDK_NAME,
+                   SDK_VERSION
+                   ];
+  
+  HockeySDKLog(@"Info: Sending report to %@", url);
+
+  request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
   
   [request setValue:SDK_NAME forHTTPHeaderField:@"User-Agent"];
   [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];

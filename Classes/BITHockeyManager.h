@@ -1,7 +1,7 @@
 // 
 //  Author: Andreas Linde <mail@andreaslinde.de>
 // 
-//  Copyright (c) 2012 HockeyApp, Bit Stadium GmbH. All rights reserved.
+//  Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH. All rights reserved.
 //  See LICENSE.txt for author information.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -48,7 +48,7 @@
 // Enable catching uncaught exceptions and let them crash the app and get a crash report
 //
 // Default: NO
-@property (nonatomic, assign, getter=sExceptionInterceptionEnabled) BOOL exceptionInterceptionEnabled;
+@property (nonatomic, assign, getter=isExceptionInterceptionEnabled) BOOL exceptionInterceptionEnabled;
 
 
 // defines if the user interface should ask for name and email

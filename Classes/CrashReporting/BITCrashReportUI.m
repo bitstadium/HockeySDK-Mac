@@ -2,7 +2,7 @@
  * Author: Andreas Linde <mail@andreaslinde.de>
  *         Kent Sutherland
  *
- * Copyright (c) 2012 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH.
  * Copyright (c) 2011 Andreas Linde & Kent Sutherland.
  * All rights reserved.
  *
@@ -59,9 +59,9 @@ const CGFloat kDetailsHeight = 285;
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
     _companyName = [companyName copy];
-    _applicationName = applicationName;
-    _userName = @"";
-    _userEmail = @"";
+    _applicationName = [applicationName copy];
+    self.userName = @"";
+    self.userEmail = @"";
     [self setShowComments: YES];
     [self setShowDetails: NO];
     [self setShowUserDetails:askUserDetails];
@@ -197,13 +197,13 @@ const CGFloat kDetailsHeight = 285;
   [[self window] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"WindowTitle", @""), _applicationName]];
   
   [[nameTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"NameTextTitle", @"")];
-  [[nameTextField cell] setTitle:_userName];
+  [[nameTextField cell] setTitle:self.userName];
   if ([[nameTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
     [[nameTextField cell] setUsesSingleLineMode:YES];
   }
   
   [[emailTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"EmailTextTitle", @"")];
-  [[emailTextField cell] setTitle:_userEmail];
+  [[emailTextField cell] setTitle:self.userEmail];
   if ([[emailTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
     [[emailTextField cell] setUsesSingleLineMode:YES];
   }
@@ -266,8 +266,8 @@ const CGFloat kDetailsHeight = 285;
   [_logContent release]; _logContent = nil;
   [_applicationName release]; _applicationName = nil;
   [_companyName release]; _companyName = nil;
-  [_userName release]; _userName = nil;
-  [_userEmail release]; _userEmail = nil;
+  self.userName = nil;
+  self.userEmail = nil;
   
   _crashReportManager = nil;
   
