@@ -4,6 +4,15 @@ This document describes how to integrate the HockeySDK-Mac into your app. The SD
 
 ## Release Notes
 
+Version 1.0.3:
+
+- Added BITSystemProfile class to send analytics data for beta apps when using Sparkle
+- Fixed a few compiler warnings
+- Fixed crashes when initializing hockey manager in a different autorelease pool than starting the manager
+- Fixed a problem when sending crash reports automatically without user interaction
+- Fixed showMainApplicationWindow delegate being invoked multiple times in rare cases
+- Improvements to installation and setup instructions
+
 Version 1.0.2:
 
 - Include new PLCrashReporter version, which fixes a crash that can happen when the App/System is unloading images from a process
