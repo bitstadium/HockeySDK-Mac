@@ -214,24 +214,24 @@ Crash reports are normally sent to our server asynchronously. If your applicatio
 
 1. Set the following additional Sparkle property:
 
-       sparkleUpdater.sendsSystemProfile = YES;
+        sparkleUpdater.sendsSystemProfile = YES;
 
 2. Add the following Sparkle delegate method (don't forget to bind `SUUpdater` to your appDelegate!):
 
-       - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
+        - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
                         sendingSystemProfile:(BOOL)sendingProfile {
-         return [[BITSystemProfile sharedSystemProfile] systemUsageData];
-       }
+            return [[BITSystemProfile sharedSystemProfile] systemUsageData];
+        }
 
 3. Initialize usage tracking depending on your needs.
 
     a. One example is to track usage when a document is opened
 
-           - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
-               …
-               [[BITSystemProfile sharedSystemProfile] startUsage];
-               …
-           }
+            - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
+                …
+                [[BITSystemProfile sharedSystemProfile] startUsage];
+                …
+            }
            
        and stop tracking usage when a document is being closed.
 
