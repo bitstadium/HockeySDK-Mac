@@ -50,6 +50,8 @@
 
 // flags if the crashreporter should automatically send crashes without asking the user again
 // set this as bool in user defaults e.g. in the settings, if you want to let the user be able to set this on or off
+// or set it on runtime using the `autoSubmitCrashReport property` via
+// `[[BITCrashReportManager sharedCrashReportManager] setAutoSubmitCrashReport: YES];`
 #define kHockeySDKAutomaticallySendCrashReports @"HockeySDKAutomaticallySendCrashReports"
 
 
