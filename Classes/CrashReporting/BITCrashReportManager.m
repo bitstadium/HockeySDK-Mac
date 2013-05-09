@@ -37,7 +37,6 @@
 #import <objc/runtime.h>
 
 #define SDK_NAME @"HockeySDK-Mac"
-#define SDK_VERSION @"1.0"
 
 NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
@@ -642,7 +641,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
                    _submissionURL,
                    [self.appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
                    SDK_NAME,
-                   SDK_VERSION
+                   [HOCKEYSDK_BUNDLE objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
                    ];
   
   HockeySDKLog(@"Info: Sending report to %@", url);
