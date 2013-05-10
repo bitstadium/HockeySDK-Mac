@@ -29,7 +29,7 @@
 "ProblemDetailsTitle" = "Problemdetails und Systemkonfiguration";
 
 /* Privacy note text */
-"PrivacyNote" = "Es werden keine personenbezogene Informationen mit diesem Bericht verschickt.";
+"PrivacyNote" = "Es werden nur die dargestellten Informationen mit diesem Bericht verschickt.";
 
 /* Show Details Button */
 "ShowDetailsButtonTitle" = "Details einblenden";
