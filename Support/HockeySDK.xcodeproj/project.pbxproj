@@ -69,7 +69,7 @@
 		1EF09DD0152371DC00067A5C /* BITCrashReportUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportUI.h; sourceTree = "<group>"; };
 		1EF09DD1152371DC00067A5C /* BITCrashReportUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportUI.m; sourceTree = "<group>"; };
 		1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportTextFormatter.h; sourceTree = "<group>"; };
-		1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportTextFormatter.m; sourceTree = "<group>"; };
+		1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportTextFormatter.m; sourceTree = "<group>"; tabWidth = 4; };
 		4D1F150F162D4A6F0047B9D9 /* BITSystemProfilePrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITSystemProfilePrivate.h; sourceTree = "<group>"; };
 		4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BITSystemProfile.h; path = BetaDistribution/BITSystemProfile.h; sourceTree = "<group>"; };
 		4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BITSystemProfile.m; path = BetaDistribution/BITSystemProfile.m; sourceTree = "<group>"; };
