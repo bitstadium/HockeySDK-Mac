@@ -395,9 +395,12 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
             }
         }
 
-        /* Determine if this is the main executable */
+        /* Determine if this is the main executable or an app specific framework*/
         NSString *binaryDesignator = @" ";
-        if ([imageInfo.imageName isEqual: report.processInfo.processPath])
+        NSString *imagePath = [imageInfo.imageName stringByStandardizingPath];
+        NSString *appBundleContentsPath = [[report.processInfo.processPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+
+        if ([imagePath isEqual: report.processInfo.processPath] || [imagePath hasPrefix:appBundleContentsPath]) {
             binaryDesignator = @"+";
         
         /* base_address - terminating_address [designator]file_name arch <uuid> file_path */
