@@ -176,6 +176,11 @@
   NSString *app_version = [bundle objectForInfoDictionaryKey:@"CFBundleVersion"];
   [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"app_version", @"App Version", app_version, app_version, nil] forKeys:keys]];
   
+  if ([[bundle preferredLocalizations] count] > 0) {
+    NSString *language = [[bundle preferredLocalizations] objectAtIndex:0];
+    [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"used_lang", @"Used Language", language, language] forKeys:keys]];
+  }
+  
   NSString *os_version = [[self class] systemVersionString];
   [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"os_version", @"OS Version", os_version, os_version, nil] forKeys:keys]];
   [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"os", @"OS", @"Mac OS", @"Mac OS", nil] forKeys:keys]];
