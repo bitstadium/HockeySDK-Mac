@@ -73,6 +73,18 @@
 
 #pragma mark - Private Class Methods
 
+- (BOOL)checkValidityOfAppIdentifier:(NSString *)identifier {
+  BOOL result = NO;
+  
+  if (identifier) {
+    NSCharacterSet *hexSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdef"];
+    NSCharacterSet *inStringSet = [NSCharacterSet characterSetWithCharactersInString:identifier];
+    result = ([identifier length] == 32) && ([hexSet isSupersetOfSet:inStringSet]);
+  }
+  
+  return result;
+}
+
 
 #pragma mark - Public Instance Methods (Configuration)
 
@@ -104,9 +116,7 @@
 
 
 - (void)startManager {
-	NSCharacterSet *hexSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdef"];
-	NSCharacterSet *inStringSet = [NSCharacterSet characterSetWithCharactersInString:_appIdentifier];
-	BOOL validAppID = ([_appIdentifier length] == 32) && ([hexSet isSupersetOfSet:inStringSet]);
+  BOOL validAppID = [self checkValidityOfAppIdentifier:_appIdentifier];
   
 	if (validAppID) {
     [[BITCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
