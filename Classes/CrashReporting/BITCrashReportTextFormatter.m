@@ -564,7 +564,7 @@ NSInteger binaryImageSort(id binary1, id binary2, void *context);
             index += range.length - 1;
         }
         if (index > 32) {
-            imageName = [NSString stringWithFormat:@"%@...", [imageName substringToIndex:index - 1]];
+            imageName = [NSString stringWithFormat:@"%@... ", [imageName substringToIndex:index - 1]];
             index += 3;
             break;
         }
