@@ -2,93 +2,6 @@ This document describes how to integrate the HockeySDK-Mac into your app. The SD
 
 **Collect crash reports:** If your app crashes, a crash log with the same format as from the Apple Crash Reporter is written to the device's storage. If the user starts the app again, he is asked to submit the crash report to HockeyApp.
 
-## Release Notes
-
-Version 1.0.3:
-
-- Added BITSystemProfile class to send analytics data for beta apps when using Sparkle
-- Fixed a few compiler warnings
-- Fixed crashes when initializing hockey manager in a different autorelease pool than starting the manager
-- Fixed a problem when sending crash reports automatically without user interaction
-- Fixed showMainApplicationWindow delegate being invoked multiple times in rare cases
-- Improvements to installation and setup instructions
-
-Version 1.0.2:
-
-- Include new PLCrashReporter version, which fixes a crash that can happen when the App/System is unloading images from a process
-
-Version 1.0.1:
-
-- Fixed a App Store rejection cause (only happened if you don't submit with sandbox enabled!): settings data was written into ~/Library/net.hockeyapp.sdk.mac/, and is now written into ~/Library/Caches/<app bundle identifier>/net.hockeyapp.sdk.mac/ next to the queued crash reports
-- Fixed an issue writing the queued crashes into the wrong key in the settings file
-- Fixed reading the wrong meta data (application log data) for queued crash reports
-- Delete crash reports if they can not be processed (only might happen if there is an unknown PLCrashReporter issue)
-- Send unique UUID for the crash report to the server (so HockeyApp can identify duplicates in a future version)
-- Initialize PLCrashReporter as early as possible instead of waiting until the `startManager` call
-- Added new property `didCrashInLastSession`
-- Minor code cleanup
-
-Version 1.0:
-
-- Update URL to send crash reports to https://sdk.hockeyapp.net/
-
-Version 0.9.6 (RC 6):
-
-- IMPORTANT: Initialization methods and class names changed! Please check the *Setup* section in the *README*. Sorry for that.
-- Optimize sending of crash reports. Crash reports will be send synchronously if the app crashes within a customizable time interval (default 5s)
-- Added option to ask the user for name and email in the UI
-- Removed the delegates to get userid and contact, replaced with username and useremail properties
-- Validate app identifier and disable the SDK if it is obviously invalid
-- Use proper sandbox safe directories for crash caches and sdk settings
-- Fixed symlink error of the framework
-- Adjust namespace from CNS (Codenauts) to BIT (Bit Stadium).
-- Updated bundle identifiers
-- Update copyright information to use Bit Stadium GmbH
-- Some internal optimizations
-
-Version 0.9.5 (RC 5):
-
-- Add multiple localizations (Finnish, French, Italian, Norwegian, Swedish. Thanks Markus!)
-- UI now automatically resizes the buttons to fit the localized strings
-- Move CNSCrashReporterManagerDelegate to public headers of the framework
-
-Version 0.9.4 (RC 4):
-
-- Update SDK initializer to be less error prone
-- Add german localization (Beware, button sizes are not automatically adjusted if you add other languages!)
-
-Version 0.9.3 (RC 3):
-
-- Fixed double PLCrashReporter in HockeySDK-Mac framework
-
-Version 0.9.2 (RC 2):
-
-- Cleaned up protocols, initialization slightly changed, please check the readme file!
-- Fixed company name not appearing in the user interface
-- Moved PLCrashReporter framework into the HockeySDK-Mac frameworks folder
-
-Version 0.9.0 (RC 1):
-
-- Fixed memory leak
-- Added option to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler
-- Send crash report synchronously, so crashes that appear on startup are also safely submitted
-- Make sure crash reports are anonymous and don't contain user's home directory name
-- Send app binaries UUIDs to the server for server side symbolication improvements
-
-Version 0.6.0:
-
-- System calls in Last Exception Backtrace are now symbolicated
-- Fixed invalid stacktrace and some cases
-- Fixed 0x0 appearances in stack traces
-- Fixed memory leak
-
-Version 0.5.1:
-
-- Added Mac Sandbox support:
-  - Supports 32 and 64 bit Intel X86 architecture
-  - Uses brand new PLCrashReporter version instead of crash logs from Libary directories
-- Fixed sending crash reports to the HockeyApp servers
-
 ## Prerequisites
 
 1. Before you integrate HockeySDK-Mac into your own app, you should add the app to HockeyApp if you haven't already. Read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-create-a-new-app) on how to do it.
@@ -133,6 +46,7 @@ We propose the following method to set version numbers in your beta versions:
    - Drag HockeySDK-Mac from the Project Navigator left sidebar to the list in the new Copy Files phase.
 
 5. Continue with the chapter "Setup HockeySDK-Mac framework".
+6. If Xcode requires to sign all frameworks, add `--deep` to the `OTHER_CODE_SIGN_FLAGS` build settings of your app target
 
 ## Setup HockeySDK-Mac
 
@@ -202,6 +116,12 @@ They will be treated with the default behavior given to uncaught exceptions. Use
     }
         
     @end
+
+### Automatic sending of crash reports
+
+If you want to send all crash reports automatically, configure the SDK with the following code:
+
+    [[BITCrashReportManager sharedCrashReportManager] setAutoSubmitCrashReport: YES];
 
 ### Improved startup crashes handling
 
