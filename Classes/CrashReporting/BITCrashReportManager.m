@@ -30,10 +30,13 @@
 
 #import "BITCrashReportManager.h"
 #import "BITCrashReportUI.h"
-#import <sys/sysctl.h>
-#import <CrashReporter/CrashReporter.h>
+
 #import <HockeySDK/HockeySDK.h>
+
 #import "BITCrashReportTextFormatter.h"
+#import <CrashReporter/CrashReporter.h>
+
+#import <sys/sysctl.h>
 #import <objc/runtime.h>
 
 #define SDK_NAME @"HockeySDK-Mac"
@@ -75,7 +78,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 - (void)handleCrashReport;
 - (BOOL)hasPendingCrashReport;
 - (void)cleanCrashReports;
-- (NSString *)extractAppUUIDs:(PLCrashReport *)report;
+- (NSString *)extractAppUUIDs:(BITPLCrashReport *)report;
 
 - (void)postXML:(NSString*)xml;
 - (void)searchCrashLogFile:(NSString *)path;
@@ -173,7 +176,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     // on the very first startup this will always be initialized, since the default value for _crashReportActivated is YES
     // but we do it anyway, to be able to initialize PLCrashReporter as early as possible
     if (_crashReportActivated) {      
-      PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+      BITPLCrashReporter *crashReporter = [BITPLCrashReporter sharedReporter];
       NSError *error = NULL;
       
       // Check if we previously crashed
@@ -327,7 +330,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   return modelString;
 }
 
-- (NSString *)extractAppUUIDs:(PLCrashReport *)report {  
+- (NSString *)extractAppUUIDs:(BITPLCrashReport *)report {
   NSMutableString *uuidString = [NSMutableString string];
   NSArray *uuidArray = [BITCrashReportTextFormatter arrayOfAppUUIDsForCrashReport:report];
   
@@ -359,11 +362,11 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 }
 
 
-#pragma mark - PLCrashReporter
+#pragma mark - BITPLCrashReporter
 
 // Called to handle a pending crash report.
 - (void)handleCrashReport {
-  PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+  BITPLCrashReporter *crashReporter = [BITPLCrashReporter sharedReporter];
   NSError *error = NULL;
 	
   [self loadSettings];
@@ -385,10 +388,12 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
       [crashData writeToFile:[_crashesDir stringByAppendingPathComponent: cacheFilename] atomically:YES];
       
       // get the startup timestamp from the crash report, and the file timestamp to calculate the timeinterval when the crash happened after startup
-      PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
+      BITPLCrashReport *report = [[[BITPLCrashReport alloc] initWithData:crashData error:&error] autorelease];
       
-      if (report.systemInfo.timestamp && report.applicationInfo.applicationStartupTimestamp) {
-        _timeIntervalCrashInLastSessionOccured = [report.systemInfo.timestamp timeIntervalSinceDate:report.applicationInfo.applicationStartupTimestamp];
+      if ([report.processInfo respondsToSelector:@selector(processStartTime)]) {
+        if (report.systemInfo.timestamp && report.processInfo.processStartTime) {
+          _timeIntervalCrashInLastSessionOccured = [report.systemInfo.timestamp timeIntervalSinceDate:report.processInfo.processStartTime];
+        }
       }
     }
   }
@@ -455,8 +460,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     
     NSString *crashFile = [_crashFiles lastObject];
     NSData *crashData = [NSData dataWithContentsOfFile: crashFile];
-    PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
-    crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report];
+    BITPLCrashReport *report = [[[BITPLCrashReport alloc] initWithData:crashData error:&error] autorelease];
+    NSString *installString = [BITSystemProfile deviceIdentifier] ?: @"";
+    crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report crashReporterKey:installString];
     
     if (crashReport && !error) {        
       NSString *log = @"";
@@ -542,7 +548,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     NSData *crashData = [NSData dataWithContentsOfFile:filename];
 		
     if ([crashData length] > 0) {
-      PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
+      BITPLCrashReport *report = [[[BITPLCrashReport alloc] initWithData:crashData error:&error] autorelease];
 			
       if (report == nil) {
         HockeySDKLog(@"ERROR: Could not parse crash report");
@@ -552,9 +558,13 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
         continue;
       }
       
-      NSString *crashUUID = report.reportInfo.reportGUID ?: @"";
-      NSString *crashLogString = [BITCrashReportTextFormatter stringValueForCrashReport:report];
-                     
+      NSString *crashUUID = @"";
+//      if ([report respondsToSelector:@selector(reportInfo)]) {
+//        crashUUID = report.reportInfo.reportGUID ?: @"";
+//      }
+      NSString *installString = [BITSystemProfile deviceIdentifier] ?: @"";
+      NSString *crashLogString = [BITCrashReportTextFormatter stringValueForCrashReport:report crashReporterKey:installString];
+      
       if ([report.applicationInfo.applicationVersion compare:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
         _crashIdenticalCurrentVersion = YES;
       }

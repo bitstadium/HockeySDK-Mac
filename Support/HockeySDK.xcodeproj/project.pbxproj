@@ -218,7 +218,6 @@
 				1EF09D881523574200067A5C /* Frameworks */,
 				4C7E213C159C900B00D02AD1 /* CopyFiles */,
 				1EF09D891523574200067A5C /* Headers */,
-				1EF09DC2152357DD00067A5C /* Change CrashReporter framework load path */,
 			);
 			buildRules = (
 			);
@@ -272,23 +271,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		1EF09DC2152357DD00067A5C /* Change CrashReporter framework load path */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Change CrashReporter framework load path";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "install_name_tool -change \"@loader_path/../Frameworks/CrashReporter.framework/Versions/A/CrashReporter\"  \"@loader_path/Frameworks/CrashReporter.framework/Versions/A/CrashReporter\" \"$TARGET_BUILD_DIR/HockeySDK.framework/Versions/A/HockeySDK\"\n\nif [ ! -e \"$TARGET_BUILD_DIR/HockeySDK.framework/Frameworks\" ];\nthen \n    cd \"$TARGET_BUILD_DIR/HockeySDK.framework\"\n    ln -s \"Versions/Current/Frameworks\" \"Frameworks\"\nfi";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1EF09D871523574200067A5C /* Sources */ = {
@@ -392,7 +374,7 @@
 				GCC_PREFIX_HEADER = "../Resources/HockeySDK-Prefix.pch";
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
 				INSTALL_PATH = "@rpath";
-				LD_DYLIB_INSTALL_NAME = "@rpath/$(PRODUCT_NAME).$(WRAPPER_EXTENSION)/$(PRODUCT_NAME)";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
@@ -414,7 +396,7 @@
 				GCC_PREFIX_HEADER = "../Resources/HockeySDK-Prefix.pch";
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
 				INSTALL_PATH = "@rpath";
-				LD_DYLIB_INSTALL_NAME = "@rpath/$(PRODUCT_NAME).$(WRAPPER_EXTENSION)/$(PRODUCT_NAME)";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
