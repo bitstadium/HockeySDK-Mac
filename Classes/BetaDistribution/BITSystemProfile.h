@@ -25,12 +25,16 @@
 #import <Foundation/Foundation.h>
 
 @interface BITSystemProfile : NSObject {
-  @private
+@private
   NSDate *_usageStartTimestamp;
   NSInteger _startCounter;
 }
 
 + (BITSystemProfile *)sharedSystemProfile;
+
++ (NSString *)deviceIdentifier;
++ (NSString *)deviceModel;
++ (NSString *)systemVersionString;
 
 - (NSMutableArray *)systemDataForBundle:(NSBundle *)bundle;
 - (NSMutableArray *)systemData;
