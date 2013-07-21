@@ -559,9 +559,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
       }
       
       NSString *crashUUID = @"";
-//      if ([report respondsToSelector:@selector(reportInfo)]) {
-//        crashUUID = report.reportInfo.reportGUID ?: @"";
-//      }
+      if (report.uuidRef != NULL) {
+        crashUUID = (NSString *) CFUUIDCreateString(NULL, report.uuidRef);
+      }
       NSString *installString = [BITSystemProfile deviceIdentifier] ?: @"";
       NSString *crashLogString = [BITCrashReportTextFormatter stringValueForCrashReport:report crashReporterKey:installString];
       
