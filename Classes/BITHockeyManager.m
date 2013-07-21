@@ -73,6 +73,16 @@
 
 #pragma mark - Private Class Methods
 
+- (BOOL)isSetUpOnMainThread {
+  if (!NSThread.isMainThread) {
+    NSAssert(NSThread.isMainThread, @"ERROR: This SDK has to be setup on the main thread!");
+    
+    return NO;
+  }
+  
+  return YES;
+}
+
 - (BOOL)checkValidityOfAppIdentifier:(NSString *)identifier {
   BOOL result = NO;
   
@@ -116,6 +126,10 @@
 
 
 - (void)startManager {
+  if (![self isSetUpOnMainThread]) {
+    [[BITCrashReportManager sharedCrashReportManager] returnToMainApplication];
+  }
+  
   BOOL validAppID = [self checkValidityOfAppIdentifier:_appIdentifier];
   
 	if (validAppID) {
