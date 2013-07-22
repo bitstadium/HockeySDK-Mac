@@ -2,6 +2,7 @@
 
 - General
 
+    - [UPDATE] Updated installation instructions with notes about sandboxing, automatic sending of crash reports and code signing
     - [FIX] Fix build warnings
 	<br /><br/>
 

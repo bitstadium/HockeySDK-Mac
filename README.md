@@ -88,7 +88,9 @@ We propose the following method to set version numbers in your beta versions:
         
 8. Set additional options and/or implement optional delegate methods as mentioned below if you want to add custom data to the crash reports.
 
-9. Done.
+9. If this app is sandboxed, make sure to add the entitlements for network access.
+
+10. Done.
 
 ## Additional Options
 
