@@ -54,6 +54,7 @@ const CGFloat kDetailsHeight = 285;
   self = [super initWithWindowNibName: @"BITCrashReportUI"];
   
   if ( self != nil) {
+    _mainAppMenu = [NSApp mainMenu];
     _crashReportManager = crashReportManager;
     _crashFile = [crashReportFile copy];
     _crashLogContent = [crashReport copy];
@@ -107,6 +108,7 @@ const CGFloat kDetailsHeight = 285;
 - (void)endCrashReporter {
   [self close];
   [NSApp stopModal];
+  [NSApp setMainMenu:_mainAppMenu];
 }
 
 

@@ -53,6 +53,8 @@
   IBOutlet NSButton   *cancelButton;
   IBOutlet NSButton   *submitButton;
   
+  NSMenu              *_mainAppMenu;
+  
   BITCrashReportManager   *_crashReportManager;
   
   NSString      *_companyName;
