@@ -651,7 +651,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
                    _submissionURL,
                    [self.appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
                    SDK_NAME,
-                   [HOCKEYSDK_BUNDLE objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
+                   [[HOCKEYSDK_BUNDLE objectForInfoDictionaryKey:@"CFBundleShortVersionString"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
                    ];
   
   HockeySDKLog(@"Info: Sending report to %@", url);
