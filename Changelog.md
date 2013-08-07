@@ -1,3 +1,13 @@
+## Version 1.1.0 Beta 2
+
+- Crash Reporting
+
+    - [UPDATE] Enable Copy&Paste in crash report UI
+    - [FIX] Fix sending of crash reports in Beta 1 not working
+    - [FIX] Change XML format so improper formatted log data can not result in empty crash reports on the server
+	<br /><br/>
+
+
 ## Version 1.1.0 Beta 1
 
 - General
