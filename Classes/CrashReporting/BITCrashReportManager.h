@@ -84,7 +84,6 @@ typedef enum HockeyCrashReportStatus {
 
   BOOL _crashIdenticalCurrentVersion;
   BOOL _crashReportActivated;
-  BOOL _exceptionInterceptionEnabled;
   
   NSTimeInterval _timeIntervalCrashInLastSessionOccured;
   NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
@@ -126,9 +125,6 @@ typedef enum HockeyCrashReportStatus {
 
 // The HockeyApp app identifier (required)
 @property (nonatomic, retain) NSString *appIdentifier;
-
-// defines if Uncaught Exception Interception should be used, default to NO
-@property (nonatomic, assign) BOOL exceptionInterceptionEnabled;
 
 // defines if the user interface should ask for name and email, default to NO
 @property (nonatomic, assign) BOOL askUserDetails;

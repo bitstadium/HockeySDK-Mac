@@ -30,7 +30,6 @@
   NSString *_companyName;
   
   BOOL _loggingEnabled;
-  BOOL _exceptionInterceptionEnabled;
   BOOL _askUserDetails;
   
   NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
@@ -44,11 +43,6 @@
 //
 // Default: NO
 @property (nonatomic, assign, getter=isLoggingEnabled) BOOL loggingEnabled;
-
-// Enable catching uncaught exceptions and let them crash the app and get a crash report
-//
-// Default: NO
-@property (nonatomic, assign, getter=isExceptionInterceptionEnabled) BOOL exceptionInterceptionEnabled;
 
 
 // defines if the user interface should ask for name and email

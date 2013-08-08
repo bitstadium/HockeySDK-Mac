@@ -33,7 +33,6 @@
 
 @synthesize appIdentifier = _appIdentifier;
 @synthesize loggingEnabled = _loggingEnabled;
-@synthesize exceptionInterceptionEnabled = _exceptionInterceptionEnabled;
 @synthesize askUserDetails = _askUserDetails;
 @synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
@@ -107,11 +106,6 @@
   _companyName = [newCompanyName copy];
 
   [[BITCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
-}
-
-
-- (void)setExceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
-  [[BITCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
 }
 
 

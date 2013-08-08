@@ -43,30 +43,6 @@
 
 NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
-/**
- * @internal
- *
- * The overridden version of sendEvent: in NSApplication
- */
-@class NSEvent;
-
-@interface NSObject (HockeySDK_PrivateAdditions)
-- (void)hockeysdk_catching_sendEvent: (NSEvent *) theEvent;
-@end
-
-@implementation NSObject (HockeySDK_PrivateAdditions)
-
-- (void)hockeysdk_catching_sendEvent:(NSEvent *)theEvent {
-  @try {
-    /* In a swizzled method, calling the swizzled selector actually calls the
-     original method. */
-    [self hockeysdk_catching_sendEvent:theEvent];
-  } @catch (NSException *exception) {
-    (NSGetUncaughtExceptionHandler())(exception);
-  }
-}
-
-@end
 
 
 @interface BITCrashReportManager (private)
@@ -89,7 +65,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 @implementation BITCrashReportManager
 
-@synthesize exceptionInterceptionEnabled = _exceptionInterceptionEnabled;
 @synthesize delegate = _delegate;
 @synthesize appIdentifier = _appIdentifier;
 @synthesize companyName = _companyName;
@@ -114,7 +89,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 - (id)init {
   if ((self = [super init])) {
-    _exceptionInterceptionEnabled = NO;
     _serverResult = HockeyCrashReportStatusUnknown;
     _crashReportUI = nil;
     _fileManager = [[NSFileManager alloc] init];
@@ -298,29 +272,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   } else {
     HockeySDKLog(@"ERROR: Reading settings. %@", error);
   }
-}
-
-
-/**
- * Swizzle -[NSApplication sendEvent:] to capture exceptions in the run loop.
- */
-- (BOOL)trapRunLoopExceptions {
-  Class cls = NSClassFromString(@"NSApplication");
-  
-  if (!cls)
-    return NO;
-  
-  SEL origSel = @selector(sendEvent:), altSel = @selector(hockeysdk_catching_sendEvent:);
-  Method origMethod = class_getInstanceMethod(cls, origSel),
-  altMethod = class_getInstanceMethod(cls, altSel);
-  
-  if (!origMethod || !altMethod)
-    return NO;
-  
-  class_addMethod(cls, origSel, class_getMethodImplementation(cls, origSel), method_getTypeEncoding(origMethod));
-  class_addMethod(cls, altSel, class_getMethodImplementation(cls, altSel), method_getTypeEncoding(altMethod));
-  method_exchangeImplementations(class_getInstanceMethod(cls, origSel), class_getInstanceMethod(cls, altSel));
-  return YES;
 }
 
 
@@ -837,17 +788,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 
 #pragma mark - GetterSetter
-
-- (void)setExceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
-  _exceptionInterceptionEnabled = exceptionInterceptionEnabled;
-  
-  /* Enable run-loop exception trapping if requested */
-  if (exceptionInterceptionEnabled) {
-    if (![self trapRunLoopExceptions])
-      NSLog(@"Warning: Could not enable run-loop exception trapping!");
-  }
-}
-
 
 - (NSString *)applicationName {
   NSString *applicationName = [[[NSBundle mainBundle] localizedInfoDictionary] valueForKey: @"CFBundleExecutable"];

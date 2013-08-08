@@ -96,28 +96,7 @@ We propose the following method to set version numbers in your beta versions:
 
 ### Catch additional exceptions
 
-If you want the SDK to intercept exceptions thrown within the main NSRunLoop before they reach Apple's exception handler, add the following line before `startManager`:
-
-    [[BITHockeyManager sharedHockeyManager] setExceptionInterceptionEnabled:YES];
-
-They will be treated with the default behavior given to uncaught exceptions. Use with caution if the client overrides `-[NSApplication sendEvent:]`!
-
-    Alternatively you can also subclass `NSWindow` or `NSApplication` to catch the exceptions like this:
-    
-    @implementation MyWindow
-
-    - (void)sendEvent:(NSEvent *)theEvent
-    {
-        // Catch all exceptions and forward them to the crash reporter
-        @try {
-            [super sendEvent: theEvent];
-        }
-        @catch (NSException *exception) {
-            (NSGetUncaughtExceptionHandler())(exception);
-        }
-    }
-        
-    @end
+T.B.D.
 
 ### Automatic sending of crash reports
 
