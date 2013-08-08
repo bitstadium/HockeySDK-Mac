@@ -120,6 +120,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     _fileManager = [[NSFileManager alloc] init];
     _askUserDetails = YES;
     
+    _exceptionHandler = nil;
     _crashIdenticalCurrentVersion = YES;
     _submissionURL = @"https://sdk.hockeyapp.net/";
     
@@ -185,9 +186,43 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
         [self handleCrashReport];
       }
       
-      // Enable the Crash Reporter
-      if (![crashReporter enableCrashReporterAndReturnError:&error])
-        NSLog(@"Warning: Could not enable crash reporter: %@", error);
+      // PLCrashReporter is throwing an NSException if it is being enabled again
+      // even though it already is enabled
+      @try {
+        // Multiple exception handlers can be set, but we can only query the top level error handler (uncaught exception handler).
+        //
+        // To check if PLCrashReporter's error handler is successfully added, we compare the top
+        // level one that is set before and the one after PLCrashReporter sets up its own.
+        //
+        // With delayed processing we can then check if another error handler was set up afterwards
+        // and can show a debug warning log message, that the dev has to make sure the "newer" error handler
+        // doesn't exit the process itself, because then all subsequent handlers would never be invoked.
+        //
+        // Note: ANY error handler setup BEFORE HockeySDK initialization will not be processed!
+        
+        // get the current top level error handler
+        NSUncaughtExceptionHandler *initialHandler = NSGetUncaughtExceptionHandler();
+        
+        // Enable the Crash Reporter
+        if (![crashReporter enableCrashReporterAndReturnError:&error])
+          NSLog(@"Warning: Could not enable crash reporter: %@", error);
+        
+        // get the new current top level error handler, which should now be the one from PLCrashReporter
+        NSUncaughtExceptionHandler *currentHandler = NSGetUncaughtExceptionHandler();
+        
+        // do we have a new top level error handler? then we were successful
+        if (currentHandler && currentHandler != initialHandler) {
+          _exceptionHandler = currentHandler;
+          
+          HockeySDKLog(@"INFO: Exception handler successfully initialized.");
+        } else {
+          // this should never happen, theoretically only if NSSetUncaugtExceptionHandler() has some internal issues
+          NSLog(@"[HockeySDK] ERROR: Exception handler could not be set. Make sure there is no other exception handler set up!");
+        }
+      }
+      @catch (NSException * e) {
+        NSLog(@"[HockeySDK] WARNING: %@", [e reason]);
+      }
     }
   }
   return self;
@@ -449,7 +484,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 - (void)startManager {
   HockeySDKLog(@"Info: Start CrashReportManager startManager");
-
+  
   BOOL returnToApp = NO;
   
   if ([self hasPendingCrashReport]) {
@@ -500,6 +535,25 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   
   if (returnToApp)
     [self returnToMainApplication];
+
+  [self performSelector:@selector(invokeDelayedProcessing) withObject:nil afterDelay:0.5];
+}
+
+// slightly delayed startup processing, so we don't keep the first runloop on startup busy for too long
+- (void)invokeDelayedProcessing {
+  HockeySDKLog(@"INFO: Start delayed CrashManager processing");
+  
+  // was our own exception handler successfully added?
+  if (_exceptionHandler) {
+    // get the current top level error handler
+    NSUncaughtExceptionHandler *currentHandler = NSGetUncaughtExceptionHandler();
+    
+    // If the top level error handler differs from our own, then at least another one was added.
+    // This could cause exception crashes not to be reported to HockeyApp. See log message for details.
+    if (_exceptionHandler != currentHandler) {
+      HockeySDKLog(@"[HockeySDK] WARNING: Another exception handler was added. If this invokes any kind exit() after processing the exception, which causes any subsequent error handler not to be invoked, these crashes will NOT be reported to HockeyApp!");
+    }
+  }
 }
 
 - (void)cancelReport {
