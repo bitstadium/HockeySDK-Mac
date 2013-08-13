@@ -1,3 +1,11 @@
+## Version 1.1.0 Beta 3
+
+- Crash Reporting
+
+    - [NEW] Check if additional uncaught exception handlers are installed and print a warning in the console
+    - [FIX] Fix an exception when the process path is empty
+	<br /><br/>
+
 ## Version 1.1.0 Beta 2
 
 - Crash Reporting
