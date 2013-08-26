@@ -108,7 +108,7 @@ typedef enum HockeyCrashReportStatus {
   NSString       *_crashesDir;
   NSString       *_settingsFile;
 
-  NSUncaughtExceptionHandler *_exceptionHandler;
+  NSUncaughtExceptionHandler *_plcrExceptionHandler;
   
   BITCrashReportUI *_crashReportUI;
 

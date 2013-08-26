@@ -29,6 +29,7 @@
  */
 
 #import "BITCrashReportManager.h"
+#import "BITCrashReportManagerPrivate.h"
 #import "BITCrashReportUI.h"
 
 #import <HockeySDK/HockeySDK.h>
@@ -44,25 +45,6 @@
 NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 
-
-@interface BITCrashReportManager (private)
-- (NSString *)applicationName;
-- (NSString *)applicationVersion;
-
-- (BOOL)trapRunLoopExceptions;
-
-- (void)handleCrashReport;
-- (BOOL)hasPendingCrashReport;
-- (void)cleanCrashReports;
-- (NSString *)extractAppUUIDs:(BITPLCrashReport *)report;
-
-- (void)postXML:(NSString*)xml;
-- (void)searchCrashLogFile:(NSString *)path;
-
-- (void)returnToMainApplication;
-@end
-
-
 @implementation BITCrashReportManager
 
 @synthesize delegate = _delegate;
@@ -74,6 +56,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 @synthesize askUserDetails = _askUserDetails;
 @synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 @synthesize didCrashInLastSession = _didCrashInLastSession;
+@synthesize plcrExceptionHandler = _plcrExceptionHandler;
 
 #pragma mark - Init
 
@@ -94,7 +77,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     _fileManager = [[NSFileManager alloc] init];
     _askUserDetails = YES;
     
-    _exceptionHandler = nil;
+    _plcrExceptionHandler = nil;
     _crashIdenticalCurrentVersion = YES;
     _submissionURL = @"https://sdk.hockeyapp.net/";
     
@@ -147,7 +130,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     }
     
     _settingsFile = [[_crashesDir stringByAppendingPathComponent:HOCKEYSDK_SETTINGS] retain];
-      
+    
     // on the very first startup this will always be initialized, since the default value for _crashReportActivated is YES
     // but we do it anyway, to be able to initialize PLCrashReporter as early as possible
     if (_crashReportActivated) {      
@@ -186,7 +169,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
         
         // do we have a new top level error handler? then we were successful
         if (currentHandler && currentHandler != initialHandler) {
-          _exceptionHandler = currentHandler;
+          self.plcrExceptionHandler = currentHandler;
           
           HockeySDKLog(@"INFO: Exception handler successfully initialized.");
         } else {
@@ -495,13 +478,13 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   HockeySDKLog(@"INFO: Start delayed CrashManager processing");
   
   // was our own exception handler successfully added?
-  if (_exceptionHandler) {
+  if (self.plcrExceptionHandler) {
     // get the current top level error handler
     NSUncaughtExceptionHandler *currentHandler = NSGetUncaughtExceptionHandler();
     
     // If the top level error handler differs from our own, then at least another one was added.
     // This could cause exception crashes not to be reported to HockeyApp. See log message for details.
-    if (_exceptionHandler != currentHandler) {
+    if (self.plcrExceptionHandler != currentHandler) {
       HockeySDKLog(@"[HockeySDK] WARNING: Another exception handler was added. If this invokes any kind exit() after processing the exception, which causes any subsequent error handler not to be invoked, these crashes will NOT be reported to HockeyApp!");
     }
   }

@@ -11,6 +11,8 @@
 		1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E413D9315A0BB8800620BFE /* HockeySDK.strings */; };
 		1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7F5A2315A46249001081FC /* HockeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
+		1EA551FD17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EA551FB17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1EA551FE17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA551FC17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.m */; };
 		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
 		1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DAE1523579100067A5C /* BITHockeyManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09DB61523579100067A5C /* BITHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* BITHockeyManager.m */; };
@@ -51,6 +53,9 @@
 		1E66F5E415A1C4BF00C0816F /* nb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E66F5E515A1C4D100C0816F /* sv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E7F5A2315A46249001081FC /* HockeySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDK.h; sourceTree = "<group>"; };
+		1EA551FB17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportExceptionApplication.h; sourceTree = "<group>"; };
+		1EA551FC17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportExceptionApplication.m; sourceTree = "<group>"; };
+		1ED926C817B420390046DFD3 /* BITCrashReportManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITCrashReportManagerPrivate.h; sourceTree = "<group>"; };
 		1EE1DFFE1524B3D600C0DA76 /* BITCrashReportManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportManagerDelegate.h; sourceTree = "<group>"; };
 		1EE8CF7E17147CF20088444D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1EF09D8C1523574200067A5C /* HockeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HockeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -169,7 +174,10 @@
 				1EF09DCD152371DC00067A5C /* BITCrashReportUI.nib */,
 				1EF09DCE152371DC00067A5C /* BITCrashReportManager.h */,
 				1EF09DCF152371DC00067A5C /* BITCrashReportManager.m */,
+				1ED926C817B420390046DFD3 /* BITCrashReportManagerPrivate.h */,
 				1EE1DFFE1524B3D600C0DA76 /* BITCrashReportManagerDelegate.h */,
+				1EA551FB17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.h */,
+				1EA551FC17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.m */,
 				1EF09DD0152371DC00067A5C /* BITCrashReportUI.h */,
 				1EF09DD1152371DC00067A5C /* BITCrashReportUI.m */,
 				1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */,
@@ -202,6 +210,7 @@
 				4DD13AF4162CA7C400BF15E8 /* BITSystemProfile.h in Headers */,
 				1EF09DD7152371DC00067A5C /* BITCrashReportUI.h in Headers */,
 				1EF09DD9152371DC00067A5C /* BITCrashReportTextFormatter.h in Headers */,
+				1EA551FD17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.h in Headers */,
 				1E20566E15A5F61F008FC20A /* BITCrashReportManagerDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -279,6 +288,7 @@
 			files = (
 				1EF09DB61523579100067A5C /* BITHockeyManager.m in Sources */,
 				1EF09DD6152371DC00067A5C /* BITCrashReportManager.m in Sources */,
+				1EA551FE17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.m in Sources */,
 				1EF09DD8152371DC00067A5C /* BITCrashReportUI.m in Sources */,
 				1EF09DDA152371DC00067A5C /* BITCrashReportTextFormatter.m in Sources */,
 				4DD13AF5162CA7C400BF15E8 /* BITSystemProfile.m in Sources */,
