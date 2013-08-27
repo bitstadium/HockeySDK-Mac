@@ -39,8 +39,7 @@
 
 #pragma mark - Public Class Methods
 
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
-+ (BITHockeyManager *)sharedHockeyManager {   
++ (BITHockeyManager *)sharedHockeyManager {
   static BITHockeyManager *sharedInstance = nil;
   static dispatch_once_t pred;
   
@@ -51,17 +50,6 @@
   
   return sharedInstance;
 }
-#else
-+ (BITHockeyManager *)sharedHockeyManager {
-  static BITHockeyManager *hockeyManager = nil;
-  
-  if (hockeyManager == nil) {
-    hockeyManager = [[BITHockeyManager alloc] init];
-  }
-  
-  return hockeyManager;
-}
-#endif
 
 
 - (void)dealloc {

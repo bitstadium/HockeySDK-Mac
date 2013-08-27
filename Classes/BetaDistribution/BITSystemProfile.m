@@ -90,7 +90,7 @@
   return sharedInstance;
 }
 
-- (id)init {
+- (instancetype)init {
   if ((self = [super init])) {
     _usageStartTimestamp = nil;
     _startCounter = 0;

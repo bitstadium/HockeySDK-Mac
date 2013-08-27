@@ -61,16 +61,18 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 #pragma mark - Init
 
 + (BITCrashReportManager *)sharedCrashReportManager {
-  static BITCrashReportManager *crashReportManager = nil;
+  static BITCrashReportManager *sharedInstance = nil;
+  static dispatch_once_t pred;
   
-  if (crashReportManager == nil) {
-    crashReportManager = [[BITCrashReportManager alloc] init];
-  }
+  dispatch_once(&pred, ^{
+    sharedInstance = [BITCrashReportManager alloc];
+    sharedInstance = [sharedInstance init];
+  });
   
-  return crashReportManager;
+  return sharedInstance;
 }
 
-- (id)init {
+- (instancetype)init {
   if ((self = [super init])) {
     _serverResult = HockeyCrashReportStatusUnknown;
     _crashReportUI = nil;
