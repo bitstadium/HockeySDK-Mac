@@ -175,6 +175,15 @@ typedef enum HockeyCrashReportStatus {
  */
 @property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
+/**
+ *  Detect if a debugger is attached to the app process
+ *
+ *  This is only invoked once on app startup and can not detect if the debugger is being
+ *  attached during runtime!
+ *
+ *  @return BOOL if the debugger is attached on app startup
+ */
+- (BOOL)isDebuggerAttached;
 
 /**
  *  Initialize the crash reporter and check if there are any pending crash reports
