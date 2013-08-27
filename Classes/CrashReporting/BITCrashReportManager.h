@@ -142,19 +142,50 @@ typedef enum HockeyCrashReportStatus {
 @property (nonatomic, assign) id <BITCrashReportManagerDelegate> delegate;
 
 // Indicates if the app crash in the previous session
+/**
+ *  Indicates if the app crash in the previous session
+ */
 @property (nonatomic, readonly) BOOL didCrashInLastSession;
 
-// if YES, the crash report will be submitted without asking the user
-// if NO, the user will be asked if the crash report can be submitted (default)
+/**
+ *  Submit crash reports without asking the user
+ *
+ *  _YES_: The crash report will be submitted without asking the user
+ *  _NO_: The user will be asked if the crash report can be submitted (default)
+ *
+ *  Default: _NO_
+ */
 @property (nonatomic, assign, getter=isAutoSubmitCrashReport) BOOL autoSubmitCrashReport;
 
-// Defines the maximum time interval after the app start and the crash, that will cause showing the app window after sending is complete instead of with the start of the sending process. Default is 5 seconds.
+/**
+ *  Time between startup and a crash within which sending a crash will be send synchronously
+ *
+ *  By default crash reports are being send asynchronously, since otherwise it may block the
+ *  app from startup, e.g. while the network is down and the crash report can not be send until
+ *  the timeout occurs.
+ *
+ *  But especially crashes during app startup could be frequent to the affected user and if the app
+ *  would continue to startup normally it might crash right away again, resulting in the crash reports
+ *  never to arrive.
+ *
+ *  This property allows to specify the time between app start and crash within which the crash report
+ *  should be send synchronously instead to improve the probability of the crash report being send successfully.
+ *
+ *  Default: _5_
+ */
 @property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
 - (void)returnToMainApplication;
-- (void)startManager;
 
 - (void)cancelReport;
 - (void)sendReportWithCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
+/**
+ *  Initialize the crash reporter and check if there are any pending crash reports
+ *
+ *  This method initializes the PLCrashReporter instance if it is not disabled.
+ *  It also checks if there are any pending crash reports available that should be send or
+ *  presented to the user.
+ */
+- (void)startManager;
 
 @end
