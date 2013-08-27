@@ -19,6 +19,11 @@
 - (NSString *)applicationName;
 - (NSString *)applicationVersion;
 
+- (void)returnToMainApplication;
+
+- (void)cancelReport;
+- (void)sendReportWithCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
+
 - (void)handleCrashReport;
 - (BOOL)hasPendingCrashReport;
 - (void)cleanCrashReports;

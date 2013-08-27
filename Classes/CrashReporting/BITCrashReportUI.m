@@ -32,6 +32,7 @@
 #import <HockeySDK/HockeySDK.h>
 #import <sys/sysctl.h>
 #import <CrashReporter/CrashReporter.h>
+#import "BITCrashReportManagerPrivate.h"
 
 
 @interface BITCrashReportUI(private)

@@ -26,6 +26,7 @@
 #import <HockeySDK/HockeySDK.h>
 
 #import "BITCrashReportManager.h"
+#import "BITCrashReportManagerPrivate.h"
 #import "BITCrashReportManagerDelegate.h"
 
 

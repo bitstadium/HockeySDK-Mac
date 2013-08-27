@@ -175,10 +175,7 @@ typedef enum HockeyCrashReportStatus {
  */
 @property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
-- (void)returnToMainApplication;
 
-- (void)cancelReport;
-- (void)sendReportWithCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
 /**
  *  Initialize the crash reporter and check if there are any pending crash reports
  *
