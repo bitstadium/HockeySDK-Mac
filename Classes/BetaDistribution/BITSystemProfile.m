@@ -78,6 +78,7 @@
 	return version;
 }
 
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
 + (BITSystemProfile *)sharedSystemProfile {
   static BITSystemProfile *sharedInstance = nil;
   static dispatch_once_t pred;
@@ -89,6 +90,17 @@
   
   return sharedInstance;
 }
+#else
++ (BITSystemProfile *)sharedSystemProfile {
+  static BITSystemProfile *sharedInstance = nil;
+  
+  if (sharedInstance == nil) {
+    sharedInstance = [[BITSystemProfile alloc] init];
+  }
+  
+  return sharedInstance;
+}
+#endif
 
 - (instancetype)init {
   if ((self = [super init])) {
