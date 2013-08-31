@@ -55,6 +55,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 @synthesize autoSubmitCrashReport = _autoSubmitCrashReport;
 @synthesize askUserDetails = _askUserDetails;
 @synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
+@synthesize enableMachExceptionHandler = _enableMachExceptionHandler;
 @synthesize didCrashInLastSession = _didCrashInLastSession;
 @synthesize plcrExceptionHandler = _plcrExceptionHandler;
 
@@ -132,57 +133,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     }
     
     _settingsFile = [[_crashesDir stringByAppendingPathComponent:HOCKEYSDK_SETTINGS] retain];
-    
-    // on the very first startup this will always be initialized, since the default value for _crashReportActivated is YES
-    // but we do it anyway, to be able to initialize PLCrashReporter as early as possible
-    if (_crashReportActivated) {      
-      BITPLCrashReporter *crashReporter = [BITPLCrashReporter sharedReporter];
-      NSError *error = NULL;
-      
-      // Check if we previously crashed
-      if ([crashReporter hasPendingCrashReport]) {
-        _didCrashInLastSession = YES;
-        [self handleCrashReport];
-      }
-      
-      // PLCrashReporter is throwing an NSException if it is being enabled again
-      // even though it already is enabled
-      @try {
-        // Multiple exception handlers can be set, but we can only query the top level error handler (uncaught exception handler).
-        //
-        // To check if PLCrashReporter's error handler is successfully added, we compare the top
-        // level one that is set before and the one after PLCrashReporter sets up its own.
-        //
-        // With delayed processing we can then check if another error handler was set up afterwards
-        // and can show a debug warning log message, that the dev has to make sure the "newer" error handler
-        // doesn't exit the process itself, because then all subsequent handlers would never be invoked.
-        //
-        // Note: ANY error handler setup BEFORE HockeySDK initialization will not be processed!
-        
-        // get the current top level error handler
-        NSUncaughtExceptionHandler *initialHandler = NSGetUncaughtExceptionHandler();
-        
-        // Enable the Crash Reporter
-        if (![crashReporter enableCrashReporterAndReturnError:&error])
-          NSLog(@"Warning: Could not enable crash reporter: %@", error);
-        
-        // get the new current top level error handler, which should now be the one from PLCrashReporter
-        NSUncaughtExceptionHandler *currentHandler = NSGetUncaughtExceptionHandler();
-        
-        // do we have a new top level error handler? then we were successful
-        if (currentHandler && currentHandler != initialHandler) {
-          self.plcrExceptionHandler = currentHandler;
-          
-          HockeySDKLog(@"INFO: Exception handler successfully initialized.");
-        } else {
-          // this should never happen, theoretically only if NSSetUncaugtExceptionHandler() has some internal issues
-          NSLog(@"[HockeySDK] ERROR: Exception handler could not be set. Make sure there is no other exception handler set up!");
-        }
-      }
-      @catch (NSException * e) {
-        NSLog(@"[HockeySDK] WARNING: %@", [e reason]);
-      }
-    }
   }
   return self;
 }
@@ -328,7 +278,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindow)]) {
     [self.delegate showMainApplicationWindow];
   } else {
-    NSLog(@"ERROR: Required BITCrashReportManagerDelegate is not set!");
+    NSLog(@"[HockeySDK] ERROR: Required BITCrashReportManagerDelegate is not set!");
   }
 }
 
@@ -358,11 +308,11 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     
     if (sysctl(name, 4, &info, &info_size, NULL, 0) == -1) {
       NSLog(@"[HockeySDK] ERROR: Checking for a running debugger via sysctl() failed: %s", strerror(errno));
-      debuggerPredicate = false;
+      debuggerIsAttached = false;
     }
     
-    if (!debuggerPredicate && (info.kp_proc.p_flag & P_TRACED) != 0)
-      debuggerPredicate = true;
+    if (!debuggerIsAttached && (info.kp_proc.p_flag & P_TRACED) != 0)
+      debuggerIsAttached = true;
   });
   
   return debuggerIsAttached;
@@ -372,7 +322,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 // Called to handle a pending crash report.
 - (void)handleCrashReport {
-  BITPLCrashReporter *crashReporter = [BITPLCrashReporter sharedReporter];
   NSError *error = NULL;
 	
   [self loadSettings];
@@ -384,7 +333,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     [self saveSettings];
     
     // Try loading the crash report
-    NSData *crashData = [[[NSData alloc] initWithData:[crashReporter loadPendingCrashReportDataAndReturnError: &error]] autorelease];
+    NSData *crashData = [[[NSData alloc] initWithData:[_plCrashReporter loadPendingCrashReportDataAndReturnError: &error]] autorelease];
     
     NSString *cacheFilename = [NSString stringWithFormat: @"%.0f", [NSDate timeIntervalSinceReferenceDate]];
     
@@ -409,7 +358,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   _analyzerStarted = NO;
   [self saveSettings];
   
-  [crashReporter purgePendingCrashReport];
+  [_plCrashReporter purgePendingCrashReport];
 }
 
 - (BOOL)hasNonApprovedCrashReports {
@@ -457,6 +406,67 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   HockeySDKLog(@"Info: Start CrashReportManager startManager");
   
   BOOL returnToApp = NO;
+  
+  static dispatch_once_t plcrPredicate;
+  dispatch_once(&plcrPredicate, ^{
+    if (_crashReportActivated) {
+      /* Configure our reporter */
+      
+      PLCrashReporterSignalHandlerType signalHandlerType = PLCrashReporterSignalHandlerTypeBSD;
+      if (self.isMachExceptionHandlerEnabled) {
+        signalHandlerType = PLCrashReporterSignalHandlerTypeMach;
+      }
+      BITPLCrashReporterConfig *config = [[BITPLCrashReporterConfig alloc] initWithSignalHandlerType: signalHandlerType
+                                                                               symbolicationStrategy: PLCrashReporterSymbolicationStrategyAll];
+      _plCrashReporter = [[BITPLCrashReporter alloc] initWithConfiguration: config];
+      NSError *error = NULL;
+      
+      // Check if we previously crashed
+      if ([_plCrashReporter hasPendingCrashReport]) {
+        _didCrashInLastSession = YES;
+        [self handleCrashReport];
+      }
+      
+      // The actual signal and mach handlers are only registered when invoking `enableCrashReporterAndReturnError`
+      // So it is safe enough to only disable the following part when a debugger is attached no matter which
+      // signal handler type is set
+      if (![self isDebuggerAttached]) {
+        // Multiple exception handlers can be set, but we can only query the top level error handler (uncaught exception handler).
+        //
+        // To check if PLCrashReporter's error handler is successfully added, we compare the top
+        // level one that is set before and the one after PLCrashReporter sets up its own.
+        //
+        // With delayed processing we can then check if another error handler was set up afterwards
+        // and can show a debug warning log message, that the dev has to make sure the "newer" error handler
+        // doesn't exit the process itself, because then all subsequent handlers would never be invoked.
+        //
+        // Note: ANY error handler setup BEFORE HockeySDK initialization will not be processed!
+        
+        // get the current top level error handler
+        NSUncaughtExceptionHandler *initialHandler = NSGetUncaughtExceptionHandler();
+        
+        // Enable the Crash Reporter
+        BOOL crashReporterEnabled = [_plCrashReporter enableCrashReporterAndReturnError:&error];
+        if (!crashReporterEnabled)
+          NSLog(@"[HockeySDK] WARNING: Could not enable crash reporter: %@", error);
+        
+        // get the new current top level error handler, which should now be the one from PLCrashReporter
+        NSUncaughtExceptionHandler *currentHandler = NSGetUncaughtExceptionHandler();
+        
+        // do we have a new top level error handler? then we were successful
+        if (currentHandler && currentHandler != initialHandler) {
+          self.plcrExceptionHandler = currentHandler;
+          
+          HockeySDKLog(@"INFO: Exception handler successfully initialized.");
+        } else {
+          // this should never happen, theoretically only if NSSetUncaugtExceptionHandler() has some internal issues
+          NSLog(@"[HockeySDK] ERROR: Exception handler could not be set. Make sure there is no other exception handler set up!");
+        }
+      } else {
+        NSLog(@"[HockeySDK] WARNING: Detecting crashes is NOT enabled due to running the app with a debugger attached.");
+      }
+    }
+  });
   
   if ([self hasPendingCrashReport]) {
     HockeySDKLog(@"Info: Pending crash reports found.");

@@ -31,4 +31,13 @@
 
 - (void)postXML:(NSString*)xml;
 
+/**
+ *  Initialize the crash reporter and check if there are any pending crash reports
+ *
+ *  This method initializes the PLCrashReporter instance if it is not disabled.
+ *  It also checks if there are any pending crash reports available that should be send or
+ *  presented to the user.
+ */
+- (void)startManager;
+
 @end

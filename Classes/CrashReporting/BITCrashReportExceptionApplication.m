@@ -35,30 +35,6 @@
 
 @implementation BITCrashReportExceptionApplication
 
-// Check if the debugger is attached
-// Taken from https://github.com/plausiblelabs/plcrashreporter/blob/2dd862ce049e6f43feb355308dfc710f3af54c4d/Source/Crash%20Demo/main.m#L96
-static bool isDebuggerAttached (void) {
-  struct kinfo_proc info;
-  size_t info_size = sizeof(info);
-  int name[4];
-  
-  name[0] = CTL_KERN;
-  name[1] = KERN_PROC;
-  name[2] = KERN_PROC_PID;
-  name[3] = getpid();
-  
-  if (sysctl(name, 4, &info, &info_size, NULL, 0) == -1) {
-    NSLog(@"sysctl() failed: %s", strerror(errno));
-    return false;
-  }
-  
-  if ((info.kp_proc.p_flag & P_TRACED) != 0)
-    return true;
-  
-  return false;
-}
-
-
 /*
  * Solution for Scenario 2
  *
@@ -69,7 +45,7 @@ static bool isDebuggerAttached (void) {
   [super reportException: exception];
   
   // Don't invoke the registered UncaughtExceptionHandler if we are currently debugging this app!
-  if (!isDebuggerAttached()) {
+  if (![[BITCrashReportManager sharedCrashReportManager] isDebuggerAttached]) {
     // We forward this exception to PLCrashReporters UncaughtExceptionHandler
     // If the developer has implemented their own exception handler and that one is
     // invoked before PLCrashReporters exception handler and the developers
@@ -98,7 +74,7 @@ static bool isDebuggerAttached (void) {
     [super sendEvent:theEvent];
   } @catch (NSException *exception) {
     // Don't invoke the registered UncaughtExceptionHandler if we are currently debugging this app!
-    if (!isDebuggerAttached()) {
+    if (![[BITCrashReportManager sharedCrashReportManager] isDebuggerAttached]) {
       // We forward this exception to PLCrashReporters UncaughtExceptionHandler only
       NSUncaughtExceptionHandler *plcrExceptionHandler = [[BITCrashReportManager sharedCrashReportManager] plcrExceptionHandler];
       if (plcrExceptionHandler && exception) {

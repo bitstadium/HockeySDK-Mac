@@ -78,8 +78,10 @@ typedef enum HockeyCrashReportStatus {
 } HockeyCrashReportStatus;
 
 @class BITCrashReportUI;
+@class BITPLCrashReporter;
 
 @interface BITCrashReportManager : NSObject {
+@private
   NSFileManager *_fileManager;
 
   BOOL _crashIdenticalCurrentVersion;
@@ -107,8 +109,10 @@ typedef enum HockeyCrashReportStatus {
   NSMutableArray *_crashFiles;
   NSString       *_crashesDir;
   NSString       *_settingsFile;
-
+  
+  BOOL                       _enableMachExceptionHandler;
   NSUncaughtExceptionHandler *_plcrExceptionHandler;
+  BITPLCrashReporter         *_plCrashReporter;
   
   BITCrashReportUI *_crashReportUI;
 
@@ -122,6 +126,19 @@ typedef enum HockeyCrashReportStatus {
 - (NSString *)modelVersion;
 
 + (BITCrashReportManager *)sharedCrashReportManager;
+
+
+///-----------------------------------------------------------------------------
+/// @name Delegate
+///-----------------------------------------------------------------------------
+
+// delegate is required
+@property (nonatomic, assign) id <BITCrashReportManagerDelegate> delegate;
+
+
+///-----------------------------------------------------------------------------
+/// @name Configuration
+///-----------------------------------------------------------------------------
 
 // The HockeyApp app identifier (required)
 @property (nonatomic, retain) NSString *appIdentifier;
@@ -138,10 +155,25 @@ typedef enum HockeyCrashReportStatus {
 // defines the users email address
 @property (nonatomic, copy) NSString *userEmail;
 
-// delegate is required
-@property (nonatomic, assign) id <BITCrashReportManagerDelegate> delegate;
+/**
+ *  Trap fatal signals via a Mach exception server.
+ *
+ *  By default the SDK is using the safe and proven in-process BSD Signals for catching crashes.
+ *  This option provides an option to enable catching fatal signals via a Mach exception server
+ *  instead.
+ *
+ *  We strongly advice _NOT_ to enable Mach exception handler in release versions of your apps!
+ *
+ *  Default: _NO_
+ *
+ * @warning The Mach exception handler executes in-process, and will interfere with debuggers when
+ *  they attempt to suspend all active threads (which will include the Mach exception handler).
+ *  Mach-based handling should _NOT_ be used when a debugger is attached. The SDK will not
+ *  enabled catching exceptions if the app is started with the debugger running. If you attach
+ *  the debugger during runtime, this may cause issues the Mach exception handler is enabled!
+ */
+@property (nonatomic, assign, getter=isMachExceptionHandlerEnabled) BOOL enableMachExceptionHandler;
 
-// Indicates if the app crash in the previous session
 /**
  *  Indicates if the app crash in the previous session
  */
@@ -175,6 +207,11 @@ typedef enum HockeyCrashReportStatus {
  */
 @property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 
+
+///-----------------------------------------------------------------------------
+/// @name Helper
+///-----------------------------------------------------------------------------
+
 /**
  *  Detect if a debugger is attached to the app process
  *
@@ -185,13 +222,5 @@ typedef enum HockeyCrashReportStatus {
  */
 - (BOOL)isDebuggerAttached;
 
-/**
- *  Initialize the crash reporter and check if there are any pending crash reports
- *
- *  This method initializes the PLCrashReporter instance if it is not disabled.
- *  It also checks if there are any pending crash reports available that should be send or
- *  presented to the user.
- */
-- (void)startManager;
 
 @end

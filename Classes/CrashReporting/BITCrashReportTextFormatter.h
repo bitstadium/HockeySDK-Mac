@@ -34,7 +34,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <CrashReporter/PLCrashReporterNamespace.h>
+#import <CrashReporter/PLCrashNamespace.h>
 #import <CrashReporter/PLCrashReport.h>
 
 // Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
