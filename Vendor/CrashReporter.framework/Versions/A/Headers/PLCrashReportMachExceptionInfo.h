@@ -1,7 +1,7 @@
 /*
  * Author: Landon Fuller <landonf@plausiblelabs.com>
  *
- * Copyright (c) 2008-2009 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2013 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -28,26 +28,21 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PLCrashReportApplicationInfo : NSObject {
+@interface PLCrashReportMachExceptionInfo : NSObject {
 @private
-    /** Application identifier */
-    NSString *_applicationIdentifier;
+    /** The Mach exception type. */
+    uint64_t _type;
     
-    /** Application version */
-    NSString *_applicationVersion;
+    /** The Mach exception codes, represented as an ordered array of NSNumber instances. */
+    NSArray *_codes;
 }
 
-- (id) initWithApplicationIdentifier: (NSString *) applicationIdentifier 
-                  applicationVersion: (NSString *) applicationVersion;
+- (id) initWithType: (uint64_t) type codes: (NSArray *) codes;
 
-/**
- * The application identifier. This is usually the application's CFBundleIdentifier value.
- */
-@property(nonatomic, readonly) NSString *applicationIdentifier;
+/** The Mach exception type. */
+@property(nonatomic, readonly) uint64_t type;
 
-/**
- * The application version. This is usually the application's CFBundleVersion value.
- */
-@property(nonatomic, readonly) NSString *applicationVersion;
+/** The Mach exception codes, represented as an ordered array of 64-bit unsigned NSNumber instances. */
+@property(nonatomic, readonly) NSArray *codes;
 
 @end
