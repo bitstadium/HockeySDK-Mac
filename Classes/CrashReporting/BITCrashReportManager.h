@@ -141,6 +141,11 @@ extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
   BOOL       _invokedReturnToMainApplication;
 }
 
+/**
+ *  Returns the shared manager object
+ *
+ *  @return A singleton BITCrashReportManager instance ready use
+ */
 + (BITCrashReportManager *)sharedCrashReportManager;
 
 
