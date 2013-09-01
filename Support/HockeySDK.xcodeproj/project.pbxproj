@@ -53,6 +53,8 @@
 		1E66F5E415A1C4BF00C0816F /* nb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E66F5E515A1C4D100C0816F /* sv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E7F5A2315A46249001081FC /* HockeySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDK.h; sourceTree = "<group>"; };
+		1E7FB96217D3F45200B7E10D /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = buildnumber.xcconfig; sourceTree = SOURCE_ROOT; };
+		1E7FB96317D3F45200B7E10D /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = SOURCE_ROOT; };
 		1EA551FB17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportExceptionApplication.h; sourceTree = "<group>"; };
 		1EA551FC17B3EB44004A0CB7 /* BITCrashReportExceptionApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportExceptionApplication.m; sourceTree = "<group>"; };
 		1ED926C817B420390046DFD3 /* BITCrashReportManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITCrashReportManagerPrivate.h; sourceTree = "<group>"; };
@@ -96,11 +98,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E7FB96117D3F44100B7E10D /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				1E7FB96217D3F45200B7E10D /* buildnumber.xcconfig */,
+				1E7FB96317D3F45200B7E10D /* HockeySDK.xcconfig */,
+			);
+			name = Support;
+			path = ../Vendor;
+			sourceTree = "<group>";
+		};
 		1EF09D801523574200067A5C = {
 			isa = PBXGroup;
 			children = (
 				1EF09DA81523579100067A5C /* Classes */,
 				1EF09DB71523579A00067A5C /* Resources */,
+				1E7FB96117D3F44100B7E10D /* Support */,
 				1EF09DBF152357A500067A5C /* Vendor */,
 				1EF09D8E1523574200067A5C /* Frameworks */,
 				1EF09D8D1523574200067A5C /* Products */,
@@ -316,8 +329,23 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1E7FB95D17D3F36B00B7E10D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1E7FB95E17D3F36B00B7E10D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		1EF09D9F1523574200067A5C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E7FB96217D3F45200B7E10D /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
@@ -348,6 +376,7 @@
 		};
 		1EF09DA01523574200067A5C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E7FB96217D3F45200B7E10D /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
@@ -416,6 +445,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1E7FB95F17D3F36B00B7E10D /* Build configuration list for PBXAggregateTarget "HockeySDK Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E7FB95D17D3F36B00B7E10D /* Debug */,
+				1E7FB95E17D3F36B00B7E10D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		1EF09D851523574200067A5C /* Build configuration list for PBXProject "HockeySDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
