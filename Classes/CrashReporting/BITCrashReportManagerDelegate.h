@@ -25,20 +25,28 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * The `BITCrashReportManagerDelegate` formal protocol defines methods further configuring
+ * the behaviour of `BITCrashReportManager`.
+ */
 @protocol BITCrashReportManagerDelegate <NSObject>
 
 @required
 
-// Invoked once the modal sheets are gone
+/**
+ *  Invoked once the user interface asking for crash details and if the data should be send is dismissed
+ */
 - (void) showMainApplicationWindow;
 
 @optional
 
-// Invoked before a crash report will be sent
-// 
-// Return cadditional application specific log data the crashreport should contain, empty by default.
-// 
-// Default: empty
+/**
+ * Return any log string based data the crash report being processed should contain
+ *
+ * Please make sure to return at max 50KByte of text data.
+ *
+ *  @return NSString containing the data that should be attached to a crash report
+ */
 -(NSString *)crashReportApplicationLog;
 
 @end

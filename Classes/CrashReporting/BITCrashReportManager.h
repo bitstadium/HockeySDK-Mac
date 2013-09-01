@@ -70,7 +70,7 @@ typedef enum HockeyCrashAlertType {
   HockeyCrashAlertTypeFeedback = 1,
 } HockeyCrashAlertType;
 
-typedef enum HockeyCrashReportStatus {  
+typedef enum HockeyCrashReportStatus {
   HockeyCrashReportStatusUnknown = 0,
   HockeyCrashReportStatusAssigned = 1,
   HockeyCrashReportStatusSubmitted = 2,
@@ -80,6 +80,37 @@ typedef enum HockeyCrashReportStatus {
 @class BITCrashReportUI;
 @class BITPLCrashReporter;
 
+/**
+ * The crash reporting module.
+ *
+ * This is the HockeySDK module for handling crash reports, including when distributed via the App Store.
+ * As a foundation it is using the open source, reliable and async-safe crash reporting framework
+ * [PLCrashReporter](https://www.plcrashreporter.org).
+ *
+ * This module works as a wrapper around the underlying crash reporting framework and provides functionality to
+ * detect new crashes, queues them if networking is not available, present a user interface to approve sending
+ * the reports to the HockeyApp servers and more.
+ *
+ * It also provides options to add additional meta information to each crash report, like `userName`, `userEmail`,
+ * additional textual log information via `BITCrashReportManagerDelegate` protocol and a way to detect startup
+ * crashes so you can adjust your startup process to get these crash reports too and delay your app initialization.
+ *
+ * Crashes are send the next time the app starts. If `autoSubmitCrashReport` is enabled, crashes will be send
+ * without any user interaction, otherwise an alert will appear allowing the users to decide whether they want
+ * to send the report or not. This module is not sending the reports right when the crash happens
+ * deliberately, because if is not safe to implement such a mechanism while being async-safe (any Objective-C code
+ * is _NOT_ async-safe!) and not causing more danger like a deadlock of the device, than helping. We found that users
+ * do start the app again because most don't know what happened, and you will get by far most of the reports.
+ *
+ * Sending the reports on startup is done asynchronously (non-blocking) if the crash happened outside of the
+ * time defined in `maxTimeIntervalOfCrashForReturnMainApplicationDelay`.
+ *
+ * More background information on this topic can be found in the following blog post by Landon Fuller, the
+ * developer of [PLCrashReporter](https://www.plcrashreporter.org), about writing reliable and
+ * safe crash reporting: [Reliable Crash Reporting](http://goo.gl/WvTBR)
+ *
+ * @warning If you start the app with the Xcode debugger attached, detecting crashes will _NOT_ be enabled!
+ */
 @interface BITCrashReportManager : NSObject {
 @private
   NSFileManager *_fileManager;
@@ -143,16 +174,26 @@ typedef enum HockeyCrashReportStatus {
 // The HockeyApp app identifier (required)
 @property (nonatomic, retain) NSString *appIdentifier;
 
-// defines if the user interface should ask for name and email, default to NO
+/**
+ *  Defines if the user interface should ask for name and email
+ *
+ *  Default: _YES_
+ */
 @property (nonatomic, assign) BOOL askUserDetails;
 
-// defines the company name to be shown in the crash reporting dialog
+/**
+ *  Defines the company name to be shown in the crash reporting dialog
+ */
 @property (nonatomic, retain) NSString *companyName;
 
-// defines the users name or user id
+/**
+ *  Defines the users name or user id
+ */
 @property (nonatomic, copy) NSString *userName;
 
-// defines the users email address
+/**
+ *  Defines the users email address
+ */
 @property (nonatomic, copy) NSString *userEmail;
 
 /**
