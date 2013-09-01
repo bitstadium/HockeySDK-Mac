@@ -10,6 +10,18 @@
 
 #import <CrashReporter/CrashReporter.h>
 
+// flags if the crashlog analyzer is started. since this may theoretically crash we need to track it
+#define kHockeySDKAnalyzerStarted @"HockeySDKCrashReportAnalyzerStarted"
+
+// stores the set of crashreports that have been approved but aren't sent yet
+#define kHockeySDKApprovedCrashReports @"HockeySDKApprovedCrashReports"
+
+// stores the user name entered in the UI
+#define kHockeySDKUserName @"HockeySDKUserName"
+
+// stores the user email address entered in the UI
+#define kHockeySDKUserEmail @"HockeySDKUserEmail"
+
 
 @interface BITCrashReportManager ()
 
