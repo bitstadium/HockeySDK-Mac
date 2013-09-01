@@ -193,11 +193,6 @@ extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
 @property (nonatomic, assign, getter=isMachExceptionHandlerEnabled) BOOL enableMachExceptionHandler;
 
 /**
- *  Indicates if the app crash in the previous session
- */
-@property (nonatomic, readonly) BOOL didCrashInLastSession;
-
-/**
  *  Submit crash reports without asking the user
  *
  *  _YES_: The crash report will be submitted without asking the user
@@ -224,6 +219,24 @@ extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
  *  Default: _5_
  */
 @property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;
+
+
+///-----------------------------------------------------------------------------
+/// @name Crash Meta Information
+///-----------------------------------------------------------------------------
+
+/**
+ * Indicates if the app crash in the previous session
+ *
+ * Use this on startup, to check if the app starts the first time after it crashed
+ * previously. You can use this also to disable specific events, like asking
+ * the user to rate your app.
+ *
+ * @warning This property only has a correct value, once `[BITHockeyManager startManager]` was
+ * invoked!
+ */
+@property (nonatomic, readonly) BOOL didCrashInLastSession;
+
 
 
 ///-----------------------------------------------------------------------------
