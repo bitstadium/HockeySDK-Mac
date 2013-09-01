@@ -141,8 +141,6 @@ extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
   BOOL       _invokedReturnToMainApplication;
 }
 
-- (NSString *)modelVersion;
-
 + (BITCrashReportManager *)sharedCrashReportManager;
 
 
