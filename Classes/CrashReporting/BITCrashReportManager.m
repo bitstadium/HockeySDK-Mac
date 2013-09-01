@@ -87,7 +87,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 - (instancetype)init {
   if ((self = [super init])) {
-    _serverResult = HockeyCrashReportStatusUnknown;
     _crashReportUI = nil;
     _fileManager = [[NSFileManager alloc] init];
     _askUserDetails = YES;
@@ -722,7 +721,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [request setHTTPBody:postBody];
   
-  _serverResult = HockeyCrashReportStatusUnknown;
   _statusCode = 200;
   
   if (_timeIntervalCrashInLastSessionOccured > -1 && _timeIntervalCrashInLastSessionOccured <= _maxTimeIntervalOfCrashForReturnMainApplicationDelay) {
@@ -766,8 +764,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
                                                                                format:nil
                                                                      errorDescription:NULL];
     HockeySDKLog(@"Received API response: %@", response);
-    
-    _serverResult = (HockeyCrashReportStatus)[[response objectForKey:@"status"] intValue];    
   } else if (_statusCode == 400) {
     [self cleanCrashReports];
     

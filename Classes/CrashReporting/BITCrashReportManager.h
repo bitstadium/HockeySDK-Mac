@@ -65,18 +65,6 @@ typedef enum {
 extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
 
 
-typedef enum HockeyCrashAlertType {
-  HockeyCrashAlertTypeSend = 0,
-  HockeyCrashAlertTypeFeedback = 1,
-} HockeyCrashAlertType;
-
-typedef enum HockeyCrashReportStatus {
-  HockeyCrashReportStatusUnknown = 0,
-  HockeyCrashReportStatusAssigned = 1,
-  HockeyCrashReportStatusSubmitted = 2,
-  HockeyCrashReportStatusAvailable = 3,
-} HockeyCrashReportStatus;
-
 @class BITCrashReportUI;
 @class BITPLCrashReporter;
 
@@ -121,7 +109,6 @@ typedef enum HockeyCrashReportStatus {
   NSTimeInterval _timeIntervalCrashInLastSessionOccured;
   NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
   
-  HockeyCrashReportStatus _serverResult;
   NSInteger         _statusCode;
   NSURLConnection   *_urlConnection;
   NSMutableData     *_responseData;
