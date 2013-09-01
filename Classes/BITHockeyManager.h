@@ -31,14 +31,14 @@
  * modules, providing access to global properties and to all modules. Initialization is divided into several distinct phases:
  *
  * 1. Setup the [HockeyApp](http://hockeyapp.net/) app identifier and the optional delegate: This is the least required information on setting up the SDK and using it. It does some simple validation of the app identifier.
- * 2. Provides access to the SDK module `BITCrashManager`. This way all modules can be further configured to personal needs, if the defaults don't fit the requirements.
+ * 2. Provides access to the SDK module `BITCrashReportManager`. This way all modules can be further configured to personal needs, if the defaults don't fit the requirements.
  * 3. Configure each module.
  * 4. Start up all modules.
  *
  * The SDK is optimized to defer everything possible to a later time while making sure e.g. crashes on startup can also be caught and each module executes other code with a delay some seconds. This ensures that applicationDidFinishLaunching will process as fast as possible and the SDK will not block the startup sequence resulting in a possible kill by the watchdog process.
  *
  * All modules do **NOT** show any user interface if the module is not activated or not integrated.
- * `BITCrashManager`: Shows an alert on startup asking the user if he/she agrees on sending the crash report, if `[BITCrashManager crashManagerStatus]` is set to `BITCrashManagerStatusAlwaysAsk` (default)
+ * `BITCrashReportManager`: Shows an alert on startup asking the user if he/she agrees on sending the crash report, if `[BITCrashReportManager autoSubmitCrashReport]` is enabled (default)
  *
  * @warning The SDK is **NOT** thread safe and has to be set up on the main thread!
  *
