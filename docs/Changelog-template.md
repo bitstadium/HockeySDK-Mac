@@ -1,3 +1,13 @@
+## Version 1.1.0 Beta 4
+
+- Crash Reporting
+
+    - [NEW] Incorporate PLCrashReporter v1.2 Beta 1 build with BIT namespace (Providing support for optional Mach Exceptions)
+    - [NEW] Replace `exceptionInterception` property in favor of new `BITCrashReportExceptionApplication` class to catch more exceptions. Check the README file for more details on how to use this.
+    - [NEW] Catching crashes is will _NOT_ be enabled if the application is starting with a debugger attached!
+    - [UPDATE] Improved header documentation
+	<br /><br/>
+
 ## Version 1.1.0 Beta 3
 
 - Crash Reporting

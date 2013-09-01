@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		1E7FB95C17D3F36B00B7E10D /* HockeySDK Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 1E7FB95F17D3F36B00B7E10D /* Build configuration list for PBXAggregateTarget "HockeySDK Documentation" */;
+			buildPhases = (
+				1E7FB96017D3F37100B7E10D /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "HockeySDK Documentation";
+			productName = "HockeySDK Documentation";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		1E20566E15A5F61F008FC20A /* BITCrashReportManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* BITCrashReportManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E413D9315A0BB8800620BFE /* HockeySDK.strings */; };
@@ -278,6 +292,7 @@
 			projectRoot = "";
 			targets = (
 				1EF09D8B1523574200067A5C /* HockeySDK */,
+				1E7FB95C17D3F36B00B7E10D /* HockeySDK Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -293,6 +308,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1E7FB96017D3F37100B7E10D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/appledoc \\\n--output \"${SOURCE_ROOT}/../documentation\" \\\n--ignore Vendor \\\n--ignore Products \\\n--ignore .m \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-intermediate-files \\\n--project-name \"${HOCKEYSDK_DOCSET_NAME} ${VERSION_STRING}\" \\\n--project-version \"${VERSION_STRING}\" \\\n--project-company \"BitStadium GmbH\" \\\n--company-id \"de.bitstadium\" \\\n--docset-bundle-name \"${HOCKEYSDK_DOCSET_NAME} ${VERSION_STRING}\" \\\n--docset-feed-name \"${HOCKEYSDK_DOCSET_NAME}\" \\\n--docset-desc \"\" \\\n--docset-platform-family \"macosx\" \\\n--index-desc \"${SOURCE_ROOT}/../docs/index.md\" \\\n--include \"${SOURCE_ROOT}/../docs/index.html\" \\\n--include \"${SOURCE_ROOT}/../docs/\" \\\n--merge-categories \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive \\\n--warn-invalid-crossref \\\n--warn-missing-arg \\\n--logformat xcode \\\n--exit-threshold 2 \\\n\"${SOURCE_ROOT}/../\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1EF09D871523574200067A5C /* Sources */ = {
