@@ -40,7 +40,7 @@
 #import <sys/sysctl.h>
 #import <objc/runtime.h>
 
-#define SDK_NAME @"HockeySDK-Mac"
+#define BITHOCKEY_NAME @"HockeySDK"
 
 NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
@@ -694,15 +694,15 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   NSString *url = [NSString stringWithFormat:@"%@api/2/apps/%@/crashes?sdk=%@&sdk_version=%@&feedbackEnabled=no",
                    _submissionURL,
                    [self.appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                   SDK_NAME,
-                   [[HOCKEYSDK_BUNDLE objectForInfoDictionaryKey:@"CFBundleShortVersionString"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                   BITHOCKEY_NAME,
+                   BITHOCKEY_VERSION
                    ];
   
   HockeySDKLog(@"Info: Sending report to %@", url);
 
   request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
   
-  [request setValue:SDK_NAME forHTTPHeaderField:@"User-Agent"];
+  [request setValue:BITHOCKEY_NAME forHTTPHeaderField:@"User-Agent"];
   [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
   [request setTimeoutInterval: 15];
   [request setHTTPMethod:@"POST"];
