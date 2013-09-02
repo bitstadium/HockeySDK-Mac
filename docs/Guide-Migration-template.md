@@ -1,0 +1,38 @@
+## Introduction
+
+This guide will help you migrate from HockeySDK-Mac version 1.x to the latest release of the unified HockeySDK for Mac.
+
+First of all we will cleanup the obsolete installation files and then convert your existing code to the new API calls.
+
+## Cleanup
+
+First of all you should remove all files from prior versions of either HockeySDK-Mac. If you not sure which files you added, here are a few easy steps.
+
+### HockeySDK-iOS v1.x
+
+In Xcode open the `Project Navigator` (⌘+1). In the search field at the bottom enter `HockeySDK.framework`. If search returns any results you have the first release of our unified SDK added to your project. Even if you added it as a git submodule we would suggest you remove it first.
+
+### Final Steps
+
+Search again in the `Project Navigator` (⌘+1) for "CrashReporter.framework". You shouldn't get any results now. If not, remove the CrashReporter.framework from your project.
+
+## Installation
+
+Follow the steps in our installation guide [Installation & Setup](Guide-Installation-Setup).
+
+After you finished the steps for either of the installation procedures, we have to migrate your existing code.
+
+## Setup
+
+### HockeySDK-Mac 1.x
+
+There might be minor to the SDK setup code required. Some delegates methods are deprecated and have to be replaced.
+
+- The protocol `BITCrashReportManagerDelegate` has been replaced by `BITCrashManagerDelegate`.
+- A new protocol `BITHockeyManagerDelegate` which also implements `BITCrashManagerDelegate` has been introduced and should be used in the appDelegate
+- The class `BITCrashReportManager` has been replaced by `BITCrashManager` and is no singleton any longer
+- The properties `userName` and `userEmail` of `BITCrashReportManager` are now delegates of `BITHockeyManagerDelegate`
+  - `- (NSString *)userNameForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;`
+  - `- (NSString *)userEmailForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;`
+- The required delegate `crashReportApplicationLog` is replaced by `-(NSString *)applicationLogForCrashManager:(id)crashManager`
+- The property `loggingEnabled` in `BITHockeyManager` has been replaced by the property `debugLogEnabled`

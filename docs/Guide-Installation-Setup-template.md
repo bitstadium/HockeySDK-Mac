@@ -54,7 +54,7 @@ We propose the following method to set version numbers in your beta versions:
 
 2. Add the following line at the top of the file below your own #import statements:<pre><code>#import &lt;HockeySDK/HockeySDK.h&gt;</code></pre>
 
-3. Add the following protocol to your AppDelegate: `BITCrashReportManagerDelegate`:<pre><code>@interface AppDelegate() &lt;BITCrashReportManagerDelegate&gt; {}
+3. Add the following protocol to your AppDelegate: `BITHockeyManagerDelegate`:<pre><code>@interface AppDelegate() &lt;BITHockeyManagerDelegate&gt; {}
 @end</code></pre>
 
 4. Switch to your `AppDelegate.m` file and add the following line at the top of the file below your own #import statements:<pre><code>#import &lt;HockeySDK/BITHockeyManager.h&gt;</code></pre>
@@ -68,16 +68,16 @@ We propose the following method to set version numbers in your beta versions:
 
     In case of document based apps, invoke `startManager` at the end of `applicationDidFinishLaunching`, since otherwise you may lose the Apple events to restore, open untitled document etc.
     
-	If any crash report has been saved from the last time your application ran, `startManager` will present a dialog to allow the user to submit it. Once done, or if there are no crash logs, it will then call back to your `appDelegate` with `showMainApplicationWindow` (see step 7 below) to continue the process of getting your main window displayed.
+	If any crash report has been saved from the last time your application ran, `startManager` will present a dialog to allow the user to submit it. Once done, or if there are no crash logs, it will then call back to your `appDelegate` with `showMainApplicationWindowForCrashManager:` (see step 7 below) to continue the process of getting your main window displayed.
 
     This allows the SDK to present a crash dialog on the next startup before your main window gets initialized and possibly crashes right away again.
 
 6. Replace `APP_IDENTIFIER` in `configureWithIdentifier:` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier). 
 
-7. Your `appDelegate` is now a `BITCrashReportManagerDelegate`, so you must implement the required `showMainApplicationWindow` method like this:
+7. Your `appDelegate` is now a `BITCrashManagerDelegate`, so you must implement the required `showMainApplicationWindowForCrashManager:` method like this:
 
         // this delegate method is required
-        - (void) showMainApplicationWindow
+        - (void) showMainApplicationWindowForCrashManager:(id)crashManager
         {
             // launch the main app window
             [myWindow makeFirstResponder: nil];
@@ -135,22 +135,22 @@ On Mac OS X there are three types of crashes that are not reported to a register
 
 In general there are two solutions. The first one is to use an `NSExceptionHandler` class instead of an `NSUncaughtExceptionHandler`. But this has a few drawbacks which are detailed in `BITCrashReportExceptionApplication.h`.
 
-Instead we provide the optional `NSApplication` subclass `BITCrashReportExceptionApplication` which handles cases 2 and 3.
+Instead we provide the optional `NSApplication` subclass `BITCrashExceptionApplication` which handles cases 2 and 3.
 
 **Installation:**
 
 * Open the applications `Info.plist`
 * Search for the field `Principal class`
-* Replace `NSApplication` with `BITCrashReportExceptionApplication`
+* Replace `NSApplication` with `BITCrashExceptionApplication`
 
-Alternatively, if you have your own NSApplication subclass, change it to be a subclass of `BITCrashReportExceptionApplication` instead.
+Alternatively, if you have your own NSApplication subclass, change it to be a subclass of `BITCrashExceptionApplication` instead.
 
 
 ### Automatic sending of crash reports
 
 If you want to send all crash reports automatically, configure the SDK with the following code:
 
-    [[BITCrashReportManager sharedCrashReportManager] setAutoSubmitCrashReport: YES];
+    [[BITHockeyManager sharedHockeyManager].crashManager setAutoSubmitCrashReport: YES];
 
 ### Improved startup crashes handling
 
@@ -199,7 +199,7 @@ Crash reports are normally sent to our server asynchronously. If your applicatio
 
 In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
 
-    [[BITHockeyManager sharedHockeyManager] setLoggingEnabled:YES];
+    [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled];
  
 ## Optional Delegate Methods
 

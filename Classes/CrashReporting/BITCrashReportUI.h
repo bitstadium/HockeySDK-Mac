@@ -30,7 +30,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class BITCrashReportManager;
+@class BITCrashManager;
 
 @interface BITCrashReportUI : NSWindowController {
   IBOutlet NSTextField  *nameTextField;
@@ -55,7 +55,7 @@
   
   NSMenu              *_mainAppMenu;
   
-  BITCrashReportManager   *_crashReportManager;
+  BITCrashManager   *_crashManager;
   
   NSString      *_companyName;
   NSString      *_applicationName;
@@ -78,7 +78,7 @@
 @property (nonatomic, retain) NSString *userEmail;
 
 
-- (instancetype)initWithManager:(BITCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails;
+- (instancetype)initWithManager:(BITCrashManager *)crashManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails;
 
 - (void)askCrashReportDetails;
 

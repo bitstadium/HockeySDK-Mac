@@ -26,14 +26,16 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "BITCrashReportExceptionApplication.h"
+#import "BITCrashExceptionApplication.h"
 
 #import <sys/sysctl.h>
-#import "BITCrashReportManager.h"
-#import "BITCrashReportManagerPrivate.h"
+
+#import "BITHockeyManager.h"
+#import "BITCrashManager.h"
+#import "BITCrashManagerPrivate.h"
 
 
-@implementation BITCrashReportExceptionApplication
+@implementation BITCrashExceptionApplication
 
 /*
  * Solution for Scenario 2
@@ -45,7 +47,7 @@
   [super reportException: exception];
   
   // Don't invoke the registered UncaughtExceptionHandler if we are currently debugging this app!
-  if (![[BITCrashReportManager sharedCrashReportManager] isDebuggerAttached]) {
+  if (![[BITHockeyManager sharedHockeyManager].crashManager isDebuggerAttached]) {
     // We forward this exception to PLCrashReporters UncaughtExceptionHandler
     // If the developer has implemented their own exception handler and that one is
     // invoked before PLCrashReporters exception handler and the developers
@@ -53,7 +55,7 @@
     // call but directly jump into PLCrashReporters exception handler.
     // If we wouldn't do this, this call would lead to an infinite loop.
     
-    NSUncaughtExceptionHandler *plcrExceptionHandler = [[BITCrashReportManager sharedCrashReportManager] plcrExceptionHandler];
+    NSUncaughtExceptionHandler *plcrExceptionHandler = [[BITHockeyManager sharedHockeyManager].crashManager plcrExceptionHandler];
     if (plcrExceptionHandler && exception) {
       plcrExceptionHandler(exception);
     }
@@ -74,9 +76,9 @@
     [super sendEvent:theEvent];
   } @catch (NSException *exception) {
     // Don't invoke the registered UncaughtExceptionHandler if we are currently debugging this app!
-    if (![[BITCrashReportManager sharedCrashReportManager] isDebuggerAttached]) {
+    if (![[BITHockeyManager sharedHockeyManager].crashManager isDebuggerAttached]) {
       // We forward this exception to PLCrashReporters UncaughtExceptionHandler only
-      NSUncaughtExceptionHandler *plcrExceptionHandler = [[BITCrashReportManager sharedCrashReportManager] plcrExceptionHandler];
+      NSUncaughtExceptionHandler *plcrExceptionHandler = [[BITHockeyManager sharedHockeyManager].crashManager plcrExceptionHandler];
       if (plcrExceptionHandler && exception) {
         plcrExceptionHandler(exception);
       }

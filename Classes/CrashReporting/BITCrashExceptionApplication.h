@@ -150,6 +150,6 @@
  *   http://macdevcenter.com/pub/a/mac/2007/07/31/understanding-exceptions-and-handlers-in-cocoa.html
  *
  */
-@interface BITCrashReportExceptionApplication : NSApplication
+@interface BITCrashExceptionApplication : NSApplication
 
 @end

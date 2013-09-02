@@ -29,7 +29,6 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import <HockeySDK/BITCrashReportManagerDelegate.h>
 
 // flags if the crashreporter is activated at all
 // set this as bool in user defaults e.g. in the settings, if you want to let the user be able to deactivate it
@@ -37,19 +36,10 @@
 
 // flags if the crashreporter should automatically send crashes without asking the user again
 // set this as bool in user defaults e.g. in the settings, if you want to let the user be able to set this on or off
-// or set it on runtime using the `autoSubmitCrashReport property` via
-// `[[BITCrashReportManager sharedCrashReportManager] setAutoSubmitCrashReport: YES];`
+// or set it on runtime using the `autoSubmitCrashReport property`
 #define kHockeySDKAutomaticallySendCrashReports @"HockeySDKAutomaticallySendCrashReports"
 
-
-// hockey api error domain
-typedef enum {
-  HockeyErrorUnknown,
-  HockeyAPIAppVersionRejected,
-  HockeyAPIReceivedEmptyResponse,
-  HockeyAPIErrorWithStatusCode
-} HockeyErrorReason;
-extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
+@protocol BITCrashManagerDelegate;
 
 
 @class BITCrashReportUI;
@@ -67,7 +57,7 @@ extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
  * the reports to the HockeyApp servers and more.
  *
  * It also provides options to add additional meta information to each crash report, like `userName`, `userEmail`,
- * additional textual log information via `BITCrashReportManagerDelegate` protocol and a way to detect startup
+ * additional textual log information via `BITCrashanagerDelegate` protocol and a way to detect startup
  * crashes so you can adjust your startup process to get these crash reports too and delay your app initialization.
  *
  * Crashes are send the next time the app starts. If `autoSubmitCrashReport` is enabled, crashes will be send
@@ -86,24 +76,24 @@ extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
  *
  * @warning If you start the app with the Xcode debugger attached, detecting crashes will _NOT_ be enabled!
  */
-@interface BITCrashReportManager : NSObject {
+@interface BITCrashManager : NSObject {
 @private
   NSFileManager *_fileManager;
 
   BOOL _crashIdenticalCurrentVersion;
-  BOOL _crashReportActivated;
+  BOOL _crashManagerActivated;
   
-  NSTimeInterval _timeIntervalCrashInLastSessionOccured;
+  NSTimeInterval _timeintervalCrashInLastSessionOccured;
   NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
   
   NSInteger         _statusCode;
   NSURLConnection   *_urlConnection;
   NSMutableData     *_responseData;
 
-  id<BITCrashReportManagerDelegate> _delegate;
+  id<BITCrashManagerDelegate> _delegate;
 
   NSString   *_appIdentifier;
-  NSString   *_submissionURL;
+  NSString   *_serverURL;
   NSString   *_companyName;
   BOOL       _autoSubmitCrashReport;
   BOOL       _askUserDetails;
@@ -114,42 +104,42 @@ extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
   NSMutableArray *_crashFiles;
   NSString       *_crashesDir;
   NSString       *_settingsFile;
+  NSString       *_analyzerInProgressFile;
   
   BOOL                       _enableMachExceptionHandler;
   NSUncaughtExceptionHandler *_plcrExceptionHandler;
   BITPLCrashReporter         *_plCrashReporter;
   
   BITCrashReportUI *_crashReportUI;
-
+  
   BOOL                _didCrashInLastSession;
-  BOOL                _analyzerStarted;
   NSMutableDictionary *_approvedCrashReports;
 
+  NSMutableDictionary *_dictOfLastSessionCrash;
+  
   BOOL       _invokedReturnToMainApplication;
 }
-
-/**
- *  Returns the shared manager object
- *
- *  @return A singleton BITCrashReportManager instance ready use
- */
-+ (BITCrashReportManager *)sharedCrashReportManager;
-
 
 ///-----------------------------------------------------------------------------
 /// @name Delegate
 ///-----------------------------------------------------------------------------
 
 // delegate is required
-@property (nonatomic, assign) id <BITCrashReportManagerDelegate> delegate;
+@property (nonatomic, assign) id <BITCrashManagerDelegate> delegate;
 
 
 ///-----------------------------------------------------------------------------
 /// @name Configuration
 ///-----------------------------------------------------------------------------
 
-// The HockeyApp app identifier (required)
-@property (nonatomic, retain) NSString *appIdentifier;
+/**
+ * Defines the server URL to send data to or request data from
+ *
+ * By default this is set to the HockeyApp servers and there rarely should be a
+ * need to modify that.
+ */
+@property (nonatomic, strong) NSString *serverURL;
+
 
 /**
  *  Defines if the user interface should ask for name and email
@@ -158,20 +148,12 @@ extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
  */
 @property (nonatomic, assign) BOOL askUserDetails;
 
+
 /**
  *  Defines the company name to be shown in the crash reporting dialog
  */
 @property (nonatomic, retain) NSString *companyName;
 
-/**
- *  Defines the users name or user id
- */
-@property (nonatomic, copy) NSString *userName;
-
-/**
- *  Defines the users email address
- */
-@property (nonatomic, copy) NSString *userEmail;
 
 /**
  *  Trap fatal signals via a Mach exception server.
@@ -237,6 +219,23 @@ extern NSString *const __attribute__((unused)) kHockeyErrorDomain;
  */
 @property (nonatomic, readonly) BOOL didCrashInLastSession;
 
+
+/**
+ * Provides the time between startup and crash in seconds
+ *
+ * Use this in together with `didCrashInLastSession` to detect if the app crashed very
+ * early after startup. This can be used to delay app initialization until the crash
+ * report has been sent to the server or if you want to do any other actions like
+ * cleaning up some cache data etc.
+ *
+ * The `BITCrashManagerDelegate` protocol provides some delegates to inform if sending
+ * a crash report was finished successfully, ended in error or was cancelled by the user.
+ *
+ * *Default*: _-1_
+ * @see didCrashInLastSession
+ * @see BITCrashManagerDelegate
+ */
+@property (nonatomic, readonly) NSTimeInterval timeintervalCrashInLastSessionOccured;
 
 
 ///-----------------------------------------------------------------------------

@@ -12,14 +12,14 @@ CocoaLumberjack can write log data to multiple destinations non blocking (!!), l
 ## HowTo
 
 1. Setup the logging framework of choice
-2. Implement `[BITCrashReportManagerDelegate crashReportApplicationLog]`
+2. Implement `[BITCrashManagerDelegate applicationLogForCrashManager:]`
 3. Return the log data
 
 ## Example
 
 This example code is based on CocoaLumberjack logging into log files:
 
-	@interface BITAppDelegate () <BITCrashReportManagerDelegate> {}
+	@interface BITAppDelegate () <BITCrashManagerDelegate> {}
 		@property (nonatomic) DDFileLogger *fileLogger;
 	@end
 	
@@ -83,9 +83,9 @@ This example code is based on CocoaLumberjack logging into log files:
 	  return description;
 	}
 	
-	#pragma mark - BITCrashReportManagerDelegate
+	#pragma mark - BITCrashManagerDelegate
 	
-	- (NSString *)crashReportApplicationLog {
+	-(NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager; {
 	  NSString *description = [self getLogFilesContentWithMaxSize:5000]; // 5000 bytes should be enough!
 	  if ([description length] == 0) {
 	    return nil;
