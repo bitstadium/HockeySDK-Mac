@@ -589,7 +589,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
       signalHandlerType = PLCrashReporterSignalHandlerTypeMach;
     }
     BITPLCrashReporterConfig *config = [[BITPLCrashReporterConfig alloc] initWithSignalHandlerType: signalHandlerType
-                                                                             symbolicationStrategy: PLCrashReporterSymbolicationStrategyAll];
+                                                                             symbolicationStrategy: PLCrashReporterSymbolicationStrategySymbolTable];
     _plCrashReporter = [[BITPLCrashReporter alloc] initWithConfiguration: config];
     NSError *error = NULL;
     
