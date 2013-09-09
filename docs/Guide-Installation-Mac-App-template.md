@@ -14,7 +14,7 @@ This document contains the following sections:
 <a id="prerequisites"></a> 
 ## Prerequisites
 
-1. Mac OS X 10.6
+1. Mac OS X 10.8
 2. Xcode 4
 
 <a id="installation"></a> 
@@ -24,12 +24,7 @@ This document contains the following sections:
 2. Extract the .zip archive.
 3. Copy HockeyApp to your Application folder.
 4. Start HockeyApp.
-5. If this is your first start, the app automatically shows the Preferences dialog:
-
-    <img src="HockeyMacGeneral_normal.png"/>
-
-6. You need to enter your HockeyApp API token. If you don't have one, then create one [here](https://rink.hockeyapp.net/manage/auth_tokens).
-7. Close the dialog and you're ready to go.
+5. If this is your first start, the app requires you to log in with your HockeyApp user credentials.
 
 <a id="xcode"></a> 
 ## Integration With Xcode 4

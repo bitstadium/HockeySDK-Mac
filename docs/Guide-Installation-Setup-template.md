@@ -45,8 +45,9 @@ We propose the following method to set version numbers in your beta versions:
    - Choose Frameworks from the Destination list.
    - Drag HockeySDK-Mac from the Project Navigator left sidebar to the list in the new Copy Files phase.
 
-5. Continue with the chapter "Setup HockeySDK-Mac framework".
-6. If Xcode requires to sign all frameworks, add `--deep` to the `OTHER_CODE_SIGN_FLAGS` build settings of your app target
+5. Check the `Runpath Search Paths` in the app targets build settings to contain `@loader_path/../Frameworks`
+6. Continue with the chapter "Setup HockeySDK-Mac".
+7. If Xcode requires to sign all frameworks, add `--deep` to the `OTHER_CODE_SIGN_FLAGS` build settings of your app target
 
 ## Setup HockeySDK-Mac
 

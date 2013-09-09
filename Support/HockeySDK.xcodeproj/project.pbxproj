@@ -111,6 +111,7 @@
 		1EF09DD1152371DC00067A5C /* BITCrashReportUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportUI.m; sourceTree = "<group>"; };
 		1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportTextFormatter.h; sourceTree = "<group>"; };
 		1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportTextFormatter.m; sourceTree = "<group>"; tabWidth = 4; };
+		1EFFB86117D49DE1003FA1FD /* Guide-Migration-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Guide-Migration-template.md"; sourceTree = "<group>"; };
 		4D1F150F162D4A6F0047B9D9 /* BITSystemProfilePrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITSystemProfilePrivate.h; sourceTree = "<group>"; };
 		4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BITSystemProfile.h; path = BetaDistribution/BITSystemProfile.h; sourceTree = "<group>"; };
 		4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BITSystemProfile.m; path = BetaDistribution/BITSystemProfile.m; sourceTree = "<group>"; };
@@ -139,6 +140,7 @@
 				1E260C7817D401D000C7F9FE /* Changelog-template.md */,
 				1E260C7917D401D000C7F9FE /* Guide-Installation-Mac-App-template.md */,
 				1E260C7A17D401D000C7F9FE /* Guide-Installation-Setup-template.md */,
+				1EFFB86117D49DE1003FA1FD /* Guide-Migration-template.md */,
 				1E260C7B17D401D100C7F9FE /* HowTo-Add-Application-Log-template.md */,
 				1E260C7C17D401D100C7F9FE /* HowTo-App-Versioning-template.md */,
 				1E260C7D17D401D100C7F9FE /* HowTo-Upload-Symbols-template.md */,

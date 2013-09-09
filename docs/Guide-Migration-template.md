@@ -36,3 +36,15 @@ There might be minor to the SDK setup code required. Some delegates methods are 
   - `- (NSString *)userEmailForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;`
 - The required delegate `crashReportApplicationLog` is replaced by `-(NSString *)applicationLogForCrashManager:(id)crashManager`
 - The property `loggingEnabled` in `BITHockeyManager` has been replaced by the property `debugLogEnabled`
+
+### Troubleshooting
+
+Error message:
+
+    dyld: Library not loaded: @rpath/HockeySDK.framework/Versions/A/HockeySDK
+      Referenced from: /Users/USER/Library/Developer/Xcode/DerivedData/HockeyMac/Build/Products/Debug/APPNAME.app/Contents/MacOS/APPNAME
+      Reason: image not found
+  
+Solution: Add the following entry to your `Runpath Search Paths` in the targets build settings
+
+    @loader_path/../Frameworks
