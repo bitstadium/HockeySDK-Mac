@@ -8,7 +8,7 @@ First of all we will cleanup the obsolete installation files and then convert yo
 
 First of all you should remove all files from prior versions of either HockeySDK-Mac. If you not sure which files you added, here are a few easy steps.
 
-### HockeySDK-iOS v1.x
+### HockeySDK-Mac v1.x
 
 In Xcode open the `Project Navigator` (⌘+1). In the search field at the bottom enter `HockeySDK.framework`. If search returns any results you have the first release of our unified SDK added to your project. Even if you added it as a git submodule we would suggest you remove it first.
 

@@ -35,6 +35,8 @@
 
 /**
  *  Invoked once the user interface asking for crash details and if the data should be send is dismissed
+ *
+ * @param crashManager The `BITCrashManager` instance invoking the method
  */
 - (void) showMainApplicationWindowForCrashManager:(BITCrashManager *)crashManager;
 

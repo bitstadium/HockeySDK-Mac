@@ -63,6 +63,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1E14CB2117E1F1EA00EEFF50 /* Troubleshooting-Crash-Reporting-Not-Working-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Troubleshooting-Crash-Reporting-Not-Working-template.md"; sourceTree = "<group>"; };
 		1E260C7817D401D000C7F9FE /* Changelog-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Changelog-template.md"; sourceTree = "<group>"; };
 		1E260C7917D401D000C7F9FE /* Guide-Installation-Mac-App-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Guide-Installation-Mac-App-template.md"; sourceTree = "<group>"; };
 		1E260C7A17D401D000C7F9FE /* Guide-Installation-Setup-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Guide-Installation-Setup-template.md"; sourceTree = "<group>"; };
@@ -72,7 +73,6 @@
 		1E260C7E17D401D100C7F9FE /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		1E260C7F17D401D200C7F9FE /* index.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = index.md; sourceTree = "<group>"; };
 		1E260C8017D401D200C7F9FE /* Troubleshooting-Symbolication-Doesnt-Work-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Troubleshooting-Symbolication-Doesnt-Work-template.md"; sourceTree = "<group>"; };
-		1E260C8117D401D200C7F9FE /* Troubleshooting-Troubleshooting-Crash-Reporting-Not-Working-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Troubleshooting-Troubleshooting-Crash-Reporting-Not-Working-template.md"; sourceTree = "<group>"; };
 		1E260C8417D4070C00C7F9FE /* HockeySDKPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HockeySDKPrivate.h; sourceTree = "<group>"; };
 		1E260C8517D407D400C7F9FE /* BITHockeyManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITHockeyManagerPrivate.h; sourceTree = "<group>"; };
 		1E260C9E17D414F200C7F9FE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -147,7 +147,7 @@
 				1E260C7E17D401D100C7F9FE /* index.html */,
 				1E260C7F17D401D200C7F9FE /* index.md */,
 				1E260C8017D401D200C7F9FE /* Troubleshooting-Symbolication-Doesnt-Work-template.md */,
-				1E260C8117D401D200C7F9FE /* Troubleshooting-Troubleshooting-Crash-Reporting-Not-Working-template.md */,
+				1E14CB2117E1F1EA00EEFF50 /* Troubleshooting-Crash-Reporting-Not-Working-template.md */,
 			);
 			name = docs;
 			path = ../docs;

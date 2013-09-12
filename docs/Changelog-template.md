@@ -2,32 +2,35 @@
 
 - General
 
-    - [NEW] Major refactoring of all classes. Please go through the setup or migration guide!
-    - [NEW] Added docset with SDK documentation
-    - [UPDATE] Improved header documentation
+  - [NEW] Major refactoring of all classes. Please go through the setup or migration guide!
+  - [NEW] Added docset with SDK documentation
+  - [UPDATE] Improved documentation
+	<br /><br/>
 
 - Crash Reporting
 
-    - [NEW] Incorporate PLCrashReporter v1.2 Beta 1 build with BIT namespace (Providing support for optional Mach Exceptions)
-    - [NEW] Replace `exceptionInterception` property in favor of new `BITCrashReportExceptionApplication` class to catch more exceptions. Check the README file for more details on how to use this.
-    - [NEW] Catching crashes is will _NOT_ be enabled if the application is starting with a debugger attached!
+  - [NEW] Integrated PLCrashReporter 1.2 beta 1
+  - [NEW] Added optional support for Mach exceptions
+  - [UPDATE] Replace `exceptionInterception` property in favor of new `BITCrashReportExceptionApplication` class to catch more exceptions. Check the README file for more details on how to use this.
+  - [UPDATE] PLCrashReporter build with `BIT` namespace to avoid collisions
+  - [UPDATE] Crash reporting is automatically disabled when the app is invoked with the debugger!
 	<br /><br/>
 
 ## Version 1.1.0 Beta 3
 
 - Crash Reporting
 
-    - [NEW] Check if additional uncaught exception handlers are installed and print a warning in the console
-    - [FIX] Fix an exception when the process path is empty
+  - [NEW] Check if additional uncaught exception handlers are installed and print a warning in the console
+  - [FIX] Fix an exception when the process path is empty
 	<br /><br/>
 
 ## Version 1.1.0 Beta 2
 
 - Crash Reporting
 
-    - [UPDATE] Enable Copy&Paste in crash report UI
-    - [FIX] Fix sending of crash reports in Beta 1 not working
-    - [FIX] Change XML format so improper formatted log data can not result in empty crash reports on the server
+  - [UPDATE] Enable Copy&Paste in crash report UI
+  - [FIX] Fix sending of crash reports in Beta 1 not working
+  - [FIX] Change XML format so improper formatted log data can not result in empty crash reports on the server
 	<br /><br/>
 
 
@@ -35,21 +38,21 @@
 
 - General
 
-    - [UPDATE] Updated installation instructions with notes about sandboxing, automatic sending of crash reports and code signing
-    - [FIX] Fix build warnings
+  - [UPDATE] Updated installation instructions with notes about sandboxing, automatic sending of crash reports and code signing
+  - [FIX] Fix build warnings
 	<br /><br/>
 
 - Crash Reporting
 
-    - [NEW] Added beta version of much improved PLCrashReporter 1.2 Beta 1
-    - [UPDATE] Crash report text in the dialogs detail view can now be selected
-    - [UPDATE] Adjusted privacy note in the dialog
-    - [FIX] Fixed converting long executable names in crash reports that broke symbolication
+  - [NEW] Added beta version of much improved PLCrashReporter 1.2 Beta 1
+  - [UPDATE] Crash report text in the dialogs detail view can now be selected
+  - [UPDATE] Adjusted privacy note in the dialog
+  - [FIX] Fixed converting long executable names in crash reports that broke symbolication
 	<br /><br/>
     
 - Beta Updates
 
-    - Add used language to the Sparkle request keys in the BITSystemProfile helper class
+  - Add used language to the Sparkle request keys in the BITSystemProfile helper class
 	<br /><br/>
 
 
