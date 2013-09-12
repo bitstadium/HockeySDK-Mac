@@ -22,25 +22,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "BITHockeyManager.h"
-#import <HockeySDK/HockeySDK.h>
+#import "HockeySDK.h"
+#import "HockeySDKPrivate.h"
 
-#import "BITCrashReportManager.h"
-#import "BITCrashReportManagerDelegate.h"
+#import "BITHockeyManagerPrivate.h"
+#import "BITCrashManagerPrivate.h"
 
 
 @implementation BITHockeyManager
 
-@synthesize appIdentifier = _appIdentifier;
-@synthesize loggingEnabled = _loggingEnabled;
-@synthesize exceptionInterceptionEnabled = _exceptionInterceptionEnabled;
-@synthesize askUserDetails = _askUserDetails;
-@synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
+@synthesize delegate = _delegate;
+@synthesize serverURL = _serverURL;
+@synthesize crashManager = _crashManager;
+@synthesize disableCrashManager = _disableCrashManager;
+@synthesize debugLogEnabled = _debugLogEnabled;
 
 #pragma mark - Public Class Methods
 
 #if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
-+ (BITHockeyManager *)sharedHockeyManager {   
++ (BITHockeyManager *)sharedHockeyManager {
   static BITHockeyManager *sharedInstance = nil;
   static dispatch_once_t pred;
   
@@ -63,6 +63,18 @@
 }
 #endif
 
+- (id) init {
+  if ((self = [super init])) {
+    _serverURL = nil;
+    
+    _disableCrashManager = NO;
+    
+    _startManagerIsInvoked = NO;
+    
+    [self performSelector:@selector(validateStartManagerIsInvoked) withObject:nil afterDelay:0.0f];
+  }
+  return self;
+}
 
 - (void)dealloc {
   [_appIdentifier release], _appIdentifier = nil;
@@ -72,6 +84,16 @@
 
 
 #pragma mark - Private Class Methods
+
+- (BOOL)isSetUpOnMainThread {
+  if (!NSThread.isMainThread) {
+    NSAssert(NSThread.isMainThread, @"ERROR: This SDK has to be setup on the main thread!");
+    
+    return NO;
+  }
+  
+  return YES;
+}
 
 - (BOOL)checkValidityOfAppIdentifier:(NSString *)identifier {
   BOOL result = NO;
@@ -85,47 +107,87 @@
   return result;
 }
 
+- (void)logInvalidIdentifier:(NSString *)environment {
+  NSLog(@"[HockeySDK] ERROR: The %@ is invalid! Please use the HockeyApp app identifier you find on the apps website on HockeyApp! The SDK is disabled!", environment);
+}
+
 
 #pragma mark - Public Instance Methods (Configuration)
 
-- (void)configureWithIdentifier:(NSString *)newAppIdentifier companyName:(NSString *)newCompanyName crashReportManagerDelegate:(id <BITCrashReportManagerDelegate>)crashReportManagerDelegate {
-
+- (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *)companyName delegate:(id <BITHockeyManagerDelegate>)delegate {
   [_appIdentifier release];
-  _appIdentifier = [newAppIdentifier copy];
-
+  _appIdentifier = [appIdentifier copy];
+  
   [_companyName release];
-  _companyName = [newCompanyName copy];
-
-  [[BITCrashReportManager sharedCrashReportManager] setDelegate:crashReportManagerDelegate];
+  _companyName = [companyName copy];
+  
+  _delegate = delegate;
+  
+  [self initializeModules];
 }
-
-
-- (void)setExceptionInterceptionEnabled:(BOOL)exceptionInterceptionEnabled {
-  [[BITCrashReportManager sharedCrashReportManager] setExceptionInterceptionEnabled:exceptionInterceptionEnabled];
-}
-
-
-- (void)setAskUserDetails:(BOOL)askUserDetails {
-  [[BITCrashReportManager sharedCrashReportManager] setAskUserDetails:askUserDetails];
-}
-
-
-- (void)setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:(NSTimeInterval)maxTimeIntervalOfCrashForReturnMainApplicationDelay {
-  [[BITCrashReportManager sharedCrashReportManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:maxTimeIntervalOfCrashForReturnMainApplicationDelay];
-}
-
 
 - (void)startManager {
-  BOOL validAppID = [self checkValidityOfAppIdentifier:_appIdentifier];
-  
-	if (validAppID) {
-    [[BITCrashReportManager sharedCrashReportManager] setAppIdentifier:_appIdentifier];
-    [[BITCrashReportManager sharedCrashReportManager] setCompanyName:_companyName];
-    [[BITCrashReportManager sharedCrashReportManager] startManager];
-  } else {
-    NSLog(@"ERROR: The app identifier is invalid! Please use the HockeyApp app identifier you find on the apps website on HockeyApp! The SDK is disabled!");
-    [[BITCrashReportManager sharedCrashReportManager] returnToMainApplication];
+  if (!_validAppIdentifier || ![self isSetUpOnMainThread]) {
+    [_crashManager returnToMainApplication];
+    return;
   }
+  
+  BITHockeyLog(@"INFO: Starting HockeyManager");
+  _startManagerIsInvoked = YES;
+  
+  // start CrashManager
+  if (![self isCrashManagerDisabled]) {
+    BITHockeyLog(@"INFO: Start CrashManager");
+    if (_serverURL) {
+      [_crashManager setServerURL:_serverURL];
+    }
+    [_crashManager setCompanyName:_companyName];
+    [_crashManager startManager];
+  } else {
+    [_crashManager returnToMainApplication];
+  }
+}
+
+- (void)validateStartManagerIsInvoked {
+  if (_validAppIdentifier && !_startManagerIsInvoked) {
+    NSLog(@"[HockeySDK] ERROR: You did not call [[BITHockeyManager sharedHockeyManager] startManager] to startup the HockeySDK! Please do so after setting up all properties. The SDK is NOT running.");
+  }
+}
+
+- (void)setServerURL:(NSString *)aServerURL {
+  // ensure url ends with a trailing slash
+  if (![aServerURL hasSuffix:@"/"]) {
+    aServerURL = [NSString stringWithFormat:@"%@/", aServerURL];
+  }
+  
+  if (_serverURL != aServerURL) {
+    _serverURL = [aServerURL copy];
+  }
+}
+
+
+#pragma mark - Private Instance Methods
+
+- (void)initializeModules {
+  _validAppIdentifier = [self checkValidityOfAppIdentifier:_appIdentifier];
+  
+  if (![self isSetUpOnMainThread]) return;
+  
+  _startManagerIsInvoked = NO;
+  
+  BITHockeyLog(@"INFO: Setup CrashManager");
+  _crashManager = [[BITCrashManager alloc] initWithAppIdentifier:_appIdentifier];
+  _crashManager.delegate = _delegate;
+  
+  // if we don't initialize the BITCrashManager instance, then the delegate will not be invoked
+  // leaving the app to never show the window if the developer provided an invalid app identifier
+  if (!_validAppIdentifier) {
+    [self logInvalidIdentifier:@"app identifier"];
+    self.disableCrashManager = YES;
+  }
+  
+  if ([self isCrashManagerDisabled])
+    _crashManager.crashManagerActivated = NO;
 }
 
 

@@ -29,7 +29,12 @@
  */
 
 #import "BITCrashReportUI.h"
+
 #import <HockeySDK/HockeySDK.h>
+#import "HockeySDKPrivate.h"
+
+#import "BITCrashManagerPrivate.h"
+
 #import <sys/sysctl.h>
 #import <CrashReporter/CrashReporter.h>
 
@@ -49,12 +54,13 @@ const CGFloat kDetailsHeight = 285;
 @synthesize userEmail = _userEmail;
 
 
-- (id)initWithManager:(BITCrashReportManager *)crashReportManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
+- (instancetype)initWithManager:(BITCrashManager *)crashManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
   
   self = [super initWithWindowNibName: @"BITCrashReportUI"];
   
   if ( self != nil) {
-    _crashReportManager = crashReportManager;
+    _mainAppMenu = [NSApp mainMenu];
+    _crashManager = crashManager;
     _crashFile = [crashReportFile copy];
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
@@ -107,6 +113,7 @@ const CGFloat kDetailsHeight = 285;
 - (void)endCrashReporter {
   [self close];
   [NSApp stopModal];
+  [NSApp setMainMenu:_mainAppMenu];
 }
 
 
@@ -165,7 +172,7 @@ const CGFloat kDetailsHeight = 285;
 - (IBAction)cancelReport:(id)sender {
   [self endCrashReporter];
   
-  [_crashReportManager cancelReport];
+  [_crashManager cancelReport];
 }
 
 - (IBAction)submitReport:(id)sender {
@@ -177,11 +184,11 @@ const CGFloat kDetailsHeight = 285;
   [[self window] makeFirstResponder: nil];
   
   if (showUserDetails) {
-    _crashReportManager.userName = [nameTextField stringValue];
-    _crashReportManager.userEmail = [emailTextField stringValue];
+    _crashManager.userName = [nameTextField stringValue];
+    _crashManager.userEmail = [emailTextField stringValue];
   }
   
-  [_crashReportManager sendReportWithCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
+  [_crashManager sendReportWithCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
   [_crashLogContent release];
   _crashLogContent = nil;
   
@@ -193,31 +200,31 @@ const CGFloat kDetailsHeight = 285;
 #define DISTANCE_BETWEEN_BUTTONS		3
   
   
-  [[self window] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"WindowTitle", @""), _applicationName]];
+  [[self window] setTitle:[NSString stringWithFormat:BITHockeyLocalizedString(@"WindowTitle", @""), _applicationName]];
   
-  [[nameTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"NameTextTitle", @"")];
+  [[nameTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"NameTextTitle", @"")];
   [[nameTextField cell] setTitle:self.userName];
   if ([[nameTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
     [[nameTextField cell] setUsesSingleLineMode:YES];
   }
   
-  [[emailTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"EmailTextTitle", @"")];
+  [[emailTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"EmailTextTitle", @"")];
   [[emailTextField cell] setTitle:self.userEmail];
   if ([[emailTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
     [[emailTextField cell] setUsesSingleLineMode:YES];
   }
 
-  [[introductionText cell] setTitle:[NSString stringWithFormat:HockeySDKLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
-  [[commentsTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"CommentsDisclosureTitle", @"")];
-  [[problemDescriptionTextFieldTitle cell] setTitle:HockeySDKLocalizedString(@"ProblemDetailsTitle", @"")];
+  [[introductionText cell] setTitle:[NSString stringWithFormat:BITHockeyLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
+  [[commentsTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"CommentsDisclosureTitle", @"")];
+  [[problemDescriptionTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"ProblemDetailsTitle", @"")];
 
-  [[descriptionTextField cell] setPlaceholderString:HockeySDKLocalizedString(@"UserDescriptionPlaceholder", @"")];
-  [noteText setStringValue:HockeySDKLocalizedString(@"PrivacyNote", @"")];
+  [[descriptionTextField cell] setPlaceholderString:BITHockeyLocalizedString(@"UserDescriptionPlaceholder", @"")];
+  [noteText setStringValue:BITHockeyLocalizedString(@"PrivacyNote", @"")];
   
-  [showButton setTitle:HockeySDKLocalizedString(@"ShowDetailsButtonTitle", @"")];
-  [hideButton setTitle:HockeySDKLocalizedString(@"HideDetailsButtonTitle", @"")];
-  [cancelButton setTitle:HockeySDKLocalizedString(@"CancelButtonTitle", @"")];
-  [submitButton setTitle:HockeySDKLocalizedString(@"SendButtonTitle", @"")];
+  [showButton setTitle:BITHockeyLocalizedString(@"ShowDetailsButtonTitle", @"")];
+  [hideButton setTitle:BITHockeyLocalizedString(@"HideDetailsButtonTitle", @"")];
+  [cancelButton setTitle:BITHockeyLocalizedString(@"CancelButtonTitle", @"")];
+  [submitButton setTitle:BITHockeyLocalizedString(@"SendButtonTitle", @"")];
   
   // adjust button sizes
   NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys: [submitButton font], NSFontAttributeName, nil];
@@ -267,8 +274,6 @@ const CGFloat kDetailsHeight = 285;
   [_companyName release]; _companyName = nil;
   self.userName = nil;
   self.userEmail = nil;
-  
-  _crashReportManager = nil;
   
   [super dealloc];
 }

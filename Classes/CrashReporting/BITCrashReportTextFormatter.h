@@ -34,6 +34,7 @@
 
 #import <Foundation/Foundation.h>
 
+#import <CrashReporter/PLCrashNamespace.h>
 #import <CrashReporter/PLCrashReport.h>
 
 // Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
@@ -47,7 +48,7 @@
 @interface BITCrashReportTextFormatter : NSObject {
 }
 
-+ (NSString *)stringValueForCrashReport:(PLCrashReport *)report;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(PLCrashReport *)report;
++ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
++ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
 
 @end

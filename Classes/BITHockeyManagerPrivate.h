@@ -1,7 +1,7 @@
 /*
- * Author: Landon Fuller <landonf@plausiblelabs.com>
+ * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2008-2009 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -28,26 +28,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PLCrashReportApplicationInfo : NSObject {
-@private
-    /** Application identifier */
-    NSString *_applicationIdentifier;
-    
-    /** Application version */
-    NSString *_applicationVersion;
+@protocol BITHockeyManagerDelegate;
+
+
+@interface BITHockeyManager () {
 }
 
-- (id) initWithApplicationIdentifier: (NSString *) applicationIdentifier 
-                  applicationVersion: (NSString *) applicationVersion;
-
-/**
- * The application identifier. This is usually the application's CFBundleIdentifier value.
- */
-@property(nonatomic, readonly) NSString *applicationIdentifier;
-
-/**
- * The application version. This is usually the application's CFBundleVersion value.
- */
-@property(nonatomic, readonly) NSString *applicationVersion;
+@property (nonatomic, unsafe_unretained) id<BITHockeyManagerDelegate> delegate;
 
 @end
