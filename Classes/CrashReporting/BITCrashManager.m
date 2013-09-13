@@ -202,8 +202,11 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   NSString *serviceName = [NSString stringWithFormat:@"%@.HockeySDK", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
   
   BITGenericKeychainItem *item = [BITGenericKeychainItem genericKeychainItemForService:serviceName withUsername:key];
-  if (item)
-    return [item password];
+  if (item) {
+    NSString *pwd = [item password];
+    CFRelease(item);
+    return pwd;
+  }
   
   return nil;
 }
@@ -214,6 +217,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   BITGenericKeychainItem *item = [BITGenericKeychainItem genericKeychainItemForService:serviceName withUsername:key];
   if (item) {
     [item removeFromKeychain];
+    CFRelease(item);
     return YES;
   }
   
