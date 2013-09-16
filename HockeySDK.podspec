@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name        = "HockeySDK"
   s.version     = "1.0.3"
-  s.license     = 'MIT'
+  s.license     = {:type=>'MIT', :file=>'HockeySDK-Mac/LICENSE.txt'}
   s.platform    = :osx, '10.5'
   s.summary     = 'Collect crash reports with HockeyApp.'
   s.homepage    = 'http://hockeyapp.net/'
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
   s.source         = { :http => 'http://download.hockeyapp.net/sdk/mac/HockeySDK-Mac-v1.0.3.zip' }
 
-  s.source_files   = 'HockeySDK-Mac/HockeySDK.framework/Headers/*.h'
+  s.public_header_files   = 'HockeySDK-Mac/HockeySDK.framework/Headers/*.h'
   s.preserve_paths = 'HockeySDK-Mac/HockeySDK.framework'
 
   s.frameworks     = 'HockeySDK'
