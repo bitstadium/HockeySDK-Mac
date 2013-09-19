@@ -251,6 +251,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   NSString *errorString = nil;
   NSPropertyListFormat format;
   
+  self.userName = [self stringValueFromKeychainForKey:[NSString stringWithFormat:@"default.%@", kBITCrashMetaUserName]];
+  self.userEmail = [self stringValueFromKeychainForKey:[NSString stringWithFormat:@"default.%@", kBITCrashMetaUserEmail]];
+  
   if (![_fileManager fileExistsAtPath:_settingsFile])
     return;
   
