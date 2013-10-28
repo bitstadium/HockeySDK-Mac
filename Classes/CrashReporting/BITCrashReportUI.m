@@ -254,7 +254,7 @@ const CGFloat kDetailsHeight = 285;
 	hideBtnBox.size.width = titleSize.width;
 	[hideButton setFrame: showBtnBox];
     
-  NSString *logTextViewContent = [_crashLogContent copy];
+  NSString *logTextViewContent = [[_crashLogContent copy] autorelease];
   
   if (_logContent)
     logTextViewContent = [NSString stringWithFormat:@"%@\n\n%@", logTextViewContent, _logContent];
