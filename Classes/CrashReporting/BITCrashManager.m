@@ -81,7 +81,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 - (instancetype)init {
   if ((self = [super init])) {
     _appIdentifier = nil;
-    _serverURL = BITHOCKEYSDK_URL;
+    _serverURL = [BITHOCKEYSDK_URL copy];
     _crashReportUI = nil;
     _fileManager = [[NSFileManager alloc] init];
     _askUserDetails = YES;
@@ -161,18 +161,22 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   [_responseData release]; _responseData = nil;
   
   [_appIdentifier release]; _appIdentifier = nil;
+  [_serverURL release]; _serverURL = nil;
   [_companyName release]; _companyName = nil;
+  [_userName release]; _userName = nil;
+  [_userEmail release]; _userEmail = nil;
 
   [_fileManager release]; _fileManager = nil;
   
   [_crashFiles release]; _crashFiles = nil;
   [_crashesDir release]; _crashesDir = nil;
   [_settingsFile release]; _settingsFile = nil;
+  [_analyzerInProgressFile release]; _analyzerInProgressFile = nil;
   
   [_crashReportUI release]; _crashReportUI= nil;
   
-  [_analyzerInProgressFile release]; _analyzerInProgressFile = nil;
   [_approvedCrashReports release]; _approvedCrashReports = nil;
+  [_dictOfLastSessionCrash release]; _dictOfLastSessionCrash = nil;
   
   [super dealloc];
 }
@@ -538,7 +542,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     
     NSString *crashFile = [_crashFiles lastObject];
     NSData *crashData = [NSData dataWithContentsOfFile: crashFile];
-    BITPLCrashReport *report = [[BITPLCrashReport alloc] initWithData:crashData error:&error];
+    BITPLCrashReport *report = [[[BITPLCrashReport alloc] initWithData:crashData error:&error] autorelease];
     NSString *installString = [BITSystemProfile deviceIdentifier] ?: @"";
     crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report crashReporterKey:installString];
     
