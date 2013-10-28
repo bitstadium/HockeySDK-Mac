@@ -138,7 +138,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     }
     
     _settingsFile = [[_crashesDir stringByAppendingPathComponent:BITHOCKEY_CRASH_SETTINGS] retain];
-    _analyzerInProgressFile = [_crashesDir stringByAppendingPathComponent:BITHOCKEY_CRASH_ANALYZER];
+    _analyzerInProgressFile = [[_crashesDir stringByAppendingPathComponent:BITHOCKEY_CRASH_ANALYZER] retain];
     
     if ([_fileManager fileExistsAtPath:_analyzerInProgressFile]) {
       NSError *theError = nil;
@@ -171,6 +171,7 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   
   [_crashReportUI release]; _crashReportUI= nil;
   
+  [_analyzerInProgressFile release]; _analyzerInProgressFile = nil;
   [_approvedCrashReports release]; _approvedCrashReports = nil;
   
   [super dealloc];
