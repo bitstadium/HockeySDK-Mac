@@ -366,8 +366,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindowForCrashManager:)]) {
     [self.delegate showMainApplicationWindowForCrashManager:self];
-  } else {
-    NSLog(@"[HockeySDK] ERROR: Required BITCrashManagerDelegate is not set!");
   }
 }
 
