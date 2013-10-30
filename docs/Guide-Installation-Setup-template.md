@@ -50,7 +50,7 @@ This document contains the following sections:
    - Drag HockeySDK-Mac from the Project Navigator left sidebar to the list in the new Copy Files phase.
 
 5. Check the `Runpath Search Paths` in the app targets build settings to contain `@loader_path/../Frameworks`
-6. Continue with the chapter "Setup HockeySDK-Mac".
+6. Make sure to sign the app, since the SDK will store user related input in the keychain for privacy reasons
 7. If you want to distribute your app to the App Store and Xcode doesn't sign the framework automatically, you need to sign the framework yourself with your App Store distribution profile. One option is to add a run script build phase:
     
         LOCATION="${BUILT_PRODUCTS_DIR}"/"${FRAMEWORKS_FOLDER_PATH}"
