@@ -1,55 +1,65 @@
+## Version 2.0.0 RC 1
+
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/2.0.0rc1/docs/docs/Changelog.html)
+
+## Introduction
+
 This how-to describes how to integrate the HockeySDK-Mac client into your Mac app. The client allows testers to send crash reports after the application has crashed. It will ask the tester on the next startup if he wants to send the crash report and then submit the crash report to HockeyApp. If you have uploaded the .dSYM file, HockeyApp will automatically symbolicate the crash report so that you can analyze the stack trace including class, method and line number at which the crash happened.
 
 HockeySDK-Mac can be integrated in apps for both beta distribution and the App Store.
 
-## Prerequisites
+This document contains the following sections:
+
+- [Requirements](#requirements)
+- [Download & Extract](#download)
+- [Set up Xcode](#xcode)
+- [Modify Code](#modify)
+- [Additional Options](#options)
+
+<a id="requirements"></a> 
+## Requirements
 
 1. Before you integrate HockeySDK-Mac into your own app, you should add the app to HockeyApp if you haven't already. Read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-create-a-new-app) on how to do it.
 
 2. We also assume that you already have a project in Xcode and that this project is opened in Xcode 4.
 
-## Versioning
+3. The SDK runs on devices with Mac OS X 10.5.0 or higher.
 
-We suggest to handle beta and release versions in two separate *apps* on HockeyApp with their own bundle identifier (e.g. by adding "beta" to the bundle identifier), so
+<a id="download"></a> 
+## Download & Extract
 
-* both apps can run on the same device or computer at the same time without interfering,
+1. Download the latest [HockeySDK-Mac](http://www.hockeyapp.net/releases/) framework.
 
-* release versions do not appear on the beta download pages, and
+2. Unzip the file. A new folder `HockeySDK-Mac` is created.
 
-* easier analysis of crash reports and user feedback.
+3. Move the folder into your project directory. We usually put 3rd-party code into a subdirectory named `Vendor`, so we move the directory into it.
 
-We propose the following method to set version numbers in your beta versions:
+<a id="xcode"></a> 
+## Set up Xcode
 
-* Use both "Bundle Version" and "Bundle Version String, short" in your Info.plist.
-
-* "Bundle Version" should contain a sequential build number, e.g. 1, 2, 3.
-
-* "Bundle Version String, short" should contain the target official version number, e.g. 1.0.
-
-## Integrate using the framework binary
-
-1. Download the latest framework.
-
-2. Unzip the file. A HockeySDK.framework package is extracted
-
-3. Link the HockeySDK-Mac framework to your target:
-   - Drag HockeySDK.framework into the Frameworks folder of your Xcode project.
-   - Be sure to check the “copy items into the destination group’s folder” box in the sheet that appears.
-   - Make sure the box is checked for your app’s target in the sheet’s Add to targets list.
+1. Drag HockeySDK.framework into the Frameworks folder of your Xcode project.
+2. Similar to above, our projects have a group `Vendor`, so we drop it there.
+3. Select `Create groups for any added folders` and set the checkmark for your target. Then click `Finish`.
 4. Now we’ll make sure the framework is copied into your app bundle:
-   - Click on your project in the Project Navigator.
+   - Click on your project in the `Project Navigator` (⌘+1).
    - Click your target in the project editor.
-   - Click on the Build Phases tab.
-   - Click the Add Build Phase button at the bottom and choose Add Copy Files.
+   - Click on the `Build Phases` tab.
+   - Click the `Add Build Phase` button at the bottom and choose `Add Copy Files`.
    - Click the disclosure triangle next to the new build phase.
-   - Choose Frameworks from the Destination list.
+   - Choose `Frameworks` from the Destination list.
    - Drag HockeySDK-Mac from the Project Navigator left sidebar to the list in the new Copy Files phase.
 
 5. Check the `Runpath Search Paths` in the app targets build settings to contain `@loader_path/../Frameworks`
 6. Continue with the chapter "Setup HockeySDK-Mac".
-7. If Xcode requires to sign all frameworks, add `--deep` to the `OTHER_CODE_SIGN_FLAGS` build settings of your app target
+7. If you want to distribute your app to the App Store and Xcode doesn't sign the framework automatically, you need to sign the framework yourself with your App Store distribution profile. One option is to add a run script build phase:
+    
+        LOCATION="${BUILT_PRODUCTS_DIR}"/"${FRAMEWORKS_FOLDER_PATH}"
+        IDENTITY="Developer ID Application: ENTERYOURDEVELOPERNAMEFORTHECERTIFICATE"
+        codesign --verbose --force --sign "$IDENTITY" "$LOCATION/HockeySDK.framework/Versions/A/Frameworks/CrashReporter.framework/Versions/A"
+        codesign --verbose --force --sign "$IDENTITY" "$LOCATION/HockeySDK.framework/Versions/A"
 
-## Setup HockeySDK-Mac
+<a id="modify"></a> 
+## Modify Code
 
 1. Open your `AppDelegate.h` file.
 
@@ -60,39 +70,26 @@ We propose the following method to set version numbers in your beta versions:
 
 4. Switch to your `AppDelegate.m` file and add the following line at the top of the file below your own #import statements:<pre><code>#import &lt;HockeySDK/BITHockeyManager.h&gt;</code></pre>
 
-5. Search for the method `applicationDidFinishLaunching:(NSNotification *)aNotification`, or find where your application normally presents and activates its main/first window. (Note: If you are using NIBs, make sure to change the main window to NOT automatically show when the NIB is loaded!)
+5. Search for the method `applicationDidFinishLaunching:(NSNotification *)aNotification`, or find where your application normally presents and activates its main/first window.
 
    Replace whatever usually opens the main window with the following lines:
 
         [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" crashReportManagerDelegate:self];
         [[BITHockeyManager sharedHockeyManager] startManager];
 
-    In case of document based apps, invoke `startManager` at the end of `applicationDidFinishLaunching`, since otherwise you may lose the Apple events to restore, open untitled document etc.
+   In case of document based apps, invoke `startManager` at the end of `applicationDidFinishLaunching`, since otherwise you may lose the Apple events to restore, open untitled document etc.
     
-	If any crash report has been saved from the last time your application ran, `startManager` will present a dialog to allow the user to submit it. Once done, or if there are no crash logs, it will then call back to your `appDelegate` with `showMainApplicationWindowForCrashManager:` (see step 7 below) to continue the process of getting your main window displayed.
-
-    This allows the SDK to present a crash dialog on the next startup before your main window gets initialized and possibly crashes right away again.
+   If any crash report has been saved from the last time your application ran, `startManager` will present a dialog to allow the user to submit it. Once done, or if there are no crash logs, it will then call back to your `appDelegate` with `showMainApplicationWindowForCrashManager:` (if implemented, see [Improved startup crashes handling](#improvedstartup)).
 
 6. Replace `APP_IDENTIFIER` in `configureWithIdentifier:` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier). 
 
-7. Your `appDelegate` is now a `BITCrashManagerDelegate`, so you must implement the required `showMainApplicationWindowForCrashManager:` method like this:
+7. Set additional options and/or implement optional delegate methods as mentioned below if you want to add custom data to the crash reports.
 
-        // this delegate method is required
-        - (void) showMainApplicationWindowForCrashManager:(id)crashManager
-        {
-            // launch the main app window
-            [myWindow makeFirstResponder: nil];
-            [myWindow makeKeyAndOrderFront: nil];
-        }
+8. If this app is sandboxed, make sure to add the entitlements for network access.
 
-    In case of NSDocument-based applications, leave the implementation empty.
-        
-8. Set additional options and/or implement optional delegate methods as mentioned below if you want to add custom data to the crash reports.
+9. Done.
 
-9. If this app is sandboxed, make sure to add the entitlements for network access.
-
-10. Done.
-
+<a id="options"></a> 
 ## Additional Options
 
 ### Catch additional exceptions
@@ -153,9 +150,24 @@ If you want to send all crash reports automatically, configure the SDK with the 
 
     [[BITHockeyManager sharedHockeyManager].crashManager setAutoSubmitCrashReport: YES];
 
+<a id"improvedstartup"></a>
 ### Improved startup crashes handling
 
-Crash reports are normally sent to our server asynchronously. If your application is crashing near startup, BITHockeyManager will send crash reports synchronously to make sure they are being received. For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously, use the following line:
+If you have a window based app, you could set the main window not to show app automatically, allowing the SDK to show a crash reporter window before the app shows the main window and possibly crash right away before the crash could be reported to the servers.
+
+Implement the optional `BITCrashManagerDelegate` protocol method `showMainApplicationWindowForCrashManager:` method like this:
+
+    // this delegate method is required
+    - (void) showMainApplicationWindowForCrashManager:(id)crashManager
+    {
+        // launch the main app window
+        [myWindow makeFirstResponder: nil];
+        [myWindow makeKeyAndOrderFront: nil];
+    }
+
+If you are using NIBs, make sure to change the main window to NOT automatically show when the NIB is loaded!
+ 
+Crash reports are normally sent to our server asynchronously. If your application is crashing near startup and you implemented the above method, BITHockeyManager will send crash reports synchronously to make sure they are being received. For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously, use the following line:
 
     [[BITHockeyManager sharedHockeyManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:<NewTimeInterval>];
 
@@ -195,6 +207,24 @@ Crash reports are normally sent to our server asynchronously. If your applicatio
             [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillResignActiveNotification object:nil];
             …
         };
+
+### Versioning
+
+We suggest to handle beta and release versions in two separate *apps* on HockeyApp with their own bundle identifier (e.g. by adding "beta" to the bundle identifier), so
+
+* both apps can run on the same device or computer at the same time without interfering,
+
+* release versions do not appear on the beta download pages, and
+
+* easier analysis of crash reports and user feedback.
+
+We propose the following method to set version numbers in your beta versions:
+
+* Use both "Bundle Version" and "Bundle Version String, short" in your Info.plist.
+
+* "Bundle Version" should contain a sequential build number, e.g. 1, 2, 3.
+
+* "Bundle Version String, short" should contain the target official version number, e.g. 1.0.
 
 ### Show debug log messages
 
@@ -236,8 +266,23 @@ As an easier alternative for step 5 and 6, you can use our [HockeyMac](https://g
 
 If your app is using multiple frameworks that are not statically linked, you can upload all dSYM packages to HockeyApp by creating a single `.zip` file with all the dSYM packages included and make sure the zip file has the extension `.dSYM.zip`.
 
+### Mac Desktop Uploader
 
-## Checklist if Crashes Do Not Appear in HockeyApp
+The Mac Desktop Uploader can provide easy uploading of your app versions to HockeyApp. Check out the [installation tutorial](Guide-Installation-Mac-App).
+
+### Xcode Documentation
+
+This documentation provides integrated help in Xcode for all public APIs and a set of additional tutorials and HowTos.
+
+1. Download the [HockeySDK-Mac documentation](http://hockeyapp.net/releases/).
+
+2. Unzip the file. A new folder `HockeySDK-Mac-documentation` is created.
+
+3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSet`
+
+The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/2.0.0rc1/](http://hockeyapp.net/help/sdk/mac/2.0.0rc1/)
+
+### Checklist if Crashes Do Not Appear in HockeyApp
 
 1. Check if the `APP_IDENTIFIER` matches the App ID in HockeyApp.
 
