@@ -263,6 +263,8 @@ static BOOL _logsErrors;
 	{
 		if (_logsErrors)
 			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+
+        if (password) SecKeychainItemFreeContent(NULL, password);
 		return nil;
 	}
 	NSString *passwordString = [[[NSString alloc] initWithData:[NSData dataWithBytes:password length:passwordLength] encoding:NSUTF8StringEncoding] autorelease];
