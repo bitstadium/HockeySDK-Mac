@@ -28,7 +28,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <CrashReporter/CrashReporter.h>
+#import "CrashReporter.h"
 
 // stores the set of crashreports that have been approved but aren't sent yet
 #define kHockeySDKApprovedCrashReports @"HockeySDKApprovedCrashReports"

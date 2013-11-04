@@ -38,7 +38,7 @@
 #import "BITKeychainItem.h"
 
 #import "BITCrashReportTextFormatter.h"
-#import <CrashReporter/CrashReporter.h>
+#import "CrashReporter.h"
 
 #import <sys/sysctl.h>
 #import <objc/runtime.h>

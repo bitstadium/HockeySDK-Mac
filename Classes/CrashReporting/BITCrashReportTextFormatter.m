@@ -31,7 +31,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <CrashReporter/CrashReporter.h>
+#import "CrashReporter.h"
 
 #import "BITCrashReportTextFormatter.h"
 

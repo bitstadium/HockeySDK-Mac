@@ -36,7 +36,7 @@
 #import "BITCrashManagerPrivate.h"
 
 #import <sys/sysctl.h>
-#import <CrashReporter/CrashReporter.h>
+#import "CrashReporter.h"
 
 
 @interface BITCrashReportUI(private)
