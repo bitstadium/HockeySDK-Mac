@@ -15,6 +15,7 @@ This document contains the following sections:
 - [Set up Xcode](#xcode)
 - [Modify Code](#modify)
 - [Additional Options](#options)
+- [Upload the .dSYM File](#dsymupload)
 
 <a id="requirements"></a> 
 ## Requirements
@@ -90,6 +91,17 @@ This document contains the following sections:
 <a id="options"></a> 
 ## Additional Options
 
+- [Catch additional exceptions](#exceptions)
+- [Automatic sending of crash reports](#automatic)
+- [Improved startup crashes handling](#improvedstartup)
+- [Add analytics data to Sparkle setup](#sparkle)
+- [Show debug log messages](#debug)
+- [Optional Delegate Methods](#delegates)
+- [Versioning](#versioning)
+<br/><br/><br/>
+
+
+<a id="exceptions"></a>
 ### Catch additional exceptions
 
 On Mac OS X there are three types of crashes that are not reported to a registered `NSUncaughtExceptionHandler`:
@@ -140,13 +152,17 @@ Instead we provide the optional `NSApplication` subclass `BITCrashExceptionAppli
 * Replace `NSApplication` with `BITCrashExceptionApplication`
 
 Alternatively, if you have your own NSApplication subclass, change it to be a subclass of `BITCrashExceptionApplication` instead.
+<br/><br/><br/>
 
 
+<a id="automatic"></a>
 ### Automatic sending of crash reports
 
 If you want to send all crash reports automatically, configure the SDK with the following code:
 
     [[BITHockeyManager sharedHockeyManager].crashManager setAutoSubmitCrashReport: YES];
+<br/><br/>
+
 
 <a id"improvedstartup"></a>
 ### Improved startup crashes handling
@@ -168,7 +184,10 @@ If you are using NIBs, make sure to change the main window to NOT automatically 
 Crash reports are normally sent to our server asynchronously. If your application is crashing near startup and you implemented the above method, BITHockeyManager will send crash reports synchronously to make sure they are being received. For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously, use the following line:
 
     [[BITHockeyManager sharedHockeyManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:<NewTimeInterval>];
+<br/><br/>
 
+
+<a id="sparkle"></a>
 ### Sparkle setup for beta distribution
 
 * Install the Sparkle SDK: http://sparkle.andymatuschak.org/
@@ -178,6 +197,8 @@ Crash reports are normally sent to our server asynchronously. If your applicatio
 * Set `SUFeedURL` to `https://rink.hockeyapp.net/api/2/apps/<APP_IDENTIFIER>` and replace `<APP_IDENTIFIER>` with the same value used to initialize the HockeySDK
 
 * Create a `.zip` file of your app bundle and upload that to HockeyApp.
+<br/><br/><br/>
+
 
 ### Add analytics data to Sparkle setup
 
@@ -205,7 +226,34 @@ Crash reports are normally sent to our server asynchronously. If your applicatio
             [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillResignActiveNotification object:nil];
             …
         };
+<br/><br/>
 
+
+<a id="delegates"></a>
+### Optional Delegate Methods
+
+Besides the crash log, HockeyApp can show you fields with information about the user and an optional description. You can fill out these fields by implementing the following methods:
+
+* `crashReportUserID` should be a user ID or email, e.g. if your app requires to sign in into your server, you could specify the login here. The string should be no longer than 255 chars. 
+
+* `crashReportContact` should be the user's name or similar. The string should be no longer than 255 chars.
+
+* `crashReportApplicationLog` can be as long as you want it to be and contain additional information about the crash. For example, you can return a custom log or the last XML or JSON response from your server here.
+
+If you implement these delegate methods and keep them in your live app too, please consider the privacy implications.
+<br/><br/><br/>
+
+
+<a id="debug"></a>
+### Show debug log messages
+
+In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
+
+    [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled];
+<br/><br/><br/>
+
+
+<a id="versioning"></a>
 ### Versioning
 
 We suggest to handle beta and release versions in two separate *apps* on HockeyApp with their own bundle identifier (e.g. by adding "beta" to the bundle identifier), so
@@ -224,24 +272,7 @@ We propose the following method to set version numbers in your beta versions:
 
 * "Bundle Version String, short" should contain the target official version number, e.g. 1.0.
 
-### Show debug log messages
-
-In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
-
-    [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled];
- 
-## Optional Delegate Methods
-
-Besides the crash log, HockeyApp can show you fields with information about the user and an optional description. You can fill out these fields by implementing the following methods:
-
-* `crashReportUserID` should be a user ID or email, e.g. if your app requires to sign in into your server, you could specify the login here. The string should be no longer than 255 chars. 
-
-* `crashReportContact` should be the user's name or similar. The string should be no longer than 255 chars.
-
-* `crashReportApplicationLog` can be as long as you want it to be and contain additional information about the crash. For example, you can return a custom log or the last XML or JSON response from your server here.
-
-If you implement these delegate methods and keep them in your live app too, please consider the privacy implications.
-
+<a id="dsymupload"></a>
 ## Upload the .dSYM File
 
 Once you have your app ready for beta testing or even to submit it to the App Store, you need to upload the .dSYM bundle to HockeyApp to enable symbolication. If you have built your app with Xcode4, menu Product > Archive, you can find the .dSYM as follows:

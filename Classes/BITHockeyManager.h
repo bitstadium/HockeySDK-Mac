@@ -26,32 +26,33 @@
 @protocol BITHockeyManagerDelegate;
 
 /**
- * The HockeySDK manager. Responsible for setup and management of all components
- *
- * This is the principal SDK class. It represents the entry point for the HockeySDK. The main promises of the class are initializing the SDK 
- * modules, providing access to global properties and to all modules. Initialization is divided into several distinct phases:
- *
- * 1. Setup the [HockeyApp](http://hockeyapp.net/) app identifier and the optional delegate: This is the least required information on setting up the SDK and using it. It does some simple validation of the app identifier.
- * 2. Provides access to the SDK module `BITCrashManager`. This way all modules can be further configured to personal needs, if the defaults don't fit the requirements.
- * 3. Configure each module.
- * 4. Start up all modules.
- *
- * The SDK is optimized to defer everything possible to a later time while making sure e.g. crashes on startup can also be caught and each module executes other code with a delay some seconds. This ensures that applicationDidFinishLaunching will process as fast as possible and the SDK will not block the startup sequence resulting in a possible kill by the watchdog process.
- *
- * All modules do **NOT** show any user interface if the module is not activated or not integrated.
- * `BITCrashManager`: Shows an alert on startup asking the user if he/she agrees on sending the crash report, if `[BITCrashManager autoSubmitCrashReport]` is enabled (default)
- *
- * @warning The SDK is **NOT** thread safe and has to be set up on the main thread!
- *
- * @warning You should **NOT** change any module configuration after calling `startManager`!
- *
- * Example:
- *    [[BITHockeyManager sharedHockeyManager]
- *      configureWithIdentifier:@"<AppIdentifierFromHockeyApp>"
- *      companyName:@"<YourCompanyName>"
- *      crashReportManagerDelegate:self];
- *    [[BITHockeyManager sharedHockeyManager] startManager];
- *
+ The HockeySDK manager. Responsible for setup and management of all components
+ 
+ This is the principal SDK class. It represents the entry point for the HockeySDK. The main promises of the class are initializing the SDK
+ modules, providing access to global properties and to all modules. Initialization is divided into several distinct phases:
+ 
+ 1. Setup the [HockeyApp](http://hockeyapp.net/) app identifier and the optional delegate: This is the least required information on setting up the SDK and using it. It does some simple validation of the app identifier.
+ 2. Provides access to the SDK module `BITCrashManager`. This way all modules can be further configured to personal needs, if the defaults don't fit the requirements.
+ 3. Configure each module.
+ 4. Start up all modules.
+ 
+ The SDK is optimized to defer everything possible to a later time while making sure e.g. crashes on startup can also be caught and each module executes other code with a delay some seconds. This ensures that applicationDidFinishLaunching will process as fast as possible and the SDK will not block the startup sequence resulting in a possible kill by the watchdog process.
+ 
+ All modules do **NOT** show any user interface if the module is not activated or not integrated.
+ `BITCrashManager`: Shows an alert on startup asking the user if he/she agrees on sending the crash report, if `[BITCrashManager autoSubmitCrashReport]` is enabled (default)
+ 
+ Example:
+ 
+     [[BITHockeyManager sharedHockeyManager]
+       configureWithIdentifier:@"<AppIdentifierFromHockeyApp>"
+       companyName:@"<YourCompanyName>"
+       crashReportManagerDelegate:self];
+     [[BITHockeyManager sharedHockeyManager] startManager];
+ 
+ @warning The SDK is **NOT** thread safe and has to be set up on the main thread!
+ 
+ @warning You should **NOT** change any module configuration after calling `startManager`!
+ 
  */
 @interface BITHockeyManager : NSObject {
 @private
