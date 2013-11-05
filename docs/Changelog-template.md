@@ -1,3 +1,21 @@
+## Version 2.0 RC 1
+
+- General
+
+  - [UPDATE] Simplified setup by integrating PLCrashReporter as a static library
+  - [UPDATE] Improved documentation
+	<br /><br/>
+
+- Crash Reporting
+
+  - [NEW] Integrated PLCrashReporter 1.2 beta 3
+  - [UPDATE] Made all delegates fully optional to simplify setup
+  - [FIX] Fixed a possible crash when detecting a crash report
+  - [FIX] Fixed memory leaks reported by clang on Xcode 5
+  - [FIX] Fixed username, email and userid not being sent to the server
+  - [FIX] Load previously entered username and email and show them in the dialog
+	<br /><br/>
+  
 ## Version 2.0 Beta 1
 
 - General
