@@ -599,7 +599,7 @@
 				INSTALL_PATH = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/andreaslinde/SourceCode/HA/HockeySDK-MacDemo/Vendor/HockeySDK/Vendor/CrashReporter",
+					../Vendor/CrashReporter,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -620,7 +620,7 @@
 				INSTALL_PATH = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/andreaslinde/SourceCode/HA/HockeySDK-MacDemo/Vendor/HockeySDK/Vendor/CrashReporter",
+					../Vendor/CrashReporter,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
