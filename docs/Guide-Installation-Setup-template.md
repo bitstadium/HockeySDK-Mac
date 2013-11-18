@@ -60,33 +60,31 @@ This document contains the following sections:
 <a id="modify"></a> 
 ## Modify Code
 
-1. Open your `AppDelegate.h` file.
+1. Open your `AppDelegate.m` file.
 
 2. Add the following line at the top of the file below your own #import statements:<pre><code>#import &lt;HockeySDK/HockeySDK.h&gt;</code></pre>
 
 3. Add the following protocol to your AppDelegate: `BITHockeyManagerDelegate`:<pre><code>@interface AppDelegate() &lt;BITHockeyManagerDelegate&gt; {}
 @end</code></pre>
 
-4. Switch to your `AppDelegate.m` file and add the following line at the top of the file below your own #import statements:<pre><code>#import &lt;HockeySDK/BITHockeyManager.h&gt;</code></pre>
-
-5. Search for the method `applicationDidFinishLaunching:(NSNotification *)aNotification`, or find where your application normally presents and activates its main/first window.
+4. Search for the method `applicationDidFinishLaunching:(NSNotification *)aNotification`, or find where your application normally presents and activates its main/first window.
 
    Replace whatever usually opens the main window with the following lines:
 
-        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" crashReportManagerDelegate:self];
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" delegate:self];
         [[BITHockeyManager sharedHockeyManager] startManager];
 
    In case of document based apps, invoke `startManager` at the end of `applicationDidFinishLaunching`, since otherwise you may lose the Apple events to restore, open untitled document etc.
     
    If any crash report has been saved from the last time your application ran, `startManager` will present a dialog to allow the user to submit it. Once done, or if there are no crash logs, it will then call back to your `appDelegate` with `showMainApplicationWindowForCrashManager:` (if implemented, see [Improved startup crashes handling](#improvedstartup)).
 
-6. Replace `APP_IDENTIFIER` in `configureWithIdentifier:` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier). 
+5. Replace `APP_IDENTIFIER` in `configureWithIdentifier:` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier).
 
-7. Set additional options and/or implement optional delegate methods as mentioned below if you want to add custom data to the crash reports.
+6. Set additional options and/or implement optional delegate methods as mentioned below if you want to add custom data to the crash reports.
 
-8. If this app is sandboxed, make sure to add the entitlements for network access.
+7. If this app is sandboxed, make sure to add the entitlements for network access.
 
-9. Done.
+8. Done.
 
 <a id="options"></a> 
 ## Additional Options
