@@ -175,8 +175,8 @@ Implement the optional `BITCrashManagerDelegate` protocol method `showMainApplic
     - (void) showMainApplicationWindowForCrashManager:(id)crashManager
     {
         // launch the main app window
-        [myWindow makeFirstResponder: nil];
-        [myWindow makeKeyAndOrderFront: nil];
+        [self.window makeFirstResponder: nil];
+        [self.window makeKeyAndOrderFront: nil];
     }
 
 If you are using NIBs, make sure to change the main window to NOT automatically show when the NIB is loaded!
