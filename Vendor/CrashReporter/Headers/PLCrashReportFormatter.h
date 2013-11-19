@@ -1,12 +1,7 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Landon Fuller <landonf@plausiblelabs.com>
  *
  * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
- * Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -31,24 +26,26 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #import <Foundation/Foundation.h>
 
-#import "PLCrashNamespace.h"
 #import "PLCrashReport.h"
 
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
-#endif
+/**
+ * A crash report formatter accepts a PLCrashReport instance, formats it according to implementation-specified rules,
+ * (such as implementing text output support), and returns the result.
+ */
+@protocol PLCrashReportFormatter
 
-
-@interface BITCrashReportTextFormatter : NSObject {
-}
-
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
+/**
+ * Format the provided @a report.
+ *
+ * @param report Report to be formatted.
+ * @param outError A pointer to an NSError object variable. If an error occurs, this pointer will contain an error
+ * object indicating why the pending crash report could not be formatted. If no error occurs, this parameter will
+ * be left unmodified. You may specify nil for this parameter, and no error information will be provided.
+ *
+ * @return Returns the formatted report data on success, or nil on failure.
+ */
+- (NSData *) formatReport: (PLCrashReport *) report error: (NSError **) outError;
 
 @end

@@ -78,6 +78,7 @@
 	return version;
 }
 
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
 + (BITSystemProfile *)sharedSystemProfile {
   static BITSystemProfile *sharedInstance = nil;
   static dispatch_once_t pred;
@@ -89,8 +90,19 @@
   
   return sharedInstance;
 }
+#else
++ (BITSystemProfile *)sharedSystemProfile {
+  static BITSystemProfile *sharedInstance = nil;
+  
+  if (sharedInstance == nil) {
+    sharedInstance = [[BITSystemProfile alloc] init];
+  }
+  
+  return sharedInstance;
+}
+#endif
 
-- (id)init {
+- (instancetype)init {
   if ((self = [super init])) {
     _usageStartTimestamp = nil;
     _startCounter = 0;
@@ -175,6 +187,11 @@
   
   NSString *app_version = [bundle objectForInfoDictionaryKey:@"CFBundleVersion"];
   [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"app_version", @"App Version", app_version, app_version, nil] forKeys:keys]];
+  
+  if ([[bundle preferredLocalizations] count] > 0) {
+    NSString *language = [[bundle preferredLocalizations] objectAtIndex:0];
+    [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"used_lang", @"Used Language", language, language] forKeys:keys]];
+  }
   
   NSString *os_version = [[self class] systemVersionString];
   [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"os_version", @"OS Version", os_version, os_version, nil] forKeys:keys]];

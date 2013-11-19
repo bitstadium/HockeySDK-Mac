@@ -29,7 +29,7 @@
 "ProblemDetailsTitle" = "Problem details and system configuration";
 
 /* Privacy note text */
-"PrivacyNote" = "No personal information will be sent with this report.";
+"PrivacyNote" = "Only the presented data will be sent with this report.";
 
 /* Show Details Button */
 "ShowDetailsButtonTitle" = "Show Details";

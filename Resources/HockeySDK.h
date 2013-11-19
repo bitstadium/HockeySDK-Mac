@@ -23,14 +23,28 @@
 //  THE SOFTWARE.
 
 #import <HockeySDK/BITHockeyManager.h>
-#import <HockeySDK/BITCrashReportManager.h>
-#import <HockeySDK/BITCrashReportManagerDelegate.h>
+#import <HockeySDK/BITHockeyManagerDelegate.h>
+
+#import <HockeySDK/BITCrashManager.h>
+#import <HockeySDK/BITCrashManagerDelegate.h>
+
 #import <HockeySDK/BITSystemProfile.h>
 
-#ifndef HOCKEYSDK_IDENTIFIER
-#define HOCKEYSDK_IDENTIFIER @"net.hockeyapp.sdk.mac"
-#define HOCKEYSDK_SETTINGS @"BITCrashManager.plist"
-#define HOCKEYSDK_BUNDLE [NSBundle bundleWithIdentifier:HOCKEYSDK_IDENTIFIER]
-#define HockeySDKLocalizedString(key,comment) NSLocalizedStringFromTableInBundle(key, @"HockeySDK", HOCKEYSDK_BUNDLE, comment)
-#define HockeySDKLog(fmt, ...) do { if([BITHockeyManager sharedHockeyManager].isLoggingEnabled) { NSLog((@"[HockeySDK] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__); }} while(0)
-#endif
+
+// hockey crash reporting api error domain
+typedef enum {
+  BITCrashErrorUnknown,
+  BITCrashAPIAppVersionRejected,
+  BITCrashAPIReceivedEmptyResponse,
+  BITCrashAPIErrorWithStatusCode
+} BITCrashErrorReason;
+extern NSString *const __attribute__((unused)) kBITCrashErrorDomain;
+
+
+// HockeySDK
+
+typedef enum {
+  BITHockeyErrorUnknown,
+  HockeyAPIClientMissingJSONLibrary
+} BITHockeyErrorReason;
+extern NSString *const __attribute__((unused)) kBITHockeyErrorDomain;

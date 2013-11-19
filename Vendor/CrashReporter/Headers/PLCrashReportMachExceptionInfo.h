@@ -1,12 +1,7 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Landon Fuller <landonf@plausiblelabs.com>
  *
- * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
- * Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2013 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -31,24 +26,23 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #import <Foundation/Foundation.h>
 
-#import "PLCrashNamespace.h"
-#import "PLCrashReport.h"
-
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
-#endif
-
-
-@interface BITCrashReportTextFormatter : NSObject {
+@interface PLCrashReportMachExceptionInfo : NSObject {
+@private
+    /** The Mach exception type. */
+    uint64_t _type;
+    
+    /** The Mach exception codes, represented as an ordered array of NSNumber instances. */
+    NSArray *_codes;
 }
 
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
+- (id) initWithType: (uint64_t) type codes: (NSArray *) codes;
+
+/** The Mach exception type. */
+@property(nonatomic, readonly) uint64_t type;
+
+/** The Mach exception codes, represented as an ordered array of 64-bit unsigned NSNumber instances. */
+@property(nonatomic, readonly) NSArray *codes;
 
 @end

@@ -1,12 +1,7 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Landon Fuller <landonf@plausible.coop>
  *
  * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
- * Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -31,24 +26,49 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #import <Foundation/Foundation.h>
+#import <mach/machine.h>
 
-#import "PLCrashNamespace.h"
-#import "PLCrashReport.h"
+/**
+ * @ingroup constants
+ *
+ * The type encodings supported for CPU types and subtypes. Currently only Apple
+ * Mach-O defined encodings are supported.
+ *
+ * @internal
+ * These enum values match the protobuf values. Keep them synchronized.
+ */
+typedef enum {
+    /** Unknown cpu type encoding. */
+    PLCrashReportProcessorTypeEncodingUnknown = 0,
 
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
-#endif
+    /** Apple Mach-defined processor types. */
+    PLCrashReportProcessorTypeEncodingMach = 1
+} PLCrashReportProcessorTypeEncoding;
 
+@interface PLCrashReportProcessorInfo : NSObject {
+@private
+    /** Type encoding */
+    PLCrashReportProcessorTypeEncoding _typeEncoding;
 
-@interface BITCrashReportTextFormatter : NSObject {
+    /** CPU type */
+    uint64_t _type;
+
+    /** CPU subtype */
+    uint64_t _subtype;
 }
 
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
+- (id) initWithTypeEncoding: (PLCrashReportProcessorTypeEncoding) typeEncoding
+                       type: (uint64_t) type
+                    subtype: (uint64_t) subtype;
+
+/** The CPU type encoding. */
+@property(nonatomic, readonly) PLCrashReportProcessorTypeEncoding typeEncoding;
+
+/** The CPU type. */
+@property(nonatomic, readonly) uint64_t type;
+
+/** The CPU subtype. */
+@property(nonatomic, readonly) uint64_t subtype;
 
 @end
