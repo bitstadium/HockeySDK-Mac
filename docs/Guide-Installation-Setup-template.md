@@ -1,6 +1,6 @@
-## Version 2.0.0 RC 1
+## Version 2.0.0
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/2.0.0rc1/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/2.0.0/docs/docs/Changelog.html)
 
 ## Introduction
 
@@ -33,7 +33,7 @@ This document contains the following sections:
 
 2. Unzip the file. A new folder `HockeySDK-Mac` is created.
 
-3. Move the folder into your project directory. We usually put 3rd-party code into a subdirectory named `Vendor`, so we move the directory into it.
+3. Move the framework `HockeySDK.framework` from inside the folder into your project directory. We usually put 3rd-party code into a subdirectory named `Vendor`, so we move the framework into it.
 
 <a id="xcode"></a> 
 ## Set up Xcode
@@ -307,7 +307,7 @@ This documentation provides integrated help in Xcode for all public APIs and a s
 
 3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSet`
 
-The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/2.0.0rc1/](http://hockeyapp.net/help/sdk/mac/2.0.0rc1/)
+The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/2.0.0/](http://hockeyapp.net/help/sdk/mac/2.0.0/)
 
 ### Checklist if Crashes Do Not Appear in HockeyApp
 

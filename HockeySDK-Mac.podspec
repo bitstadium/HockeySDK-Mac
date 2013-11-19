@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name        = "HockeySDK-Mac"
-  s.version     = "2.0.0-rc1"
+  s.version     = "2.0.0"
   s.license     = {:type=>'MIT', :file=>'HockeySDK-Mac/LICENSE.txt'}
   s.platform    = :osx, '10.5'
   s.summary     = 'Collect crash reports with HockeyApp.'
