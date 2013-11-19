@@ -1,3 +1,32 @@
+## Version 2.0
+
+- General
+
+  - [NEW] Major refactoring of all classes. Please go through the setup or migration guide!
+  - [NEW] Added docset with SDK documentation
+  - [UPDATE] Updated installation instructions with notes about sandboxing, automatic sending of crash reports and code signing
+  - [UPDATE] Improved documentation
+  <br /><br/>
+
+- Crash Reporting
+
+  - [NEW] Integrated PLCrashReporter 1.2 beta 3
+  - [NEW] Added optional support for Mach exceptions
+  - [NEW] Check if additional uncaught exception handlers are installed and print a warning in the console
+  - [UPDATE] Replaced `exceptionInterception` property in favor of new `BITCrashReportExceptionApplication` class to catch more exceptions. Check the README file for more details on how to use this.
+  - [UPDATE] PLCrashReporter built with `BIT` namespace to avoid collisions
+  - [UPDATE] Crash reporting is automatically disabled when the app is invoked with the debugger!
+  - [UPDATE] Made all delegates fully optional to simplify setup
+  - [UPDATE] Enabled Copy&Paste in crash report UI
+  - [UPDATE] Crash report text in the dialog's detail view can now be selected
+  - [UPDATE] Adjusted privacy note in the dialog
+  <br /><br/>
+      
+- Beta Updates
+
+  - Added used language to the Sparkle request keys in the BITSystemProfile helper class
+  <br /><br/>
+
 ## Version 2.0 RC 1
 
 - General
