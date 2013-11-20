@@ -246,4 +246,18 @@
 - (BOOL)isDebuggerAttached;
 
 
+/**
+ * Lets the app crash for easy testing of the SDK
+ *
+ * The best way to use this is to trigger the crash with a button action.
+ *
+ * Make sure not to let the app crash in `applicationDidFinishLaunching` or any other
+ * startup method! Since otherwise the app would crash before the SDK could process it.
+ *
+ * Note that our SDK provides support for handling crashes that happen early on startup.
+ * Check the documentation for more information on how to use this.
+ */
+- (void)generateTestCrash;
+
+
 @end
