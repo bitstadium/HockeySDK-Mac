@@ -115,7 +115,6 @@
 		1E260C7F17D401D200C7F9FE /* index.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = index.md; sourceTree = "<group>"; };
 		1E260C8017D401D200C7F9FE /* Troubleshooting-Symbolication-Doesnt-Work-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Troubleshooting-Symbolication-Doesnt-Work-template.md"; sourceTree = "<group>"; };
 		1E260C8417D4070C00C7F9FE /* HockeySDKPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HockeySDKPrivate.h; sourceTree = "<group>"; };
-		1E260C8517D407D400C7F9FE /* BITHockeyManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITHockeyManagerPrivate.h; sourceTree = "<group>"; };
 		1E260C9E17D414F200C7F9FE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITKeychainItem.h; sourceTree = "<group>"; };
 		1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITKeychainItem.m; sourceTree = "<group>"; };
@@ -300,7 +299,6 @@
 				1EF09DAE1523579100067A5C /* BITHockeyManager.h */,
 				1EF09DAF1523579100067A5C /* BITHockeyManager.m */,
 				1E260CA917D42B1500C7F9FE /* BITHockeyManagerDelegate.h */,
-				1E260C8517D407D400C7F9FE /* BITHockeyManagerPrivate.h */,
 			);
 			name = Classes;
 			path = ../Classes;

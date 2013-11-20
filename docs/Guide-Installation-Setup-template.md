@@ -64,27 +64,24 @@ This document contains the following sections:
 
 2. Add the following line at the top of the file below your own #import statements:<pre><code>#import &lt;HockeySDK/HockeySDK.h&gt;</code></pre>
 
-3. Add the following protocol to your AppDelegate: `BITHockeyManagerDelegate`:<pre><code>@interface AppDelegate() &lt;BITHockeyManagerDelegate&gt; {}
-@end</code></pre>
-
-4. Search for the method `applicationDidFinishLaunching:(NSNotification *)aNotification`, or find where your application normally presents and activates its main/first window.
+3. Search for the method `applicationDidFinishLaunching:`, or find where your application normally presents and activates its main/first window.
 
    Replace whatever usually opens the main window with the following lines:
 
-        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>" companyName:@"My company" delegate:self];
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"<APP_IDENTIFIER>"];
         [[BITHockeyManager sharedHockeyManager] startManager];
 
    In case of document based apps, invoke `startManager` at the end of `applicationDidFinishLaunching`, since otherwise you may lose the Apple events to restore, open untitled document etc.
     
    If any crash report has been saved from the last time your application ran, `startManager` will present a dialog to allow the user to submit it. Once done, or if there are no crash logs, it will then call back to your `appDelegate` with `showMainApplicationWindowForCrashManager:` (if implemented, see [Improved startup crashes handling](#improvedstartup)).
 
-5. Replace `APP_IDENTIFIER` in `configureWithIdentifier:` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier).
+4. Replace `APP_IDENTIFIER` in `configureWithIdentifier:` with the app identifier of your app. If you don't know what the app identifier is or how to find it, please read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-find-the-app-identifier).
 
-6. Set additional options and/or implement optional delegate methods as mentioned below if you want to add custom data to the crash reports.
+5. Set additional options and/or implement optional delegate methods as mentioned below if you want to add custom data to the crash reports.
 
-7. If this app is sandboxed, make sure to add the entitlements for network access.
+6. If this app is sandboxed, make sure to add the entitlements for network access.
 
-8. Done.
+7. Done.
 
 <a id="options"></a> 
 ## Additional Options
@@ -167,7 +164,10 @@ If you want to send all crash reports automatically, configure the SDK with the 
 
 If you have a window based app, you could set the main window not to show app automatically, allowing the SDK to show a crash reporter window before the app shows the main window and possibly crash right away before the crash could be reported to the servers.
 
-Implement the optional `BITCrashManagerDelegate` protocol method `showMainApplicationWindowForCrashManager:` method like this:
+Make sure to set the `delegate` property via `[[BITHockeyManager sharedHockeyManager] setDelegate: self];` and add the following protocol to your AppDelegate: `BITHockeyManagerDelegate`:<pre><code>@interface AppDelegate() &lt;BITHockeyManagerDelegate&gt; {}
+@end</code></pre>
+
+Now implement the optional `BITCrashManagerDelegate` protocol method `showMainApplicationWindowForCrashManager:` method like this:
 
     // this delegate method is required
     - (void) showMainApplicationWindowForCrashManager:(id)crashManager
@@ -229,6 +229,9 @@ Crash reports are normally sent to our server asynchronously. If your applicatio
 
 <a id="delegates"></a>
 ### Optional Delegate Methods
+
+Make sure to set the `delegate` property via `[[BITHockeyManager sharedHockeyManager] setDelegate: self];` and add the following protocol to your AppDelegate: `BITHockeyManagerDelegate`:<pre><code>@interface AppDelegate() &lt;BITHockeyManagerDelegate&gt; {}
+@end</code></pre>
 
 Besides the crash log, HockeyApp can show you fields with information about the user and an optional description. You can fill out these fields by implementing the following methods:
 

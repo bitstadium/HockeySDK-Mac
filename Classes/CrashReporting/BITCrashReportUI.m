@@ -54,7 +54,7 @@ const CGFloat kDetailsHeight = 285;
 @synthesize userEmail = _userEmail;
 
 
-- (instancetype)initWithManager:(BITCrashManager *)crashManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent companyName:(NSString *)companyName applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
+- (instancetype)initWithManager:(BITCrashManager *)crashManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
   
   self = [super initWithWindowNibName: @"BITCrashReportUI"];
   
@@ -64,7 +64,6 @@ const CGFloat kDetailsHeight = 285;
     _crashFile = [crashReportFile copy];
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
-    _companyName = [companyName copy];
     _applicationName = [applicationName copy];
     self.userName = @"";
     self.userEmail = @"";
@@ -214,7 +213,7 @@ const CGFloat kDetailsHeight = 285;
     [[emailTextField cell] setUsesSingleLineMode:YES];
   }
 
-  [[introductionText cell] setTitle:[NSString stringWithFormat:BITHockeyLocalizedString(@"IntroductionText", @""), _applicationName, _companyName]];
+  [[introductionText cell] setTitle:[NSString stringWithFormat:BITHockeyLocalizedString(@"IntroductionText", @""), _applicationName]];
   [[commentsTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"CommentsDisclosureTitle", @"")];
   [[problemDescriptionTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"ProblemDetailsTitle", @"")];
 
@@ -271,7 +270,6 @@ const CGFloat kDetailsHeight = 285;
   [_crashLogContent release]; _crashLogContent = nil;
   [_logContent release]; _logContent = nil;
   [_applicationName release]; _applicationName = nil;
-  [_companyName release]; _companyName = nil;
   self.userName = nil;
   self.userEmail = nil;
   

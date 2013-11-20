@@ -25,7 +25,6 @@
 #import "HockeySDK.h"
 #import "HockeySDKPrivate.h"
 
-#import "BITHockeyManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
 
 
@@ -66,6 +65,7 @@
 - (id) init {
   if ((self = [super init])) {
     _serverURL = nil;
+    _delegate = nil;
     
     _disableCrashManager = NO;
     
@@ -114,14 +114,18 @@
 
 #pragma mark - Public Instance Methods (Configuration)
 
-- (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *)companyName delegate:(id <BITHockeyManagerDelegate>)delegate {
+- (void)configureWithIdentifier:(NSString *)appIdentifier {
   [_appIdentifier release];
   _appIdentifier = [appIdentifier copy];
   
-  [_companyName release];
-  _companyName = [companyName copy];
+  [self initializeModules];
+}
+
+- (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id <BITHockeyManagerDelegate>)delegate {
+  [_appIdentifier release];
+  _appIdentifier = [appIdentifier copy];
   
-  _delegate = delegate;
+  self.delegate = delegate;
   
   [self initializeModules];
 }
@@ -141,7 +145,6 @@
     if (_serverURL) {
       [_crashManager setServerURL:_serverURL];
     }
-    [_crashManager setCompanyName:_companyName];
     [_crashManager startManager];
   } else {
     [_crashManager returnToMainApplication];
@@ -165,6 +168,16 @@
   }
 }
 
+- (void)setDelegate:(id<BITHockeyManagerDelegate>)delegate {
+  if (_delegate != delegate) {
+    _delegate = delegate;
+    
+    if (_crashManager) {
+      _crashManager.delegate = delegate;
+    }
+  }
+}
+
 
 #pragma mark - Private Instance Methods
 
@@ -177,7 +190,7 @@
   
   BITHockeyLog(@"INFO: Setup CrashManager");
   _crashManager = [[BITCrashManager alloc] initWithAppIdentifier:_appIdentifier];
-  _crashManager.delegate = _delegate;
+  _crashManager.delegate = self.delegate;
   
   // if we don't initialize the BITCrashManager instance, then the delegate will not be invoked
   // leaving the app to never show the window if the developer provided an invalid app identifier
