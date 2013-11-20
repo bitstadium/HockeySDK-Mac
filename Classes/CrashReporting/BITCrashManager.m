@@ -403,6 +403,15 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 }
 
 
+- (void)generateTestCrash {
+  if ([self isDebuggerAttached]) {
+    NSLog(@"[HockeySDK] WARNING: The debugger is attached. The following crash cannot be detected by the SDK!");
+  }
+  
+  __builtin_trap();
+}
+
+
 #pragma mark - BITPLCrashReporter
 
 // Called to handle a pending crash report.
