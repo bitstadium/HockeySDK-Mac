@@ -94,7 +94,6 @@
 
   NSString   *_appIdentifier;
   NSString   *_serverURL;
-  NSString   *_companyName;
   BOOL       _autoSubmitCrashReport;
   BOOL       _askUserDetails;
   
@@ -147,12 +146,6 @@
  *  Default: _YES_
  */
 @property (nonatomic, assign) BOOL askUserDetails;
-
-
-/**
- *  Defines the company name to be shown in the crash reporting dialog
- */
-@property (nonatomic, retain) NSString *companyName;
 
 
 /**

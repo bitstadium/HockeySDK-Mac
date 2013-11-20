@@ -32,7 +32,6 @@
 
 #import "BITCrashReportUI.h"
 
-#import "BITHockeyManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
 
 #import "BITKeychainItem.h"
@@ -67,7 +66,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 @synthesize delegate = _delegate;
 @synthesize serverURL = _serverURL;
 @synthesize appIdentifier = _appIdentifier;
-@synthesize companyName = _companyName;
 @synthesize autoSubmitCrashReport = _autoSubmitCrashReport;
 @synthesize askUserDetails = _askUserDetails;
 @synthesize timeintervalCrashInLastSessionOccured = _timeintervalCrashInLastSessionOccured;
@@ -104,7 +102,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
     
     _invokedReturnToMainApplication = NO;
     self.delegate = nil;
-    self.companyName = @"";
     
     NSString *testValue = nil;
     testValue = [[NSUserDefaults standardUserDefaults] stringForKey:kHockeySDKCrashReportActivated];
@@ -162,7 +159,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   
   [_appIdentifier release]; _appIdentifier = nil;
   [_serverURL release]; _serverURL = nil;
-  [_companyName release]; _companyName = nil;
   [_userName release]; _userName = nil;
   [_userEmail release]; _userEmail = nil;
 
@@ -557,7 +553,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
                                                    crashReportFile:crashFile
                                                        crashReport:crashReport
                                                         logContent:log
-                                                       companyName:_companyName ?: @"the developer"
                                                    applicationName:[self applicationName]
                                                     askUserDetails:_askUserDetails];
         

@@ -11,7 +11,7 @@
 "WindowTitle" = "Problembericht für %@";
 
 /* Introduction text, with app name placeholder first and company placeholder second */
-"IntroductionText" = "%@ wurde beim letzten Programmlauf unerwartet beendet. Möchten Sie einen Problembericht an %@ senden?";
+"IntroductionText" = "%@ wurde unerwartet beendet. Möchten Sie einen Bericht senden, sodass wir das Problem beheben können?";
 
 /* Name Text Title */
 "NameTextTitle" = "Name";

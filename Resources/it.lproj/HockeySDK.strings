@@ -11,7 +11,8 @@
 "WindowTitle" = "Rapporto di problemi per %@";
 
 /* Introduction text, with app name placeholder first and company placeholder second */
-"IntroductionText" = "L'ultima volta, l'applicazione %@ è stata interrotta inaspettatamente. Desidera inviare un rapporto di errore a %@?";
+"IntroductionText" = "%@ si è chiusa inaspettatamente. Vuoi inviare un report con i dettagli del crash per aiutarci a risolvere il problema?";
+
 
 /* Name Text Title */
 "NameTextTitle" = "Nome";

@@ -11,7 +11,7 @@
 "WindowTitle" = "%@障害報告";
 
 /* Introduction text, with app name placeholder first and company placeholder second */
-"IntroductionText" = "前回の使用時%@が強制終了した記録が残されています。記録を%@へ送信しますか？";
+"IntroductionText" = "%@が予期しない理由で終了。問題が修正できるよう、レポートを送信しますか？";
 
 /* Name Text Title */
 "NameTextTitle" = "お名前";

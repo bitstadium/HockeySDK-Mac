@@ -57,7 +57,6 @@
 @interface BITHockeyManager : NSObject {
 @private
   NSString *_appIdentifier;
-  NSString *_companyName;
   NSString *_serverURL;
   
   BOOL _validAppIdentifier;
@@ -87,16 +86,28 @@
 /**
  * Initializes the manager with a particular app identifier, company name and delegate
  *
- * Initialize the manager with a HockeyApp app identifier and assign the class that
- * implements the required protocol `BITCrashManagerDelegate`.
+ * Initialize the manager with a HockeyApp app identifier.
  *
  * @see BITCrashManagerDelegate
  * @see startManager
+ * @see configureWithIdentifier:delegate:
  * @param appIdentifier The app identifier that should be used.
- * @param companyName the company that should be shown in the UI
- * @param delegate `nil` or the class implementing the required protocols
  */
-- (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *)companyName delegate:(id <BITHockeyManagerDelegate>) delegate;
+- (void)configureWithIdentifier:(NSString *)appIdentifier;
+
+/**
+ * Initializes the manager with a particular app identifier, company name and delegate
+ *
+ * Initialize the manager with a HockeyApp app identifier and assign the class that
+ * implements the optional protocol `BITCrashManagerDelegate`.
+ *
+ * @see BITCrashManagerDelegate
+ * @see startManager
+ * @see configureWithIdentifier:
+ * @param appIdentifier The app identifier that should be used.
+ * @param delegate `nil` or the class implementing the optional protocols
+ */
+- (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id <BITHockeyManagerDelegate>) delegate;
 
 /**
  * Starts the manager and runs all modules
@@ -109,6 +120,22 @@
 
 
 #pragma mark - Public Properties
+
+///-----------------------------------------------------------------------------
+/// @name General
+///-----------------------------------------------------------------------------
+
+
+/**
+ * Set the delegate
+ *
+ * Defines the class that implements the optional protocol `BITHockeyManagerDelegate`.
+ *
+ * @see BITHockeyManagerDelegate
+ * @see BITCrashManagerDelegate
+ */
+@property (nonatomic, unsafe_unretained) id<BITHockeyManagerDelegate> delegate;
+
 
 ///-----------------------------------------------------------------------------
 /// @name Modules
