@@ -14,6 +14,8 @@
 #define BITHOCKEY_CRASH_SETTINGS @"BITCrashManager.plist"
 #define BITHOCKEY_CRASH_ANALYZER @"BITCrashManager.analyzer"
 
+#define BITHOCKEY_INTEGRATIONFLOW_TIMESTAMP @"BITIntegrationFlowStartTimestamp"
+
 #define BITHockeyBundle [NSBundle bundleWithIdentifier:BITHOCKEY_IDENTIFIER]
 #define BITHOCKEYSDK_URL @"https://sdk.hockeyapp.net/"
 

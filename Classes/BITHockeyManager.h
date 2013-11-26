@@ -68,6 +68,9 @@
   BOOL _disableCrashManager;
   
   BOOL _debugLogEnabled;
+
+  NSInteger         _statusCode;
+  NSURLConnection   *_urlConnection;
 }
 
 #pragma mark - Public Methods
