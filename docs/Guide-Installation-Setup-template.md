@@ -55,7 +55,7 @@ This document contains the following sections:
     
         LOCATION="${BUILT_PRODUCTS_DIR}"/"${FRAMEWORKS_FOLDER_PATH}"
         IDENTITY="Developer ID Application: ENTERYOURDEVELOPERNAMEFORTHECERTIFICATE"
-        find "$LOCATION" -name '*.framework' -exec codesign --verbose --force --sign "$IDENTITY" " {}/Versions/Current \;
+        find "$LOCATION" -name '*.framework' -exec codesign --verbose --force --sign "$IDENTITY" {}/Versions/Current \;
 
 <a id="modify"></a> 
 ## Modify Code
