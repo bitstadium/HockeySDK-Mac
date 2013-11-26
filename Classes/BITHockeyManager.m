@@ -111,6 +111,73 @@
   NSLog(@"[HockeySDK] ERROR: The %@ is invalid! Please use the HockeyApp app identifier you find on the apps website on HockeyApp! The SDK is disabled!", environment);
 }
 
+- (NSString *)integrationFlowTimeString {
+  NSString *timeString = [[NSBundle mainBundle] objectForInfoDictionaryKey:BITHOCKEY_INTEGRATIONFLOW_TIMESTAMP];
+  
+  return timeString;
+}
+
+- (BOOL)integrationFlowStartedWithTimeString:(NSString *)timeString {
+  if (timeString == nil) {
+    return NO;
+  }
+  
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+  [dateFormatter setLocale:enUSPOSIXLocale];
+  [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+  NSDate *integrationFlowStartDate = [dateFormatter dateFromString:timeString];
+  
+  if (integrationFlowStartDate && [integrationFlowStartDate timeIntervalSince1970] > [[NSDate date] timeIntervalSince1970] - (60 * 10) ) {
+    return YES;
+  }
+  
+  return NO;
+}
+
+- (void)pingServerForIntegrationStartWorkflowWithTimeString:(NSString *)timeString {
+  if (!_appIdentifier) {
+    return;
+  }
+  
+  NSString *serverString = [BITHOCKEYSDK_URL copy];
+  if (_serverURL)
+    serverString = [_serverURL copy];
+  
+  NSMutableURLRequest *request = nil;
+  NSString *boundary = @"----FOO";
+  
+  NSString *url = [NSString stringWithFormat:@"%@api/3/apps/%@/integration",
+                   serverString,
+                   [_appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                   ];
+  
+  BITHockeyLog(@"INFO: Sending integration workflow ping to %@", url);
+  
+  request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+  
+  [request setValue:BITHOCKEY_NAME forHTTPHeaderField:@"User-Agent"];
+  [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+  [request setTimeoutInterval: 15];
+  [request setHTTPMethod:@"POST"];
+  NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+  [request setValue:contentType forHTTPHeaderField:@"Content-type"];
+  
+  NSMutableData *postBody =  [NSMutableData data];
+  [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+  [postBody appendData:[@"Content-Disposition: form-data; name=\"timestamp\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+  [postBody appendData:[timeString dataUsingEncoding:NSUTF8StringEncoding]];
+  [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+  [request setHTTPBody:postBody];
+  
+  _statusCode = 200;
+  
+  _urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+  if (!_urlConnection) {
+    BITHockeyLog(@"INFO: Pinging server could not start!");
+  }
+}
+
 
 #pragma mark - Public Instance Methods (Configuration)
 
@@ -148,6 +215,11 @@
     [_crashManager startManager];
   } else {
     [_crashManager returnToMainApplication];
+  }
+  
+  NSString *integrationFlowTime = [self integrationFlowTimeString];
+  if (integrationFlowTime && [self integrationFlowStartedWithTimeString:integrationFlowTime]) {
+    [self pingServerForIntegrationStartWorkflowWithTimeString:integrationFlowTime];
   }
 }
 
@@ -203,5 +275,38 @@
     _crashManager.crashManagerActivated = NO;
 }
 
+#pragma mark - NSURLConnection Delegate
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+  if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+    _statusCode = [(NSHTTPURLResponse *)response statusCode];
+  }
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+  BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
+  
+  [_urlConnection release];
+  _urlConnection = nil;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+  [_urlConnection release];
+  _urlConnection = nil;
+  
+  [self processServerResult];
+}
+
+- (void)processServerResult {
+  if (_statusCode == 201) {
+    BITHockeyLog(@"INFO: Ping accepted.");
+  } else if (_statusCode == 200) {
+    BITHockeyLog(@"INFO: Ping accepted. Server already knows.");
+  } else if (_statusCode == 400) {
+    BITHockeyLog(@"ERROR: App ID not found");
+  } else {
+    BITHockeyLog(@"ERROR: Unknown error");
+  }
+}
 
 @end
