@@ -232,11 +232,13 @@ Crash reports are normally sent to our server asynchronously. If your applicatio
 
 Besides the crash log, HockeyApp can show you fields with information about the user and an optional description. You can fill out these fields by implementing the following methods:
 
-* `crashReportUserID` should be a user ID or email, e.g. if your app requires to sign in into your server, you could specify the login here. The string should be no longer than 255 chars. 
+* `userIDForHockeyManager:componentManager:` should be a user ID, e.g. if your app requires to sign in into your server, you could specify the login here. The string should be no longer than 255 chars. 
 
-* `crashReportContact` should be the user's name or similar. The string should be no longer than 255 chars.
+* `userEmailForHockeyManager:componentManager:` should be a user email, e.g. if your app requires to sign in into your server, you could specify the login here. The string should be no longer than 255 chars. 
 
-* `crashReportApplicationLog` can be as long as you want it to be and contain additional information about the crash. For example, you can return a custom log or the last XML or JSON response from your server here.
+* `userNameForHockeyManager:componentManager:` should be the user's name or similar. The string should be no longer than 255 chars.
+
+* `applicationLogForCrashManager:` can be as long as you want it to be and contain additional information about the crash. For example, you can return a custom log or the last XML or JSON response from your server here.
 
 If you implement these delegate methods and keep them in your live app too, please consider the privacy implications.
 <br/><br/><br/>
