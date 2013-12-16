@@ -251,6 +251,17 @@
 }
 
 
+- (void)testIdentifier {
+  if (!_appIdentifier) {
+    return;
+  }
+  
+  NSDate *now = [NSDate date];
+  NSString *timeString = [NSString stringWithFormat:@"%.0f", [now timeIntervalSince1970]];
+  [self pingServerForIntegrationStartWorkflowWithTimeString:timeString];
+}
+
+
 #pragma mark - Private Instance Methods
 
 - (void)initializeModules {
