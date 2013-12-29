@@ -122,8 +122,8 @@
     return NO;
   }
   
-  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-  NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+  NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+  NSLocale *enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
   [dateFormatter setLocale:enUSPOSIXLocale];
   [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
   NSDate *integrationFlowStartDate = [dateFormatter dateFromString:timeString];
@@ -140,9 +140,9 @@
     return;
   }
   
-  NSString *serverString = [BITHOCKEYSDK_URL copy];
+  NSString *serverString = [[BITHOCKEYSDK_URL copy] autorelease];
   if (_serverURL)
-    serverString = [_serverURL copy];
+    serverString = [[_serverURL copy] autorelease];
   
   NSMutableURLRequest *request = nil;
   NSString *boundary = @"----FOO";
