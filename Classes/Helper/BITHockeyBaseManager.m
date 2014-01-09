@@ -48,6 +48,12 @@
   return self;
 }
 
+- (void)dealloc {
+  [_serverURL release]; _serverURL = nil;
+  
+  [super dealloc];
+}
+
 
 #pragma mark - Private
 

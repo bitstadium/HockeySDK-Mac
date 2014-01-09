@@ -32,6 +32,7 @@
 
 #import "BITCrashReportUI.h"
 
+#import "BITHockeyBaseManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
 
 #import "BITKeychainItem.h"
@@ -58,7 +59,47 @@
 NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 
-@implementation BITCrashManager
+@implementation BITCrashManager {
+  NSFileManager *_fileManager;
+  
+  BOOL _crashIdenticalCurrentVersion;
+  BOOL _crashManagerActivated;
+  
+  NSTimeInterval _timeintervalCrashInLastSessionOccured;
+  NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
+  
+  NSInteger         _statusCode;
+  NSURLConnection   *_urlConnection;
+  NSMutableData     *_responseData;
+  
+  id<BITCrashManagerDelegate> _delegate;
+  
+  NSString   *_appIdentifier;
+  NSString   *_serverURL;
+  BOOL       _autoSubmitCrashReport;
+  BOOL       _askUserDetails;
+  
+  NSString   *_userName;
+  NSString   *_userEmail;
+  
+  NSMutableArray *_crashFiles;
+  NSString       *_crashesDir;
+  NSString       *_settingsFile;
+  NSString       *_analyzerInProgressFile;
+  
+  BOOL                       _enableMachExceptionHandler;
+  NSUncaughtExceptionHandler *_plcrExceptionHandler;
+  BITPLCrashReporter         *_plCrashReporter;
+  
+  BITCrashReportUI *_crashReportUI;
+  
+  BOOL                _didCrashInLastSession;
+  NSMutableDictionary *_approvedCrashReports;
+  
+  NSMutableDictionary *_dictOfLastSessionCrash;
+  
+  BOOL       _invokedReturnToMainApplication;
+}
 
 @synthesize userName = _userName;
 @synthesize userEmail = _userEmail;
@@ -145,20 +186,12 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   return self;
 }
 
-- (id)initWithAppIdentifier:(NSString *)appIdentifier {
-  if ((self = [self init])) {
-    _appIdentifier = appIdentifier;
-  }
-  return self;
-}
-
 - (void)dealloc {
   _delegate = nil;
 
   [_responseData release]; _responseData = nil;
   
   [_appIdentifier release]; _appIdentifier = nil;
-  [_serverURL release]; _serverURL = nil;
   [_userName release]; _userName = nil;
   [_userEmail release]; _userEmail = nil;
 
@@ -175,56 +208,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   [_dictOfLastSessionCrash release]; _dictOfLastSessionCrash = nil;
   
   [super dealloc];
-}
-
-
-#pragma mark - Keychain
-
-- (BOOL)addStringValueToKeychain:(NSString *)stringValue forKey:(NSString *)key {
-	if (!key || !stringValue)
-		return NO;
-  
-  NSString *serviceName = [NSString stringWithFormat:@"%@.HockeySDK", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
-  
-  BITGenericKeychainItem *item = [BITGenericKeychainItem genericKeychainItemForService:serviceName withUsername:key];
-
-  if (item) {
-    // update
-    [item setPassword:stringValue];
-    return YES;
-  } else {
-    if ([BITGenericKeychainItem addGenericKeychainItemForService:serviceName withUsername:key password:stringValue])
-      return YES;
-  }
-  
-  return NO;
-}
-
-- (NSString *)stringValueFromKeychainForKey:(NSString *)key {
-	if (!key)
-		return nil;
-  
-  NSString *serviceName = [NSString stringWithFormat:@"%@.HockeySDK", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
-  
-  BITGenericKeychainItem *item = [BITGenericKeychainItem genericKeychainItemForService:serviceName withUsername:key];
-  if (item) {
-    NSString *pwd = [item password];
-    return pwd;
-  }
-  
-  return nil;
-}
-
-- (BOOL)removeKeyFromKeychain:(NSString *)key {
-  NSString *serviceName = [NSString stringWithFormat:@"%@.HockeySDK", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
-  
-  BITGenericKeychainItem *item = [BITGenericKeychainItem genericKeychainItemForService:serviceName withUsername:key];
-  if (item) {
-    [item removeFromKeychain];
-    return YES;
-  }
-  
-  return NO;
 }
 
 
