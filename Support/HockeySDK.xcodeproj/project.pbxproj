@@ -67,6 +67,8 @@
 		1E7E551D187F3EE700F0858E /* HockeySDKPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E5516187F3EE700F0858E /* HockeySDKPrivate.h */; };
 		1E7E551E187F3EE700F0858E /* HockeySDKPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5517187F3EE700F0858E /* HockeySDKPrivate.m */; };
 		1E7E552A187F62B400F0858E /* BITSystemProfilePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E5529187F62B400F0858E /* BITSystemProfilePrivate.h */; };
+		1E7E552D187F632300F0858E /* NSURLConnection+BITAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E552B187F632300F0858E /* NSURLConnection+BITAdditions.h */; };
+		1E7E552E187F632300F0858E /* NSURLConnection+BITAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E552C187F632300F0858E /* NSURLConnection+BITAdditions.m */; };
 		1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7F5A2315A46249001081FC /* HockeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
 		1EA551FD17B3EB44004A0CB7 /* BITCrashExceptionApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EA551FB17B3EB44004A0CB7 /* BITCrashExceptionApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -161,6 +163,8 @@
 		1E7E5516187F3EE700F0858E /* HockeySDKPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDKPrivate.h; sourceTree = "<group>"; };
 		1E7E5517187F3EE700F0858E /* HockeySDKPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HockeySDKPrivate.m; sourceTree = "<group>"; };
 		1E7E5529187F62B400F0858E /* BITSystemProfilePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BITSystemProfilePrivate.h; path = BetaDistribution/BITSystemProfilePrivate.h; sourceTree = "<group>"; };
+		1E7E552B187F632300F0858E /* NSURLConnection+BITAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+BITAdditions.h"; sourceTree = "<group>"; };
+		1E7E552C187F632300F0858E /* NSURLConnection+BITAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+BITAdditions.m"; sourceTree = "<group>"; };
 		1E7F5A2315A46249001081FC /* HockeySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDK.h; sourceTree = "<group>"; };
 		1E7FB96217D3F45200B7E10D /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = buildnumber.xcconfig; sourceTree = SOURCE_ROOT; };
 		1E7FB96317D3F45200B7E10D /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = SOURCE_ROOT; };
@@ -275,6 +279,8 @@
 				1E7E5517187F3EE700F0858E /* HockeySDKPrivate.m */,
 				1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */,
 				1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */,
+				1E7E552B187F632300F0858E /* NSURLConnection+BITAdditions.h */,
+				1E7E552C187F632300F0858E /* NSURLConnection+BITAdditions.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -439,6 +445,7 @@
 				1E06CDB11827D9DF00895076 /* PLCrashReportSymbolInfo.h in Headers */,
 				1E06CDAB1827D9DF00895076 /* PLCrashReportMachineInfo.h in Headers */,
 				1EF09DD9152371DC00067A5C /* BITCrashReportTextFormatter.h in Headers */,
+				1E7E552D187F632300F0858E /* NSURLConnection+BITAdditions.h in Headers */,
 				1E06CDAD1827D9DF00895076 /* PLCrashReportProcessorInfo.h in Headers */,
 				1EA551FD17B3EB44004A0CB7 /* BITCrashExceptionApplication.h in Headers */,
 				1E06CDAC1827D9DF00895076 /* PLCrashReportProcessInfo.h in Headers */,
@@ -556,6 +563,7 @@
 				1EF09DB61523579100067A5C /* BITHockeyManager.m in Sources */,
 				1E7E5519187F3EE700F0858E /* BITHockeyBaseManager.m in Sources */,
 				1E7E551C187F3EE700F0858E /* BITHockeyHelper.m in Sources */,
+				1E7E552E187F632300F0858E /* NSURLConnection+BITAdditions.m in Sources */,
 				1EF09DD6152371DC00067A5C /* BITCrashManager.m in Sources */,
 				1EA551FE17B3EB44004A0CB7 /* BITCrashExceptionApplication.m in Sources */,
 				1EF09DD8152371DC00067A5C /* BITCrashReportUI.m in Sources */,
