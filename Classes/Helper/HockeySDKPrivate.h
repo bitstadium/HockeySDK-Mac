@@ -54,6 +54,4 @@
 
 #endif
 
-NSString *BITHockeyMD5(NSString *str);
-
 

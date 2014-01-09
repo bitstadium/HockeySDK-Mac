@@ -49,9 +49,9 @@
 
 @property (nonatomic, strong) NSNumber *lastMessageID;
 
-@property (nonatomic, copy) NSString *userID;
-@property (nonatomic, copy) NSString *userName;
-@property (nonatomic, copy) NSString *userEmail;
+//@property (nonatomic, copy) NSString *userID;
+//@property (nonatomic, copy) NSString *userName;
+//@property (nonatomic, copy) NSString *userEmail;
 
 
 // load new messages from the server

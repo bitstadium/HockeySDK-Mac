@@ -68,6 +68,9 @@
   id <BITHockeyManagerDelegate> _delegate;
   BOOL _disableCrashManager;
   
+  BITFeedbackManager *_feedbackManager;
+  BOOL _disableFeedbackManager;
+  
   BOOL _debugLogEnabled;
 
   NSInteger         _statusCode;

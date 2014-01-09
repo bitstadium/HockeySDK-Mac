@@ -33,6 +33,7 @@
 #import <HockeySDK/HockeySDK.h>
 #import "HockeySDKPrivate.h"
 
+#import "BITHockeyBaseManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
 
 #import <sys/sysctl.h>

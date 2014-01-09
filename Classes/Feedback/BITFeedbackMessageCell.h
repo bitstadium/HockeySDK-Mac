@@ -30,7 +30,13 @@
 
 @class BITFeedbackMessage;
 
-@interface BITFeedbackMessageCell : NSTextFieldCell
+@interface BITFeedbackMessageCell : NSTextFieldCell {
+@private
+  NSDateFormatter *_dateFormatter;
+  NSDateFormatter *_timeFormatter;
+  
+  NSInteger _row;
+}
 
 @property (nonatomic) NSInteger row;
 

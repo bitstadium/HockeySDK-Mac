@@ -10,6 +10,7 @@
 
 #import "HockeySDK.h"
 
+#import "BITHockeyBaseManagerPrivate.h"
 #import "BITFeedbackManagerPrivate.h"
 #import "BITFeedbackMessageCell.h"
 
@@ -53,6 +54,33 @@
 @end
 
 @implementation BITFeedbackWindowController
+
+@synthesize manager = _manager;
+@synthesize lastUpdateDateFormatter = _lastUpdateDateFormatter;
+
+@synthesize userDataView = _userDataView;
+@synthesize userNameTextField = _userNameTextField;
+@synthesize userEmailTextField = _userEmailTextField;
+@synthesize userDataContinueButton = _userDataContinueButton;
+
+@synthesize userName = _userName;
+@synthesize userEmail = _userEmail;
+
+@synthesize feedbackView = _feedbackView;
+@synthesize feedbackEmptyView = _feedbackEmptyView;
+@synthesize feedbackScrollView = _feedbackScrollView;
+@synthesize feedbackTableView = _feedbackTableView;
+
+@synthesize messageTextField = _messageTextField;
+@synthesize messageText = _messageText;
+
+@synthesize statusBarComposeView = _statusBarComposeView;
+@synthesize sendMessageButton = _sendMessageButton;
+
+@synthesize statusBarDefaultView = _statusBarDefaultView;
+@synthesize statusBarLoadingIndicator = _statusBarLoadingIndicator;
+@synthesize statusBarTextField = _statusBarTextField;
+@synthesize statusBarRefreshButton = _statusBarRefreshButton;
 
 
 - (id)initWithManager:(BITFeedbackManager *)feedbackManager {

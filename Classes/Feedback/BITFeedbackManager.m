@@ -47,18 +47,20 @@
 #define kBITFeedbackAppID           @"HockeyFeedbackAppID"
 
 
-@implementation BITFeedbackManager {
-  NSFileManager  *_fileManager;
-  NSString       *_feedbackDir;
-  NSString       *_settingsFile;
-  
-  NSDate *_lastRefreshDate;
-  
-  BITFeedbackWindowController *_feedbackWindowController;
-  
-  BOOL _didSetupDidBecomeActiveNotifications;
-  BOOL _networkRequestInProgress;
-}
+@implementation BITFeedbackManager
+
+@synthesize feedbackList = _feedbackList;
+@synthesize token = _token;
+
+@synthesize disableFeedbackManager = _disableFeedbackManager;
+@synthesize didAskUserData = _didAskUserData;
+
+@synthesize requireUserName = _requireUserName;
+@synthesize requireUserEmail = _requireUserEmail;
+@synthesize showAlertOnIncomingMessages = _showAlertOnIncomingMessages;
+
+@synthesize lastCheck = _lastCheck;
+@synthesize lastMessageID = _lastMessageID;
 
 #pragma mark - Initialization
 
@@ -87,7 +89,7 @@
     
     // temporary directory for crashes grabbed from PLCrashReporter
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDir = paths[0];
+    NSString *cacheDir = [paths objectAtIndex:0];
     _feedbackDir = [[[cacheDir stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:BITHOCKEY_IDENTIFIER] retain];
     
     if (![_fileManager fileExistsAtPath:_feedbackDir]) {

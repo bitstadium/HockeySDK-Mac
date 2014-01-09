@@ -19,15 +19,21 @@
 #import <sys/sysctl.h>
 #import <mach-o/ldsyms.h>
 
-@implementation BITHockeyBaseManager {
-  NSDateFormatter *_rfc3339Formatter;
-}
+@implementation BITHockeyBaseManager
+
+@synthesize appIdentifier = _appIdentifier;
+
+@synthesize userID = _userID;
+@synthesize userName = _userName;
+@synthesize userEmail = _userEmail;
+
+@synthesize serverURL = _serverURL;
 
 
 - (id)init {
   if ((self = [super init])) {
     _appIdentifier = nil;
-    _serverURL = BITHOCKEYSDK_URL;
+    _serverURL = [BITHOCKEYSDK_URL copy];
     _userID = nil;
     _userName = nil;
     _userEmail = nil;
@@ -51,6 +57,10 @@
 - (void)dealloc {
   [_serverURL release]; _serverURL = nil;
   
+  [_appIdentifier release]; _appIdentifier = nil;
+  [_userName release]; _userName = nil;
+  [_userEmail release]; _userEmail = nil;
+
   [super dealloc];
 }
 

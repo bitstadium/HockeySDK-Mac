@@ -78,7 +78,43 @@
  *
  * @warning If you start the app with the Xcode debugger attached, detecting crashes will _NOT_ be enabled!
  */
-@interface BITCrashManager : BITHockeyBaseManager
+@interface BITCrashManager : BITHockeyBaseManager {
+@private
+  NSFileManager *_fileManager;
+  
+  BOOL _crashIdenticalCurrentVersion;
+  BOOL _crashManagerActivated;
+  
+  NSTimeInterval _timeintervalCrashInLastSessionOccured;
+  NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
+  
+  NSInteger         _statusCode;
+  NSURLConnection   *_urlConnection;
+  NSMutableData     *_responseData;
+  
+  id<BITCrashManagerDelegate> _delegate;
+  
+  BOOL       _autoSubmitCrashReport;
+  BOOL       _askUserDetails;
+  
+  NSMutableArray *_crashFiles;
+  NSString       *_crashesDir;
+  NSString       *_settingsFile;
+  NSString       *_analyzerInProgressFile;
+  
+  BOOL                       _enableMachExceptionHandler;
+  NSUncaughtExceptionHandler *_plcrExceptionHandler;
+  BITPLCrashReporter         *_plCrashReporter;
+  
+  BITCrashReportUI *_crashReportUI;
+  
+  BOOL                _didCrashInLastSession;
+  NSMutableDictionary *_approvedCrashReports;
+  
+  NSMutableDictionary *_dictOfLastSessionCrash;
+  
+  BOOL       _invokedReturnToMainApplication;
+}
 
 ///-----------------------------------------------------------------------------
 /// @name Delegate

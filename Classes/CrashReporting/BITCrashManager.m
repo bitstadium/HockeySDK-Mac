@@ -59,54 +59,10 @@
 NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 
-@implementation BITCrashManager {
-  NSFileManager *_fileManager;
-  
-  BOOL _crashIdenticalCurrentVersion;
-  BOOL _crashManagerActivated;
-  
-  NSTimeInterval _timeintervalCrashInLastSessionOccured;
-  NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
-  
-  NSInteger         _statusCode;
-  NSURLConnection   *_urlConnection;
-  NSMutableData     *_responseData;
-  
-  id<BITCrashManagerDelegate> _delegate;
-  
-  NSString   *_appIdentifier;
-  NSString   *_serverURL;
-  BOOL       _autoSubmitCrashReport;
-  BOOL       _askUserDetails;
-  
-  NSString   *_userName;
-  NSString   *_userEmail;
-  
-  NSMutableArray *_crashFiles;
-  NSString       *_crashesDir;
-  NSString       *_settingsFile;
-  NSString       *_analyzerInProgressFile;
-  
-  BOOL                       _enableMachExceptionHandler;
-  NSUncaughtExceptionHandler *_plcrExceptionHandler;
-  BITPLCrashReporter         *_plCrashReporter;
-  
-  BITCrashReportUI *_crashReportUI;
-  
-  BOOL                _didCrashInLastSession;
-  NSMutableDictionary *_approvedCrashReports;
-  
-  NSMutableDictionary *_dictOfLastSessionCrash;
-  
-  BOOL       _invokedReturnToMainApplication;
-}
+@implementation BITCrashManager
 
-@synthesize userName = _userName;
-@synthesize userEmail = _userEmail;
 @synthesize crashManagerActivated = _crashManagerActivated;
 @synthesize delegate = _delegate;
-@synthesize serverURL = _serverURL;
-@synthesize appIdentifier = _appIdentifier;
 @synthesize autoSubmitCrashReport = _autoSubmitCrashReport;
 @synthesize askUserDetails = _askUserDetails;
 @synthesize timeintervalCrashInLastSessionOccured = _timeintervalCrashInLastSessionOccured;
@@ -119,14 +75,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 - (instancetype)init {
   if ((self = [super init])) {
-    _appIdentifier = nil;
-    _serverURL = [BITHOCKEYSDK_URL copy];
     _crashReportUI = nil;
     _fileManager = [[NSFileManager alloc] init];
     _askUserDetails = YES;
-    
-    _userEmail = nil;
-    _userName = nil;
     
     _plcrExceptionHandler = nil;
     _crashIdenticalCurrentVersion = YES;
@@ -190,10 +141,6 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   _delegate = nil;
 
   [_responseData release]; _responseData = nil;
-  
-  [_appIdentifier release]; _appIdentifier = nil;
-  [_userName release]; _userName = nil;
-  [_userEmail release]; _userEmail = nil;
 
   [_fileManager release]; _fileManager = nil;
   

@@ -38,6 +38,7 @@
 @synthesize date = _date;
 @synthesize messageID = _messageID;
 @synthesize token = _token;
+@synthesize status = _status;
 @synthesize userMessage = _userMessage;
 
 

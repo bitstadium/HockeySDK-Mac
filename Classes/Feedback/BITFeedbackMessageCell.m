@@ -65,6 +65,12 @@
 
 @implementation BITFeedbackMessageCell
 
+@synthesize dateFormatter = _dateFormatter;
+@synthesize timeFormatter = _timeFormatter;
+
+@synthesize row = _row;
+
+
 - (id)init {
   self = [super init];
   
@@ -108,11 +114,11 @@
 
 #pragma mark - Layout
 
-+ (CGRect)messageUsedRect:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width {
++ (NSRect)messageUsedRect:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width {
   CGRect maxMessageHeightFrame = CGRectMake(0, 0, width - FRAME_SIDE_BORDER * 2, CGFLOAT_MAX);
   
   NSTextStorage *textStorage = [[[NSTextStorage alloc] initWithString:message.text] autorelease];
-  NSTextContainer *textContainer = [[[NSTextContainer alloc] initWithContainerSize:maxMessageHeightFrame.size] autorelease];
+  NSTextContainer *textContainer = [[[NSTextContainer alloc] initWithContainerSize:NSSizeFromCGSize(maxMessageHeightFrame.size)] autorelease];
   NSLayoutManager *layoutManager = [[[NSLayoutManager alloc] init] autorelease];
   
   [layoutManager addTextContainer:textContainer];
@@ -123,7 +129,7 @@
   [textContainer setLineFragmentPadding:0.0];
   
   (void)[layoutManager glyphRangeForTextContainer:textContainer];
-  CGRect aRect = [layoutManager usedRectForTextContainer:textContainer];
+  NSRect aRect = [layoutManager usedRectForTextContainer:textContainer];
   
   aRect.size.height += FRAME_TOP_BORDER + LABEL_TEXT_Y + FRAME_BOTTOM_BORDER;
   
@@ -189,17 +195,17 @@
   
   CGSize headerSize = CGSizeMake(cellFrame.size.width - (2 * FRAME_SIDE_BORDER), LABEL_TITLE_HEIGHT);
   
-  NSRect headerFrame = CGRectMake(cellFrame.origin.x + FRAME_SIDE_BORDER, cellFrame.origin.y + FRAME_TOP_BORDER + LABEL_TITLE_Y, headerSize.width, headerSize.height);
+  CGRect headerFrame = CGRectMake(cellFrame.origin.x + FRAME_SIDE_BORDER, cellFrame.origin.y + FRAME_TOP_BORDER + LABEL_TITLE_Y, headerSize.width, headerSize.height);
 
-  [dateString drawInRect:headerFrame withAttributes:titleAttributes];
+  [dateString drawInRect:NSRectFromCGRect(headerFrame) withAttributes:titleAttributes];
   
   // message text
   CGSize textSize = CGSizeMake(cellFrame.size.width - (2 * FRAME_SIDE_BORDER),
                            [[self class] heightForRowWithMessage:message tableViewWidth:cellFrame.size.width] - LABEL_TEXT_Y - FRAME_BOTTOM_BORDER);
   
-  NSRect textFrame = CGRectMake(cellFrame.origin.x + FRAME_SIDE_BORDER, cellFrame.origin.y + LABEL_TEXT_Y, textSize.width, textSize.height);
+  CGRect textFrame = CGRectMake(cellFrame.origin.x + FRAME_SIDE_BORDER, cellFrame.origin.y + LABEL_TEXT_Y, textSize.width, textSize.height);
   
-  [message.text drawInRect:textFrame withAttributes:textAttributes];
+  [message.text drawInRect:NSRectFromCGRect(textFrame) withAttributes:textAttributes];
 }
 
 @end

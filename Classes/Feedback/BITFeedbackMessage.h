@@ -45,6 +45,16 @@ typedef enum {
 } BITFeedbackMessageStatus;
 
 @interface BITFeedbackMessage : NSObject <NSCopying> {
+@private
+  NSString *_text;
+  NSString *_userID;
+  NSString *_name;
+  NSString *_email;
+  NSDate *_date;
+  NSNumber *_messageID;
+  NSString *_token;
+  BITFeedbackMessageStatus _status;
+  BOOL _userMessage;
 }
 
 @property (nonatomic, copy) NSString *text;
