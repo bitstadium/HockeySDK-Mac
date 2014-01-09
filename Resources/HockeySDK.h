@@ -30,6 +30,13 @@
 
 #import <HockeySDK/BITSystemProfile.h>
 
+#import <HockeySDK/BITFeedbackManager.h>
+#import <HockeySDK/BITFeedbackWindowController.h>
+
+
+// Notification message which HockeyManager is listening to, to retry requesting updated from the server
+#define BITHockeyNetworkDidBecomeReachableNotification @"BITHockeyNetworkDidBecomeReachable"
+
 
 // hockey crash reporting api error domain
 typedef enum {
@@ -39,6 +46,18 @@ typedef enum {
   BITCrashAPIErrorWithStatusCode
 } BITCrashErrorReason;
 extern NSString *const __attribute__((unused)) kBITCrashErrorDomain;
+
+
+// hockey feedback api error domain
+typedef enum {
+  BITFeedbackErrorUnknown,
+  BITFeedbackAPIServerReturnedInvalidStatus,
+  BITFeedbackAPIServerReturnedInvalidData,
+  BITFeedbackAPIServerReturnedEmptyResponse,
+  BITFeedbackAPIClientAuthorizationMissingSecret,
+  BITFeedbackAPIClientCannotCreateConnection
+} BITFeedbackErrorReason;
+extern NSString *const __attribute__((unused)) kBITFeedbackErrorDomain;
 
 
 // HockeySDK

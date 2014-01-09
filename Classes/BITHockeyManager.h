@@ -23,6 +23,7 @@
 //  THE SOFTWARE.
 
 @class BITCrashManager;
+@class BITFeedbackManager;
 @protocol BITHockeyManagerDelegate;
 
 /**
@@ -178,6 +179,32 @@
  */
 @property (nonatomic, getter = isCrashManagerDisabled) BOOL disableCrashManager;
 
+
+/**
+ Reference to the initialized BITFeedbackManager module
+ 
+ Returns the BITFeedbackManager instance initialized by BITHockeyManager
+ 
+ @see configureWithIdentifier:delegate:
+ @see configureWithBetaIdentifier:liveIdentifier:delegate:
+ @see startManager
+ @see disableFeedbackManager
+ */
+@property (nonatomic, strong, readonly) BITFeedbackManager *feedbackManager;
+
+
+/**
+ Flag the determines whether the Feedback Manager should be disabled
+ 
+ If this flag is enabled, then letting the user give feedback and
+ get responses will be turned off!
+ 
+ Please note that the Feedback Manager will be initialized anyway!
+ 
+ *Default*: _NO_
+ @see feedbackManager
+ */
+@property (nonatomic, getter = isFeedbackManagerDisabled) BOOL disableFeedbackManager;
 
 
 ///-----------------------------------------------------------------------------
