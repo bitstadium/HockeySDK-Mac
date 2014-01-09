@@ -34,6 +34,7 @@
 #import "BITHockeyBaseManagerPrivate.h"
 
 #import "BITHockeyHelper.h"
+#import "NSURLConnection+BITAdditions.h"
 
 
 #define kBITFeedbackUserDataAsked   @"HockeyFeedbackUserDataAsked"
@@ -702,7 +703,7 @@
     [request setHTTPBody:postBody];
   }
   
-  [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
+  [NSURLConnection bit_sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
     
     self->_networkRequestInProgress = NO;
     
