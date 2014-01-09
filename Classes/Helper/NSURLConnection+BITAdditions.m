@@ -133,7 +133,7 @@
   _maximumResourceLength = maximumResourceLength;
   _queue = queue;
   _handler = [handler copy];
-  _dataBuffer = [NSMutableData data];
+  _dataBuffer = [[NSMutableData alloc] init];
   
   /* Create and start the request; NSURLConnection will retain our instance for the duration
    * of the request. */
@@ -143,9 +143,17 @@
   return self;
 }
 
+- (void)dealloc {
+  [_handler release], _handler = nil;
+  [_dataBuffer release], _dataBuffer = nil;
+  [_response release], _response = nil;
+  
+  [super dealloc];
+}
+
 // from NSURLConnectionDataDelegate protocol
 - (void) connection: (NSURLConnection *) connection didReceiveResponse: (NSURLResponse *) response {
-  _response = response;
+  _response = [response retain];
 }
 
 // from NSURLConnectionDataDelegate protocol

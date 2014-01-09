@@ -80,7 +80,7 @@
     _token = nil;
     _lastMessageID = nil;
     _feedbackWindowController = nil;
-    _lastRefreshDate = [NSDate distantPast];
+    _lastRefreshDate = [[NSDate distantPast] retain];
     
     self.feedbackList = [NSMutableArray array];
 
@@ -705,9 +705,9 @@
   
   [NSURLConnection bit_sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
     
-    self->_networkRequestInProgress = NO;
+    _networkRequestInProgress = NO;
     
-    self->_lastRefreshDate = [NSDate date];
+    _lastRefreshDate = [[NSDate alloc] init];
     
     if (err) {
       [self reportError:err];
