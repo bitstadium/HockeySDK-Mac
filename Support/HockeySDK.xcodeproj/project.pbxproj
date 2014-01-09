@@ -66,6 +66,7 @@
 		1E7E551C187F3EE700F0858E /* BITHockeyHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5515187F3EE700F0858E /* BITHockeyHelper.m */; };
 		1E7E551D187F3EE700F0858E /* HockeySDKPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E5516187F3EE700F0858E /* HockeySDKPrivate.h */; };
 		1E7E551E187F3EE700F0858E /* HockeySDKPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5517187F3EE700F0858E /* HockeySDKPrivate.m */; };
+		1E7E552A187F62B400F0858E /* BITSystemProfilePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E5529187F62B400F0858E /* BITSystemProfilePrivate.h */; };
 		1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7F5A2315A46249001081FC /* HockeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
 		1EA551FD17B3EB44004A0CB7 /* BITCrashExceptionApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EA551FB17B3EB44004A0CB7 /* BITCrashExceptionApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -159,6 +160,7 @@
 		1E7E5515187F3EE700F0858E /* BITHockeyHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHockeyHelper.m; sourceTree = "<group>"; };
 		1E7E5516187F3EE700F0858E /* HockeySDKPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDKPrivate.h; sourceTree = "<group>"; };
 		1E7E5517187F3EE700F0858E /* HockeySDKPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HockeySDKPrivate.m; sourceTree = "<group>"; };
+		1E7E5529187F62B400F0858E /* BITSystemProfilePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BITSystemProfilePrivate.h; path = BetaDistribution/BITSystemProfilePrivate.h; sourceTree = "<group>"; };
 		1E7F5A2315A46249001081FC /* HockeySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDK.h; sourceTree = "<group>"; };
 		1E7FB96217D3F45200B7E10D /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = buildnumber.xcconfig; sourceTree = SOURCE_ROOT; };
 		1E7FB96317D3F45200B7E10D /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = SOURCE_ROOT; };
@@ -184,7 +186,6 @@
 		1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportTextFormatter.h; sourceTree = "<group>"; };
 		1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashReportTextFormatter.m; sourceTree = "<group>"; tabWidth = 4; };
 		1EFFB86117D49DE1003FA1FD /* Guide-Migration-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Guide-Migration-template.md"; sourceTree = "<group>"; };
-		4D1F150F162D4A6F0047B9D9 /* BITSystemProfilePrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITSystemProfilePrivate.h; sourceTree = "<group>"; };
 		4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BITSystemProfile.h; path = BetaDistribution/BITSystemProfile.h; sourceTree = "<group>"; };
 		4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BITSystemProfile.m; path = BetaDistribution/BITSystemProfile.m; sourceTree = "<group>"; };
 		4DD13AF6162CAA2200BF15E8 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -406,7 +407,7 @@
 			children = (
 				4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */,
 				4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */,
-				4D1F150F162D4A6F0047B9D9 /* BITSystemProfilePrivate.h */,
+				1E7E5529187F62B400F0858E /* BITSystemProfilePrivate.h */,
 			);
 			name = BetaDistribution;
 			sourceTree = "<group>";
@@ -453,6 +454,7 @@
 				1E7E5509187F3ED800F0858E /* BITFeedbackManagerPrivate.h in Headers */,
 				1E260CA617D41E9100C7F9FE /* BITKeychainItem.h in Headers */,
 				1E06CDA41827D9DF00895076 /* PLCrashReportApplicationInfo.h in Headers */,
+				1E7E552A187F62B400F0858E /* BITSystemProfilePrivate.h in Headers */,
 				1E7E550A187F3ED800F0858E /* BITFeedbackMessage.h in Headers */,
 				1E7E550C187F3ED800F0858E /* BITFeedbackMessageCell.h in Headers */,
 				1E06CDB41827D9DF00895076 /* PLCrashReportThreadInfo.h in Headers */,
