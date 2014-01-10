@@ -62,6 +62,7 @@
 
 @synthesize lastCheck = _lastCheck;
 @synthesize lastMessageID = _lastMessageID;
+@synthesize lastRefreshDate = _lastRefreshDate;
 
 #pragma mark - Initialization
 
@@ -80,7 +81,7 @@
     _token = nil;
     _lastMessageID = nil;
     _feedbackWindowController = nil;
-    _lastRefreshDate = [[NSDate distantPast] retain];
+    self.lastRefreshDate = [NSDate distantPast];
     
     self.feedbackList = [NSMutableArray array];
 
@@ -119,7 +120,7 @@
     [self updateAppDefinedUserData];
     
     // wait at least 5 minutes since the last refresh before doing another auto update
-    if ([[NSDate date] timeIntervalSinceDate:_lastRefreshDate] > 60 * 5) {
+    if ([[NSDate date] timeIntervalSinceDate:self.lastRefreshDate] > 60 * 5) {
       [self updateMessagesList];
     }
   }
@@ -228,13 +229,13 @@
   if (![_fileManager fileExistsAtPath:_settingsFile])
     return;
 
-  NSData *codedData = [[NSData alloc] initWithContentsOfFile:_settingsFile];
+  NSData *codedData = [[[NSData alloc] initWithContentsOfFile:_settingsFile] autorelease];
   if (codedData == nil) return;
   
   NSKeyedUnarchiver *unarchiver = nil;
   
   @try {
-    unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:codedData];
+    unarchiver = [[[NSKeyedUnarchiver alloc] initForReadingWithData:codedData] autorelease];
   }
   @catch (NSException *exception) {
     return;
@@ -391,7 +392,7 @@
 }
 
 - (NSArray *)messagesWithStatus:(BITFeedbackMessageStatus)status {
-  NSMutableArray *resultMessages = [[NSMutableArray alloc] initWithCapacity:[_feedbackList count]];
+  NSMutableArray *resultMessages = [[[NSMutableArray alloc] initWithCapacity:[_feedbackList count]] autorelease];
   
   [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger messagesIdx, BOOL *stop) {
     if ([objMessage status] == status) {
@@ -399,7 +400,7 @@
     }
   }];
   
-  return [NSArray arrayWithArray:resultMessages];;
+  return [NSArray arrayWithArray:resultMessages];
 }
 
 - (BITFeedbackMessage *)lastMessageHavingID {
@@ -512,7 +513,8 @@
       self.token = nil;
     }
     
-    NSInteger pendingMessagesCountAfterProcessing = [[self messagesWithStatus:BITFeedbackMessageStatusSendPending] count];
+    NSArray *messages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
+    NSInteger pendingMessagesCountAfterProcessing = [messages count];
 
     [self saveMessages];
     
@@ -539,7 +541,8 @@
     // get the message that was currently sent if available
     NSArray *messagesSendInProgress = [self messagesWithStatus:BITFeedbackMessageStatusSendInProgress];
     
-    NSInteger pendingMessagesCount = [messagesSendInProgress count] + [[self messagesWithStatus:BITFeedbackMessageStatusSendPending] count];
+    NSArray *pendingMessages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
+    NSInteger pendingMessagesCount = [messagesSendInProgress count] + [pendingMessages count];
     
     __block BOOL newMessage = NO;
     NSMutableSet *returnedMessageIDs = [[[NSMutableSet alloc] init] autorelease];
@@ -616,7 +619,8 @@
       }
     }
     
-    NSInteger pendingMessagesCountAfterProcessing = [[self messagesWithStatus:BITFeedbackMessageStatusSendPending] count];
+    pendingMessages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
+    NSInteger pendingMessagesCountAfterProcessing = [pendingMessages count];
 
     // check if this request was successful and we have more messages pending and continue if positive
     if (pendingMessagesCount > pendingMessagesCountAfterProcessing && pendingMessagesCountAfterProcessing > 0) {
@@ -703,11 +707,12 @@
     [request setHTTPBody:postBody];
   }
   
-  [NSURLConnection bit_sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
-    
+  [NSURLConnection bit_sendAsynchronousRequest:request
+                                         queue:[NSOperationQueue mainQueue]
+                             completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
     _networkRequestInProgress = NO;
     
-    _lastRefreshDate = [[NSDate alloc] init];
+    self.lastRefreshDate = [NSDate date];
     
     if (err) {
       [self reportError:err];

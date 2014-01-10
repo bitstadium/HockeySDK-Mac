@@ -31,7 +31,26 @@
 
 #import "NSURLConnection+BITAdditions.h"
 
-@interface BITNSURLAsyncRequestHandler : NSObject <NSURLConnectionDataDelegate>
+@interface BITNSURLAsyncRequestHandler : NSObject <NSURLConnectionDataDelegate> {
+@private
+  /** Target queue. */
+  NSOperationQueue *_queue;
+  
+  /** Maximum number of bytes to download, or 0 if no limit. */
+  NSUInteger _maximumResourceLength;
+  
+  /** Completion handler. */
+  void (^_handler)(NSURLResponse *response, NSData *data, NSError *error);
+  
+  /** Received data. */
+  NSMutableData *_dataBuffer;
+  
+  /** Received response. */
+  NSURLResponse *_response;
+  
+  NSURLConnection *_urlConnection;
+}
+
 - (id) initWithRequest: (NSURLRequest *) request
  maximumResourceLength: (NSUInteger) maximumResourceLength
                  queue: (NSOperationQueue *) queue
@@ -56,10 +75,10 @@
                    completionHandler: (void (^)(NSURLResponse *response, NSData *data, NSError *error)) handler
 {
   /* The instance handles scheduling and dispatch independently */
-  [[BITNSURLAsyncRequestHandler alloc] initWithRequest: request
-                                maximumResourceLength: NSUIntegerMax /* Maximum size of an NSData instance */
-                                                queue: queue
-                                    completionHandler: handler];
+  [[[BITNSURLAsyncRequestHandler alloc] initWithRequest: request
+                                  maximumResourceLength: NSUIntegerMax /* Maximum size of an NSData instance */
+                                                  queue: queue
+                                      completionHandler: handler] autorelease];
 }
 
 /**
@@ -79,10 +98,10 @@
                    completionHandler: (void (^)(NSURLResponse *response, NSData *data, NSError *error)) handler
 {
   /* The instance handles scheduling and dispatch independently */
-  [[BITNSURLAsyncRequestHandler alloc] initWithRequest: request
-                                 maximumResourceLength: maximumResourceLength
-                                                 queue: queue
-                                     completionHandler: handler];
+  [[[BITNSURLAsyncRequestHandler alloc] initWithRequest: request
+                                  maximumResourceLength: maximumResourceLength
+                                                  queue: queue
+                                      completionHandler: handler] autorelease];
 }
 
 
@@ -92,23 +111,7 @@
  * @internal
  * Manages NSURLConnection on background thread
  */
-@implementation BITNSURLAsyncRequestHandler {
-@private
-  /** Target queue. */
-  NSOperationQueue *_queue;
-
-  /** Maximum number of bytes to download, or 0 if no limit. */
-  NSUInteger _maximumResourceLength;
-  
-  /** Completion handler. */
-  void (^_handler)(NSURLResponse *response, NSData *data, NSError *error);
-  
-  /** Received data. */
-  NSMutableData *_dataBuffer;
-  
-  /** Received response. */
-  NSURLResponse *_response;
-}
+@implementation BITNSURLAsyncRequestHandler
 
 /**
  * Initialize a new instance.
@@ -137,16 +140,17 @@
   
   /* Create and start the request; NSURLConnection will retain our instance for the duration
    * of the request. */
-  NSURLConnection *c = [NSURLConnection connectionWithRequest: request delegate: self];
-  [c start];
+  _urlConnection = [[NSURLConnection connectionWithRequest: request delegate: self] retain];
+  [_urlConnection start];
   
   return self;
 }
 
 - (void)dealloc {
-  [_handler release], _handler = nil;
-  [_dataBuffer release], _dataBuffer = nil;
-  [_response release], _response = nil;
+  [_handler release];
+  [_dataBuffer release];
+  [_response release];
+  [_urlConnection release];
   
   [super dealloc];
 }
@@ -175,6 +179,8 @@
   [_queue addOperation: [NSBlockOperation blockOperationWithBlock: ^{
     _handler(_response, nil, error);
   }]];
+  [_urlConnection release];
+  _urlConnection = nil;
 }
 
 // from NSURLConnectionDataDelegate protocol
@@ -182,6 +188,8 @@
   [_queue addOperation: [NSBlockOperation blockOperationWithBlock: ^{
     _handler(_response, _dataBuffer, nil);
   }]];
+  [_urlConnection release];
+  _urlConnection = nil;
 }
 
 @end

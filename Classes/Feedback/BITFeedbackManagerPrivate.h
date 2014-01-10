@@ -46,6 +46,7 @@
 @property (nonatomic) BOOL didAskUserData;
 
 @property (nonatomic, strong) NSDate *lastCheck;
+@property (nonatomic, strong) NSDate *lastRefreshDate;
 
 @property (nonatomic, strong) NSNumber *lastMessageID;
 

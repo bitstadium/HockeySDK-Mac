@@ -59,6 +59,18 @@
   return self;
 }
 
+- (void)dealloc {
+  [_text release];
+  [_userID release];
+  [_name release];
+  [_email release];
+  [_date release];
+  [_token release];
+  [_messageID release];
+  
+  [super dealloc];
+}
+
 - (id)copyWithZone:(NSZone *)zone {
   BITFeedbackMessage *copy = [[[self class] allocWithZone: zone] init];
   
