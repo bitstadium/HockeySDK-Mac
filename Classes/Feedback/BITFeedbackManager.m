@@ -215,7 +215,64 @@
   [super setUserEmail:userEmail];
 }
 
+- (BOOL)updateUserIDUsingDelegate {
+  BOOL availableViaDelegate = NO;
+  
+  if ([BITHockeyManager sharedHockeyManager].delegate &&
+      [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userIDForHockeyManager:componentManager:)]) {
+    NSString *userID = [[BITHockeyManager sharedHockeyManager].delegate
+                        userIDForHockeyManager:[BITHockeyManager sharedHockeyManager]
+                        componentManager:self];
+    if (userID) {
+      availableViaDelegate = YES;
+      self.userID = userID;
+    }
+  }
+  
+  return availableViaDelegate;
+}
+
+- (BOOL)updateUserNameUsingDelegate {
+  BOOL availableViaDelegate = NO;
+  
+  if ([BITHockeyManager sharedHockeyManager].delegate &&
+      [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userNameForHockeyManager:componentManager:)]) {
+    NSString *userName = [[BITHockeyManager sharedHockeyManager].delegate
+                          userNameForHockeyManager:[BITHockeyManager sharedHockeyManager]
+                          componentManager:self];
+    if (userName) {
+      availableViaDelegate = YES;
+      self.userName = userName;
+      self.requireUserName = BITFeedbackUserDataElementDontShow;
+    }
+  }
+  
+  return availableViaDelegate;
+}
+
+- (BOOL)updateUserEmailUsingDelegate {
+  BOOL availableViaDelegate = NO;
+  
+  if ([BITHockeyManager sharedHockeyManager].delegate &&
+      [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userEmailForHockeyManager:componentManager:)]) {
+    NSString *userEmail = [[BITHockeyManager sharedHockeyManager].delegate
+                           userEmailForHockeyManager:[BITHockeyManager sharedHockeyManager]
+                           componentManager:self];
+    if (userEmail) {
+      availableViaDelegate = YES;
+      self.userEmail = userEmail;
+      self.requireUserEmail = BITFeedbackUserDataElementDontShow;
+    }
+  }
+  
+  return availableViaDelegate;
+}
+
 - (void)updateAppDefinedUserData {
+  [self updateUserIDUsingDelegate];
+  [self updateUserNameUsingDelegate];
+  [self updateUserEmailUsingDelegate];
+  
   // if both values are shown via the delegates, we never ever did ask and will never ever ask for user data
   if (self.requireUserName == BITFeedbackUserDataElementDontShow &&
       self.requireUserEmail == BITFeedbackUserDataElementDontShow) {
@@ -226,6 +283,10 @@
 #pragma mark - Local Storage
 
 - (void)loadMessages {
+  BOOL userIDViaDelegate = [self updateUserIDUsingDelegate];
+  BOOL userNameViaDelegate = [self updateUserNameUsingDelegate];
+  BOOL userEmailViaDelegate = [self updateUserEmailUsingDelegate];
+  
   if (![_fileManager fileExistsAtPath:_settingsFile])
     return;
 
@@ -241,19 +302,25 @@
     return;
   }
 
-  if (!self.userID) {
-    if ([unarchiver containsValueForKey:kBITFeedbackUserID])
-      self.userID = [unarchiver decodeObjectForKey:kBITFeedbackUserID];
+  if (!userIDViaDelegate) {
+    if (!self.userID) {
+      if ([unarchiver containsValueForKey:kBITFeedbackUserID])
+        self.userID = [unarchiver decodeObjectForKey:kBITFeedbackUserID];
+    }
   }
   
-  if (!self.userName) {
-    if ([unarchiver containsValueForKey:kBITFeedbackName])
-      self.userName = [unarchiver decodeObjectForKey:kBITFeedbackName];
+  if (!userNameViaDelegate) {
+    if (!self.userName) {
+      if ([unarchiver containsValueForKey:kBITFeedbackName])
+        self.userName = [unarchiver decodeObjectForKey:kBITFeedbackName];
+    }
   }
 
-  if (!self.userEmail) {
-    if ([unarchiver containsValueForKey:kBITFeedbackEmail])
-      self.userEmail = [unarchiver decodeObjectForKey:kBITFeedbackEmail];
+  if (!userEmailViaDelegate) {
+    if (!self.userEmail) {
+      if ([unarchiver containsValueForKey:kBITFeedbackEmail])
+        self.userEmail = [unarchiver decodeObjectForKey:kBITFeedbackEmail];
+    }
   }
   
   if ([unarchiver containsValueForKey:kBITFeedbackUserDataAsked])

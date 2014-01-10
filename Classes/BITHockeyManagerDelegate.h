@@ -30,7 +30,7 @@
 #import "BITCrashManagerDelegate.h"
 
 @class BITHockeyManager;
-@class BITCrashManager;
+@class BITHockeyBaseManager;
 
 /**
  The `BITHockeyManagerDelegate` formal protocol defines methods further configuring
@@ -67,7 +67,7 @@
  @see userNameForHockeyManager:componentManager:
  @see userEmailForHockeyManager:componentManager:
  */
-- (NSString *)userIDForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITCrashManager *)componentManager;
+- (NSString *)userIDForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;
 
 
 /** Return the user name that should used in the SDK components
@@ -89,7 +89,7 @@
  @see userIDForHockeyManager:componentManager:
  @see userEmailForHockeyManager:componentManager:
  */
-- (NSString *)userNameForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITCrashManager *)componentManager;
+- (NSString *)userNameForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;
 
 
 /** Return the users email address that should used in the SDK components
@@ -111,6 +111,6 @@
  @see userIDForHockeyManager:componentManager:
  @see userNameForHockeyManager:componentManager:
  */
-- (NSString *)userEmailForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITCrashManager *)componentManager;
+- (NSString *)userEmailForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;
 
 @end
