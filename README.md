@@ -37,7 +37,7 @@ This documentation provides integrated help in Xcode for all public APIs and a s
 
 2. Unzip the file. A new folder `HockeySDK-Mac-documentation` is created.
 
-3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSet`
+3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSets`
 
 The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/2.0.0/](http://hockeyapp.net/help/sdk/mac/2.0.0/)
 
