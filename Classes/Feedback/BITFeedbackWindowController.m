@@ -188,11 +188,11 @@
 - (BOOL)canContinueUserDataView {
   BOOL result = YES;
   
-  if ([self.manager requireUserName]) {
+  if ([self.manager requireUserName] == BITFeedbackUserDataElementRequired) {
     if (self.userName.length == 0)
       result = NO;
   }
-  if (result && [self.manager requireUserEmail]) {
+  if (result && [self.manager requireUserEmail] == BITFeedbackUserDataElementRequired) {
     if (self.userEmail.length == 0)
       result = NO;
   }
