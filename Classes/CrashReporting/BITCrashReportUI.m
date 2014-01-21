@@ -199,8 +199,8 @@ const CGFloat kDetailsHeight = 285;
 - (void)askCrashReportDetails {
 #define DISTANCE_BETWEEN_BUTTONS		3
   
-  
-  [[self window] setTitle:[NSString stringWithFormat:BITHockeyLocalizedString(@"WindowTitle", @""), _applicationName]];
+  NSString *title = BITHockeyLocalizedString(@"WindowTitle", @"");
+  [[self window] setTitle:[NSString stringWithFormat:title, _applicationName]];
   
   [[nameTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"NameTextTitle", @"")];
   [[nameTextField cell] setTitle:self.userName];
@@ -214,7 +214,8 @@ const CGFloat kDetailsHeight = 285;
     [[emailTextField cell] setUsesSingleLineMode:YES];
   }
 
-  [[introductionText cell] setTitle:[NSString stringWithFormat:BITHockeyLocalizedString(@"IntroductionText", @""), _applicationName]];
+  title = BITHockeyLocalizedString(@"IntroductionText", @"");
+  [[introductionText cell] setTitle:[NSString stringWithFormat:title, _applicationName]];
   [[commentsTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"CommentsDisclosureTitle", @"")];
   [[problemDescriptionTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"ProblemDetailsTitle", @"")];
 
