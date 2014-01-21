@@ -35,7 +35,7 @@
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
 
-#import "BITKeychainItem.h"
+#import "BITHockeyHelper.h"
 
 #import "BITCrashReportTextFormatter.h"
 #import "CrashReporter.h"
@@ -182,8 +182,8 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   NSString *errorString = nil;
   NSPropertyListFormat format;
   
-  self.userName = [self stringValueFromKeychainForKey:[NSString stringWithFormat:@"default.%@", kBITCrashMetaUserName]];
-  self.userEmail = [self stringValueFromKeychainForKey:[NSString stringWithFormat:@"default.%@", kBITCrashMetaUserEmail]];
+  self.userName = bit_stringValueFromKeychainForKey([NSString stringWithFormat:@"default.%@", kBITCrashMetaUserName]);
+  self.userEmail = bit_stringValueFromKeychainForKey([NSString stringWithFormat:@"default.%@", kBITCrashMetaUserEmail]);
   
   if (![_fileManager fileExistsAtPath:_settingsFile])
     return;
@@ -209,9 +209,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   for (NSUInteger i=0; i < [_crashFiles count]; i++) {
     [_fileManager removeItemAtPath:[_crashFiles objectAtIndex:i] error:&error];
     [_fileManager removeItemAtPath:[[_crashFiles objectAtIndex:i] stringByAppendingString:@".meta"] error:&error];
-    [self removeKeyFromKeychain:[NSString stringWithFormat:@"%@.%@", [[_crashFiles objectAtIndex:i] lastPathComponent], kBITCrashMetaUserName]];
-    [self removeKeyFromKeychain:[NSString stringWithFormat:@"%@.%@", [[_crashFiles objectAtIndex:i] lastPathComponent], kBITCrashMetaUserEmail]];
-    [self removeKeyFromKeychain:[NSString stringWithFormat:@"%@.%@", [[_crashFiles objectAtIndex:i] lastPathComponent], kBITCrashMetaUserID]];
+    bit_removeKeyFromKeychain([NSString stringWithFormat:@"%@.%@", [[_crashFiles objectAtIndex:i] lastPathComponent], kBITCrashMetaUserName]);
+    bit_removeKeyFromKeychain([NSString stringWithFormat:@"%@.%@", [[_crashFiles objectAtIndex:i] lastPathComponent], kBITCrashMetaUserEmail]);
+    bit_removeKeyFromKeychain([NSString stringWithFormat:@"%@.%@", [[_crashFiles objectAtIndex:i] lastPathComponent], kBITCrashMetaUserID]);
   }
   [_crashFiles removeAllObjects];
   [_approvedCrashReports removeAllObjects];
@@ -237,50 +237,57 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 }
 
 - (NSString *)userIDForCrashReport {
-  NSString *userID = @"";
+  NSString *userID = nil;
   
+  if (self.userID)
+    return self.userID;
+
+  userID = bit_stringValueFromKeychainForKey(kBITDefaultUserID);
+
   if ([BITHockeyManager sharedHockeyManager].delegate &&
       [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userIDForHockeyManager:componentManager:)]) {
     userID = [[BITHockeyManager sharedHockeyManager].delegate
               userIDForHockeyManager:[BITHockeyManager sharedHockeyManager]
-              componentManager:self] ?: @"";
+              componentManager:self];
   }
   
-  return userID;
+  return userID ?: @"";
 }
 
 - (NSString *)userNameForCrashReport {
-  NSString *username = @"";
+  NSString *userName = nil;
   
-  // will be only set by BITCrashReportUI
   if (self.userName)
     return self.userName;
   
+  userName = bit_stringValueFromKeychainForKey(kBITDefaultUserName);
+
   if ([BITHockeyManager sharedHockeyManager].delegate &&
       [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userNameForHockeyManager:componentManager:)]) {
-    username = [[BITHockeyManager sharedHockeyManager].delegate
+    userName = [[BITHockeyManager sharedHockeyManager].delegate
                 userNameForHockeyManager:[BITHockeyManager sharedHockeyManager]
-                componentManager:self] ?: @"";
+                componentManager:self];
   }
   
-  return username;
+  return userName ?: @"";
 }
 
 - (NSString *)userEmailForCrashReport {
-  NSString *useremail = @"";
+  NSString *userEmail = nil;
   
-  // will be only set by BITCrashReportUI
   if (self.userEmail)
     return self.userEmail;
   
+  userEmail = bit_stringValueFromKeychainForKey(kBITDefaultUserEmail);
+
   if ([BITHockeyManager sharedHockeyManager].delegate &&
       [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userEmailForHockeyManager:componentManager:)]) {
-    useremail = [[BITHockeyManager sharedHockeyManager].delegate
+    userEmail = [[BITHockeyManager sharedHockeyManager].delegate
                  userEmailForHockeyManager:[BITHockeyManager sharedHockeyManager]
-                 componentManager:self] ?: @"";
+                 componentManager:self];
   }
   
-  return useremail;
+  return userEmail ?: @"";
 }
 
 - (void)returnToMainApplication {
@@ -382,9 +389,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
       NSString *applicationLog = @"";
       NSString *errorString = nil;
       
-      [self addStringValueToKeychain:[self userNameForCrashReport] forKey:[NSString stringWithFormat:@"%@.%@", cacheFilename, kBITCrashMetaUserName]];
-      [self addStringValueToKeychain:[self userEmailForCrashReport] forKey:[NSString stringWithFormat:@"%@.%@", cacheFilename, kBITCrashMetaUserEmail]];
-      [self addStringValueToKeychain:[self userIDForCrashReport] forKey:[NSString stringWithFormat:@"%@.%@", cacheFilename, kBITCrashMetaUserID]];
+      bit_addStringValueToKeychain([self userNameForCrashReport], [NSString stringWithFormat:@"%@.%@", cacheFilename, kBITCrashMetaUserName]);
+      bit_addStringValueToKeychain([self userEmailForCrashReport], [NSString stringWithFormat:@"%@.%@", cacheFilename, kBITCrashMetaUserEmail]);
+      bit_addStringValueToKeychain([self userIDForCrashReport], [NSString stringWithFormat:@"%@.%@", cacheFilename, kBITCrashMetaUserID]);
       
       if (self.delegate != nil && [self.delegate respondsToSelector:@selector(applicationLogForCrashManager:)]) {
         applicationLog = [self.delegate applicationLogForCrashManager:self] ?: @"";
@@ -619,10 +626,10 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
   
   NSString *userName = [self userNameForCrashReport];
   NSString *userEmail = [self userEmailForCrashReport];
-  [self addStringValueToKeychain:userName forKey:[NSString stringWithFormat:@"default.%@", kBITCrashMetaUserName]];
-  [self addStringValueToKeychain:userEmail forKey:[NSString stringWithFormat:@"default.%@", kBITCrashMetaUserEmail]];
-  [self addStringValueToKeychain:userName forKey:[NSString stringWithFormat:@"%@.%@", [crashFile lastPathComponent], kBITCrashMetaUserName]];
-  [self addStringValueToKeychain:userEmail forKey:[NSString stringWithFormat:@"%@.%@", [crashFile lastPathComponent], kBITCrashMetaUserEmail]];
+  bit_addStringValueToKeychain(userName, [NSString stringWithFormat:@"default.%@", kBITCrashMetaUserName]);
+  bit_addStringValueToKeychain(userEmail, [NSString stringWithFormat:@"default.%@", kBITCrashMetaUserEmail]);
+  bit_addStringValueToKeychain(userName, [NSString stringWithFormat:@"%@.%@", [crashFile lastPathComponent], kBITCrashMetaUserName]);
+  bit_addStringValueToKeychain(userEmail, [NSString stringWithFormat:@"%@.%@", [crashFile lastPathComponent], kBITCrashMetaUserEmail]);
   
   NSString *metaFilename = [NSString stringWithFormat:@"%@.meta", crashFile];
   NSString *errorString = nil;
@@ -679,9 +686,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
         [_fileManager removeItemAtPath:filename error:&error];
         [_fileManager removeItemAtPath:[NSString stringWithFormat:@"%@.meta", filename] error:&error];
         
-        [self removeKeyFromKeychain:[NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserName]];
-        [self removeKeyFromKeychain:[NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserEmail]];
-        [self removeKeyFromKeychain:[NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserID]];
+        bit_removeKeyFromKeychain([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserName]);
+        bit_removeKeyFromKeychain([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserEmail]);
+        bit_removeKeyFromKeychain([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserID]);
         continue;
       }
       
@@ -723,9 +730,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
                                       errorDescription:&errorString];
         }
         
-        username = [self stringValueFromKeychainForKey:[NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserName]] ?: @"";
-        useremail = [self stringValueFromKeychainForKey:[NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserEmail]] ?: @"";
-        userid = [self stringValueFromKeychainForKey:[NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserID]] ?: @"";
+        username = bit_stringValueFromKeychainForKey([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserName]) ?: @"";
+        useremail = bit_stringValueFromKeychainForKey([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserEmail]) ?: @"";
+        userid = bit_stringValueFromKeychainForKey([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserID]) ?: @"";
         applicationLog = [metaDict objectForKey:kBITCrashMetaApplicationLog] ?: @"";
         description = [metaDict objectForKey:kBITCrashMetaDescription] ?: @"";
       } else {
@@ -763,9 +770,9 @@ NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
       [_fileManager removeItemAtPath:filename error:&error];
       [_fileManager removeItemAtPath:[NSString stringWithFormat:@"%@.meta", filename] error:&error];
       
-      [self removeKeyFromKeychain:[NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserName]];
-      [self removeKeyFromKeychain:[NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserEmail]];
-      [self removeKeyFromKeychain:[NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserID]];
+      bit_removeKeyFromKeychain([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserName]);
+      bit_removeKeyFromKeychain([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserEmail]);
+      bit_removeKeyFromKeychain([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserID]);
     }
   }
 	

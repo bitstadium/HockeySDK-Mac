@@ -37,6 +37,9 @@
 // Notification message which HockeyManager is listening to, to retry requesting updated from the server
 #define BITHockeyNetworkDidBecomeReachableNotification @"BITHockeyNetworkDidBecomeReachable"
 
+extern NSString *const __attribute__((unused)) kBITDefaultUserID;
+extern NSString *const __attribute__((unused)) kBITDefaultUserName;
+extern NSString *const __attribute__((unused)) kBITDefaultUserEmail;
 
 // hockey crash reporting api error domain
 typedef enum {

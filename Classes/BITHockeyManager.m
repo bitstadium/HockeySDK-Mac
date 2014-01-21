@@ -28,6 +28,7 @@
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
 #import "BITFeedbackManagerPrivate.h"
+#import "BITHockeyHelper.h"
 
 
 @implementation BITHockeyManager
@@ -271,6 +272,29 @@
   }
 }
 
+- (void)setUserID:(NSString *)userID {
+  if (!userID) {
+    bit_removeKeyFromKeychain(kBITDefaultUserID);
+  } else {
+    bit_addStringValueToKeychain(userID, kBITDefaultUserID);
+  }
+}
+
+- (void)setUserName:(NSString *)userName {
+  if (!userName) {
+    bit_removeKeyFromKeychain(kBITDefaultUserName);
+  } else {
+    bit_addStringValueToKeychain(userName, kBITDefaultUserName);
+  }
+}
+
+- (void)setUserEmail:(NSString *)userEmail {
+  if (!userEmail) {
+    bit_removeKeyFromKeychain(kBITDefaultUserEmail);
+  } else {
+    bit_addStringValueToKeychain(userEmail, kBITDefaultUserEmail);
+  }
+}
 
 - (void)testIdentifier {
   if (!_appIdentifier) {

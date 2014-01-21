@@ -211,6 +211,50 @@
 
 
 ///-----------------------------------------------------------------------------
+/// @name Configuration
+///-----------------------------------------------------------------------------
+
+
+/** Set the userid that should used in the SDK components
+ 
+ Right now this is used by the `BITCrashMananger` to attach to a crash report and `BITFeedbackManager`.
+ 
+ Note: the value is persisted in the keychain! To remove old values, call this setter with a `nil` value.
+ 
+ @see [BITHockeyManagerDelegate userIDForHockeyManager:componentManager:]
+ @see setUserName:
+ @see setUserEmail:
+ */
+- (void)setUserID:(NSString *)userID;
+
+
+/** Set the user name that should used in the SDK components
+ 
+ Right now this is used by the `BITCrashMananger` to attach to a crash report and `BITFeedbackManager`.
+ 
+ Note: the value is persisted in the keychain! To remove old values, call this setter with a `nil` value.
+
+ @see [BITHockeyManagerDelegate userNameForHockeyManager:componentManager:]
+ @see setUserID:
+ @see setUserEmail:
+ */
+- (void)setUserName:(NSString *)userName;
+
+
+/** Set the users email address that should used in the SDK components
+ 
+ Right now this is used by the `BITCrashMananger` to attach to a crash report and `BITFeedbackManager`.
+ 
+ Note: the value is persisted in the keychain! To remove old values, call this setter with a `nil` value.
+
+ @see [BITHockeyManagerDelegate userEmailForHockeyManager:componentManager:]
+ @see setUserID:
+ @see setUserName:
+ */
+- (void)setUserEmail:(NSString *)userEmail;
+
+
+///-----------------------------------------------------------------------------
 /// @name Debug Logging
 ///-----------------------------------------------------------------------------
 

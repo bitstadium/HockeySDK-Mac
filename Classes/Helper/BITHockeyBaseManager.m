@@ -35,8 +35,6 @@
 #import "BITHockeyBaseManager.h"
 #import "BITHockeyBaseManagerPrivate.h"
 
-#import "BITKeychainItem.h"
-
 #import <sys/sysctl.h>
 #import <mach-o/ldsyms.h>
 
@@ -104,55 +102,6 @@
   NSString *platform = [NSString stringWithCString:answer encoding: NSUTF8StringEncoding];
   free(answer);
   return platform;
-}
-
-#pragma mark - Keychain
-
-- (BOOL)addStringValueToKeychain:(NSString *)stringValue forKey:(NSString *)key {
-	if (!key || !stringValue)
-		return NO;
-  
-  NSString *serviceName = [NSString stringWithFormat:@"%@.HockeySDK", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
-  
-  BITGenericKeychainItem *item = [BITGenericKeychainItem genericKeychainItemForService:serviceName withUsername:key];
-  
-  if (item) {
-    // update
-    [item setPassword:stringValue];
-    return YES;
-  } else {
-    if ([BITGenericKeychainItem addGenericKeychainItemForService:serviceName withUsername:key password:stringValue])
-      return YES;
-  }
-  
-  return NO;
-}
-
-- (NSString *)stringValueFromKeychainForKey:(NSString *)key {
-	if (!key)
-		return nil;
-  
-  NSString *serviceName = [NSString stringWithFormat:@"%@.HockeySDK", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
-  
-  BITGenericKeychainItem *item = [BITGenericKeychainItem genericKeychainItemForService:serviceName withUsername:key];
-  if (item) {
-    NSString *pwd = [item password];
-    return pwd;
-  }
-  
-  return nil;
-}
-
-- (BOOL)removeKeyFromKeychain:(NSString *)key {
-  NSString *serviceName = [NSString stringWithFormat:@"%@.HockeySDK", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
-  
-  BITGenericKeychainItem *item = [BITGenericKeychainItem genericKeychainItemForService:serviceName withUsername:key];
-  if (item) {
-    [item removeFromKeychain];
-    return YES;
-  }
-  
-  return NO;
 }
 
 

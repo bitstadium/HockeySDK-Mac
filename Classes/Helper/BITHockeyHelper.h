@@ -33,3 +33,7 @@ NSString *bit_URLEncodedString(NSString *inputString);
 NSString *bit_URLDecodedString(NSString *inputString);
 NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB);
 NSString *bit_appName(NSString *placeHolderString);
+
+BOOL bit_addStringValueToKeychain(NSString *stringValue, NSString *key);
+NSString *bit_stringValueFromKeychainForKey(NSString *key);
+BOOL bit_removeKeyFromKeychain(NSString *key);

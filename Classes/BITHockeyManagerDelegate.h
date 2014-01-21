@@ -49,7 +49,7 @@
 
 /** Return the userid that should used in the SDK components
  
- Right now this is used by the `BITCrashMananger` to attach to a crash report.
+ Right now this is used by the `BITCrashMananger` to attach to a crash report and `BITFeedbackManager`.
  
  You can find out the component requesting the user name like this:
     - (NSString *)userNameForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITCrashManager *)componentManager {
@@ -64,6 +64,7 @@
  
  @param hockeyManager The `BITHockeyManager` HockeyManager instance invoking this delegate
  @param componentManager The `BITCrashManager` component instance invoking this delegate
+ @see [BITHockeyManager setUserID:]
  @see userNameForHockeyManager:componentManager:
  @see userEmailForHockeyManager:componentManager:
  */
@@ -72,7 +73,7 @@
 
 /** Return the user name that should used in the SDK components
  
- Right now this is used by the `BITCrashMananger` to attach to a crash report.
+ Right now this is used by the `BITCrashMananger` to attach to a crash report and `BITFeedbackManager`.
  
  You can find out the component requesting the user name like this:
     - (NSString *)userNameForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITCrashManager *)componentManager {
@@ -86,6 +87,7 @@
  
  @param hockeyManager The `BITHockeyManager` HockeyManager instance invoking this delegate
  @param componentManager The `BITCrashManager` component instance invoking this delegate
+ @see [BITHockeyManager setUserName:]
  @see userIDForHockeyManager:componentManager:
  @see userEmailForHockeyManager:componentManager:
  */
@@ -94,7 +96,7 @@
 
 /** Return the users email address that should used in the SDK components
  
- Right now this is used by the `BITCrashMananger` to attach to a crash report.
+ Right now this is used by the `BITCrashMananger` to attach to a crash report and `BITFeedbackManager`.
  
  You can find out the component requesting the user name like this:
     - (NSString *)userNameForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITCrashManager *)componentManager {
@@ -108,6 +110,7 @@
  
  @param hockeyManager The `BITHockeyManager` HockeyManager instance invoking this delegate
  @param componentManager The `BITCrashManager` component instance invoking this delegate
+ @see [BITHockeyManager setUserEmail:]
  @see userIDForHockeyManager:componentManager:
  @see userNameForHockeyManager:componentManager:
  */
