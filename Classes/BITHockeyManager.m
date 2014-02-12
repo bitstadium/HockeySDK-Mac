@@ -1,7 +1,7 @@
 // 
 //  Author: Andreas Linde <mail@andreaslinde.de>
 // 
-//  Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH. All rights reserved.
+//  Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH. All rights reserved.
 //  See LICENSE.txt for author information.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,7 +25,10 @@
 #import "HockeySDK.h"
 #import "HockeySDKPrivate.h"
 
+#import "BITHockeyBaseManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
+#import "BITFeedbackManagerPrivate.h"
+#import "BITHockeyHelper.h"
 
 
 @implementation BITHockeyManager
@@ -34,6 +37,8 @@
 @synthesize serverURL = _serverURL;
 @synthesize crashManager = _crashManager;
 @synthesize disableCrashManager = _disableCrashManager;
+@synthesize feedbackManager = _feedbackManager;
+@synthesize disableFeedbackManager = _disableFeedbackManager;
 @synthesize debugLogEnabled = _debugLogEnabled;
 
 #pragma mark - Public Class Methods
@@ -68,6 +73,7 @@
     _delegate = nil;
     
     _disableCrashManager = NO;
+    _disableFeedbackManager = NO;
     
     _startManagerIsInvoked = NO;
     
@@ -217,6 +223,15 @@
     [_crashManager returnToMainApplication];
   }
   
+  // start FeedbackManager
+  if (![self isFeedbackManagerDisabled]) {
+    BITHockeyLog(@"INFO: Start FeedbackManager");
+    if (_serverURL) {
+      [_feedbackManager setServerURL:_serverURL];
+    }
+    [_feedbackManager performSelector:@selector(startManager) withObject:nil afterDelay:1.0f];
+  }
+
   NSString *integrationFlowTime = [self integrationFlowTimeString];
   if (integrationFlowTime && [self integrationFlowStartedWithTimeString:integrationFlowTime]) {
     [self pingServerForIntegrationStartWorkflowWithTimeString:integrationFlowTime];
@@ -227,6 +242,13 @@
   if (_validAppIdentifier && !_startManagerIsInvoked) {
     NSLog(@"[HockeySDK] ERROR: You did not call [[BITHockeyManager sharedHockeyManager] startManager] to startup the HockeySDK! Please do so after setting up all properties. The SDK is NOT running.");
   }
+}
+
+- (void)setDisableFeedbackManager:(BOOL)disableFeedbackManager {
+  if (_feedbackManager) {
+    [_feedbackManager setDisableFeedbackManager:disableFeedbackManager];
+  }
+  _disableFeedbackManager = disableFeedbackManager;
 }
 
 - (void)setServerURL:(NSString *)aServerURL {
@@ -250,6 +272,29 @@
   }
 }
 
+- (void)setUserID:(NSString *)userID {
+  if (!userID) {
+    bit_removeKeyFromKeychain(kBITDefaultUserID);
+  } else {
+    bit_addStringValueToKeychain(userID, kBITDefaultUserID);
+  }
+}
+
+- (void)setUserName:(NSString *)userName {
+  if (!userName) {
+    bit_removeKeyFromKeychain(kBITDefaultUserName);
+  } else {
+    bit_addStringValueToKeychain(userName, kBITDefaultUserName);
+  }
+}
+
+- (void)setUserEmail:(NSString *)userEmail {
+  if (!userEmail) {
+    bit_removeKeyFromKeychain(kBITDefaultUserEmail);
+  } else {
+    bit_addStringValueToKeychain(userEmail, kBITDefaultUserEmail);
+  }
+}
 
 - (void)testIdentifier {
   if (!_appIdentifier) {
@@ -280,6 +325,9 @@
   if (!_validAppIdentifier) {
     [self logInvalidIdentifier:@"app identifier"];
     self.disableCrashManager = YES;
+  } else {
+    BITHockeyLog(@"INFO: Setup FeedbackManager");
+    _feedbackManager = [[BITFeedbackManager alloc] initWithAppIdentifier:_appIdentifier];
   }
   
   if ([self isCrashManagerDisabled])

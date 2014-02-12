@@ -1,11 +1,6 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
  * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
@@ -31,24 +26,14 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #import <Foundation/Foundation.h>
 
-#import "PLCrashNamespace.h"
-#import "PLCrashReport.h"
+/* NSString helpers */
+NSString *bit_URLEncodedString(NSString *inputString);
+NSString *bit_URLDecodedString(NSString *inputString);
+NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB);
+NSString *bit_appName(NSString *placeHolderString);
 
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
-#endif
-
-
-@interface BITCrashReportTextFormatter : NSObject {
-}
-
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
-
-@end
+BOOL bit_addStringValueToKeychain(NSString *stringValue, NSString *key);
+NSString *bit_stringValueFromKeychainForKey(NSString *key);
+BOOL bit_removeKeyFromKeychain(NSString *key);

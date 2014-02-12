@@ -1,11 +1,6 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
  * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
@@ -34,21 +29,28 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PLCrashNamespace.h"
-#import "PLCrashReport.h"
-
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
-#endif
+#import "BITHockeyBaseManager.h"
 
 
-@interface BITCrashReportTextFormatter : NSObject {
-}
+@interface BITHockeyBaseManager ()
 
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
+@property (nonatomic, strong) NSString *appIdentifier;
+@property (nonatomic, copy) NSString *userID;
+@property (nonatomic, copy) NSString *userName;
+@property (nonatomic, copy) NSString *userEmail;
+
+- (id)initWithAppIdentifier:(NSString *)appIdentifier;
+
+- (void)startManager;
+
+- (void)reportError:(NSError *)error;
+- (NSString *)encodedAppIdentifier;
+
+- (NSString *)getDevicePlatform;
+//- (NSString *)executableUUID;
+
+- (NSData *)appendPostValue:(NSString *)value forKey:(NSString *)key;
+
+- (NSDate *)parseRFC3339Date:(NSString *)dateString;
 
 @end

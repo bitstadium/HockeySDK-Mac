@@ -2,7 +2,7 @@
  * Author: Andreas Linde <mail@andreaslinde.de>
  *         Kent Sutherland
  *
- * Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
  * Copyright (c) 2011 Andreas Linde & Kent Sutherland.
  * All rights reserved.
  *
@@ -28,7 +28,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+
+#import "BITHockeyBaseManager.h"
 
 // flags if the crashreporter is activated at all
 // set this as bool in user defaults e.g. in the settings, if you want to let the user be able to deactivate it
@@ -76,10 +78,10 @@
  *
  * @warning If you start the app with the Xcode debugger attached, detecting crashes will _NOT_ be enabled!
  */
-@interface BITCrashManager : NSObject {
+@interface BITCrashManager : BITHockeyBaseManager {
 @private
   NSFileManager *_fileManager;
-
+  
   BOOL _crashIdenticalCurrentVersion;
   BOOL _crashManagerActivated;
   
@@ -89,17 +91,12 @@
   NSInteger         _statusCode;
   NSURLConnection   *_urlConnection;
   NSMutableData     *_responseData;
-
+  
   id<BITCrashManagerDelegate> _delegate;
-
-  NSString   *_appIdentifier;
-  NSString   *_serverURL;
+  
   BOOL       _autoSubmitCrashReport;
   BOOL       _askUserDetails;
   
-  NSString   *_userName;
-  NSString   *_userEmail;
-    
   NSMutableArray *_crashFiles;
   NSString       *_crashesDir;
   NSString       *_settingsFile;
@@ -113,7 +110,7 @@
   
   BOOL                _didCrashInLastSession;
   NSMutableDictionary *_approvedCrashReports;
-
+  
   NSMutableDictionary *_dictOfLastSessionCrash;
   
   BOOL       _invokedReturnToMainApplication;
@@ -130,15 +127,6 @@
 ///-----------------------------------------------------------------------------
 /// @name Configuration
 ///-----------------------------------------------------------------------------
-
-/**
- * Defines the server URL to send data to or request data from
- *
- * By default this is set to the HockeyApp servers and there rarely should be a
- * need to modify that.
- */
-@property (nonatomic, strong) NSString *serverURL;
-
 
 /**
  *  Defines if the user interface should ask for name and email

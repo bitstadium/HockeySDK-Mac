@@ -1,12 +1,8 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
  * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2011 Andreas Linde.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -31,24 +27,14 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#import "HockeySDK.h"
+#import "HockeySDKPrivate.h"
+#include <CommonCrypto/CommonDigest.h>
 
-#import <Foundation/Foundation.h>
+NSString *const kBITCrashErrorDomain = @"BITCrashReporterErrorDomain";
+NSString *const kBITFeedbackErrorDomain = @"BITFeedbackErrorDomain";
+NSString *const kBITHockeyErrorDomain = @"BITHockeyErrorDomain";
 
-#import "PLCrashNamespace.h"
-#import "PLCrashReport.h"
-
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
-#endif
-
-
-@interface BITCrashReportTextFormatter : NSObject {
-}
-
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
-
-@end
+NSString *const kBITDefaultUserID = @"default.BITMetaUserID";
+NSString *const kBITDefaultUserName = @"default.BITMetaUserName";
+NSString *const kBITDefaultUserEmail = @"default.BITMetaUserEmail";

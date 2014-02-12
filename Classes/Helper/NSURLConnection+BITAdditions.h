@@ -1,12 +1,8 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
- * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2013 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -34,21 +30,15 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PLCrashNamespace.h"
-#import "PLCrashReport.h"
+@interface NSURLConnection (BITAdditions)
 
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
-#endif
++ (void) bit_sendAsynchronousRequest: (NSURLRequest *)request
+                               queue: (NSOperationQueue *)queue
+                   completionHandler: (void (^)(NSURLResponse *response, NSData *data, NSError *error)) handler;
 
-
-@interface BITCrashReportTextFormatter : NSObject {
-}
-
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
++ (void) bit_sendAsynchronousRequest: (NSURLRequest *)request
+               maximumResourceLength: (NSUInteger) maximumResourceLength
+                               queue: (NSOperationQueue *) queue
+                   completionHandler: (void (^)(NSURLResponse *response, NSData *data, NSError *error)) handler;
 
 @end
