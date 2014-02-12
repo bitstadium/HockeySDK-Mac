@@ -1,3 +1,10 @@
+## Version 2.1 Beta 1
+
+- [NEW] Crash Reports now provide the selector name e.g. for crashes in `objc_MsgSend`
+- [NEW] Add setter for global `userID`, `userName`, `userEmail`. Can be used instead of the delegates.
+- [NEW] Added Feedback component
+- [NEW] Requires 10.6 or newer
+
 ## Version 2.0
 
 - General
