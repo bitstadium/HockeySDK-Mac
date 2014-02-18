@@ -1,3 +1,7 @@
+## Version 2.0.2
+
+- [BUGFIX] Fix a possible crash before sending the crash report when the selector could not be found
+
 ## Version 2.0.1
 
 - [NEW] Crash reports now provide the selector name e.g. for crashes in `objc_msgSend`
