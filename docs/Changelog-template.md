@@ -1,3 +1,7 @@
+## Version 2.0.2
+
+- [BUGFIX] Fix a possible crash before sending the crash report when the selector could not be found
+
 ## Version 2.1 Beta 2
 
 - [BUGFIX] Fixed a bug in french localization files that could cause the crash report UI to crash
