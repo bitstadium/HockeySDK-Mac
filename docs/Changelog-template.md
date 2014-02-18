@@ -1,3 +1,7 @@
+## Version 2.1 Beta 3
+
+- [BUGFIX] Fix a possible crash before sending the crash report when the selector could not be found
+
 ## Version 2.0.2
 
 - [BUGFIX] Fix a possible crash before sending the crash report when the selector could not be found

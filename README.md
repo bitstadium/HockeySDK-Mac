@@ -1,6 +1,6 @@
-## Version 2.1.0 Beta 2
+## Version 2.1.0 Beta 3
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/2.1.0-b.2/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/2.1.0-b.3/docs/docs/Changelog.html)
 
 
 ## Introduction
@@ -25,7 +25,7 @@ The main SDK class is `BITHockeyManager`. It initializes all modules and provide
 
 ## Installation & Setup
 
-- [Installation & Setup](http://www.hockeyapp.net/help/sdk/mac/2.1.0-b.2/docs/docs/Guide-Installation-Setup.html)
+- [Installation & Setup](http://www.hockeyapp.net/help/sdk/mac/2.1.0-b.3/docs/docs/Guide-Installation-Setup.html)
 - [Mac Desktop Uploader](http://support.hockeyapp.net/kb/how-tos/how-to-upload-to-hockeyapp-on-a-mac)
 
 
@@ -39,5 +39,5 @@ This documentation provides integrated help in Xcode for all public APIs and a s
 
 3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSets`
 
-The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/2.1.0-b.2/](http://hockeyapp.net/help/sdk/mac/2.1.0-b.2/)
+The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/2.1.0-b.3/](http://hockeyapp.net/help/sdk/mac/2.1.0-b.3/)
 
