@@ -45,9 +45,7 @@
  Example:
  
      [[BITHockeyManager sharedHockeyManager]
-       configureWithIdentifier:@"<AppIdentifierFromHockeyApp>"
-       companyName:@"<YourCompanyName>"
-       crashReportManagerDelegate:self];
+       configureWithIdentifier:@"<AppIdentifierFromHockeyApp>"];
      [[BITHockeyManager sharedHockeyManager] startManager];
  
  @warning The SDK is **NOT** thread safe and has to be set up on the main thread!
@@ -121,7 +119,8 @@
  *
  * Call this after configuring the manager and setting up all modules.
  *
- * @see configureWithIdentifier:companyName:delegate:
+ * @see configureWithIdentifier:
+ * @see configureWithIdentifier:delegate:
  */
 - (void)startManager;
 
@@ -162,7 +161,8 @@
  *
  * Returns the BITCrashManager instance initialized by BITHockeyManager
  *
- * @see configureWithIdentifier:companyName:delegate:
+ * @see configureWithIdentifier:
+ * @see configureWithIdentifier:delegate:
  * @see startManager
  * @see disableCrashManager
  */
