@@ -115,6 +115,22 @@
 - (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id <BITHockeyManagerDelegate>) delegate;
 
 /**
+ * Initializes the manager with a particular app identifier, company name and delegate
+ *
+ * Initialize the manager with a HockeyApp app identifier and assign the class that
+ * implements the required protocol `BITCrashManagerDelegate`.
+ *
+ * @see BITCrashManagerDelegate
+ * @see startManager
+ * @see configureWithIdentifier:
+ * @see configureWithIdentifier:delegate:
+ * @param appIdentifier The app identifier that should be used.
+ * @param companyName `nil` or the company name, this is not used anywhere any longer.
+ * @param delegate `nil` or the class implementing the required protocols
+ */
+- (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *)companyName delegate:(id <BITHockeyManagerDelegate>) delegate __attribute__((deprecated("Use configureWithIdentifier:delegate: instead")));
+
+/**
  * Starts the manager and runs all modules
  *
  * Call this after configuring the manager and setting up all modules.

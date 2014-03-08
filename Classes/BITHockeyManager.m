@@ -203,6 +203,16 @@
   [self initializeModules];
 }
 
+
+- (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *)companyName delegate:(id <BITHockeyManagerDelegate>)delegate {
+  [_appIdentifier release];
+  _appIdentifier = [appIdentifier copy];
+  
+  self.delegate = delegate;
+  
+  [self initializeModules];
+}
+
 - (void)startManager {
   if (!_validAppIdentifier || ![self isSetUpOnMainThread]) {
     [_crashManager returnToMainApplication];
