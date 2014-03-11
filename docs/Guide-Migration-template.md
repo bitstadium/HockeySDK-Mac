@@ -37,6 +37,10 @@ There might be minor to the SDK setup code required. Some delegates methods are 
 - The required delegate `crashReportApplicationLog` is replaced by `-(NSString *)applicationLogForCrashManager:(id)crashManager`
 - The property `loggingEnabled` in `BITHockeyManager` has been replaced by the property `debugLogEnabled`
 
+### HockeySDK-Mac 2.0.x
+
+- The call `[BITHockeyManager configureWithIdentifier:companyName:delegate:]` has been deprecated. Use either `[BITHockeyManager configureWithIdentifier:delegate:]` or `[BITHockeyManager configureWithIdentifier:]`
+
 ### Troubleshooting
 
 Error message:

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name              = 'HockeySDK-Mac'
-  s.version           = '2.1.0-b.3'
+  s.version           = '2.1.0'
 
   s.summary           = 'Collect crash reports with HockeyApp.'
   s.description       = <<-DESC
@@ -12,11 +12,11 @@ Pod::Spec.new do |s|
                         DESC
 
   s.homepage          = 'http://hockeyapp.net/'
-  s.documentation_url = 'http://hockeyapp.net/help/sdk/mac/2.1.0-b.3/'
+  s.documentation_url = 'http://hockeyapp.net/help/sdk/mac/2.1.0/'
 
   s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.txt' }
   s.author            = { 'Andreas Linde' => 'mail@andreaslinde.de', 'Thomas Dohmke' => "thomas@dohmke.de" }
-  s.source            = { :http => "http://download.hockeyapp.net/sdk/mac/HockeySDK-Mac-2.1.0-b.3.zip" }
+  s.source            = { :http => "http://download.hockeyapp.net/sdk/mac/HockeySDK-Mac-2.1.0.zip" }
 
   s.platform              = :osx, '10.6'
   s.osx.deployment_target = 10.6

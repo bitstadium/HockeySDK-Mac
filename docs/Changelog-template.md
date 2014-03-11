@@ -1,22 +1,12 @@
-## Version 2.1 Beta 3
+## Version 2.1
 
-- [BUGFIX] Fix a possible crash before sending the crash report when the selector could not be found
+- [NEW] Added Feedback component
+- [NEW] Added setter for global `userID`, `userName`, `userEmail`. Can be used instead of the delegates.
+- [NEW] Requires 10.6 or newer
 
 ## Version 2.0.2
 
 - [BUGFIX] Fix a possible crash before sending the crash report when the selector could not be found
-
-## Version 2.1 Beta 2
-
-- [BUGFIX] Fixed a bug in french localization files that could cause the crash report UI to crash
-- [BUGFIX] Enabled `Skip Install` for the Framework target. This fixes a warning when archiving a project and including the SDK as a subproject
-
-## Version 2.1 Beta 1
-
-- [NEW] Crash Reports now provide the selector name e.g. for crashes in `objc_MsgSend`
-- [NEW] Add setter for global `userID`, `userName`, `userEmail`. Can be used instead of the delegates.
-- [NEW] Added Feedback component
-- [NEW] Requires 10.6 or newer
 
 ## Version 2.0.1
 
