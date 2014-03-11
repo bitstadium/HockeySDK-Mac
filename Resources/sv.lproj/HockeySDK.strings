@@ -11,7 +11,7 @@
 "WindowTitle" = "Felrapport för %@";
 
 /* Introduction text, with app name placeholder first and company placeholder second */
-"IntroductionText" = "%@ slutade tvärt att fungera förra gången. Vill du skicka en felrapport till %@?";
+"IntroductionText" = "%@ slutade tvärt att fungera förra gången. Vill du skicka en felrapport?";
 
 /* Name Text Title */
 "NameTextTitle" = "Namn";

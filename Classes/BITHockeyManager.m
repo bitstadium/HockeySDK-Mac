@@ -1,7 +1,7 @@
 // 
 //  Author: Andreas Linde <mail@andreaslinde.de>
 // 
-//  Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH. All rights reserved.
+//  Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH. All rights reserved.
 //  See LICENSE.txt for author information.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,8 +25,10 @@
 #import "HockeySDK.h"
 #import "HockeySDKPrivate.h"
 
-#import "BITHockeyManagerPrivate.h"
+#import "BITHockeyBaseManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
+#import "BITFeedbackManagerPrivate.h"
+#import "BITHockeyHelper.h"
 
 
 @implementation BITHockeyManager
@@ -35,6 +37,8 @@
 @synthesize serverURL = _serverURL;
 @synthesize crashManager = _crashManager;
 @synthesize disableCrashManager = _disableCrashManager;
+@synthesize feedbackManager = _feedbackManager;
+@synthesize disableFeedbackManager = _disableFeedbackManager;
 @synthesize debugLogEnabled = _debugLogEnabled;
 
 #pragma mark - Public Class Methods
@@ -66,8 +70,10 @@
 - (id) init {
   if ((self = [super init])) {
     _serverURL = nil;
+    _delegate = nil;
     
     _disableCrashManager = NO;
+    _disableFeedbackManager = NO;
     
     _startManagerIsInvoked = NO;
     
@@ -111,17 +117,98 @@
   NSLog(@"[HockeySDK] ERROR: The %@ is invalid! Please use the HockeyApp app identifier you find on the apps website on HockeyApp! The SDK is disabled!", environment);
 }
 
+- (NSString *)integrationFlowTimeString {
+  NSString *timeString = [[NSBundle mainBundle] objectForInfoDictionaryKey:BITHOCKEY_INTEGRATIONFLOW_TIMESTAMP];
+  
+  return timeString;
+}
+
+- (BOOL)integrationFlowStartedWithTimeString:(NSString *)timeString {
+  if (timeString == nil) {
+    return NO;
+  }
+  
+  NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+  NSLocale *enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+  [dateFormatter setLocale:enUSPOSIXLocale];
+  [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+  NSDate *integrationFlowStartDate = [dateFormatter dateFromString:timeString];
+  
+  if (integrationFlowStartDate && [integrationFlowStartDate timeIntervalSince1970] > [[NSDate date] timeIntervalSince1970] - (60 * 10) ) {
+    return YES;
+  }
+  
+  return NO;
+}
+
+- (void)pingServerForIntegrationStartWorkflowWithTimeString:(NSString *)timeString {
+  if (!_appIdentifier) {
+    return;
+  }
+  
+  NSString *serverString = [[BITHOCKEYSDK_URL copy] autorelease];
+  if (_serverURL)
+    serverString = [[_serverURL copy] autorelease];
+  
+  NSMutableURLRequest *request = nil;
+  NSString *boundary = @"----FOO";
+  
+  NSString *url = [NSString stringWithFormat:@"%@api/3/apps/%@/integration",
+                   serverString,
+                   [_appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                   ];
+  
+  BITHockeyLog(@"INFO: Sending integration workflow ping to %@", url);
+  
+  request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+  
+  [request setValue:BITHOCKEY_NAME forHTTPHeaderField:@"User-Agent"];
+  [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+  [request setTimeoutInterval: 15];
+  [request setHTTPMethod:@"POST"];
+  NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+  [request setValue:contentType forHTTPHeaderField:@"Content-type"];
+  
+  NSMutableData *postBody =  [NSMutableData data];
+  [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+  [postBody appendData:[@"Content-Disposition: form-data; name=\"timestamp\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+  [postBody appendData:[timeString dataUsingEncoding:NSUTF8StringEncoding]];
+  [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+  [request setHTTPBody:postBody];
+  
+  _statusCode = 200;
+  
+  _urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+  if (!_urlConnection) {
+    BITHockeyLog(@"INFO: Pinging server could not start!");
+  }
+}
+
 
 #pragma mark - Public Instance Methods (Configuration)
+
+- (void)configureWithIdentifier:(NSString *)appIdentifier {
+  [_appIdentifier release];
+  _appIdentifier = [appIdentifier copy];
+  
+  [self initializeModules];
+}
+
+- (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id <BITHockeyManagerDelegate>)delegate {
+  [_appIdentifier release];
+  _appIdentifier = [appIdentifier copy];
+  
+  self.delegate = delegate;
+  
+  [self initializeModules];
+}
+
 
 - (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *)companyName delegate:(id <BITHockeyManagerDelegate>)delegate {
   [_appIdentifier release];
   _appIdentifier = [appIdentifier copy];
   
-  [_companyName release];
-  _companyName = [companyName copy];
-  
-  _delegate = delegate;
+  self.delegate = delegate;
   
   [self initializeModules];
 }
@@ -141,10 +228,23 @@
     if (_serverURL) {
       [_crashManager setServerURL:_serverURL];
     }
-    [_crashManager setCompanyName:_companyName];
     [_crashManager startManager];
   } else {
     [_crashManager returnToMainApplication];
+  }
+  
+  // start FeedbackManager
+  if (![self isFeedbackManagerDisabled]) {
+    BITHockeyLog(@"INFO: Start FeedbackManager");
+    if (_serverURL) {
+      [_feedbackManager setServerURL:_serverURL];
+    }
+    [_feedbackManager performSelector:@selector(startManager) withObject:nil afterDelay:1.0f];
+  }
+
+  NSString *integrationFlowTime = [self integrationFlowTimeString];
+  if (integrationFlowTime && [self integrationFlowStartedWithTimeString:integrationFlowTime]) {
+    [self pingServerForIntegrationStartWorkflowWithTimeString:integrationFlowTime];
   }
 }
 
@@ -152,6 +252,13 @@
   if (_validAppIdentifier && !_startManagerIsInvoked) {
     NSLog(@"[HockeySDK] ERROR: You did not call [[BITHockeyManager sharedHockeyManager] startManager] to startup the HockeySDK! Please do so after setting up all properties. The SDK is NOT running.");
   }
+}
+
+- (void)setDisableFeedbackManager:(BOOL)disableFeedbackManager {
+  if (_feedbackManager) {
+    [_feedbackManager setDisableFeedbackManager:disableFeedbackManager];
+  }
+  _disableFeedbackManager = disableFeedbackManager;
 }
 
 - (void)setServerURL:(NSString *)aServerURL {
@@ -163,6 +270,50 @@
   if (_serverURL != aServerURL) {
     _serverURL = [aServerURL copy];
   }
+}
+
+- (void)setDelegate:(id<BITHockeyManagerDelegate>)delegate {
+  if (_delegate != delegate) {
+    _delegate = delegate;
+    
+    if (_crashManager) {
+      _crashManager.delegate = delegate;
+    }
+  }
+}
+
+- (void)setUserID:(NSString *)userID {
+  if (!userID) {
+    bit_removeKeyFromKeychain(kBITDefaultUserID);
+  } else {
+    bit_addStringValueToKeychain(userID, kBITDefaultUserID);
+  }
+}
+
+- (void)setUserName:(NSString *)userName {
+  if (!userName) {
+    bit_removeKeyFromKeychain(kBITDefaultUserName);
+  } else {
+    bit_addStringValueToKeychain(userName, kBITDefaultUserName);
+  }
+}
+
+- (void)setUserEmail:(NSString *)userEmail {
+  if (!userEmail) {
+    bit_removeKeyFromKeychain(kBITDefaultUserEmail);
+  } else {
+    bit_addStringValueToKeychain(userEmail, kBITDefaultUserEmail);
+  }
+}
+
+- (void)testIdentifier {
+  if (!_appIdentifier) {
+    return;
+  }
+  
+  NSDate *now = [NSDate date];
+  NSString *timeString = [NSString stringWithFormat:@"%.0f", [now timeIntervalSince1970]];
+  [self pingServerForIntegrationStartWorkflowWithTimeString:timeString];
 }
 
 
@@ -177,18 +328,54 @@
   
   BITHockeyLog(@"INFO: Setup CrashManager");
   _crashManager = [[BITCrashManager alloc] initWithAppIdentifier:_appIdentifier];
-  _crashManager.delegate = _delegate;
+  _crashManager.delegate = self.delegate;
   
   // if we don't initialize the BITCrashManager instance, then the delegate will not be invoked
   // leaving the app to never show the window if the developer provided an invalid app identifier
   if (!_validAppIdentifier) {
     [self logInvalidIdentifier:@"app identifier"];
     self.disableCrashManager = YES;
+  } else {
+    BITHockeyLog(@"INFO: Setup FeedbackManager");
+    _feedbackManager = [[BITFeedbackManager alloc] initWithAppIdentifier:_appIdentifier];
   }
   
   if ([self isCrashManagerDisabled])
     _crashManager.crashManagerActivated = NO;
 }
 
+#pragma mark - NSURLConnection Delegate
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+  if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+    _statusCode = [(NSHTTPURLResponse *)response statusCode];
+  }
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+  BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
+  
+  [_urlConnection release];
+  _urlConnection = nil;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+  [_urlConnection release];
+  _urlConnection = nil;
+  
+  [self processServerResult];
+}
+
+- (void)processServerResult {
+  if (_statusCode == 201) {
+    BITHockeyLog(@"INFO: Ping accepted.");
+  } else if (_statusCode == 200) {
+    BITHockeyLog(@"INFO: Ping accepted. Server already knows.");
+  } else if (_statusCode == 400) {
+    BITHockeyLog(@"ERROR: App ID not found");
+  } else {
+    BITHockeyLog(@"ERROR: Unknown error");
+  }
+}
 
 @end

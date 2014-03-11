@@ -1,12 +1,9 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Andreas Linde <mail@andreaslinde.de>
+ *         Kent Sutherland
  *
- * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
  * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2011 Andreas Linde & Kent Sutherland.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -34,21 +31,27 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PLCrashNamespace.h"
-#import "PLCrashReport.h"
+#ifndef HockeySDK_HockeySDKPrivate_h
+#define HockeySDK_HockeySDKPrivate_h
 
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
+#define BITHOCKEY_NAME @"HockeySDK"
+#define BITHOCKEY_IDENTIFIER @"net.hockeyapp.sdk.mac"
+#define BITHOCKEY_CRASH_SETTINGS @"BITCrashManager.plist"
+#define BITHOCKEY_CRASH_ANALYZER @"BITCrashManager.analyzer"
+
+#define BITHOCKEY_FEEDBACK_SETTINGS @"BITFeedbackManager.plist"
+
+#define BITHOCKEY_INTEGRATIONFLOW_TIMESTAMP @"BITIntegrationFlowStartTimestamp"
+
+#define BITHockeyBundle [NSBundle bundleWithIdentifier:BITHOCKEY_IDENTIFIER]
+#define BITHOCKEYSDK_URL @"https://sdk.hockeyapp.net/"
+
+#define BITHockeyLocalizedString(key,comment) NSLocalizedStringFromTableInBundle(key, @"HockeySDK", BITHockeyBundle, comment)
+#define BITHockeyLog(fmt, ...) do { if([BITHockeyManager sharedHockeyManager].isDebugLogEnabled) { NSLog((@"[HockeySDK] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__); }} while(0)
+
+
+#define BIT_RGBCOLOR(r,g,b) [NSColor colorWithCalibratedRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
+
 #endif
 
 
-@interface BITCrashReportTextFormatter : NSObject {
-}
-
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
-
-@end

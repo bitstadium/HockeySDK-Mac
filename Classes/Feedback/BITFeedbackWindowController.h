@@ -1,7 +1,7 @@
 /*
  * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -26,14 +26,40 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 
-@protocol BITHockeyManagerDelegate;
+@class BITFeedbackManager;
 
+@interface BITFeedbackWindowController : NSWindowController {
+@private
+  BITFeedbackManager *_manager;
+  NSDateFormatter *_lastUpdateDateFormatter;
 
-@interface BITHockeyManager () {
+  NSView *_userDataView;
+  NSTextField *_userNameTextField;
+  NSTextField *_userEmailTextField;
+  NSButton *_userDataContinueButton;
+  
+  NSString *_userName;
+  NSString *_userEmail;
+  
+  NSView *_feedbackView;
+  NSView *_feedbackEmptyView;
+  NSScrollView *_feedbackScrollView;
+  NSTableView *_feedbackTableView;
+
+  NSTextView *_messageTextField;
+  NSAttributedString *_messageText;
+
+  NSView *_statusBarComposeView;
+  NSButton *_sendMessageButton;
+  
+  NSView *_statusBarDefaultView;
+  NSProgressIndicator *_statusBarLoadingIndicator;
+  NSTextField *_statusBarTextField;
+  NSButton *_statusBarRefreshButton;
 }
 
-@property (nonatomic, unsafe_unretained) id<BITHockeyManagerDelegate> delegate;
+- (id)initWithManager:(BITFeedbackManager *)feedbackManager;
 
 @end

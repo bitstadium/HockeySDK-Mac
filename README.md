@@ -1,6 +1,6 @@
-## Version 2.0.2
+## Version 2.1.0
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/2.0.2/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/2.1.0/docs/docs/Changelog.html)
 
 
 ## Introduction
@@ -20,12 +20,12 @@ The main SDK class is `BITHockeyManager`. It initializes all modules and provide
 
 1. Before you integrate HockeySDK into your own app, you should add the app to HockeyApp if you haven't already. Read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-create-a-new-app) on how to do it.
 2. We also assume that you already have a project in Xcode and that this project is opened in Xcode 4.
-3. The SDK supports Mac OS X 10.5.0 or newer.
+3. The SDK supports Mac OS X 10.6.0 or newer.
 
 
 ## Installation & Setup
 
-- [Installation & Setup](http://www.hockeyapp.net/help/sdk/mac/2.0.2/docs/docs/Guide-Installation-Setup.html)
+- [Installation & Setup](http://www.hockeyapp.net/help/sdk/mac/2.1.0/docs/docs/Guide-Installation-Setup.html)
 - [Mac Desktop Uploader](http://support.hockeyapp.net/kb/how-tos/how-to-upload-to-hockeyapp-on-a-mac)
 
 
@@ -37,7 +37,7 @@ This documentation provides integrated help in Xcode for all public APIs and a s
 
 2. Unzip the file. A new folder `HockeySDK-Mac-documentation` is created.
 
-3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSet`
+3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSets`
 
-The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/2.0.2/](http://hockeyapp.net/help/sdk/mac/2.0.2/)
+The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/2.1.0/](http://hockeyapp.net/help/sdk/mac/2.1.0/)
 

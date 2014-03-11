@@ -1,11 +1,6 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
  * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
@@ -34,21 +29,37 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PLCrashNamespace.h"
-#import "PLCrashReport.h"
 
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
-#endif
+/**
+ The internal superclass for all component managers
+ 
+ */
 
-
-@interface BITCrashReportTextFormatter : NSObject {
+@interface BITHockeyBaseManager : NSObject {
+@private
+  NSDateFormatter *_rfc3339Formatter;
+  
+  NSString *_appIdentifier;
+  
+  NSString *_userID;
+  NSString *_userName;
+  NSString *_userEmail;
+  
+  NSString *_serverURL;
 }
 
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
+///-----------------------------------------------------------------------------
+/// @name Modules
+///-----------------------------------------------------------------------------
+
+
+/**
+ Defines the server URL to send data to or request data from
+ 
+ By default this is set to the HockeyApp servers and there rarely should be a
+ need to modify that.
+ */
+@property (nonatomic, strong) NSString *serverURL;
+
 
 @end

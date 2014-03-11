@@ -1,12 +1,7 @@
 /*
- * Authors:
- *  Landon Fuller <landonf@plausiblelabs.com>
- *  Damian Morris <damian@moso.com.au>
- *  Andreas Linde <mail@andreaslinde.de>
+ * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2008-2013 Plausible Labs Cooperative, Inc.
- * Copyright (c) 2010 MOSO Corporation, Pty Ltd.
- * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -31,24 +26,20 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#import <Cocoa/Cocoa.h>
 
-#import <Foundation/Foundation.h>
+@class BITFeedbackMessage;
 
-#import "PLCrashNamespace.h"
-#import "PLCrashReport.h"
-
-// Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
-#ifndef kBITBinaryImageKeyUUID
-#define kBITBinaryImageKeyUUID @"uuid"
-#define kBITBinaryImageKeyArch @"arch"
-#define kBITBinaryImageKeyType @"type"
-#endif
-
-
-@interface BITCrashReportTextFormatter : NSObject {
+@interface BITFeedbackMessageCell : NSTextFieldCell {
+@private
+  NSDateFormatter *_dateFormatter;
+  NSDateFormatter *_timeFormatter;
+  
+  NSInteger _row;
 }
 
-+ (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey;
-+ (NSArray *)arrayOfAppUUIDsForCrashReport:(BITPLCrashReport *)report;
+@property (nonatomic) NSInteger row;
+
++ (CGFloat) heightForRowWithMessage:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width;
 
 @end

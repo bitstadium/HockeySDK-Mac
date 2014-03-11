@@ -1,3 +1,9 @@
+## Version 2.1
+
+- [NEW] Added Feedback component
+- [NEW] Added setter for global `userID`, `userName`, `userEmail`. Can be used instead of the delegates.
+- [NEW] Requires 10.6 or newer
+
 ## Version 2.0.2
 
 - [BUGFIX] Fix a possible crash before sending the crash report when the selector could not be found
