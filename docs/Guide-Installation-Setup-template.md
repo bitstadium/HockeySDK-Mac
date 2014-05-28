@@ -252,7 +252,7 @@ If you implement these delegate methods and keep them in your live app too, plea
 
 In case you want to check some integrated logging data (this should probably be used only for debugging purposes), add the following line before `startManager`:
 
-    [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled];
+    [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled:YES];
 <br/><br/><br/>
 
 
