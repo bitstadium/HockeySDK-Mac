@@ -35,6 +35,16 @@
 
 @optional
 
+/**
+ * Not used any longer!
+ *
+ * In previous SDK versions this invoked once the user interface asking for crash details and if the data should be send is dismissed
+ *
+ * @param crashManager The `BITCrashManager` instance invoking the method
+ * @deprecated The default crash report UI is not shown modal any longer, so this delegate is not being used any more!
+ */
+- (void) showMainApplicationWindowForCrashManager:(BITCrashManager *)crashManager __attribute__((deprecated("The default crash report UI is not shown modal any longer, so this delegate is not being used any more!")));
+
 ///-----------------------------------------------------------------------------
 /// @name Additional meta data
 ///-----------------------------------------------------------------------------
