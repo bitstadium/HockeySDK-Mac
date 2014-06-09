@@ -29,9 +29,13 @@
 #import "BITCrashManagerPrivate.h"
 #import "BITFeedbackManagerPrivate.h"
 #import "BITHockeyHelper.h"
+#import "BITHockeyAppClient.h"
 
+NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 
-@implementation BITHockeyManager
+@implementation BITHockeyManager {
+  BITHockeyAppClient *_hockeyAppClient;
+}
 
 @synthesize delegate = _delegate;
 @synthesize serverURL = _serverURL;
@@ -71,6 +75,7 @@
   if ((self = [super init])) {
     _serverURL = nil;
     _delegate = nil;
+    _hockeyAppClient = nil;
     
     _disableCrashManager = NO;
     _disableFeedbackManager = NO;
@@ -215,7 +220,6 @@
 
 - (void)startManager {
   if (!_validAppIdentifier || ![self isSetUpOnMainThread]) {
-    [_crashManager returnToMainApplication];
     return;
   }
   
@@ -229,8 +233,6 @@
       [_crashManager setServerURL:_serverURL];
     }
     [_crashManager startManager];
-  } else {
-    [_crashManager returnToMainApplication];
   }
   
   // start FeedbackManager
@@ -269,6 +271,10 @@
   
   if (_serverURL != aServerURL) {
     _serverURL = [aServerURL copy];
+
+    if (_hockeyAppClient) {
+      _hockeyAppClient.baseURL = [NSURL URLWithString:_serverURL ?: kBITHockeySDKURL];
+    }
   }
 }
 
@@ -319,6 +325,14 @@
 
 #pragma mark - Private Instance Methods
 
+- (BITHockeyAppClient *)hockeyAppClient {
+  if (!_hockeyAppClient) {
+    _hockeyAppClient = [[BITHockeyAppClient alloc] initWithBaseURL:[NSURL URLWithString:_serverURL ?: kBITHockeySDKURL]];
+  }
+  
+  return _hockeyAppClient;
+}
+
 - (void)initializeModules {
   _validAppIdentifier = [self checkValidityOfAppIdentifier:_appIdentifier];
   
@@ -329,6 +343,7 @@
   BITHockeyLog(@"INFO: Setup CrashManager");
   _crashManager = [[BITCrashManager alloc] initWithAppIdentifier:_appIdentifier];
   _crashManager.delegate = self.delegate;
+  _crashManager.hockeyAppClient = [self hockeyAppClient];
   
   // if we don't initialize the BITCrashManager instance, then the delegate will not be invoked
   // leaving the app to never show the window if the developer provided an invalid app identifier

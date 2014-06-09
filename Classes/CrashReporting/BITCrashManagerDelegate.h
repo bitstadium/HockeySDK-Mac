@@ -25,6 +25,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class BITCrashAttachment;
+
 /**
  * The `BITCrashManagerDelegate` formal protocol defines methods further configuring
  * the behaviour of `BITCrashManager`.
@@ -32,13 +34,6 @@
 @protocol BITCrashManagerDelegate <NSObject>
 
 @optional
-
-/**
- *  Invoked once the user interface asking for crash details and if the data should be send is dismissed
- *
- * @param crashManager The `BITCrashManager` instance invoking the method
- */
-- (void) showMainApplicationWindowForCrashManager:(BITCrashManager *)crashManager;
 
 ///-----------------------------------------------------------------------------
 /// @name Additional meta data
@@ -49,6 +44,29 @@
  * @param crashManager The `BITCrashManager` instance invoking this delegate
  */
 -(NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager;
+
+/** Return a BITCrashAttachment object providing an NSData object the crash report
+ being processed should contain
+ 
+ Please limit your attachments to reasonable files to avoid high traffic costs for your users.
+ 
+ Example implementation:
+ 
+     - (BITCrashAttachment *)attachmentForCrashManager:(BITCrashManager *)crashManager {
+       NSData *data = [NSData dataWithContentsOfURL:@"mydatafile"];
+ 
+       BITCrashAttachment *attachment = [[BITCrashAttachment alloc] initWithFilename:@"myfile.data"
+                                                                 crashAttachmentData:data
+                                                                         contentType:@"'application/octet-stream"];
+       return attachment;
+     }
+ 
+ @param crashManager The `BITCrashManager` instance invoking this delegate
+ @see applicationLogForCrashManager:
+ @see userNameForCrashManager:
+ @see userEmailForCrashManager:
+ */
+-(BITCrashAttachment *)attachmentForCrashManager:(BITCrashManager *)crashManager;
 
 ///-----------------------------------------------------------------------------
 /// @name Alert

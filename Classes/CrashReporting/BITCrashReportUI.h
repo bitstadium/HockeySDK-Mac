@@ -63,7 +63,6 @@
   NSString          *_userName;
   NSString          *_userEmail;
   NSString          *_crashLogContent;
-  NSString          *_crashFile;
   
   BOOL showUserDetails;
   BOOL showComments;
@@ -77,7 +76,11 @@
 @property (nonatomic, retain) NSString *userEmail;
 
 
-- (instancetype)initWithManager:(BITCrashManager *)crashManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails;
+- (instancetype)initWithManager:(BITCrashManager *)crashManager
+                    crashReport:(NSString *)crashReport
+                     logContent:(NSString *)logContent
+                applicationName:(NSString *)applicationName
+                 askUserDetails:(BOOL)askUserDetails;
 
 - (void)askCrashReportDetails;
 

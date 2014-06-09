@@ -40,26 +40,39 @@
 #define kHockeySDKUserEmail @"HockeySDKUserEmail"
 
 
+@class BITHockeyAppClient;
+@class BITCrashAttachment;
+
+
 @interface BITCrashManager ()
+
+@property (nonatomic, strong) BITHockeyAppClient *hockeyAppClient;
 
 @property (nonatomic, getter = isCrashManagerActivated) BOOL crashManagerActivated;
 
 @property (nonatomic) NSUncaughtExceptionHandler *plcrExceptionHandler;
 
+@property (nonatomic) PLCrashReporterCallbacks *crashCallBacks;
+
+@property (nonatomic) NSString *lastCrashFilename;
+
+@property (nonatomic, copy, setter = setCrashReportUIHandler:) BITCustomCrashReportUIHandler crashReportUIHandler;
+
+@property (nonatomic, strong) NSString *crashesDir;
+
 - (NSString *)applicationName;
 - (NSString *)applicationVersion;
-
-- (void)returnToMainApplication;
-
-- (void)cancelReport;
-- (void)sendReportWithCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
 
 - (void)handleCrashReport;
 - (BOOL)hasPendingCrashReport;
 - (void)cleanCrashReports;
 - (NSString *)extractAppUUIDs:(BITPLCrashReport *)report;
 
-- (void)postXML:(NSString*)xml;
+- (void)persistAttachment:(BITCrashAttachment *)attachment withFilename:(NSString *)filename;
+
+- (BITCrashAttachment *)attachmentForCrashReport:(NSString *)filename;
+
+- (void)setLastCrashFilename:(NSString *)lastCrashFilename;
 
 /**
  *  Initialize the crash reporter and check if there are any pending crash reports

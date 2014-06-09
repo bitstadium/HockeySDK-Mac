@@ -27,6 +27,8 @@
 
 #import <HockeySDK/BITCrashManager.h>
 #import <HockeySDK/BITCrashManagerDelegate.h>
+#import <HockeySDK/BITCrashDetails.h>
+#import <HockeySDK/BITCrashAttachment.h>
 
 #import <HockeySDK/BITSystemProfile.h>
 

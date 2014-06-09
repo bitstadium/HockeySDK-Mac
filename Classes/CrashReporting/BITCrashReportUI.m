@@ -35,6 +35,7 @@
 
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
+#import "BITCrashMetaData.h"
 
 #import <sys/sysctl.h>
 #import "CrashReporter.h"
@@ -55,14 +56,13 @@ const CGFloat kDetailsHeight = 285;
 @synthesize userEmail = _userEmail;
 
 
-- (instancetype)initWithManager:(BITCrashManager *)crashManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
+- (instancetype)initWithManager:(BITCrashManager *)crashManager crashReport:(NSString *)crashReport logContent:(NSString *)logContent applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
   
   self = [super initWithWindowNibName: @"BITCrashReportUI"];
   
   if ( self != nil) {
     _mainAppMenu = [NSApp mainMenu];
     _crashManager = crashManager;
-    _crashFile = [crashReportFile copy];
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
     _applicationName = [applicationName copy];
@@ -170,9 +170,9 @@ const CGFloat kDetailsHeight = 285;
 
 
 - (IBAction)cancelReport:(id)sender {
-  [self endCrashReporter];
+  [_crashManager handleUserInput:BITCrashManagerUserInputDontSend withUserProvidedMetaData:nil];
   
-  [_crashManager cancelReport];
+  [self endCrashReporter];
 }
 
 - (IBAction)submitReport:(id)sender {
@@ -183,14 +183,14 @@ const CGFloat kDetailsHeight = 285;
   
   [[self window] makeFirstResponder: nil];
   
+  BITCrashMetaData *crashMetaData = [[[BITCrashMetaData alloc] init] autorelease];
   if (showUserDetails) {
-    _crashManager.userName = [nameTextField stringValue];
-    _crashManager.userEmail = [emailTextField stringValue];
+    crashMetaData.userName = [nameTextField stringValue];
+    crashMetaData.userEmail = [emailTextField stringValue];
   }
+  crashMetaData.userDescription = [descriptionTextField stringValue];
   
-  [_crashManager sendReportWithCrash:_crashFile crashDescription:[descriptionTextField stringValue]];
-  [_crashLogContent release];
-  _crashLogContent = nil;
+  [_crashManager handleUserInput:BITCrashManagerUserInputSend withUserProvidedMetaData:crashMetaData];
   
   [self endCrashReporter];
 }
@@ -261,14 +261,10 @@ const CGFloat kDetailsHeight = 285;
     logTextViewContent = [NSString stringWithFormat:@"%@\n\n%@", logTextViewContent, _logContent];
   
   [crashLogTextView setString:logTextViewContent];
-  
-  NSBeep();
-  [NSApp runModalForWindow:[self window]];
 }
 
 
 - (void)dealloc {
-  [_crashFile release]; _crashFile = nil;
   [_crashLogContent release]; _crashLogContent = nil;
   [_logContent release]; _logContent = nil;
   [_applicationName release]; _applicationName = nil;

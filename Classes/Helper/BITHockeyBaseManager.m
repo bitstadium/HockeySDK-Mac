@@ -52,7 +52,7 @@
 - (id)init {
   if ((self = [super init])) {
     _appIdentifier = nil;
-    _serverURL = [BITHOCKEYSDK_URL copy];
+    _serverURL = kBITHockeySDKURL;
     _userID = nil;
     _userName = nil;
     _userEmail = nil;
