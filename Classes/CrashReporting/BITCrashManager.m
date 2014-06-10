@@ -658,18 +658,30 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   [_plCrashReporter purgePendingCrashReport];
 }
 
-- (BOOL)hasNonApprovedCrashReports {
-  if (!_approvedCrashReports || [_approvedCrashReports count] == 0) return YES;
+/**
+ Get the filename of the first not approved crash report
+ 
+ @return NSString Filename of the first found not approved crash report
+ */
+- (NSString *)firstNotApprovedCrashReport {
+  if ((!_approvedCrashReports || [_approvedCrashReports count] == 0) && [_crashFiles count] > 0) {
+    return [_crashFiles objectAtIndex:0];
+  }
   
   for (NSUInteger i=0; i < [_crashFiles count]; i++) {
     NSString *filename = [_crashFiles objectAtIndex:i];
     
-    if (![_approvedCrashReports objectForKey:filename]) return YES;
+    if (![_approvedCrashReports objectForKey:filename]) return filename;
   }
   
-  return NO;
+  return nil;
 }
 
+/**
+ Check if there are any new crash reports that are not yet processed
+ 
+ @return	`YES` if there is at least one new crash report found, `NO` otherwise
+ */
 - (BOOL)hasPendingCrashReport {
   if (!_crashManagerActivated) return NO;
     
@@ -719,9 +731,15 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     _sendingInProgress = YES;
     BITHockeyLog(@"INFO: Pending crash reports found.");
 
-    if (!self.autoSubmitCrashReport && [self hasNonApprovedCrashReports]) {
+    NSString *notApprovedReportFilename = [self firstNotApprovedCrashReport];
+    if (!self.autoSubmitCrashReport && notApprovedReportFilename) {
       NSError* error = nil;
       NSString *crashReport = nil;
+      
+      // this can happen in case there is a non approved crash report but it didn't happen in the previous app session
+      if (!_lastCrashFilename) {
+        _lastCrashFilename = [[notApprovedReportFilename lastPathComponent] copy];
+      }
       
       NSData *crashData = [NSData dataWithContentsOfFile: [_crashesDir stringByAppendingPathComponent:_lastCrashFilename]];
       BITPLCrashReport *report = [[[BITPLCrashReport alloc] initWithData:crashData error:&error] autorelease];
@@ -965,14 +983,14 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     // store this crash report as user approved, so if it fails it will retry automatically
     [_approvedCrashReports setObject:[NSNumber numberWithBool:YES] forKey:filename];
     
+    [self saveSettings];
+    
     BITHockeyLog(@"INFO: Sending crash reports:\n%@", crashXML);
     [self sendCrashReportWithFilename:filename xml:crashXML attachment:attachment];
   } else {
     // we cannot do anything with this report, so delete it
     [self cleanCrashReportWithFilename:filename];
   }
-  
-  [self saveSettings];
 }
 
 

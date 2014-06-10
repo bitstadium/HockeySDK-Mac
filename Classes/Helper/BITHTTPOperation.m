@@ -43,7 +43,7 @@
 
 + (instancetype)operationWithRequest:(NSURLRequest *)urlRequest {
   BITHTTPOperation *op = [[[self class] new] autorelease];
-  op->_URLRequest = urlRequest;
+  op->_URLRequest = [urlRequest retain];
   return op;
 }
 
@@ -65,6 +65,7 @@
   
   if (![[NSThread currentThread] isMainThread]) {
     [self performSelector:@selector(start) onThread:NSThread.mainThread withObject:nil waitUntilDone:NO];
+    return;
   }
   
   if(self.isCancelled) {
