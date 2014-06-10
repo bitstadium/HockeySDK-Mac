@@ -589,8 +589,6 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 - (void)handleCrashReport {
   NSError *error = NULL;
 	
-  [self loadSettings];
-
   // check if the next call ran successfully the last time
   if (![_fileManager fileExistsAtPath:_analyzerInProgressFile]) {
     // mark the start of the routine
@@ -770,6 +768,8 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   }
   
   BITHockeyLog(@"INFO: Start CrashManager startManager");
+  
+  [self loadSettings];
   
   if (!_plCrashReporter) {
     /* Configure our reporter */
@@ -1036,7 +1036,6 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
  *	@param	xml	The XML data that needs to be send to the server
  */
 - (void)sendCrashReportWithFilename:(NSString *)filename xml:(NSString*)xml attachment:(BITCrashAttachment *)attachment {
-  
   NSURLRequest* request = [self requestWithXML:xml attachment:attachment];
   
   __unsafe_unretained typeof(self) weakSelf = self;
