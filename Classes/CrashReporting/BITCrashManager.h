@@ -188,24 +188,6 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerUserInput) {
 @property (nonatomic, assign, getter=isAutoSubmitCrashReport) BOOL autoSubmitCrashReport;
 
 /**
- *  Time between startup and a crash within which sending a crash will be send synchronously
- *
- *  By default crash reports are being send asynchronously, since otherwise it may block the
- *  app from startup, e.g. while the network is down and the crash report can not be send until
- *  the timeout occurs.
- *
- *  But especially crashes during app startup could be frequent to the affected user and if the app
- *  would continue to startup normally it might crash right away again, resulting in the crash reports
- *  never to arrive.
- *
- *  This property allows to specify the time between app start and crash within which the crash report
- *  should be send synchronously instead to improve the probability of the crash report being send successfully.
- *
- *  Default: _5_
- */
-@property (nonatomic, readwrite) NSTimeInterval maxTimeIntervalOfCrashForReturnMainApplicationDelay;
-
-/**
  * Set the callbacks that will be executed prior to program termination after a crash has occurred
  *
  * PLCrashReporter provides support for executing an application specified function in the context

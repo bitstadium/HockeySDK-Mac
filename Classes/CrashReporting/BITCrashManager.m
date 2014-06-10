@@ -92,7 +92,6 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   BOOL _crashManagerActivated;
   
   NSTimeInterval _timeintervalCrashInLastSessionOccured;
-  NSTimeInterval _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
   
   NSInteger         _statusCode;
   NSURLConnection   *_urlConnection;
@@ -124,7 +123,6 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 @synthesize autoSubmitCrashReport = _autoSubmitCrashReport;
 @synthesize askUserDetails = _askUserDetails;
 @synthesize timeintervalCrashInLastSessionOccured = _timeintervalCrashInLastSessionOccured;
-@synthesize maxTimeIntervalOfCrashForReturnMainApplicationDelay = _maxTimeIntervalOfCrashForReturnMainApplicationDelay;
 @synthesize enableMachExceptionHandler = _enableMachExceptionHandler;
 @synthesize didCrashInLastSession = _didCrashInLastSession;
 @synthesize plcrExceptionHandler = _plcrExceptionHandler;
@@ -144,7 +142,6 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     _crashIdenticalCurrentVersion = YES;
     
     _timeintervalCrashInLastSessionOccured = -1;
-    _maxTimeIntervalOfCrashForReturnMainApplicationDelay = 5;
 
     _approvedCrashReports = [[NSMutableDictionary alloc] init];
     _dictOfLastSessionCrash = [[NSMutableDictionary alloc] init];
