@@ -84,6 +84,40 @@ NSString *bit_appName(NSString *placeHolderString) {
   return appName;
 }
 
+NSString *bit_UUID(void) {
+  CFUUIDRef theToken = CFUUIDCreate(NULL);
+  CFStringRef uuidStringRef = CFUUIDCreateString(NULL, theToken);
+  CFRelease(theToken);
+  NSString *stringUUID = [NSString stringWithString:(NSString *) uuidStringRef];
+  CFRelease(uuidStringRef);
+  return stringUUID;
+}
+
+NSString *bit_settingsDir(void) {
+  static NSString *settingsDir = nil;
+  static dispatch_once_t predSettingsDir;
+  
+  dispatch_once(&predSettingsDir, ^{
+    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    
+    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    
+    // temporary directory for crashes grabbed from PLCrashReporter
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cacheDir = [paths objectAtIndex: 0];
+    settingsDir = [[[cacheDir stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:BITHOCKEY_IDENTIFIER] retain];
+    
+    if (![fileManager fileExistsAtPath:settingsDir]) {
+      NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
+      NSError *theError = NULL;
+      
+      [fileManager createDirectoryAtPath:settingsDir withIntermediateDirectories: YES attributes: attributes error: &theError];
+    }
+  });
+  
+  return settingsDir;
+}
+
 #pragma mark - Keychain
 
 BOOL bit_addStringValueToKeychain(NSString *stringValue, NSString *key) {

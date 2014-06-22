@@ -169,20 +169,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
       [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:NO] forKey:kHockeySDKAutomaticallySendCrashReports];
     }
     
-    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
-    
-    // temporary directory for crashes grabbed from PLCrashReporter
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDir = [paths objectAtIndex: 0];
-    _crashesDir = [[[cacheDir stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:BITHOCKEY_IDENTIFIER] retain];
-    
-    if (![_fileManager fileExistsAtPath:_crashesDir]) {
-      NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
-      NSError *theError = NULL;
-      
-      [_fileManager createDirectoryAtPath:_crashesDir withIntermediateDirectories: YES attributes: attributes error: &theError];
-    }
-    
+    _crashesDir = [bit_settingsDir() retain];
     _settingsFile = [[_crashesDir stringByAppendingPathComponent:BITHOCKEY_CRASH_SETTINGS] retain];
     _analyzerInProgressFile = [[_crashesDir stringByAppendingPathComponent:BITHOCKEY_CRASH_ANALYZER] retain];
     
