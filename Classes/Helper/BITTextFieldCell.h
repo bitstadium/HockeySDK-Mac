@@ -32,4 +32,6 @@
 
 @property (nonatomic, retain) NSNumber *horizontalInset;
 
+- (void)setBitPlaceHolderString:(NSString *)bitPlaceHolderString;
+
 @end

@@ -37,6 +37,7 @@
 
 #import "BITTextView.h"
 #import "BITColoredView.h"
+#import "BITTextFieldCell.h"
 
 
 @interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate>
@@ -148,8 +149,9 @@
   [self.messageTextField setTypingAttributes:@{NSFontAttributeName: [NSFont userFixedPitchFontOfSize:13.0]}];
   
   [self.contactInfoTextField setStringValue:BITHockeyLocalizedString(@"FeedbackContactInfo", @"")];
-  [self.userNameTextField.cell setPlaceHolderString:BITHockeyLocalizedString(@"FeedbackName", @"")];
-  [self.userEmailTextField.cell setPlaceHolderString:BITHockeyLocalizedString(@"FeedbackEmail", @"")];
+  [(BITTextFieldCell *)[self.userNameTextField cell] setBitPlaceHolderString: BITHockeyLocalizedString(@"FeedbackName", @"")];
+  [(BITTextFieldCell *)[self.userEmailTextField cell] setBitPlaceHolderString: BITHockeyLocalizedString(@"FeedbackEmail", @"")];
+//  [[self.userEmailTextField cell] setPlaceHolderString:BITHockeyLocalizedString(@"FeedbackEmail", @"")];
   [self.userDataContinueButton setTitle:BITHockeyLocalizedString(@"FeedbackContinueButton", @"")];
   
   [self.sendMessageButton setTitle:BITHockeyLocalizedString(@"FeedbackSendButton", @"")];

@@ -48,4 +48,8 @@
 	return newRect;
 }
 
+- (void)setBitPlaceHolderString:(NSString *)bitPlaceHolderString {
+  self.placeholderString = bitPlaceHolderString;
+}
+
 @end
