@@ -28,6 +28,7 @@
 
 #import "BITFeedbackMessageDateValueTransformer.h"
 
+#import "HockeySDKPrivate.h"
 #import "BITFeedbackMessage.h"
 
 @implementation BITFeedbackMessageDateValueTransformer
@@ -94,7 +95,7 @@
   }
   
   if (!message.userMessage && [message.name length] > 0) {
-    result = [NSString stringWithFormat:@"%@ from %@", result, message.name];
+    result = [NSString stringWithFormat:@"%@ %@ %@", result, BITHockeyLocalizedString(@"FeedbackFrom", @""),  message.name];
   }
   
   return result;

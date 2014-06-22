@@ -7,6 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="BITFeedbackWindowController">
             <connections>
+                <outlet property="contactInfoTextField" destination="77" id="KCn-wy-JQO"/>
                 <outlet property="enterUserData" destination="76" id="93"/>
                 <outlet property="feedbackComposeBackgroundView" destination="5DI-pf-otK" id="amy-rC-HBu"/>
                 <outlet property="feedbackComposeTextView" destination="159" id="TyM-fe-ZKm"/>

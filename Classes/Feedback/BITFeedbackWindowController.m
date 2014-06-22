@@ -29,6 +29,7 @@
 #import "BITFeedbackWindowController.h"
 
 #import "HockeySDK.h"
+#import "HockeySDKPrivate.h"
 
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITFeedbackManagerPrivate.h"
@@ -48,6 +49,7 @@
 @property (unsafe_unretained) IBOutlet BITColoredView *mainBackgroundView;
 
 @property (unsafe_unretained) IBOutlet BITColoredView *userDataBoxView;
+@property (unsafe_unretained) IBOutlet NSTextField *contactInfoTextField;
 @property (unsafe_unretained) IBOutlet NSTextField *userNameTextField;
 @property (unsafe_unretained) IBOutlet NSTextField *userEmailTextField;
 @property (unsafe_unretained) IBOutlet NSButton *userDataContinueButton;
@@ -144,6 +146,13 @@
   
   [self.statusBarRefreshButton setHidden:YES];
   [self.messageTextField setTypingAttributes:@{NSFontAttributeName: [NSFont userFixedPitchFontOfSize:13.0]}];
+  
+  [self.contactInfoTextField setStringValue:BITHockeyLocalizedString(@"FeedbackContactInfo", @"")];
+  [self.userNameTextField.cell setPlaceHolderString:BITHockeyLocalizedString(@"FeedbackName", @"")];
+  [self.userEmailTextField.cell setPlaceHolderString:BITHockeyLocalizedString(@"FeedbackEmail", @"")];
+  [self.userDataContinueButton setTitle:BITHockeyLocalizedString(@"FeedbackContinueButton", @"")];
+  
+  [self.sendMessageButton setTitle:BITHockeyLocalizedString(@"FeedbackSendButton", @"")];
   
   // startup
   self.userName = [self.manager userName] ?: @"";
@@ -347,8 +356,9 @@
 }
 
 - (void)updateLastUpdate {  
-  NSString *text = [NSString stringWithFormat:@"Last Update: %@",
-                    [self.manager lastCheck] ? [self.lastUpdateDateFormatter stringFromDate:[self.manager lastCheck]] : @"Never"];
+  NSString *text = [NSString stringWithFormat:@"%@: %@",
+                    BITHockeyLocalizedString(@"FeedbackLastUpdate", @""),
+                    [self.manager lastCheck] ? [self.lastUpdateDateFormatter stringFromDate:[self.manager lastCheck]] : BITHockeyLocalizedString(@"FeedbackLastUpdateNever", @"")];
   
   NSFont *boldFont = [NSFont boldSystemFontOfSize:11];
 
