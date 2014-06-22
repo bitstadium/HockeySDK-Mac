@@ -97,7 +97,6 @@
 		1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DAE1523579100067A5C /* BITHockeyManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09DB61523579100067A5C /* BITHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* BITHockeyManager.m */; };
 		1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */; };
-		1EF09DD4152371DC00067A5C /* BITCrashReportUI.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1EF09DCD152371DC00067A5C /* BITCrashReportUI.nib */; };
 		1EF09DD5152371DC00067A5C /* BITCrashManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DCE152371DC00067A5C /* BITCrashManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09DD6152371DC00067A5C /* BITCrashManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DCF152371DC00067A5C /* BITCrashManager.m */; };
 		1EF09DD7152371DC00067A5C /* BITCrashReportUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DD0152371DC00067A5C /* BITCrashReportUI.h */; };
@@ -199,6 +198,7 @@
 		1E7FB96317D3F45200B7E10D /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = SOURCE_ROOT; };
 		1EA551FB17B3EB44004A0CB7 /* BITCrashExceptionApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashExceptionApplication.h; sourceTree = "<group>"; };
 		1EA551FC17B3EB44004A0CB7 /* BITCrashExceptionApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashExceptionApplication.m; sourceTree = "<group>"; };
+		1EBDC049195710CA00B5C8A3 /* BITCrashReportUI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BITCrashReportUI.xib; sourceTree = "<group>"; };
 		1EBDC04F195716F300B5C8A3 /* BITColoredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITColoredView.h; sourceTree = "<group>"; };
 		1EBDC050195716F300B5C8A3 /* BITColoredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITColoredView.m; sourceTree = "<group>"; };
 		1EBDF2A9195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessageDateValueTransformer.h; sourceTree = "<group>"; };
@@ -221,7 +221,6 @@
 		1EF09DAF1523579100067A5C /* BITHockeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHockeyManager.m; sourceTree = "<group>"; };
 		1EF09DBA1523579A00067A5C /* HockeySDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HockeySDK-Info.plist"; sourceTree = "<group>"; };
 		1EF09DBB1523579A00067A5C /* HockeySDK-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HockeySDK-Prefix.pch"; sourceTree = "<group>"; };
-		1EF09DCD152371DC00067A5C /* BITCrashReportUI.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = BITCrashReportUI.nib; sourceTree = "<group>"; };
 		1EF09DCE152371DC00067A5C /* BITCrashManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashManager.h; sourceTree = "<group>"; };
 		1EF09DCF152371DC00067A5C /* BITCrashManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashManager.m; sourceTree = "<group>"; wrapsLines = 1; };
 		1EF09DD0152371DC00067A5C /* BITCrashReportUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportUI.h; sourceTree = "<group>"; };
@@ -446,7 +445,6 @@
 		1EF09DCC152371DC00067A5C /* CrashReporting */ = {
 			isa = PBXGroup;
 			children = (
-				1EF09DCD152371DC00067A5C /* BITCrashReportUI.nib */,
 				1EF09DCE152371DC00067A5C /* BITCrashManager.h */,
 				1EF09DCF152371DC00067A5C /* BITCrashManager.m */,
 				1ED926C817B420390046DFD3 /* BITCrashManagerPrivate.h */,
@@ -460,6 +458,7 @@
 				1E5785D519461DDF0014D19A /* BITCrashDetailsPrivate.h */,
 				1EF09DD0152371DC00067A5C /* BITCrashReportUI.h */,
 				1EF09DD1152371DC00067A5C /* BITCrashReportUI.m */,
+				1EBDC049195710CA00B5C8A3 /* BITCrashReportUI.xib */,
 				1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */,
 				1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */,
 			);
@@ -599,9 +598,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EF09DD4152371DC00067A5C /* BITCrashReportUI.nib in Resources */,
 				1E7E5510187F3ED800F0858E /* BITFeedbackWindowController.xib in Resources */,
 				1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */,
+				1EBDC04A195710CA00B5C8A3 /* BITCrashReportUI.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
