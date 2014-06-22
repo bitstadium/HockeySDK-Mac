@@ -1,7 +1,7 @@
 /*
  * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -26,12 +26,33 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
+#import "BITColoredView.h"
 
-@class BITFeedbackManager;
+@implementation BITColoredView
 
-@interface BITFeedbackWindowController : NSWindowController
-
-- (id)initWithManager:(BITFeedbackManager *)feedbackManager;
+- (void)drawRect:(NSRect)dirtyRect {
+  if (self.viewBackgroundColor) {
+    [self.viewBackgroundColor setFill];
+    NSRectFill(dirtyRect);
+  }
+  
+  if (self.viewBorderWidth > 0 && self.viewBorderColor) {
+    [self setWantsLayer:YES];
+    self.layer.masksToBounds = YES;
+    self.layer.borderWidth = self.viewBorderWidth;
+    
+    // Convert to CGColorRef
+    NSInteger numberOfComponents = [self.viewBorderColor numberOfComponents];
+    CGFloat components[numberOfComponents];
+    CGColorSpaceRef colorSpace = [[self.viewBorderColor colorSpace] CGColorSpace];
+    [self.viewBorderColor getComponents:(CGFloat *)&components];
+    CGColorRef orangeCGColor = CGColorCreate(colorSpace, components);
+    
+    self.layer.borderColor = orangeCGColor;
+    CGColorRelease(orangeCGColor);    
+  }
+  
+  [super drawRect:dirtyRect];
+}
 
 @end

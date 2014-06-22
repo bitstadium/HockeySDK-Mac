@@ -1,7 +1,7 @@
 /*
  * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -26,12 +26,30 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
+#import "BITTextView.h"
 
-@class BITFeedbackManager;
+@implementation BITTextView
 
-@interface BITFeedbackWindowController : NSWindowController
+- (void)drawRect:(NSRect)rect {
+  [super drawRect:rect];
+  if ([[self string] isEqualToString:@""] && self != [[self window] firstResponder]) {
+    if (self.placeHolderString) {
+      NSColor *txtColor = [NSColor colorWithCalibratedRed:0.69 green:0.71 blue:0.73 alpha:1.0];
+      NSDictionary *dict = @{NSForegroundColorAttributeName: txtColor};
+      NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:self.placeHolderString attributes:dict];
+      [placeholder drawAtPoint:NSMakePoint(0,0)];
+    }
+  }
+}
 
-- (id)initWithManager:(BITFeedbackManager *)feedbackManager;
+- (BOOL)becomeFirstResponder {
+  [self setNeedsDisplay:YES];
+  return [super becomeFirstResponder];
+}
+
+- (BOOL)resignFirstResponder {
+  [self setNeedsDisplay:YES];
+  return [super resignFirstResponder];
+}
 
 @end

@@ -65,8 +65,6 @@
 		1E7E5509187F3ED800F0858E /* BITFeedbackManagerPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E54FF187F3ED800F0858E /* BITFeedbackManagerPrivate.h */; };
 		1E7E550A187F3ED800F0858E /* BITFeedbackMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E5500187F3ED800F0858E /* BITFeedbackMessage.h */; };
 		1E7E550B187F3ED800F0858E /* BITFeedbackMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5501187F3ED800F0858E /* BITFeedbackMessage.m */; };
-		1E7E550C187F3ED800F0858E /* BITFeedbackMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E5502187F3ED800F0858E /* BITFeedbackMessageCell.h */; };
-		1E7E550D187F3ED800F0858E /* BITFeedbackMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5503187F3ED800F0858E /* BITFeedbackMessageCell.m */; };
 		1E7E550E187F3ED800F0858E /* BITFeedbackWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E5504187F3ED800F0858E /* BITFeedbackWindowController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E7E550F187F3ED800F0858E /* BITFeedbackWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5505187F3ED800F0858E /* BITFeedbackWindowController.m */; };
 		1E7E5510187F3ED800F0858E /* BITFeedbackWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E7E5506187F3ED800F0858E /* BITFeedbackWindowController.xib */; };
@@ -84,6 +82,17 @@
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
 		1EA551FD17B3EB44004A0CB7 /* BITCrashExceptionApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EA551FB17B3EB44004A0CB7 /* BITCrashExceptionApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EA551FE17B3EB44004A0CB7 /* BITCrashExceptionApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA551FC17B3EB44004A0CB7 /* BITCrashExceptionApplication.m */; };
+		1EBDC04A195710CA00B5C8A3 /* BITCrashReportUI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EBDC049195710CA00B5C8A3 /* BITCrashReportUI.xib */; };
+		1EBDC051195716F300B5C8A3 /* BITColoredView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDC04F195716F300B5C8A3 /* BITColoredView.h */; };
+		1EBDC052195716F300B5C8A3 /* BITColoredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDC050195716F300B5C8A3 /* BITColoredView.m */; };
+		1EBDF2AB195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDF2A9195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h */; };
+		1EBDF2AC195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */; };
+		1EBDF2B11957878800C7F49A /* BITTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDF2AF1957878800C7F49A /* BITTextFieldCell.h */; };
+		1EBDF2B21957878800C7F49A /* BITTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2B01957878800C7F49A /* BITTextFieldCell.m */; };
+		1EC7152619573CB400F72C19 /* BITTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC7152419573CB400F72C19 /* BITTextView.h */; };
+		1EC7152719573CB400F72C19 /* BITTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC7152519573CB400F72C19 /* BITTextView.m */; };
+		1EC715331957524B00F72C19 /* BITFeedbackMessageCellView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC715311957524B00F72C19 /* BITFeedbackMessageCellView.h */; };
+		1EC715341957524B00F72C19 /* BITFeedbackMessageCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC715321957524B00F72C19 /* BITFeedbackMessageCellView.m */; };
 		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
 		1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF09DAE1523579100067A5C /* BITHockeyManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF09DB61523579100067A5C /* BITHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* BITHockeyManager.m */; };
@@ -172,8 +181,6 @@
 		1E7E54FF187F3ED800F0858E /* BITFeedbackManagerPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackManagerPrivate.h; sourceTree = "<group>"; };
 		1E7E5500187F3ED800F0858E /* BITFeedbackMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessage.h; sourceTree = "<group>"; };
 		1E7E5501187F3ED800F0858E /* BITFeedbackMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITFeedbackMessage.m; sourceTree = "<group>"; };
-		1E7E5502187F3ED800F0858E /* BITFeedbackMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessageCell.h; sourceTree = "<group>"; };
-		1E7E5503187F3ED800F0858E /* BITFeedbackMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITFeedbackMessageCell.m; sourceTree = "<group>"; };
 		1E7E5504187F3ED800F0858E /* BITFeedbackWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackWindowController.h; sourceTree = "<group>"; };
 		1E7E5505187F3ED800F0858E /* BITFeedbackWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITFeedbackWindowController.m; sourceTree = "<group>"; };
 		1E7E5506187F3ED800F0858E /* BITFeedbackWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BITFeedbackWindowController.xib; sourceTree = "<group>"; };
@@ -192,6 +199,16 @@
 		1E7FB96317D3F45200B7E10D /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = SOURCE_ROOT; };
 		1EA551FB17B3EB44004A0CB7 /* BITCrashExceptionApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashExceptionApplication.h; sourceTree = "<group>"; };
 		1EA551FC17B3EB44004A0CB7 /* BITCrashExceptionApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashExceptionApplication.m; sourceTree = "<group>"; };
+		1EBDC04F195716F300B5C8A3 /* BITColoredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITColoredView.h; sourceTree = "<group>"; };
+		1EBDC050195716F300B5C8A3 /* BITColoredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITColoredView.m; sourceTree = "<group>"; };
+		1EBDF2A9195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessageDateValueTransformer.h; sourceTree = "<group>"; };
+		1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITFeedbackMessageDateValueTransformer.m; sourceTree = "<group>"; };
+		1EBDF2AF1957878800C7F49A /* BITTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITTextFieldCell.h; sourceTree = "<group>"; };
+		1EBDF2B01957878800C7F49A /* BITTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITTextFieldCell.m; sourceTree = "<group>"; };
+		1EC7152419573CB400F72C19 /* BITTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITTextView.h; sourceTree = "<group>"; };
+		1EC7152519573CB400F72C19 /* BITTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITTextView.m; sourceTree = "<group>"; };
+		1EC715311957524B00F72C19 /* BITFeedbackMessageCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessageCellView.h; sourceTree = "<group>"; };
+		1EC715321957524B00F72C19 /* BITFeedbackMessageCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITFeedbackMessageCellView.m; sourceTree = "<group>"; };
 		1ED926C817B420390046DFD3 /* BITCrashManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITCrashManagerPrivate.h; sourceTree = "<group>"; };
 		1EE1DFFE1524B3D600C0DA76 /* BITCrashManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashManagerDelegate.h; sourceTree = "<group>"; };
 		1EE8CF7E17147CF20088444D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/HockeySDK.strings; sourceTree = "<group>"; };
@@ -309,6 +326,12 @@
 				1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */,
 				1E7E552B187F632300F0858E /* NSURLConnection+BITAdditions.h */,
 				1E7E552C187F632300F0858E /* NSURLConnection+BITAdditions.m */,
+				1EBDC04F195716F300B5C8A3 /* BITColoredView.h */,
+				1EBDC050195716F300B5C8A3 /* BITColoredView.m */,
+				1EBDF2AF1957878800C7F49A /* BITTextFieldCell.h */,
+				1EBDF2B01957878800C7F49A /* BITTextFieldCell.m */,
+				1EC7152419573CB400F72C19 /* BITTextView.h */,
+				1EC7152519573CB400F72C19 /* BITTextView.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -321,8 +344,10 @@
 				1E7E54FF187F3ED800F0858E /* BITFeedbackManagerPrivate.h */,
 				1E7E5500187F3ED800F0858E /* BITFeedbackMessage.h */,
 				1E7E5501187F3ED800F0858E /* BITFeedbackMessage.m */,
-				1E7E5502187F3ED800F0858E /* BITFeedbackMessageCell.h */,
-				1E7E5503187F3ED800F0858E /* BITFeedbackMessageCell.m */,
+				1EC715311957524B00F72C19 /* BITFeedbackMessageCellView.h */,
+				1EC715321957524B00F72C19 /* BITFeedbackMessageCellView.m */,
+				1EBDF2A9195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h */,
+				1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */,
 				1E7E5504187F3ED800F0858E /* BITFeedbackWindowController.h */,
 				1E7E5505187F3ED800F0858E /* BITFeedbackWindowController.m */,
 				1E7E5506187F3ED800F0858E /* BITFeedbackWindowController.xib */,
@@ -461,10 +486,13 @@
 				1E06CDAA1827D9DF00895076 /* PLCrashReportMachExceptionInfo.h in Headers */,
 				1E7E551B187F3EE700F0858E /* BITHockeyHelper.h in Headers */,
 				1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */,
+				1EBDF2AB195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h in Headers */,
 				1E5785DB19461DF60014D19A /* BITHockeyAttachment.h in Headers */,
 				1E7E5507187F3ED800F0858E /* BITFeedbackManager.h in Headers */,
 				1E7E5518187F3EE700F0858E /* BITHockeyBaseManager.h in Headers */,
+				1EC7152619573CB400F72C19 /* BITTextView.h in Headers */,
 				1E5785D619461DDF0014D19A /* BITCrashDetails.h in Headers */,
+				1EC715331957524B00F72C19 /* BITFeedbackMessageCellView.h in Headers */,
 				1E7E551D187F3EE700F0858E /* HockeySDKPrivate.h in Headers */,
 				1E7E550E187F3ED800F0858E /* BITFeedbackWindowController.h in Headers */,
 				1E5785E7194647180014D19A /* BITHTTPOperation.h in Headers */,
@@ -499,11 +527,12 @@
 				1E7E5509187F3ED800F0858E /* BITFeedbackManagerPrivate.h in Headers */,
 				1E260CA617D41E9100C7F9FE /* BITKeychainItem.h in Headers */,
 				1E06CDA41827D9DF00895076 /* PLCrashReportApplicationInfo.h in Headers */,
+				1EBDC051195716F300B5C8A3 /* BITColoredView.h in Headers */,
 				1E7E552A187F62B400F0858E /* BITSystemProfilePrivate.h in Headers */,
 				1E7E550A187F3ED800F0858E /* BITFeedbackMessage.h in Headers */,
 				1E5785ED194652900014D19A /* BITCrashMetaData.h in Headers */,
-				1E7E550C187F3ED800F0858E /* BITFeedbackMessageCell.h in Headers */,
 				1E06CDB41827D9DF00895076 /* PLCrashReportThreadInfo.h in Headers */,
+				1EBDF2B11957878800C7F49A /* BITTextFieldCell.h in Headers */,
 				1E06CDA31827D9DF00895076 /* PLCrashReport.h in Headers */,
 				1E260CAA17D42B1E00C7F9FE /* BITHockeyManagerDelegate.h in Headers */,
 				1E06CDB31827D9DF00895076 /* PLCrashReportTextFormatter.h in Headers */,
@@ -604,20 +633,24 @@
 				1E7E5519187F3EE700F0858E /* BITHockeyBaseManager.m in Sources */,
 				1E5785D719461DDF0014D19A /* BITCrashDetails.m in Sources */,
 				1E7E551C187F3EE700F0858E /* BITHockeyHelper.m in Sources */,
+				1EC7152719573CB400F72C19 /* BITTextView.m in Sources */,
 				1E7E552E187F632300F0858E /* NSURLConnection+BITAdditions.m in Sources */,
 				1E5785EE194652900014D19A /* BITCrashMetaData.m in Sources */,
 				1EF09DD6152371DC00067A5C /* BITCrashManager.m in Sources */,
 				1EA551FE17B3EB44004A0CB7 /* BITCrashExceptionApplication.m in Sources */,
 				1EF09DD8152371DC00067A5C /* BITCrashReportUI.m in Sources */,
+				1EBDF2B21957878800C7F49A /* BITTextFieldCell.m in Sources */,
 				1EF09DDA152371DC00067A5C /* BITCrashReportTextFormatter.m in Sources */,
 				4DD13AF5162CA7C400BF15E8 /* BITSystemProfile.m in Sources */,
+				1EBDF2AC195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m in Sources */,
 				1E7E550F187F3ED800F0858E /* BITFeedbackWindowController.m in Sources */,
 				1E5785E2194646C00014D19A /* BITHockeyAppClient.m in Sources */,
 				1E7E550B187F3ED800F0858E /* BITFeedbackMessage.m in Sources */,
 				1E7E5508187F3ED800F0858E /* BITFeedbackManager.m in Sources */,
+				1EBDC052195716F300B5C8A3 /* BITColoredView.m in Sources */,
 				1E7E551E187F3EE700F0858E /* HockeySDKPrivate.m in Sources */,
 				1E5785DC19461DF60014D19A /* BITHockeyAttachment.m in Sources */,
-				1E7E550D187F3ED800F0858E /* BITFeedbackMessageCell.m in Sources */,
+				1EC715341957524B00F72C19 /* BITFeedbackMessageCellView.m in Sources */,
 				1E260CA717D41E9100C7F9FE /* BITKeychainItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -686,7 +719,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -715,7 +748,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -735,7 +768,6 @@
 					"$(inherited)",
 					../Vendor/CrashReporter,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
@@ -757,7 +789,6 @@
 					"$(inherited)",
 					../Vendor/CrashReporter,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;

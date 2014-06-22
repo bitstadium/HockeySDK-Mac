@@ -1,7 +1,7 @@
 /*
  * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -26,12 +26,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
-@class BITFeedbackManager;
-
-@interface BITFeedbackWindowController : NSWindowController
-
-- (id)initWithManager:(BITFeedbackManager *)feedbackManager;
+@interface BITFeedbackMessageDateValueTransformer : NSValueTransformer
 
 @end

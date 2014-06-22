@@ -1,7 +1,7 @@
 /*
  * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -28,10 +28,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class BITFeedbackManager;
+@interface BITColoredView : NSView
 
-@interface BITFeedbackWindowController : NSWindowController
-
-- (id)initWithManager:(BITFeedbackManager *)feedbackManager;
+@property (nonatomic, retain) NSColor *viewBackgroundColor;
+@property (nonatomic, retain) NSColor *viewBorderColor;
+@property (nonatomic) CGFloat viewBorderWidth;
 
 @end

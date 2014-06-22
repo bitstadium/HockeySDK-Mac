@@ -32,7 +32,10 @@
 
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITFeedbackManagerPrivate.h"
-#import "BITFeedbackMessageCell.h"
+#import "BITFeedbackMessageCellView.h"
+
+#import "BITTextView.h"
+#import "BITColoredView.h"
 
 
 @interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate>
@@ -41,6 +44,10 @@
 @property (nonatomic, strong) NSDateFormatter *lastUpdateDateFormatter;
 
 @property (unsafe_unretained) IBOutlet NSView *userDataView;
+
+@property (unsafe_unretained) IBOutlet BITColoredView *mainBackgroundView;
+
+@property (unsafe_unretained) IBOutlet BITColoredView *userDataBoxView;
 @property (unsafe_unretained) IBOutlet NSTextField *userNameTextField;
 @property (unsafe_unretained) IBOutlet NSTextField *userEmailTextField;
 @property (unsafe_unretained) IBOutlet NSButton *userDataContinueButton;
@@ -48,14 +55,22 @@
 @property (nonatomic, copy) NSString *userName;
 @property (nonatomic, copy) NSString *userEmail;
 
+@property (unsafe_unretained) IBOutlet BITColoredView *feedbackListBackgroundView;
 @property (unsafe_unretained) IBOutlet NSView *feedbackView;
 @property (unsafe_unretained) IBOutlet NSView *feedbackEmptyView;
+@property (unsafe_unretained) IBOutlet NSImageView *feedbackEmptyAppImageView;
+
+@property (unsafe_unretained) IBOutlet BITColoredView *feedbackComposeBackgroundView;
+@property (unsafe_unretained) IBOutlet BITTextView *feedbackComposeTextView;
+
 @property (unsafe_unretained) IBOutlet NSScrollView *feedbackScrollView;
 @property (unsafe_unretained) IBOutlet NSTableView *feedbackTableView;
 
 @property (unsafe_unretained) IBOutlet NSTextView *messageTextField;
 @property (nonatomic, strong) NSAttributedString *messageText;
 
+@property (unsafe_unretained) IBOutlet BITColoredView *horizontalLine;
+@property (unsafe_unretained) IBOutlet BITColoredView *statusBar;
 @property (unsafe_unretained) IBOutlet NSView *statusBarComposeView;
 @property (unsafe_unretained) IBOutlet NSButton *sendMessageButton;
 
@@ -75,33 +90,6 @@
 
 @implementation BITFeedbackWindowController
 
-@synthesize manager = _manager;
-@synthesize lastUpdateDateFormatter = _lastUpdateDateFormatter;
-
-@synthesize userDataView = _userDataView;
-@synthesize userNameTextField = _userNameTextField;
-@synthesize userEmailTextField = _userEmailTextField;
-@synthesize userDataContinueButton = _userDataContinueButton;
-
-@synthesize userName = _userName;
-@synthesize userEmail = _userEmail;
-
-@synthesize feedbackView = _feedbackView;
-@synthesize feedbackEmptyView = _feedbackEmptyView;
-@synthesize feedbackScrollView = _feedbackScrollView;
-@synthesize feedbackTableView = _feedbackTableView;
-
-@synthesize messageTextField = _messageTextField;
-@synthesize messageText = _messageText;
-
-@synthesize statusBarComposeView = _statusBarComposeView;
-@synthesize sendMessageButton = _sendMessageButton;
-
-@synthesize statusBarDefaultView = _statusBarDefaultView;
-@synthesize statusBarLoadingIndicator = _statusBarLoadingIndicator;
-@synthesize statusBarTextField = _statusBarTextField;
-@synthesize statusBarRefreshButton = _statusBarRefreshButton;
-
 
 - (id)initWithManager:(BITFeedbackManager *)feedbackManager {
   self = [super initWithWindowNibName: @"BITFeedbackWindowController"];
@@ -118,10 +106,21 @@
 }
 
 - (void)awakeFromNib {
-	NSTableColumn* column = [[self.feedbackTableView tableColumns] objectAtIndex:0];
-	
-	BITFeedbackMessageCell *cell = [[[BITFeedbackMessageCell alloc] init] autorelease];
-	[column setDataCell: cell];
+  NSImage *appIcon = [NSImage imageNamed:@"NSApplicationIcon"];
+  appIcon = [self imageToGreyImage:appIcon];
+  appIcon = [self imageWithReducedAlpha:0.5 fromImage:appIcon];
+  [self.feedbackEmptyAppImageView setImage:appIcon];
+  
+  [self.feedbackComposeTextView setPlaceHolderString:@"Your Feedback"];
+  
+  [self.feedbackListBackgroundView setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.91 green:0.92 blue:0.93 alpha:1.0]];
+  [self.feedbackComposeBackgroundView setViewBackgroundColor:[NSColor whiteColor]];
+  [self.horizontalLine setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.79 green:0.82 blue:0.83 alpha:1.0]];
+  [self.statusBar setViewBackgroundColor:[NSColor whiteColor]];
+  [self.mainBackgroundView setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.91 green:0.92 blue:0.93 alpha:1.0]];
+  [self.userDataBoxView setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.88 green:0.89 blue:0.90 alpha:1.0]];
+  [self.userDataBoxView setViewBorderWidth:1.0];
+  [self.userDataBoxView setViewBorderColor:[NSColor colorWithCalibratedRed:0.82 green:0.85 blue:0.86 alpha:1.0]];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(tableViewFrameChanged:)
@@ -170,6 +169,75 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:self.feedbackTableView];
 
   [super dealloc];
+}
+
+
+#pragma mark - Private Image methods
+
+- (NSImage *)imageWithReducedAlpha:(CGFloat)alpha fromImage:(NSImage *)image {
+  NSSize imageSize = [image size];
+  NSRect imageRect = {NSZeroPoint, imageSize};
+  
+  [image lockFocus];
+  [[[NSColor whiteColor] colorWithAlphaComponent: alpha] set];
+  NSRectFillUsingOperation(imageRect, NSCompositeSourceAtop);
+  [image unlockFocus];
+  
+  return image;
+}
+
+- (NSImage *)imageToGreyImage:(NSImage *)image {
+  // Create image rectangle with current image width/height
+  CGFloat actualWidth = image.size.width;
+  CGFloat actualHeight = image.size.height;
+  
+  CGRect imageRect = CGRectMake(0, 0, actualWidth, actualHeight);
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+  
+  CGContextRef context = CGBitmapContextCreate(nil, actualWidth, actualHeight, 8, 0, colorSpace, (CGBitmapInfo)kCGImageAlphaNone);
+  CGContextDrawImage(context, imageRect, [self nsImageToCGImageRef:image]);
+  
+  CGImageRef grayImage = CGBitmapContextCreateImage(context);
+  CGColorSpaceRelease(colorSpace);
+  CGContextRelease(context);
+  
+  context = CGBitmapContextCreate(nil, actualWidth, actualHeight, 8, 0, nil, (CGBitmapInfo)kCGImageAlphaOnly);
+  CGContextDrawImage(context, imageRect, [self nsImageToCGImageRef:image]);
+  CGImageRef mask = CGBitmapContextCreateImage(context);
+  CGContextRelease(context);
+  
+  NSImage *grayScaleImage =  [self imageFromCGImageRef:CGImageCreateWithMask(grayImage, mask)];
+  CGImageRelease(grayImage);
+  CGImageRelease(mask);
+  
+  // Return the new grayscale image
+  return grayScaleImage;
+}
+
+- (NSImage*)imageFromCGImageRef:(CGImageRef)image {
+  NSRect imageRect = NSMakeRect(0.0, 0.0, 0.0, 0.0);
+  CGContextRef imageContext = nil;
+  NSImage* newImage = nil; // Get the image dimensions.
+  imageRect.size.height = CGImageGetHeight(image);
+  imageRect.size.width = CGImageGetWidth(image);
+  
+  // Create a new image to receive the Quartz image data.
+  newImage = [[NSImage alloc] initWithSize:imageRect.size];
+  [newImage lockFocus];
+  
+  // Get the Quartz context and draw.
+  imageContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+  CGContextDrawImage(imageContext, *(CGRect*)&imageRect, image); [newImage unlockFocus];
+  return newImage;
+}
+
+- (CGImageRef)nsImageToCGImageRef:(NSImage*)image; {
+  NSData * imageData = [image TIFFRepresentation];
+  CGImageRef imageRef;
+  if(!imageData) return nil;
+  CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)imageData, NULL);
+  imageRef = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
+  return imageRef;
 }
 
 
@@ -248,10 +316,12 @@
   
   if ([self.manager numberOfMessages] > 0) {
     [self.statusBarRefreshButton setHidden:NO];
+    [self.statusBarTextField setHidden:NO];
     [self.feedbackScrollView setHidden:NO];
     [self.feedbackEmptyView setHidden:YES];
   } else {
     [self.statusBarRefreshButton setHidden:YES];
+    [self.statusBarTextField setHidden:YES];
     [self.feedbackScrollView setHidden:YES];
     [self.feedbackEmptyView setHidden:NO];
   }
@@ -276,9 +346,27 @@
   [self updateLastUpdate];
 }
 
-- (void)updateLastUpdate {
-  self.statusBarTextField.stringValue = [NSString stringWithFormat:@"Last Update: %@",
-                         [self.manager lastCheck] ? [self.lastUpdateDateFormatter stringFromDate:[self.manager lastCheck]] : @"Never"];
+- (void)updateLastUpdate {  
+  NSString *text = [NSString stringWithFormat:@"Last Update: %@",
+                    [self.manager lastCheck] ? [self.lastUpdateDateFormatter stringFromDate:[self.manager lastCheck]] : @"Never"];
+  
+  NSFont *boldFont = [NSFont boldSystemFontOfSize:11];
+
+  NSMutableDictionary *style = [NSMutableDictionary dictionary];
+  style[NSFontAttributeName] = boldFont;
+  
+  NSMutableAttributedString *attributedText = [[[NSMutableAttributedString alloc] initWithString:text] autorelease];
+  [attributedText beginEditing];
+  [attributedText addAttribute:NSFontAttributeName
+                 value:boldFont
+                 range:NSMakeRange(0, 12)];
+  [attributedText endEditing];
+  
+  NSMutableParagraphStyle *paraStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+  [paraStyle setAlignment:NSCenterTextAlignment];
+  [attributedText addAttributes:@{NSParagraphStyleAttributeName: paraStyle} range:NSMakeRange(0, [attributedText length])];
+
+  self.statusBarTextField.attributedStringValue = attributedText;
 }
 
 
@@ -308,14 +396,8 @@
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
   BITFeedbackMessage *message = [self.manager messageAtIndex:row];
   
-  return [BITFeedbackMessageCell heightForRowWithMessage:message tableViewWidth:tableView.frame.size.width];
-}
-
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-  [(BITFeedbackMessageCell *)cell setRow:row];
+  CGFloat height = [BITFeedbackMessageCellView heightForRowWithMessage:message tableViewWidth:tableView.frame.size.width];
+  return height;
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -26,20 +26,26 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
+#import "BITTextFieldCell.h"
 
-@class BITFeedbackMessage;
+@implementation BITTextFieldCell
 
-@interface BITFeedbackMessageCell : NSTextFieldCell {
-@private
-  NSDateFormatter *_dateFormatter;
-  NSDateFormatter *_timeFormatter;
+- (NSRect)drawingRectForBounds:(NSRect)theRect {
+	// Get the parent's idea of where we should draw
+	NSRect newRect = [super drawingRectForBounds:theRect];
+  NSSize textSize = [self cellSizeForBounds:theRect];
   
-  NSInteger _row;
+  float heightDelta = newRect.size.height - textSize.height;
+  if (heightDelta > 0) {
+    newRect.size.height -= heightDelta;
+    newRect.origin.y += heightDelta / 2;
+    if (self.horizontalInset) {
+      newRect.origin.x += [self.horizontalInset floatValue];
+      newRect.size.width -= ([self.horizontalInset floatValue] * 2);
+    }
+  }
+	
+	return newRect;
 }
-
-@property (nonatomic) NSInteger row;
-
-+ (CGFloat) heightForRowWithMessage:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width;
 
 @end

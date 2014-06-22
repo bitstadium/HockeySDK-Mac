@@ -1,7 +1,7 @@
 /*
  * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -28,10 +28,14 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class BITFeedbackManager;
+@class BITFeedbackMessage;
 
-@interface BITFeedbackWindowController : NSWindowController
+@interface BITFeedbackMessageCellView : NSTableCellView
 
-- (id)initWithManager:(BITFeedbackManager *)feedbackManager;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTextField *message;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTextField *dateAndStatus;
+
++ (NSString *)identifier;
++ (CGFloat) heightForRowWithMessage:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width;
 
 @end
