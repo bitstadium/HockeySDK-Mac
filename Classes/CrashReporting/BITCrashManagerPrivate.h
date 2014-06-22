@@ -41,7 +41,7 @@
 
 
 @class BITHockeyAppClient;
-@class BITCrashAttachment;
+@class BITHockeyAttachment;
 
 
 @interface BITCrashManager ()
@@ -68,9 +68,9 @@
 - (void)cleanCrashReports;
 - (NSString *)extractAppUUIDs:(BITPLCrashReport *)report;
 
-- (void)persistAttachment:(BITCrashAttachment *)attachment withFilename:(NSString *)filename;
+- (void)persistAttachment:(BITHockeyAttachment *)attachment withFilename:(NSString *)filename;
 
-- (BITCrashAttachment *)attachmentForCrashReport:(NSString *)filename;
+- (BITHockeyAttachment *)attachmentForCrashReport:(NSString *)filename;
 
 - (void)setLastCrashFilename:(NSString *)lastCrashFilename;
 
