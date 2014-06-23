@@ -90,7 +90,7 @@
     if ([self isSameDayWithDate1:[NSDate date] date2:message.date]) {
       result = [[self timeFormatter] stringFromDate:message.date];
     } else {
-      result = [[self dateFormatter] stringFromDate:message.date];
+      result = [NSString stringWithFormat:@"%@ %@", [[self dateFormatter] stringFromDate:message.date], [[self timeFormatter] stringFromDate:message.date]];
     }
   }
   
