@@ -30,7 +30,7 @@
 
 @interface BITTextFieldCell : NSTextFieldCell
 
-@property (nonatomic, retain) NSNumber *horizontalInset;
+@property (nonatomic, strong) NSNumber *horizontalInset;
 
 - (void)setBitPlaceHolderString:(NSString *)bitPlaceHolderString;
 

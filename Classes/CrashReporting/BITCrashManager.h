@@ -143,7 +143,7 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerUserInput) {
 ///-----------------------------------------------------------------------------
 
 // delegate is required
-@property (nonatomic, assign) id <BITCrashManagerDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id <BITCrashManagerDelegate> delegate;
 
 
 ///-----------------------------------------------------------------------------

@@ -30,7 +30,6 @@
 @implementation BITHockeyAppClient
 - (void)dealloc {
   [self cancelOperationsWithPath:nil method:nil];
-  [super dealloc];
 }
 
 - (instancetype)initWithBaseURL:(NSURL *)baseURL {

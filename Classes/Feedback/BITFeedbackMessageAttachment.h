@@ -39,7 +39,7 @@
 @property (nonatomic, copy, readonly) NSData *data;
 
 
-@property (readonly) NSImage *imageRepresentation;
+@property (weak, readonly) NSImage *imageRepresentation;
 
 
 + (BITFeedbackMessageAttachment *)attachmentWithData:(NSData *)data contentType:(NSString *)contentType;

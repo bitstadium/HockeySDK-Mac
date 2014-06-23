@@ -50,10 +50,40 @@ const CGFloat kUserHeight = 50;
 const CGFloat kCommentsHeight = 105;
 const CGFloat kDetailsHeight = 285;
 
-@implementation BITCrashReportUI
-
-@synthesize userName = _userName;
-@synthesize userEmail = _userEmail;
+@implementation BITCrashReportUI {
+  IBOutlet NSTextField *nameTextField;
+  IBOutlet NSTextField *emailTextField;
+  IBOutlet NSTextField *descriptionTextField;
+  IBOutlet NSTextView  *crashLogTextView;
+  
+  IBOutlet NSTextField *nameTextFieldTitle;
+  IBOutlet NSTextField *emailTextFieldTitle;
+  
+  IBOutlet NSTextField *introductionText;
+  IBOutlet NSTextField *commentsTextFieldTitle;
+  IBOutlet NSTextField *problemDescriptionTextFieldTitle;
+  
+  IBOutlet NSTextField *noteText;
+  
+  IBOutlet NSButton *disclosureButton;
+  IBOutlet NSButton *showButton;
+  IBOutlet NSButton *hideButton;
+  IBOutlet NSButton *cancelButton;
+  IBOutlet NSButton *submitButton;
+  
+  NSMenu          *_mainAppMenu;
+  
+  BITCrashManager *_crashManager;
+  
+  NSString *_applicationName;
+  
+  NSMutableString *_logContent;
+  NSString        *_crashLogContent;
+  
+  BOOL _showUserDetails;
+  BOOL _showComments;
+  BOOL _showDetails;
+}
 
 
 - (instancetype)initWithManager:(BITCrashManager *)crashManager crashReport:(NSString *)crashReport logContent:(NSString *)logContent applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
@@ -66,11 +96,11 @@ const CGFloat kDetailsHeight = 285;
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
     _applicationName = [applicationName copy];
-    self.userName = @"";
-    self.userEmail = @"";
-    [self setShowComments: YES];
-    [self setShowDetails: NO];
-    [self setShowUserDetails:askUserDetails];
+    _userName = @"";
+    _userEmail = @"";
+    _showComments = YES;
+    _showDetails = NO;
+    _showUserDetails = askUserDetails;
     
     NSRect windowFrame = [[self window] frame];
     windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height - kDetailsHeight);
@@ -183,8 +213,8 @@ const CGFloat kDetailsHeight = 285;
   
   [[self window] makeFirstResponder: nil];
   
-  BITCrashMetaData *crashMetaData = [[[BITCrashMetaData alloc] init] autorelease];
-  if (showUserDetails) {
+  BITCrashMetaData *crashMetaData = [[BITCrashMetaData alloc] init];
+  if (_showUserDetails) {
     crashMetaData.userName = [nameTextField stringValue];
     crashMetaData.userEmail = [emailTextField stringValue];
   }
@@ -228,7 +258,7 @@ const CGFloat kDetailsHeight = 285;
   [submitButton setTitle:BITHockeyLocalizedString(@"SendButtonTitle", @"")];
   
   // adjust button sizes
-  NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys: [submitButton font], NSFontAttributeName, nil];
+  NSDictionary *attrs = @{NSFontAttributeName: [submitButton font]};
   NSSize titleSize = [[submitButton title] sizeWithAttributes: attrs];
 	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
 	NSRect submitBtnBox = [submitButton frame];
@@ -255,7 +285,7 @@ const CGFloat kDetailsHeight = 285;
 	hideBtnBox.size.width = titleSize.width;
 	[hideButton setFrame: showBtnBox];
     
-  NSString *logTextViewContent = [[_crashLogContent copy] autorelease];
+  NSString *logTextViewContent = [_crashLogContent copy];
   
   if (_logContent)
     logTextViewContent = [NSString stringWithFormat:@"%@\n\n%@", logTextViewContent, _logContent];
@@ -265,44 +295,38 @@ const CGFloat kDetailsHeight = 285;
 
 
 - (void)dealloc {
-  [_crashLogContent release]; _crashLogContent = nil;
-  [_logContent release]; _logContent = nil;
-  [_applicationName release]; _applicationName = nil;
-  self.userName = nil;
-  self.userEmail = nil;
-  
-  [super dealloc];
+   _crashLogContent = nil;
+   _logContent = nil;
+   _applicationName = nil;
 }
 
 
 - (BOOL)showUserDetails {
-  return showUserDetails;
+  return _showUserDetails;
 }
 
-
 - (void)setShowUserDetails:(BOOL)value {
-  showUserDetails = value;
+  _showUserDetails = value;
 }
 
 
 - (BOOL)showComments {
-  return showComments;
+  return _showComments;
 }
 
-
 - (void)setShowComments:(BOOL)value {
-  showComments = value;
+  _showComments = value;
 }
 
 
 - (BOOL)showDetails {
-  return showDetails;
+  return _showDetails;
 }
-
 
 - (void)setShowDetails:(BOOL)value {
-  showDetails = value;
+  _showDetails = value;
 }
+
 
 #pragma mark NSTextField Delegate
 

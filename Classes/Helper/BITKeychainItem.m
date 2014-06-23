@@ -105,14 +105,10 @@ static BOOL _logsErrors;
 
 - (void)dealloc
 {
-	[mUsername release];
-	[mPassword release];
-	[mLabel release];
 	
 	if (mCoreKeychainItem)
 		CFRelease(mCoreKeychainItem);
 	
-	[super dealloc];
 }
 
 #pragma mark -
@@ -122,7 +118,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [[mPassword copy] autorelease];
+		return [mPassword copy];
 	}
 }
 
@@ -133,7 +129,6 @@ static BOOL _logsErrors;
 		if (mPassword == newPassword)
 			return;
 		
-		[mPassword release];
 		mPassword = [newPassword copy];
 		
 		const char *newPasswordCString = [newPassword UTF8String];
@@ -147,7 +142,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [[mUsername copy] autorelease];
+		return [mUsername copy];
 	}
 }
 
@@ -158,7 +153,6 @@ static BOOL _logsErrors;
 		if (mUsername == newUsername)
 			return;
 		
-		[mUsername release];
 		mUsername = [newUsername copy];
 		
 		const char *newUsernameCString = [newUsername UTF8String];
@@ -172,7 +166,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [[mLabel copy] autorelease];
+		return [mLabel copy];
 	}
 }
 
@@ -183,7 +177,6 @@ static BOOL _logsErrors;
 		if (mLabel == newLabel)
 			return;
 		
-		[mLabel release];
 		mLabel = [newLabel copy];
 		
 		const char *newLabelCString = [newLabel UTF8String];
@@ -231,18 +224,12 @@ static BOOL _logsErrors;
                                       username:(NSString *)username
                                       password:(NSString *)password
 {
-	return [[[BITGenericKeychainItem alloc] _initWithCoreKeychainItem:coreKeychainItem
+	return [[BITGenericKeychainItem alloc] _initWithCoreKeychainItem:coreKeychainItem
                                                        serviceName:serviceName
                                                           username:username
-                                                          password:password] autorelease];
+                                                          password:password];
 }
 
-- (void)dealloc
-{
-	[mServiceName release];
-  
-	[super dealloc];
-}
 
 #pragma mark -
 + (BITGenericKeychainItem *)genericKeychainItemForService:(NSString *)serviceName
@@ -267,7 +254,7 @@ static BOOL _logsErrors;
         if (password) SecKeychainItemFreeContent(NULL, password);
 		return nil;
 	}
-	NSString *passwordString = [[[NSString alloc] initWithData:[NSData dataWithBytes:password length:passwordLength] encoding:NSUTF8StringEncoding] autorelease];
+	NSString *passwordString = [[NSString alloc] initWithData:[NSData dataWithBytes:password length:passwordLength] encoding:NSUTF8StringEncoding];
 	SecKeychainItemFreeContent(NULL, password);
 	
 	return [BITGenericKeychainItem _genericKeychainItemWithCoreKeychainItem:item forServiceName:serviceName username:username password:passwordString];
@@ -303,7 +290,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [[mServiceName copy] autorelease];
+		return [mServiceName copy];
 	}
 }
 
@@ -314,7 +301,6 @@ static BOOL _logsErrors;
 		if (mServiceName == newServiceName)
 			return;
 		
-		[mServiceName release];
 		mServiceName = [newServiceName copy];
 		
 		const char *newServiceNameCString = [newServiceName UTF8String];

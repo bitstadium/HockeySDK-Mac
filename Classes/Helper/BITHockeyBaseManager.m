@@ -57,7 +57,7 @@
     _userName = nil;
     _userEmail = nil;
     
-    NSLocale *enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     _rfc3339Formatter = [[NSDateFormatter alloc] init];
     [_rfc3339Formatter setLocale:enUSPOSIXLocale];
     [_rfc3339Formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
@@ -73,15 +73,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [_serverURL release]; _serverURL = nil;
-  
-  [_appIdentifier release]; _appIdentifier = nil;
-  [_userName release]; _userName = nil;
-  [_userEmail release]; _userEmail = nil;
-
-  [super dealloc];
-}
 
 
 #pragma mark - Private
@@ -99,7 +90,7 @@
   sysctlbyname("hw.machine", NULL, &size, NULL, 0);
   char *answer = (char*)malloc(size);
   sysctlbyname("hw.machine", answer, &size, NULL, 0);
-  NSString *platform = [NSString stringWithCString:answer encoding: NSUTF8StringEncoding];
+  NSString *platform = @(answer);
   free(answer);
   return platform;
 }

@@ -322,8 +322,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         
         NSString *incidentIdentifier = @"???";
         if (report.uuidRef != NULL) {
-            incidentIdentifier = (NSString *) CFUUIDCreateString(NULL, report.uuidRef);
-            [incidentIdentifier autorelease];
+            incidentIdentifier = (NSString *) CFBridgingRelease(CFUUIDCreateString(NULL, report.uuidRef));
         }
         
         [text appendFormat: @"Incident Identifier: %@\n", incidentIdentifier];
@@ -348,7 +347,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
                 processName = report.processInfo.processName;
             
             /* PID */
-            processId = [[NSNumber numberWithUnsignedInteger: report.processInfo.processID] stringValue];
+            processId = [@(report.processInfo.processID) stringValue];
             
             /* Process Path */
             if (report.processInfo.processPath != nil) {
@@ -446,7 +445,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         /* Write out the frames. In raw reports, Apple writes this out as a simple list of PCs. In the minimally
          * post-processed report, Apple writes this out as full frame entries. We use the latter format. */
         for (NSUInteger frame_idx = 0; frame_idx < [exception.stackFrames count]; frame_idx++) {
-            BITPLCrashReportStackFrameInfo *frameInfo = [exception.stackFrames objectAtIndex: frame_idx];
+            BITPLCrashReportStackFrameInfo *frameInfo = (exception.stackFrames)[frame_idx];
             [text appendString: [self bit_formatStackFrame: frameInfo frameIndex: frame_idx report: report lp64: lp64]];
         }
         [text appendString: @"\n"];
@@ -462,7 +461,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
             [text appendFormat: @"Thread %ld:\n", (long) thread.threadNumber];
         }
         for (NSUInteger frame_idx = 0; frame_idx < [thread.stackFrames count]; frame_idx++) {
-            BITPLCrashReportStackFrameInfo *frameInfo = [thread.stackFrames objectAtIndex: frame_idx];
+            BITPLCrashReportStackFrameInfo *frameInfo = (thread.stackFrames)[frame_idx];
             [text appendString: [self bit_formatStackFrame: frameInfo frameIndex: frame_idx report: report lp64: lp64]];
         }
         [text appendString: @"\n"];
@@ -590,7 +589,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         const char *foundSelector = findSEL([imageForRegAddress.imageName UTF8String], imageForRegAddress.imageUUID, regAddress - (uint64_t)imageForRegAddress.imageBaseAddress);
         
         if (foundSelector != NULL) {
-            return [NSString stringWithUTF8String:foundSelector];
+            return @(foundSelector);
         }
     }
     
@@ -632,12 +631,9 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         }
         
         if ([imagePath isEqual: report.processInfo.processPath] || [imagePath hasPrefix:appBundleContentsPath]) {
-            [appUUIDs addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                 uuid, kBITBinaryImageKeyUUID,
-                                 archName, kBITBinaryImageKeyArch,
-                                 imageType, kBITBinaryImageKeyType,
-                                 nil
-                                 ]
+            [appUUIDs addObject:@{kBITBinaryImageKeyUUID: uuid,
+                                 kBITBinaryImageKeyArch: archName,
+                                 kBITBinaryImageKeyType: imageType}
              ];
         }
     }

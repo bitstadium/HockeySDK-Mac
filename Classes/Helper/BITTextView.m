@@ -72,7 +72,7 @@
   NSPasteboard *pb = [sender draggingPasteboard];
   
   if ( [[pb types] containsObject:NSFilenamesPboardType] ) {
-    NSFileManager *fm = [[[NSFileManager alloc] init] autorelease];
+    NSFileManager *fm = [[NSFileManager alloc] init];
     
     NSArray *filenames = [pb propertyListForType:NSFilenamesPboardType];
     

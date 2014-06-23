@@ -34,16 +34,17 @@
 NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 
 @implementation BITHockeyManager {
+  NSString *_appIdentifier;
+  
+  BOOL _validAppIdentifier;
+  
+  BOOL _startManagerIsInvoked;
+  
+  NSInteger         _statusCode;
+  NSURLConnection   *_urlConnection;
+
   BITHockeyAppClient *_hockeyAppClient;
 }
-
-@synthesize delegate = _delegate;
-@synthesize serverURL = _serverURL;
-@synthesize crashManager = _crashManager;
-@synthesize disableCrashManager = _disableCrashManager;
-@synthesize feedbackManager = _feedbackManager;
-@synthesize disableFeedbackManager = _disableFeedbackManager;
-@synthesize debugLogEnabled = _debugLogEnabled;
 
 #pragma mark - Public Class Methods
 
@@ -76,9 +77,8 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 }
 
 - (void)dealloc {
-  [_appIdentifier release], _appIdentifier = nil;
+  _appIdentifier = nil;
   
-  [super dealloc];
 }
 
 
@@ -121,8 +121,8 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
     return NO;
   }
   
-  NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-  NSLocale *enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
   [dateFormatter setLocale:enUSPOSIXLocale];
   [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
   NSDate *integrationFlowStartDate = [dateFormatter dateFromString:timeString];
@@ -171,14 +171,12 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 #pragma mark - Public Instance Methods (Configuration)
 
 - (void)configureWithIdentifier:(NSString *)appIdentifier {
-  [_appIdentifier release];
   _appIdentifier = [appIdentifier copy];
   
   [self initializeModules];
 }
 
 - (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id <BITHockeyManagerDelegate>)delegate {
-  [_appIdentifier release];
   _appIdentifier = [appIdentifier copy];
   
   self.delegate = delegate;
@@ -188,7 +186,6 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 
 
 - (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *)companyName delegate:(id <BITHockeyManagerDelegate>)delegate {
-  [_appIdentifier release];
   _appIdentifier = [appIdentifier copy];
   
   self.delegate = delegate;

@@ -66,25 +66,13 @@
     _date = [[NSDate alloc] init];
     _token = nil;
     _attachments = nil;
-    _messageID = [[NSNumber alloc] initWithInteger:0];
+    _messageID = @0;
     _status = BITFeedbackMessageStatusSendPending;
     _userMessage = NO;
   }
   return self;
 }
 
-- (void)dealloc {
-  [_text release];
-  [_userID release];
-  [_name release];
-  [_email release];
-  [_date release];
-  [_token release];
-  [_messageID release];
-  [_attachments release];
-  
-  [super dealloc];
-}
 
 - (id)copyWithZone:(NSZone *)zone {
   BITFeedbackMessage *copy = [[[self class] allocWithZone: zone] init];
@@ -158,7 +146,7 @@
 
 - (void)addAttachmentsObject:(BITFeedbackMessageAttachment *)object{
   if (!self.attachments){
-    self.attachments = [NSArray array];
+    self.attachments = @[];
   }
   self.attachments = [self.attachments arrayByAddingObject:object];
 }

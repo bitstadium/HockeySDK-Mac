@@ -42,8 +42,8 @@
 
 
 + (instancetype)operationWithRequest:(NSURLRequest *)urlRequest {
-  BITHTTPOperation *op = [[[self class] new] autorelease];
-  op->_URLRequest = [urlRequest retain];
+  BITHTTPOperation *op = [[self class] new];
+  op->_URLRequest = urlRequest;
   return op;
 }
 
@@ -94,7 +94,7 @@
 #pragma mark - NSURLConnectionDelegate
 -(void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response {
   _data = [[NSMutableData alloc] init];
-  _response = [(id)response retain];
+  _response = (id)response;
 }
 
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
@@ -103,7 +103,7 @@
 
 -(void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error {
   //FINISHED and failed
-  _error = [error retain];
+  _error = error;
   _data = nil;
   
   [self finish];

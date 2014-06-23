@@ -32,7 +32,7 @@
 
 @interface BITTextView : NSTextView
 
-@property (nonatomic, retain) NSString *placeHolderString;
+@property (nonatomic, strong) NSString *placeHolderString;
 
 @property (nonatomic, unsafe_unretained) id<BITTextViewDelegate> bitDelegate;
 

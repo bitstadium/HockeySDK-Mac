@@ -30,8 +30,8 @@
 
 @interface BITColoredView : NSView
 
-@property (nonatomic, retain) NSColor *viewBackgroundColor;
-@property (nonatomic, retain) NSColor *viewBorderColor;
+@property (nonatomic, strong) NSColor *viewBackgroundColor;
+@property (nonatomic, strong) NSColor *viewBorderColor;
 @property (nonatomic) CGFloat viewBorderWidth;
 
 @end

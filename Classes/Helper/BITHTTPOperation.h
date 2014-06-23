@@ -41,7 +41,7 @@ typedef void (^BITNetworkCompletionBlock)(BITHTTPOperation* operation, NSData* d
 - (void) setCompletion:(BITNetworkCompletionBlock) completionBlock;
 
 @property (nonatomic, readonly) NSHTTPURLResponse *response;
-@property (nonatomic, readonly) NSData *data;
+@property (weak, nonatomic, readonly) NSData *data;
 @property (nonatomic, readonly) NSError *error;
 
 @end

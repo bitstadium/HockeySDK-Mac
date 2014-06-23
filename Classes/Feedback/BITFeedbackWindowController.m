@@ -84,7 +84,7 @@
 @property (unsafe_unretained) IBOutlet NSTextField *statusBarTextField;
 @property (unsafe_unretained) IBOutlet NSButton *statusBarRefreshButton;
 
-@property (nonatomic, retain) NSMutableArray *attachments;
+@property (nonatomic, strong) NSMutableArray *attachments;
 
 - (BOOL)canContinueUserDataView;
 - (BOOL)canSendMessage;
@@ -105,7 +105,7 @@
     
     _attachments = [NSMutableArray new];
     
-    self.lastUpdateDateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    self.lastUpdateDateFormatter = [[NSDateFormatter alloc] init];
 		[self.lastUpdateDateFormatter setDateStyle:NSDateFormatterShortStyle];
 		[self.lastUpdateDateFormatter setTimeStyle:NSDateFormatterShortStyle];
 		self.lastUpdateDateFormatter.locale = [NSLocale currentLocale];
@@ -186,7 +186,6 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self name:BITHockeyFeedbackMessagesLoadingFinished object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:self.feedbackTableView];
 
-  [super dealloc];
 }
 
 
@@ -374,14 +373,14 @@
   NSMutableDictionary *style = [NSMutableDictionary dictionary];
   style[NSFontAttributeName] = boldFont;
   
-  NSMutableAttributedString *attributedText = [[[NSMutableAttributedString alloc] initWithString:text] autorelease];
+  NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
   [attributedText beginEditing];
   [attributedText addAttribute:NSFontAttributeName
                  value:boldFont
                  range:NSMakeRange(0, 12)];
   [attributedText endEditing];
   
-  NSMutableParagraphStyle *paraStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+  NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
   [paraStyle setAlignment:NSCenterTextAlignment];
   [attributedText addAttributes:@{NSParagraphStyleAttributeName: paraStyle} range:NSMakeRange(0, [attributedText length])];
 
@@ -412,7 +411,7 @@
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
     CFStringRef mimeType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
     CFRelease(UTI);
-    NSString *mimeTypeString = (NSString *)mimeType;
+    NSString *mimeTypeString = (__bridge NSString *)mimeType;
     
     BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment attachmentWithData:data contentType:mimeTypeString];
     attachment.originalFilename = filename;
@@ -457,8 +456,8 @@
 
 - (void)splitView:(NSSplitView *)sender resizeSubviewsWithOldSize:(NSSize)oldSize {
   CGFloat dividerThickness = [sender dividerThickness];
-  NSRect topRect  = [[[sender subviews] objectAtIndex:0] frame];
-  NSRect bottomRect = [[[sender subviews] objectAtIndex:1] frame];
+  NSRect topRect  = [[sender subviews][0] frame];
+  NSRect bottomRect = [[sender subviews][1] frame];
   NSRect newFrame  = [sender frame];
   
   topRect.size.height = newFrame.size.height - bottomRect.size.height - dividerThickness;
@@ -467,8 +466,8 @@
   bottomRect.size.width = newFrame.size.width;
   bottomRect.origin.y = topRect.size.height + dividerThickness;
   
-  [[[sender subviews] objectAtIndex:0] setFrame:topRect];
-  [[[sender subviews] objectAtIndex:1] setFrame:bottomRect];
+  [[sender subviews][0] setFrame:topRect];
+  [[sender subviews][1] setFrame:bottomRect];
 }
 
 
