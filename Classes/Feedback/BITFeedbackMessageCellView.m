@@ -61,15 +61,15 @@
 #pragma mark - Layout
 
 - (void)drawRect:(NSRect)dirtyRect {
-  NSColor *backgroundColor = [NSColor whiteColor];
+  NSColor *backgroundColor = [NSColor colorWithCalibratedRed:0.93 green:0.94 blue:0.95 alpha:1];
   
   if (self.objectValue) {
     BITFeedbackMessage *message = (BITFeedbackMessage *)self.objectValue;
     
     if (message.userMessage) {
-      backgroundColor = [NSColor colorWithCalibratedRed:0.93 green:0.94 blue:0.95 alpha:1];
-      self.message.alignment = NSLeftTextAlignment;
-      self.dateAndStatus.alignment = NSLeftTextAlignment;
+      backgroundColor = [NSColor whiteColor];
+      self.message.alignment = NSRightTextAlignment;
+      self.dateAndStatus.alignment = NSRightTextAlignment;
     }
   }
   
