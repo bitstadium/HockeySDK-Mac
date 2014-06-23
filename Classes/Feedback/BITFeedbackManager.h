@@ -80,33 +80,7 @@ typedef enum {
  feedback message.
  */
 
-@interface BITFeedbackManager : BITHockeyBaseManager {
-@private
-  NSFileManager  *_fileManager;
-  NSString       *_feedbackDir;
-  NSString       *_settingsFile;
-  
-  NSMutableArray *_feedbackList;
-  NSString *_token;
-  
-  BOOL _disableFeedbackManager;
-  BOOL _didAskUserData;
-  
-  BITFeedbackUserDataElement _requireUserName;
-  BITFeedbackUserDataElement _requireUserEmail;
-  BOOL _showAlertOnIncomingMessages;
-  
-  NSDate *_lastCheck;
-  NSNumber *_lastMessageID;
-  
-  NSDate *_lastRefreshDate;
-  
-  BITFeedbackWindowController *_feedbackWindowController;
-  
-  BOOL _didSetupDidBecomeActiveNotifications;
-  BOOL _networkRequestInProgress;
-}
-
+@interface BITFeedbackManager : BITHockeyBaseManager
 
 ///-----------------------------------------------------------------------------
 /// @name General settings

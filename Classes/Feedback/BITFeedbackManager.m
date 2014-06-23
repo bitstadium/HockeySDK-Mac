@@ -30,9 +30,12 @@
 #import "HockeySDK.h"
 #import "HockeySDKPrivate.h"
 
+#import "BITFeedbackManager.h"
+#import "BITFeedbackMessageAttachment.h"
 #import "BITFeedbackManagerPrivate.h"
 #import "BITHockeyBaseManagerPrivate.h"
 
+#import "BITHockeyAppClient.h"
 #import "BITHockeyHelper.h"
 #import "NSURLConnection+BITAdditions.h"
 
@@ -48,21 +51,15 @@
 #define kBITFeedbackAppID           @"HockeyFeedbackAppID"
 
 
-@implementation BITFeedbackManager
-
-@synthesize feedbackList = _feedbackList;
-@synthesize token = _token;
-
-@synthesize disableFeedbackManager = _disableFeedbackManager;
-@synthesize didAskUserData = _didAskUserData;
-
-@synthesize requireUserName = _requireUserName;
-@synthesize requireUserEmail = _requireUserEmail;
-@synthesize showAlertOnIncomingMessages = _showAlertOnIncomingMessages;
-
-@synthesize lastCheck = _lastCheck;
-@synthesize lastMessageID = _lastMessageID;
-@synthesize lastRefreshDate = _lastRefreshDate;
+@implementation BITFeedbackManager {
+  NSFileManager  *_fileManager;
+  NSString       *_settingsFile;
+  
+  BITFeedbackWindowController *_feedbackWindowController;
+  
+  BOOL _didSetupDidBecomeActiveNotifications;
+  BOOL _networkRequestInProgress;
+}
 
 #pragma mark - Initialization
 
@@ -81,27 +78,13 @@
     _token = nil;
     _lastMessageID = nil;
     _feedbackWindowController = nil;
-    self.lastRefreshDate = [NSDate distantPast];
+    _lastRefreshDate = [[NSDate distantPast] retain];
     
-    self.feedbackList = [NSMutableArray array];
+    _feedbackList = [[NSMutableArray alloc] init];
 
     _fileManager = [[NSFileManager alloc] init];
     
-    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
-    
-    // temporary directory for crashes grabbed from PLCrashReporter
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDir = [paths objectAtIndex:0];
-    _feedbackDir = [[[cacheDir stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:BITHOCKEY_IDENTIFIER] retain];
-    
-    if (![_fileManager fileExistsAtPath:_feedbackDir]) {
-      NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
-      NSError *theError = NULL;
-      
-      [_fileManager createDirectoryAtPath:_feedbackDir withIntermediateDirectories: YES attributes: attributes error: &theError];
-    }
-    
-    _settingsFile = [[_feedbackDir stringByAppendingPathComponent:BITHOCKEY_FEEDBACK_SETTINGS] retain];
+    _settingsFile = [[bit_settingsDir() stringByAppendingPathComponent:BITHOCKEY_FEEDBACK_SETTINGS] retain];
   }
   return self;
 }
@@ -142,17 +125,8 @@
 
 #pragma mark - Private methods
 
-- (NSString *)uuidString {
-  CFUUIDRef theToken = CFUUIDCreate(NULL);
-  CFStringRef uuidStringRef = CFUUIDCreateString(NULL, theToken);
-  CFRelease(theToken);
-  NSString *stringUUID = [NSString stringWithString:(NSString *) uuidStringRef];
-  CFRelease(uuidStringRef);
-  return stringUUID;
-}
-
 - (NSString *)uuidAsLowerCaseAndShortened {
-  return [[[self uuidString] lowercaseString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+  return [[bit_UUID() lowercaseString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
 }
 
 
@@ -657,6 +631,15 @@
               message.messageID = [(NSDictionary *)objMessage objectForKey:@"id"];
               message.status = BITFeedbackMessageStatusUnread;
               
+              for (NSDictionary *attachmentData in objMessage[@"attachments"]) {
+                BITFeedbackMessageAttachment *newAttachment = [BITFeedbackMessageAttachment new];
+                newAttachment.originalFilename = attachmentData[@"file_name"];
+                newAttachment.identifier = attachmentData[@"id"];
+                newAttachment.sourceURL = attachmentData[@"url"];
+                newAttachment.contentType = attachmentData[@"content_type"];
+                [message addAttachmentsObject:newAttachment];
+              }
+              
               [_feedbackList addObject:message];
               
               newMessage = YES;
@@ -755,27 +738,45 @@
     
     NSMutableData *postBody = [NSMutableData data];
     
-    [postBody appendData:[self appendPostValue:@"Apple" forKey:@"oem"]];
-    [postBody appendData:[self appendPostValue:[BITSystemProfile systemVersionString] forKey:@"os_version"]];
-    [postBody appendData:[self appendPostValue:[self getDevicePlatform] forKey:@"model"]];
-    [postBody appendData:[self appendPostValue:[[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0] forKey:@"lang"]];
-    [postBody appendData:[self appendPostValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"bundle_version"]];
-    [postBody appendData:[self appendPostValue:[message text] forKey:@"text"]];
-    [postBody appendData:[self appendPostValue:[message token] forKey:@"message_token"]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:@"Apple" forKey:@"oem" boundary:boundary]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[BITSystemProfile systemVersionString] forKey:@"os_version" boundary:boundary]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[self getDevicePlatform] forKey:@"model" boundary:boundary]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0] forKey:@"lang" boundary:boundary]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"bundle_version" boundary:boundary]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[message text] forKey:@"text" boundary:boundary]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[message token] forKey:@"message_token" boundary:boundary]];
     
     NSString *installString = [BITSystemProfile deviceIdentifier];
     if (installString) {
-      [postBody appendData:[self appendPostValue:installString forKey:@"install_string"]];
+      [postBody appendData:[BITHockeyAppClient dataWithPostValue:installString forKey:@"install_string" boundary:boundary]];
     }
     
     if (self.userID) {
-      [postBody appendData:[self appendPostValue:self.userID forKey:@"user_string"]];
+      [postBody appendData:[BITHockeyAppClient dataWithPostValue:self.userID forKey:@"user_string" boundary:boundary]];
     }
     if (self.userName) {
-      [postBody appendData:[self appendPostValue:self.userName forKey:@"name"]];
+      [postBody appendData:[BITHockeyAppClient dataWithPostValue:self.userName forKey:@"name" boundary:boundary]];
     }
     if (self.userEmail) {
-      [postBody appendData:[self appendPostValue:self.userEmail forKey:@"email"]];
+      [postBody appendData:[BITHockeyAppClient dataWithPostValue:self.userEmail forKey:@"email" boundary:boundary]];
+    }
+    
+    NSInteger attachmentIndex = 0;
+    
+    for (BITFeedbackMessageAttachment *attachment in message.attachments){
+      if (![attachment isKindOfClass:[BITFeedbackMessageAttachment class]]) continue;
+      
+      NSString *key = [NSString stringWithFormat:@"attachment%ld", (long)attachmentIndex];
+      
+      NSString *filename = attachment.originalFilename;
+      
+      if (!filename) {
+        filename = [NSString stringWithFormat:@"Attachment %ld", (long)attachmentIndex];
+      }
+      
+      [postBody appendData:[BITHockeyAppClient dataWithPostValue:attachment.data forKey:key contentType:attachment.contentType boundary:boundary filename:filename]];
+      
+      attachmentIndex++;
     }
     
     [postBody appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -917,17 +918,17 @@
   }
 }
 
-- (void)submitMessageWithText:(NSString *)text {
+- (void)submitMessageWithText:(NSString *)text andAttachments:(NSArray *)attachments {
   BITFeedbackMessage *message = [[[BITFeedbackMessage alloc] init] autorelease];
   message.text = text;
   [message setStatus:BITFeedbackMessageStatusSendPending];
-  [message setToken:[self uuidAsLowerCaseAndShortened]];  
+  [message setToken:[self uuidAsLowerCaseAndShortened]];
+  [message setAttachments:attachments];
   [message setUserMessage:YES];
   
   [_feedbackList addObject:message];
   
   [self submitPendingMessages];
 }
-
 
 @end

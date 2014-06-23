@@ -79,6 +79,8 @@
 		1E7E552D187F632300F0858E /* NSURLConnection+BITAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E552B187F632300F0858E /* NSURLConnection+BITAdditions.h */; };
 		1E7E552E187F632300F0858E /* NSURLConnection+BITAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E552C187F632300F0858E /* NSURLConnection+BITAdditions.m */; };
 		1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7F5A2315A46249001081FC /* HockeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1E852AED19509368006E73E0 /* BITFeedbackMessageAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E852AEB19509368006E73E0 /* BITFeedbackMessageAttachment.h */; };
+		1E852AEE19509368006E73E0 /* BITFeedbackMessageAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E852AEC19509368006E73E0 /* BITFeedbackMessageAttachment.m */; };
 		1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D941523574200067A5C /* Foundation.framework */; };
 		1EA551FD17B3EB44004A0CB7 /* BITCrashExceptionApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EA551FB17B3EB44004A0CB7 /* BITCrashExceptionApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EA551FE17B3EB44004A0CB7 /* BITCrashExceptionApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA551FC17B3EB44004A0CB7 /* BITCrashExceptionApplication.m */; };
@@ -157,6 +159,7 @@
 		1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITKeychainItem.h; sourceTree = "<group>"; };
 		1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITKeychainItem.m; sourceTree = "<group>"; };
 		1E260CA917D42B1500C7F9FE /* BITHockeyManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITHockeyManagerDelegate.h; sourceTree = "<group>"; };
+		1E378AF11958498400451E28 /* BITTextViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITTextViewDelegate.h; sourceTree = "<group>"; };
 		1E413D9215A0BB8800620BFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E413D9515A0BB9700620BFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E5785D319461DDF0014D19A /* BITCrashDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashDetails.h; sourceTree = "<group>"; };
@@ -196,6 +199,8 @@
 		1E7F5A2315A46249001081FC /* HockeySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDK.h; sourceTree = "<group>"; };
 		1E7FB96217D3F45200B7E10D /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = buildnumber.xcconfig; sourceTree = SOURCE_ROOT; };
 		1E7FB96317D3F45200B7E10D /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = SOURCE_ROOT; };
+		1E852AEB19509368006E73E0 /* BITFeedbackMessageAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessageAttachment.h; sourceTree = "<group>"; };
+		1E852AEC19509368006E73E0 /* BITFeedbackMessageAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITFeedbackMessageAttachment.m; sourceTree = "<group>"; };
 		1EA551FB17B3EB44004A0CB7 /* BITCrashExceptionApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashExceptionApplication.h; sourceTree = "<group>"; };
 		1EA551FC17B3EB44004A0CB7 /* BITCrashExceptionApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashExceptionApplication.m; sourceTree = "<group>"; };
 		1EBDC049195710CA00B5C8A3 /* BITCrashReportUI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BITCrashReportUI.xib; sourceTree = "<group>"; };
@@ -331,6 +336,7 @@
 				1EBDF2B01957878800C7F49A /* BITTextFieldCell.m */,
 				1EC7152419573CB400F72C19 /* BITTextView.h */,
 				1EC7152519573CB400F72C19 /* BITTextView.m */,
+				1E378AF11958498400451E28 /* BITTextViewDelegate.h */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -343,6 +349,8 @@
 				1E7E54FF187F3ED800F0858E /* BITFeedbackManagerPrivate.h */,
 				1E7E5500187F3ED800F0858E /* BITFeedbackMessage.h */,
 				1E7E5501187F3ED800F0858E /* BITFeedbackMessage.m */,
+				1E852AEB19509368006E73E0 /* BITFeedbackMessageAttachment.h */,
+				1E852AEC19509368006E73E0 /* BITFeedbackMessageAttachment.m */,
 				1EC715311957524B00F72C19 /* BITFeedbackMessageCellView.h */,
 				1EC715321957524B00F72C19 /* BITFeedbackMessageCellView.m */,
 				1EBDF2A9195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h */,
@@ -497,6 +505,7 @@
 				1E5785E7194647180014D19A /* BITHTTPOperation.h in Headers */,
 				1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */,
 				1EF09DD5152371DC00067A5C /* BITCrashManager.h in Headers */,
+				1E852AED19509368006E73E0 /* BITFeedbackMessageAttachment.h in Headers */,
 				1E06CDAF1827D9DF00895076 /* PLCrashReportSignalInfo.h in Headers */,
 				1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */,
 				4DD13AF4162CA7C400BF15E8 /* BITSystemProfile.h in Headers */,
@@ -645,6 +654,7 @@
 				1E7E550F187F3ED800F0858E /* BITFeedbackWindowController.m in Sources */,
 				1E5785E2194646C00014D19A /* BITHockeyAppClient.m in Sources */,
 				1E7E550B187F3ED800F0858E /* BITFeedbackMessage.m in Sources */,
+				1E852AEE19509368006E73E0 /* BITFeedbackMessageAttachment.m in Sources */,
 				1E7E5508187F3ED800F0858E /* BITFeedbackManager.m in Sources */,
 				1EBDC052195716F300B5C8A3 /* BITColoredView.m in Sources */,
 				1E7E551E187F3EE700F0858E /* HockeySDKPrivate.m in Sources */,

@@ -28,8 +28,20 @@
 
 
 #import "BITFeedbackMessage.h"
+#import "BITFeedbackMessageAttachment.h"
 
-@implementation BITFeedbackMessage
+@implementation BITFeedbackMessage {
+  NSString *_text;
+  NSString *_userID;
+  NSString *_name;
+  NSString *_email;
+  NSDate *_date;
+  NSNumber *_messageID;
+  NSString *_token;
+  NSArray *_attachments;
+  BITFeedbackMessageStatus _status;
+  BOOL _userMessage;
+}
 
 @synthesize text = _text;
 @synthesize userID = _userID;
@@ -38,6 +50,7 @@
 @synthesize date = _date;
 @synthesize messageID = _messageID;
 @synthesize token = _token;
+@synthesize attachments = _attachments;
 @synthesize status = _status;
 @synthesize userMessage = _userMessage;
 
@@ -52,6 +65,7 @@
     _email = nil;
     _date = [[NSDate alloc] init];
     _token = nil;
+    _attachments = nil;
     _messageID = [[NSNumber alloc] initWithInteger:0];
     _status = BITFeedbackMessageStatusSendPending;
     _userMessage = NO;
@@ -67,6 +81,7 @@
   [_date release];
   [_token release];
   [_messageID release];
+  [_attachments release];
   
   [super dealloc];
 }
@@ -83,6 +98,7 @@
   [copy setMessageID: _messageID];
   [copy setStatus: _status];
   [copy setUserMessage: _userMessage];
+  [copy setAttachments: _attachments];
   
   return copy;
 }
@@ -97,6 +113,7 @@
   [encoder encodeObject:self.email forKey:@"email"];
   [encoder encodeObject:self.date forKey:@"date"];
   [encoder encodeObject:self.messageID forKey:@"messageID"];
+  [encoder encodeObject:self.attachments forKey:@"attachments"];
   [encoder encodeInteger:self.status forKey:@"status"];
   [encoder encodeBool:self.userMessage forKey:@"userMessage"];
   [encoder encodeObject:self.token forKey:@"token"];
@@ -110,11 +127,40 @@
     self.email = [decoder decodeObjectForKey:@"email"];
     self.date = [decoder decodeObjectForKey:@"date"];
     self.messageID = [decoder decodeObjectForKey:@"messageID"];
+    self.attachments = [decoder decodeObjectForKey:@"attachments"];
     self.status = (BITFeedbackMessageStatus)[decoder decodeIntegerForKey:@"status"];
     self.userMessage = [decoder decodeBoolForKey:@"userMessage"];
     self.token = [decoder decodeObjectForKey:@"token"];
   }
   return self;
+}
+
+
+#pragma mark - Deletion
+
+- (void)deleteContents {
+  for (BITFeedbackMessageAttachment *attachment in self.attachments){
+    [attachment deleteContents];
+  }
+}
+
+- (NSArray *)previewableAttachments {
+  NSMutableArray *returnArray = [NSMutableArray new];
+  
+  for (BITFeedbackMessageAttachment *attachment in self.attachments){
+//    if ([QLPreviewController canPreviewItem:attachment ]){
+//      [returnArray addObject:attachment];
+//    }
+  }
+  
+  return returnArray;
+}
+
+- (void)addAttachmentsObject:(BITFeedbackMessageAttachment *)object{
+  if (!self.attachments){
+    self.attachments = [NSArray array];
+  }
+  self.attachments = [self.attachments arrayByAddingObject:object];
 }
 
 @end

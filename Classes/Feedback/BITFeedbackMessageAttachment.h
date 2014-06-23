@@ -1,7 +1,5 @@
 /*
- * Author: Andreas Linde <mail@andreaslinde.de>
- *
- * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -26,14 +24,41 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
-#import "BITTextViewDelegate.h"
+/**
+ * An individual feedback message attachment
+ */
+@interface BITFeedbackMessageAttachment : NSObject<NSCoding>
 
-@interface BITTextView : NSTextView
+@property (nonatomic, copy) NSNumber *identifier;
+@property (nonatomic, copy) NSString *originalFilename;
+@property (nonatomic, copy) NSString *contentType;
+@property (nonatomic, copy) NSString *sourceURL;
+@property (nonatomic) BOOL isLoading;
+@property (nonatomic, copy, readonly) NSData *data;
 
-@property (nonatomic, retain) NSString *placeHolderString;
 
-@property (nonatomic, unsafe_unretained) id<BITTextViewDelegate> bitDelegate;
+@property (readonly) NSImage *imageRepresentation;
+
+
++ (BITFeedbackMessageAttachment *)attachmentWithData:(NSData *)data contentType:(NSString *)contentType;
+
+- (NSImage *)thumbnailWithSize:(NSSize)size;
+
+- (void)replaceData:(NSData *)data;
+
+- (void)deleteContents;
+
+- (BOOL)needsLoadingFromURL;
+
+- (BOOL)isImage;
+
+- (NSURL *)localURL;
+
+/**
+ Used to determine whether QuickLook can preview this file or not. If not, we don't download it.
+ */ 
+- (NSString*)possibleFilename;
 
 @end

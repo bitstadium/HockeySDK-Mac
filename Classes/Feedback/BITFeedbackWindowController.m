@@ -35,12 +35,14 @@
 #import "BITFeedbackManagerPrivate.h"
 #import "BITFeedbackMessageCellView.h"
 
+#import "BITFeedbackMessageAttachment.h"
+
 #import "BITTextView.h"
 #import "BITColoredView.h"
 #import "BITTextFieldCell.h"
 
 
-@interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate>
+@interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate, BITTextViewDelegate>
 
 @property (nonatomic, unsafe_unretained) BITFeedbackManager *manager;
 @property (nonatomic, strong) NSDateFormatter *lastUpdateDateFormatter;
@@ -69,7 +71,7 @@
 @property (unsafe_unretained) IBOutlet NSScrollView *feedbackScrollView;
 @property (unsafe_unretained) IBOutlet NSTableView *feedbackTableView;
 
-@property (unsafe_unretained) IBOutlet NSTextView *messageTextField;
+@property (unsafe_unretained) IBOutlet BITTextView *messageTextField;
 @property (nonatomic, strong) NSAttributedString *messageText;
 
 @property (unsafe_unretained) IBOutlet BITColoredView *horizontalLine;
@@ -81,6 +83,8 @@
 @property (unsafe_unretained) IBOutlet NSProgressIndicator *statusBarLoadingIndicator;
 @property (unsafe_unretained) IBOutlet NSTextField *statusBarTextField;
 @property (unsafe_unretained) IBOutlet NSButton *statusBarRefreshButton;
+
+@property (nonatomic, retain) NSMutableArray *attachments;
 
 - (BOOL)canContinueUserDataView;
 - (BOOL)canSendMessage;
@@ -98,6 +102,8 @@
   self = [super initWithWindowNibName: @"BITFeedbackWindowController"];
   if (self) {
     _manager = feedbackManager;
+    
+    _attachments = [NSMutableArray new];
     
     self.lastUpdateDateFormatter = [[[NSDateFormatter alloc] init] autorelease];
 		[self.lastUpdateDateFormatter setDateStyle:NSDateFormatterShortStyle];
@@ -147,6 +153,7 @@
   
   [self.statusBarRefreshButton setHidden:YES];
   [self.messageTextField setTypingAttributes:@{NSFontAttributeName: [NSFont userFixedPitchFontOfSize:13.0]}];
+  [self.messageTextField setBitDelegate:self];
   
   [self.contactInfoTextField setStringValue:BITHockeyLocalizedString(@"FeedbackContactInfo", @"")];
   [(BITTextFieldCell *)[self.userNameTextField cell] setBitPlaceHolderString: BITHockeyLocalizedString(@"FeedbackName", @"")];
@@ -307,7 +314,7 @@
 }
 
 - (IBAction)sendMessage:(id)sender {
-  [self.manager submitMessageWithText:[self.messageText string]];
+  [self.manager submitMessageWithText:[self.messageText string] andAttachments:self.attachments];
   self.messageText = nil;
   [self.feedbackTableView reloadData];
 }
@@ -392,6 +399,27 @@
   [NSAnimationContext endGrouping];
 }
 
+
+#pragma mark - BITTextViewDelegate
+
+- (void)textView:(BITTextView *)textView dragOperationWithFilename:(NSString *)filename {
+  NSLog(@"Dropped file: %@", filename);
+  
+  NSError *error = nil;
+  NSData *data = [NSData dataWithContentsOfFile:filename options:0 error:&error];
+  if (!error && data) {
+    CFStringRef fileExtension = (__bridge CFStringRef)[filename pathExtension];
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
+    CFStringRef mimeType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
+    CFRelease(UTI);
+    NSString *mimeTypeString = (NSString *)mimeType;
+    
+    BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment attachmentWithData:data contentType:mimeTypeString];
+    attachment.originalFilename = filename;
+
+    [self.attachments addObject:attachment];
+  }
+}
 
 #pragma mark - Table view data source
 
