@@ -170,7 +170,6 @@ DQ
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <size key="intercellSpacing" width="0.0" height="2"/>
                                                             <color key="backgroundColor" red="0.92549026012420654" green="0.94117653369903564" blue="0.95294123888015747" alpha="1" colorSpace="deviceRGB"/>
-                                                            <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                                             <color key="gridColor" red="0.82352948188781738" green="0.83921575546264648" blue="0.84705889225006104" alpha="1" colorSpace="deviceRGB"/>
                                                             <tableColumns>
                                                                 <tableColumn identifier="message" editable="NO" width="598" minWidth="40" maxWidth="100000" id="17">
@@ -222,6 +221,15 @@ DQ
                                                                                         </binding>
                                                                                     </connections>
                                                                                 </textField>
+                                                                                <customView id="Vrx-tJ-lyK" customClass="BITColoredView">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="598" height="1"/>
+                                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                                                    <userDefinedRuntimeAttributes>
+                                                                                        <userDefinedRuntimeAttribute type="color" keyPath="viewBackgroundColor">
+                                                                                            <color key="value" red="0.82352948188781738" green="0.83921575546264648" blue="0.84705889225006104" alpha="1" colorSpace="deviceRGB"/>
+                                                                                        </userDefinedRuntimeAttribute>
+                                                                                    </userDefinedRuntimeAttributes>
+                                                                                </customView>
                                                                             </subviews>
                                                                             <connections>
                                                                                 <outlet property="dateAndStatus" destination="cVx-LJ-IdJ" id="J9U-br-5Ql"/>
