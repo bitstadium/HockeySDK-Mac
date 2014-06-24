@@ -48,6 +48,10 @@
 		1E260CA617D41E9100C7F9FE /* BITKeychainItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */; };
 		1E260CA717D41E9100C7F9FE /* BITKeychainItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */; };
 		1E260CAA17D42B1E00C7F9FE /* BITHockeyManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E260CA917D42B1500C7F9FE /* BITHockeyManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1E378AF419586A6900451E28 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E378AF319586A6900451E28 /* QuickLook.framework */; };
+		1E378AF9195899B400451E28 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E378AF8195899B400451E28 /* Quartz.framework */; };
+		1E378B201959D33700451E28 /* BITActivityIndicatorButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E378B1E1959D33700451E28 /* BITActivityIndicatorButton.h */; };
+		1E378B211959D33700451E28 /* BITActivityIndicatorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E378B1F1959D33700451E28 /* BITActivityIndicatorButton.m */; };
 		1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E413D9315A0BB8800620BFE /* HockeySDK.strings */; };
 		1E5785D619461DDF0014D19A /* BITCrashDetails.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E5785D319461DDF0014D19A /* BITCrashDetails.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E5785D719461DDF0014D19A /* BITCrashDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785D419461DDF0014D19A /* BITCrashDetails.m */; };
@@ -158,6 +162,12 @@
 		1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITKeychainItem.m; sourceTree = "<group>"; };
 		1E260CA917D42B1500C7F9FE /* BITHockeyManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITHockeyManagerDelegate.h; sourceTree = "<group>"; };
 		1E378AF11958498400451E28 /* BITTextViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITTextViewDelegate.h; sourceTree = "<group>"; };
+		1E378AF319586A6900451E28 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		1E378AF51958981E00451E28 /* BITFeedbackMessageCellViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessageCellViewDelegate.h; sourceTree = "<group>"; };
+		1E378AF6195899A400451E28 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		1E378AF8195899B400451E28 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		1E378B1E1959D33700451E28 /* BITActivityIndicatorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITActivityIndicatorButton.h; sourceTree = "<group>"; };
+		1E378B1F1959D33700451E28 /* BITActivityIndicatorButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITActivityIndicatorButton.m; sourceTree = "<group>"; };
 		1E413D9215A0BB8800620BFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E413D9515A0BB9700620BFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E5785D319461DDF0014D19A /* BITCrashDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashDetails.h; sourceTree = "<group>"; };
@@ -240,6 +250,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E06CDB51827D9DF00895076 /* libCrashReporter-MacOSX-Static.a in Frameworks */,
+				1E378AF419586A6900451E28 /* QuickLook.framework in Frameworks */,
+				1E378AF9195899B400451E28 /* Quartz.framework in Frameworks */,
 				1E260C9F17D414F200C7F9FE /* Security.framework in Frameworks */,
 				4DD13AF7162CAA2200BF15E8 /* IOKit.framework in Frameworks */,
 				1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */,
@@ -345,8 +357,11 @@
 				1E7E5501187F3ED800F0858E /* BITFeedbackMessage.m */,
 				1E852AEB19509368006E73E0 /* BITFeedbackMessageAttachment.h */,
 				1E852AEC19509368006E73E0 /* BITFeedbackMessageAttachment.m */,
+				1E378B1E1959D33700451E28 /* BITActivityIndicatorButton.h */,
+				1E378B1F1959D33700451E28 /* BITActivityIndicatorButton.m */,
 				1EC715311957524B00F72C19 /* BITFeedbackMessageCellView.h */,
 				1EC715321957524B00F72C19 /* BITFeedbackMessageCellView.m */,
+				1E378AF51958981E00451E28 /* BITFeedbackMessageCellViewDelegate.h */,
 				1EBDF2A9195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h */,
 				1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */,
 				1E7E5504187F3ED800F0858E /* BITFeedbackWindowController.h */,
@@ -390,6 +405,9 @@
 		1EF09D8E1523574200067A5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E378AF8195899B400451E28 /* Quartz.framework */,
+				1E378AF6195899A400451E28 /* QuartzCore.framework */,
+				1E378AF319586A6900451E28 /* QuickLook.framework */,
 				1E260C9E17D414F200C7F9FE /* Security.framework */,
 				4DD13AF6162CAA2200BF15E8 /* IOKit.framework */,
 				1EF09D8F1523574200067A5C /* Cocoa.framework */,
@@ -497,6 +515,7 @@
 				1E7E551D187F3EE700F0858E /* HockeySDKPrivate.h in Headers */,
 				1E7E550E187F3ED800F0858E /* BITFeedbackWindowController.h in Headers */,
 				1E5785E7194647180014D19A /* BITHTTPOperation.h in Headers */,
+				1E378B201959D33700451E28 /* BITActivityIndicatorButton.h in Headers */,
 				1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */,
 				1EF09DD5152371DC00067A5C /* BITCrashManager.h in Headers */,
 				1E852AED19509368006E73E0 /* BITFeedbackMessageAttachment.h in Headers */,
@@ -653,6 +672,7 @@
 				1E5785DC19461DF60014D19A /* BITHockeyAttachment.m in Sources */,
 				1EC715341957524B00F72C19 /* BITFeedbackMessageCellView.m in Sources */,
 				1E260CA717D41E9100C7F9FE /* BITKeychainItem.m in Sources */,
+				1E378B211959D33700451E28 /* BITActivityIndicatorButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,7 +28,7 @@
 #import "BITFeedbackMessageAttachment.h"
 #import "BITHockeyHelper.h"
 #import "HockeySDKPrivate.h"
-#import <QuickLook/QuickLook.h>
+
 
 #define kCacheFolderName @"attachments"
 
@@ -150,58 +150,53 @@
 
 #pragma mark - Thubmnails / Image Representation
 
-- (NSImage *)imageRepresentation {
-  if ([self.contentType rangeOfString:@"image"].location != NSNotFound && self.filename ) {
-    return [[NSImage alloc] initWithData:self.data];
-  } else {
-    return nil;
-    
-    // TODO: what to do here?
-    // Create a Icon ..
-//    UIDocumentInteractionController* docController = [[UIDocumentInteractionController alloc] init];
-//    docController.name = self.originalFilename;
-//    NSArray* icons = docController.icons;
-//    if (icons.count){
-//      return icons[0];
-//    } else {
-//      return nil;
-//    }
+- (NSImage *)imageRepresentationWithSize:(NSSize)size {
+  NSImage *thumbnailImage = nil;
+  
+  NSDictionary *dict = @{ ((NSString *)kQLThumbnailOptionIconModeKey): @NO };
+  
+  CGImageRef ref = QLThumbnailImageCreate(kCFAllocatorDefault,
+                                          (__bridge CFURLRef)self.localURL,
+                                          size,
+                                          (__bridge CFDictionaryRef)dict);
+  
+  if (ref != NULL) {
+    thumbnailImage = [[NSImage alloc] initWithCGImage:ref size:size];
+    CFRelease(ref);
   }
+  
+  if (!thumbnailImage) {
+    thumbnailImage = [[NSWorkspace sharedWorkspace] iconForFile:self.filename];
+    if (thumbnailImage) {
+      [thumbnailImage setSize:size];
+    }
+  }
+  
+  return thumbnailImage;
 }
 
 - (NSImage *)thumbnailWithSize:(NSSize)size {
-//  id<NSCopying> cacheKey = [NSValue valueWithNSSize:size];
-//  
-//  if (!self.thumbnailRepresentations[cacheKey]) {
-//    UIImage *image = self.imageRepresentation;
-//    // consider the scale.
-//    if (!image) {
-//      return nil;
-//    }
-//    
-//    CGFloat scale = [UIScreen mainScreen].scale;
-//    
-//    if (scale != image.scale) {
-//      
-//      CGSize scaledSize = CGSizeApplyAffineTransform(size, CGAffineTransformMakeScale(scale, scale));
-//      UIImage *thumbnail = bit_imageToFitSize(image, scaledSize, YES) ;
-//      
-//      UIImage *scaledTumbnail = [UIImage imageWithCGImage:thumbnail.CGImage scale:scale orientation:thumbnail.imageOrientation];
-//      if (thumbnail) {
-//        [self.thumbnailRepresentations setObject:scaledTumbnail forKey:cacheKey];
-//      }
-//      
-//    } else {
-//      UIImage *thumbnail = bit_imageToFitSize(image, size, YES) ;
-//      
-//      [self.thumbnailRepresentations setObject:thumbnail forKey:cacheKey];
-//      
-//    }
-//    
-//  }
-//  
-//  return self.thumbnailRepresentations[cacheKey];
-  return nil;
+  if (self.needsLoadingFromURL) {
+    NSImage *thumbnailImage = [[NSWorkspace sharedWorkspace] iconForFileType:[self.originalFilename pathExtension]];
+    if (thumbnailImage) {
+      [thumbnailImage setSize:size];
+    }
+    return thumbnailImage;
+  }
+  
+  id<NSCopying> cacheKey = [NSValue valueWithSize:size];
+  
+  if (!self.thumbnailRepresentations[cacheKey]) {
+    NSImage *image = [self imageRepresentationWithSize:size];
+    
+    if (!image) {
+      return nil;
+    }
+    
+    [self.thumbnailRepresentations setObject:image forKey:cacheKey];
+  }
+  
+  return self.thumbnailRepresentations[cacheKey];
 }
 
 
@@ -256,5 +251,6 @@
   
   return nil;
 }
+
 
 @end

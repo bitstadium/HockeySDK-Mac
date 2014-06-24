@@ -26,10 +26,12 @@
 
 #import <Foundation/Foundation.h>
 
+#import <Quartz/Quartz.h>
+
 /**
  * An individual feedback message attachment
  */
-@interface BITFeedbackMessageAttachment : NSObject<NSCoding>
+@interface BITFeedbackMessageAttachment : NSObject<NSCoding, QLPreviewItem>
 
 @property (nonatomic, copy) NSNumber *identifier;
 @property (nonatomic, copy) NSString *originalFilename;

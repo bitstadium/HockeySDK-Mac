@@ -34,15 +34,20 @@
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITFeedbackManagerPrivate.h"
 #import "BITFeedbackMessageCellView.h"
+#import "BITFeedbackMessageCellViewDelegate.h"
 
 #import "BITFeedbackMessageAttachment.h"
+
+#import "BITFeedbackMessageDateValueTransformer.h"
 
 #import "BITTextView.h"
 #import "BITColoredView.h"
 #import "BITTextFieldCell.h"
 
+#import <Quartz/Quartz.h>
 
-@interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate, BITTextViewDelegate>
+
+@interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate, BITTextViewDelegate, QLPreviewPanelDataSource, QLPreviewPanelDelegate, BITFeedbackMessageCellViewDelegate>
 
 @property (nonatomic, unsafe_unretained) BITFeedbackManager *manager;
 @property (nonatomic, strong) NSDateFormatter *lastUpdateDateFormatter;
@@ -85,6 +90,11 @@
 @property (unsafe_unretained) IBOutlet NSButton *statusBarRefreshButton;
 
 @property (nonatomic, strong) NSMutableArray *attachments;
+@property (nonatomic, strong) NSOperationQueue *thumbnailQueue;
+
+@property (nonatomic, strong) QLPreviewPanel *previewPanel;
+@property (nonatomic, strong) BITFeedbackMessageAttachment *previewAttachment;
+@property (nonatomic) NSRect previewThumbnailRect;
 
 - (BOOL)canContinueUserDataView;
 - (BOOL)canSendMessage;
@@ -95,6 +105,8 @@
 
 @end
 
+NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessageDateValueTransformer";
+
 @implementation BITFeedbackWindowController
 
 
@@ -104,6 +116,9 @@
     _manager = feedbackManager;
     
     _attachments = [NSMutableArray new];
+    _thumbnailQueue = [NSOperationQueue new];
+    
+    [NSValueTransformer setValueTransformer:[[BITFeedbackMessageDateValueTransformer alloc] init] forName:BITFeedbackMessageDateValueTransformerName];
     
     self.lastUpdateDateFormatter = [[NSDateFormatter alloc] init];
 		[self.lastUpdateDateFormatter setDateStyle:NSDateFormatterShortStyle];
@@ -426,12 +441,6 @@
   return [self.manager numberOfMessages];
 }
 
-- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
-  BITFeedbackMessage *message = [self.manager messageAtIndex:rowIndex];
-  
-  return message;
-}
-
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
   BITFeedbackMessage *message = [self.manager messageAtIndex:row];
   
@@ -439,6 +448,40 @@
   return height;
 }
 
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+  BITFeedbackMessageCellView *result = [tableView makeViewWithIdentifier:[BITFeedbackMessageCellView identifier] owner:self];
+  
+  BITFeedbackMessage *message = [self.manager messageAtIndex:row];
+  if (result == nil) {
+    CGFloat height = [BITFeedbackMessageCellView heightForRowWithMessage:message tableViewWidth:tableView.frame.size.width];
+    result = [[BITFeedbackMessageCellView alloc] initWithFrame:NSMakeRect(0, 0, self.feedbackTableView.frame.size.width, height) delegate:self];
+    result.identifier = [BITFeedbackMessageCellView identifier];
+  }
+  
+  result.message = message;
+  [result updateAttachmentViews];
+
+  for (BITFeedbackMessageAttachment *attachment in message.attachments) {
+    if (attachment.needsLoadingFromURL && !attachment.isLoading){
+      attachment.isLoading = YES;
+      NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:attachment.sourceURL]];
+      [NSURLConnection sendAsynchronousRequest:request queue:self.thumbnailQueue completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
+        if (responseData.length) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+            [attachment replaceData:responseData];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kBITFeedbackAttachmentLoadedNotification object:self userInfo:@{kBITFeedbackAttachmentLoadedKey: attachment}];
+            
+            [[BITHockeyManager sharedHockeyManager].feedbackManager saveMessages];
+          });
+          
+        }
+      }];
+    }
+  }
+  
+  return result;
+}
 
 #pragma mark - NSSplitView Delegate
 
@@ -470,5 +513,96 @@
   [[sender subviews][1] setFrame:bottomRect];
 }
 
+
+#pragma mark - BITFeedbackMessageCellViewDelegate
+
+- (void)messageCellView:(BITFeedbackMessageCellView *)messaggeCellView clickOnButton:(NSButton *)button withAttachment:(BITFeedbackMessageAttachment *)attachment {
+  self.previewAttachment = attachment;
+
+  NSInteger index = [self.feedbackTableView rowForView:messaggeCellView];
+  NSRect thumbnailRect = [self.feedbackTableView frameOfCellAtColumn:0 row:index];
+  thumbnailRect.origin.x += button.frame.origin.x;
+  thumbnailRect.origin.y += (thumbnailRect.size.height - 2 * button.frame.origin.y);
+  thumbnailRect.size = button.frame.size;
+  self.previewThumbnailRect = thumbnailRect;
+  
+  [self togglePreviewPanel:self];
+}
+
+#pragma mark - Quick Look panel support
+
+- (IBAction)togglePreviewPanel:(id)sender {
+  if ([QLPreviewPanel sharedPreviewPanelExists] && [[QLPreviewPanel sharedPreviewPanel] isVisible]) {
+    [[QLPreviewPanel sharedPreviewPanel] orderOut:nil];
+  } else {
+    [[QLPreviewPanel sharedPreviewPanel] makeKeyAndOrderFront:nil];
+  }
+}
+
+- (BOOL)acceptsPreviewPanelControl:(QLPreviewPanel *)panel {
+  return YES;
+}
+
+- (void)beginPreviewPanelControl:(QLPreviewPanel *)panel {
+  _previewPanel = panel;
+  panel.delegate = self;
+  panel.dataSource = self;
+}
+
+- (void)endPreviewPanelControl:(QLPreviewPanel *)panel {
+  _previewPanel = nil;
+}
+
+
+#pragma mark - QLPreviewPanelDataSource
+
+- (NSInteger)numberOfPreviewItemsInPreviewPanel:(QLPreviewPanel *)panel {
+  return 1;
+}
+
+- (id <QLPreviewItem>)previewPanel:(QLPreviewPanel *)panel previewItemAtIndex:(NSInteger)index {
+  if (self.previewAttachment.needsLoadingFromURL && !self.previewAttachment.isLoading) {
+    self.previewAttachment.isLoading = YES;
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.previewAttachment.sourceURL]];
+    [NSURLConnection sendAsynchronousRequest:request queue:self.thumbnailQueue completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
+      self.previewAttachment.isLoading = NO;
+      if (responseData.length) {
+        [self.previewAttachment replaceData:responseData];
+        [panel reloadData];
+        
+        [[BITHockeyManager sharedHockeyManager].feedbackManager saveMessages];
+      } else {
+        [panel reloadData];
+      }
+    }];
+  }
+
+  return self.previewAttachment;
+}
+
+
+#pragma mark - QLPreviewPanelDelegate
+
+- (BOOL)previewPanel:(QLPreviewPanel *)panel handleEvent:(NSEvent *)event {
+  // redirect all key down events to the table view
+  if ([event type] == NSKeyDown) {
+    [self.feedbackTableView keyDown:event];
+    return YES;
+  }
+  return NO;
+}
+
+- (NSRect)previewPanel:(QLPreviewPanel *)panel sourceFrameOnScreenForPreviewItem:(id <QLPreviewItem>)item {
+  NSRect visibleRect = [self.feedbackTableView visibleRect];
+  
+  if (!NSIntersectsRect(visibleRect, self.previewThumbnailRect)) {
+    return NSZeroRect;
+  }
+  
+  NSRect thumbnailRect = [self.feedbackTableView convertRect:self.previewThumbnailRect toView:nil];
+  thumbnailRect = [self.window convertRectToScreen:thumbnailRect];
+  
+  return thumbnailRect;
+}
 
 @end

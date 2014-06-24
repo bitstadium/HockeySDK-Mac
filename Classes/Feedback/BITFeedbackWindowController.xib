@@ -231,8 +231,7 @@ DQ
                                                                                 </customView>
                                                                             </subviews>
                                                                             <connections>
-                                                                                <outlet property="dateAndStatus" destination="cVx-LJ-IdJ" id="J9U-br-5Ql"/>
-                                                                                <outlet property="message" destination="GEY-bx-dOl" id="Bwv-0g-GqW"/>
+                                                                                <outlet property="bitDelegate" destination="-2" id="cUP-bs-qpR"/>
                                                                             </connections>
                                                                         </tableCellView>
                                                                     </prototypeCellViews>

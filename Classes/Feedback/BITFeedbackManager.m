@@ -619,7 +619,7 @@
             matchingSendInProgressOrInConflictMessage.messageID = messageID;
             matchingSendInProgressOrInConflictMessage.status = BITFeedbackMessageStatusRead;
           } else {
-            if (((NSDictionary *)objMessage)[@"clean_text"] || ((NSDictionary *)objMessage)[@"text"]) {
+            if ([(NSDictionary *)objMessage objectForKey:@"clean_text"] || [(NSDictionary *)objMessage objectForKey:@"text"] || [(NSDictionary *)objMessage objectForKey:@"attachments"]) {
               BITFeedbackMessage *message = [[BITFeedbackMessage alloc] init];
               message.text = ((NSDictionary *)objMessage)[@"clean_text"] ?: ((NSDictionary *)objMessage)[@"text"] ?: @"";
               message.name = ((NSDictionary *)objMessage)[@"name"] ?: @"";
@@ -762,8 +762,6 @@
     NSInteger attachmentIndex = 0;
     
     for (BITFeedbackMessageAttachment *attachment in message.attachments){
-      if (![attachment isKindOfClass:[BITFeedbackMessageAttachment class]]) continue;
-      
       NSString *key = [NSString stringWithFormat:@"attachment%ld", (long)attachmentIndex];
       
       NSString *filename = attachment.originalFilename;

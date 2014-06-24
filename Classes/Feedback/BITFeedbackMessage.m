@@ -30,30 +30,11 @@
 #import "BITFeedbackMessage.h"
 #import "BITFeedbackMessageAttachment.h"
 
-@implementation BITFeedbackMessage {
-  NSString *_text;
-  NSString *_userID;
-  NSString *_name;
-  NSString *_email;
-  NSDate *_date;
-  NSNumber *_messageID;
-  NSString *_token;
-  NSArray *_attachments;
-  BITFeedbackMessageStatus _status;
-  BOOL _userMessage;
-}
+#import "HockeySDKPrivate.h"
+#import <QuickLook/QuickLook.h>
 
-@synthesize text = _text;
-@synthesize userID = _userID;
-@synthesize name = _name;
-@synthesize email = _email;
-@synthesize date = _date;
-@synthesize messageID = _messageID;
-@synthesize token = _token;
-@synthesize attachments = _attachments;
-@synthesize status = _status;
-@synthesize userMessage = _userMessage;
 
+@implementation BITFeedbackMessage
 
 #pragma mark - NSObject
 
@@ -135,19 +116,27 @@
 - (NSArray *)previewableAttachments {
   NSMutableArray *returnArray = [NSMutableArray new];
   
-  for (BITFeedbackMessageAttachment *attachment in self.attachments){
-//    if ([QLPreviewController canPreviewItem:attachment ]){
-//      [returnArray addObject:attachment];
-//    }
+  for (BITFeedbackMessageAttachment *attachment in self.attachments) {
+    if (!attachment.localURL && [self userMessage]) continue;
+    
+    NSImage *thumbnailImage = [[NSWorkspace sharedWorkspace] iconForFileType:[attachment.originalFilename pathExtension]];
+    if (!thumbnailImage) continue;
+    
+    if ([attachment thumbnailWithSize:CGSizeMake(BIT_ATTACHMENT_THUMBNAIL_LENGTH, BIT_ATTACHMENT_THUMBNAIL_LENGTH)]) {
+      [returnArray addObject:attachment];
+    }
   }
   
   return returnArray;
 }
 
 - (void)addAttachmentsObject:(BITFeedbackMessageAttachment *)object{
-  if (!self.attachments){
+  if (!self.attachments) {
     self.attachments = @[];
   }
+  
+  if (![object isKindOfClass:[BITFeedbackMessageAttachment class]]) return;
+  
   self.attachments = [self.attachments arrayByAddingObject:object];
 }
 

@@ -1,7 +1,5 @@
 /*
- * Author: Andreas Linde <mail@andreaslinde.de>
- *
- * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -28,21 +26,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+@interface BITActivityIndicatorButton : NSButton
 
-@class BITFeedbackMessage;
-@protocol BITFeedbackMessageCellViewDelegate;
+@property (nonatomic, strong) NSColor *bitBackgroundColor;
 
-@interface BITFeedbackMessageCellView : NSTableCellView
-
-@property (nonatomic, strong) BITFeedbackMessage *message;
-@property (nonatomic, strong) NSTextField *messageTextField;
-@property (nonatomic, strong) NSTextField *dateTextField;
-
-- (instancetype)initWithFrame:(NSRect)frameRect delegate:(id<BITFeedbackMessageCellViewDelegate>)delegate;
-
-+ (NSString *)identifier;
-+ (CGFloat) heightForRowWithMessage:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width;
-
-- (void)updateAttachmentViews;
+- (void)setShowsActivityIndicator:(BOOL)showsIndicator;
 
 @end
