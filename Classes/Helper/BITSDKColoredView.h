@@ -28,7 +28,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface BITColoredView : NSView
+@interface BITSDKColoredView : NSView
 
 @property (nonatomic, strong) NSColor *viewBackgroundColor;
 @property (nonatomic, strong) NSColor *viewBorderColor;

@@ -40,23 +40,23 @@
 
 #import "BITFeedbackMessageDateValueTransformer.h"
 
-#import "BITTextView.h"
-#import "BITColoredView.h"
-#import "BITTextFieldCell.h"
+#import "BITSDKTextView.h"
+#import "BITSDKColoredView.h"
+#import "BITSDKTextFieldCell.h"
 
 #import <Quartz/Quartz.h>
 
 
-@interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate, BITTextViewDelegate, QLPreviewPanelDataSource, QLPreviewPanelDelegate, BITFeedbackMessageCellViewDelegate, NSMenuDelegate>
+@interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate, BITSDKTextViewDelegate, QLPreviewPanelDataSource, QLPreviewPanelDelegate, BITFeedbackMessageCellViewDelegate, NSMenuDelegate>
 
 @property (nonatomic, unsafe_unretained) BITFeedbackManager *manager;
 @property (nonatomic, strong) NSDateFormatter *lastUpdateDateFormatter;
 
 @property (unsafe_unretained) IBOutlet NSView *userDataView;
 
-@property (unsafe_unretained) IBOutlet BITColoredView *mainBackgroundView;
+@property (unsafe_unretained) IBOutlet BITSDKColoredView *mainBackgroundView;
 
-@property (unsafe_unretained) IBOutlet BITColoredView *userDataBoxView;
+@property (unsafe_unretained) IBOutlet BITSDKColoredView *userDataBoxView;
 @property (unsafe_unretained) IBOutlet NSTextField *contactInfoTextField;
 @property (unsafe_unretained) IBOutlet NSTextField *userNameTextField;
 @property (unsafe_unretained) IBOutlet NSTextField *userEmailTextField;
@@ -65,14 +65,13 @@
 @property (nonatomic, copy) NSString *userName;
 @property (nonatomic, copy) NSString *userEmail;
 
-@property (unsafe_unretained) IBOutlet BITColoredView *feedbackListBackgroundView;
+@property (unsafe_unretained) IBOutlet BITSDKColoredView *feedbackListBackgroundView;
 @property (unsafe_unretained) IBOutlet NSView *feedbackView;
 @property (unsafe_unretained) IBOutlet NSView *feedbackEmptyView;
 @property (unsafe_unretained) IBOutlet NSImageView *feedbackEmptyAppImageView;
 
-@property (unsafe_unretained) IBOutlet BITColoredView *feedbackComposeBackgroundView;
+@property (unsafe_unretained) IBOutlet BITSDKColoredView *feedbackComposeBackgroundView;
 @property (unsafe_unretained) IBOutlet NSScrollView *feedbackComposeScrollView;
-@property (unsafe_unretained) IBOutlet BITTextView *feedbackComposeTextView;
 
 @property (unsafe_unretained) IBOutlet NSScrollView *feedbackAttachmentsScrollView;
 @property (unsafe_unretained) IBOutlet NSTableView *feedbackAttachmentsTableView;
@@ -80,11 +79,11 @@
 @property (unsafe_unretained) IBOutlet NSScrollView *feedbackScrollView;
 @property (unsafe_unretained) IBOutlet NSTableView *feedbackTableView;
 
-@property (unsafe_unretained) IBOutlet BITTextView *messageTextField;
+@property (unsafe_unretained) IBOutlet BITSDKTextView *messageTextField;
 @property (nonatomic, strong) NSAttributedString *messageText;
 
-@property (unsafe_unretained) IBOutlet BITColoredView *horizontalLine;
-@property (unsafe_unretained) IBOutlet BITColoredView *statusBar;
+@property (unsafe_unretained) IBOutlet BITSDKColoredView *horizontalLine;
+@property (unsafe_unretained) IBOutlet BITSDKColoredView *statusBar;
 @property (unsafe_unretained) IBOutlet NSView *statusBarComposeView;
 @property (unsafe_unretained) IBOutlet NSButton *sendMessageButton;
 
@@ -141,8 +140,6 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   appIcon = [self imageWithReducedAlpha:0.5 fromImage:appIcon];
   [self.feedbackEmptyAppImageView setImage:appIcon];
   
-  [self.feedbackComposeTextView setPlaceHolderString:@"Your Feedback"];
-  
   [self.feedbackListBackgroundView setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.91 green:0.92 blue:0.93 alpha:1.0]];
   [self.feedbackComposeBackgroundView setViewBackgroundColor:[NSColor whiteColor]];
   [self.horizontalLine setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.79 green:0.82 blue:0.83 alpha:1.0]];
@@ -181,10 +178,11 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   [self.statusBarRefreshButton setHidden:YES];
   [self.messageTextField setTypingAttributes:@{NSFontAttributeName: [NSFont userFixedPitchFontOfSize:13.0]}];
   [self.messageTextField setBitDelegate:self];
+  [self.messageTextField setPlaceHolderString:@"Your Feedback"];
   
   [self.contactInfoTextField setStringValue:BITHockeyLocalizedString(@"FeedbackContactInfo", @"")];
-  [(BITTextFieldCell *)[self.userNameTextField cell] setBitPlaceHolderString: BITHockeyLocalizedString(@"FeedbackName", @"")];
-  [(BITTextFieldCell *)[self.userEmailTextField cell] setBitPlaceHolderString: BITHockeyLocalizedString(@"FeedbackEmail", @"")];
+  [(BITSDKTextFieldCell *)[self.userNameTextField cell] setBitPlaceHolderString: BITHockeyLocalizedString(@"FeedbackName", @"")];
+  [(BITSDKTextFieldCell *)[self.userEmailTextField cell] setBitPlaceHolderString: BITHockeyLocalizedString(@"FeedbackEmail", @"")];
   [self.userDataContinueButton setTitle:BITHockeyLocalizedString(@"FeedbackContinueButton", @"")];
   
   [self.sendMessageButton setTitle:BITHockeyLocalizedString(@"FeedbackSendButton", @"")];
@@ -514,7 +512,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 
 #pragma mark - BITTextViewDelegate
 
-- (void)textView:(BITTextView *)textView dragOperationWithFilename:(NSString *)filename {
+- (void)textView:(BITSDKTextView *)textView dragOperationWithFilename:(NSString *)filename {
   [self addAttachmentWithFilename:filename];
 }
 

@@ -87,14 +87,14 @@
 		1EA551FD17B3EB44004A0CB7 /* BITCrashExceptionApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EA551FB17B3EB44004A0CB7 /* BITCrashExceptionApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EA551FE17B3EB44004A0CB7 /* BITCrashExceptionApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA551FC17B3EB44004A0CB7 /* BITCrashExceptionApplication.m */; };
 		1EBDC04A195710CA00B5C8A3 /* BITCrashReportUI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EBDC049195710CA00B5C8A3 /* BITCrashReportUI.xib */; };
-		1EBDC051195716F300B5C8A3 /* BITColoredView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDC04F195716F300B5C8A3 /* BITColoredView.h */; };
-		1EBDC052195716F300B5C8A3 /* BITColoredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDC050195716F300B5C8A3 /* BITColoredView.m */; };
+		1EBDC051195716F300B5C8A3 /* BITSDKColoredView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDC04F195716F300B5C8A3 /* BITSDKColoredView.h */; };
+		1EBDC052195716F300B5C8A3 /* BITSDKColoredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDC050195716F300B5C8A3 /* BITSDKColoredView.m */; };
 		1EBDF2AB195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDF2A9195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h */; };
 		1EBDF2AC195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */; };
-		1EBDF2B11957878800C7F49A /* BITTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDF2AF1957878800C7F49A /* BITTextFieldCell.h */; };
-		1EBDF2B21957878800C7F49A /* BITTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2B01957878800C7F49A /* BITTextFieldCell.m */; };
-		1EC7152619573CB400F72C19 /* BITTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC7152419573CB400F72C19 /* BITTextView.h */; };
-		1EC7152719573CB400F72C19 /* BITTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC7152519573CB400F72C19 /* BITTextView.m */; };
+		1EBDF2B11957878800C7F49A /* BITSDKTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDF2AF1957878800C7F49A /* BITSDKTextFieldCell.h */; };
+		1EBDF2B21957878800C7F49A /* BITSDKTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2B01957878800C7F49A /* BITSDKTextFieldCell.m */; };
+		1EC7152619573CB400F72C19 /* BITSDKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC7152419573CB400F72C19 /* BITSDKTextView.h */; };
+		1EC7152719573CB400F72C19 /* BITSDKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC7152519573CB400F72C19 /* BITSDKTextView.m */; };
 		1EC715331957524B00F72C19 /* BITFeedbackMessageCellView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC715311957524B00F72C19 /* BITFeedbackMessageCellView.h */; };
 		1EC715341957524B00F72C19 /* BITFeedbackMessageCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC715321957524B00F72C19 /* BITFeedbackMessageCellView.m */; };
 		1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8F1523574200067A5C /* Cocoa.framework */; };
@@ -161,7 +161,7 @@
 		1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITKeychainItem.h; sourceTree = "<group>"; };
 		1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITKeychainItem.m; sourceTree = "<group>"; };
 		1E260CA917D42B1500C7F9FE /* BITHockeyManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITHockeyManagerDelegate.h; sourceTree = "<group>"; };
-		1E378AF11958498400451E28 /* BITTextViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITTextViewDelegate.h; sourceTree = "<group>"; };
+		1E378AF11958498400451E28 /* BITSDKTextViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITSDKTextViewDelegate.h; sourceTree = "<group>"; };
 		1E378AF319586A6900451E28 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		1E378AF51958981E00451E28 /* BITFeedbackMessageCellViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessageCellViewDelegate.h; sourceTree = "<group>"; };
 		1E378AF6195899A400451E28 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -210,14 +210,14 @@
 		1EA551FB17B3EB44004A0CB7 /* BITCrashExceptionApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashExceptionApplication.h; sourceTree = "<group>"; };
 		1EA551FC17B3EB44004A0CB7 /* BITCrashExceptionApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashExceptionApplication.m; sourceTree = "<group>"; };
 		1EBDC049195710CA00B5C8A3 /* BITCrashReportUI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BITCrashReportUI.xib; sourceTree = "<group>"; };
-		1EBDC04F195716F300B5C8A3 /* BITColoredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITColoredView.h; sourceTree = "<group>"; };
-		1EBDC050195716F300B5C8A3 /* BITColoredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITColoredView.m; sourceTree = "<group>"; };
+		1EBDC04F195716F300B5C8A3 /* BITSDKColoredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITSDKColoredView.h; sourceTree = "<group>"; };
+		1EBDC050195716F300B5C8A3 /* BITSDKColoredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITSDKColoredView.m; sourceTree = "<group>"; };
 		1EBDF2A9195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessageDateValueTransformer.h; sourceTree = "<group>"; };
 		1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITFeedbackMessageDateValueTransformer.m; sourceTree = "<group>"; };
-		1EBDF2AF1957878800C7F49A /* BITTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITTextFieldCell.h; sourceTree = "<group>"; };
-		1EBDF2B01957878800C7F49A /* BITTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITTextFieldCell.m; sourceTree = "<group>"; };
-		1EC7152419573CB400F72C19 /* BITTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITTextView.h; sourceTree = "<group>"; };
-		1EC7152519573CB400F72C19 /* BITTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITTextView.m; sourceTree = "<group>"; };
+		1EBDF2AF1957878800C7F49A /* BITSDKTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITSDKTextFieldCell.h; sourceTree = "<group>"; };
+		1EBDF2B01957878800C7F49A /* BITSDKTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITSDKTextFieldCell.m; sourceTree = "<group>"; };
+		1EC7152419573CB400F72C19 /* BITSDKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITSDKTextView.h; sourceTree = "<group>"; };
+		1EC7152519573CB400F72C19 /* BITSDKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITSDKTextView.m; sourceTree = "<group>"; };
 		1EC715311957524B00F72C19 /* BITFeedbackMessageCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackMessageCellView.h; sourceTree = "<group>"; };
 		1EC715321957524B00F72C19 /* BITFeedbackMessageCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITFeedbackMessageCellView.m; sourceTree = "<group>"; };
 		1ED926C817B420390046DFD3 /* BITCrashManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITCrashManagerPrivate.h; sourceTree = "<group>"; };
@@ -336,13 +336,13 @@
 				1E7E5517187F3EE700F0858E /* HockeySDKPrivate.m */,
 				1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */,
 				1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */,
-				1EBDC04F195716F300B5C8A3 /* BITColoredView.h */,
-				1EBDC050195716F300B5C8A3 /* BITColoredView.m */,
-				1EBDF2AF1957878800C7F49A /* BITTextFieldCell.h */,
-				1EBDF2B01957878800C7F49A /* BITTextFieldCell.m */,
-				1EC7152419573CB400F72C19 /* BITTextView.h */,
-				1EC7152519573CB400F72C19 /* BITTextView.m */,
-				1E378AF11958498400451E28 /* BITTextViewDelegate.h */,
+				1EBDC04F195716F300B5C8A3 /* BITSDKColoredView.h */,
+				1EBDC050195716F300B5C8A3 /* BITSDKColoredView.m */,
+				1EBDF2AF1957878800C7F49A /* BITSDKTextFieldCell.h */,
+				1EBDF2B01957878800C7F49A /* BITSDKTextFieldCell.m */,
+				1EC7152419573CB400F72C19 /* BITSDKTextView.h */,
+				1EC7152519573CB400F72C19 /* BITSDKTextView.m */,
+				1E378AF11958498400451E28 /* BITSDKTextViewDelegate.h */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -509,7 +509,7 @@
 				1E5785DB19461DF60014D19A /* BITHockeyAttachment.h in Headers */,
 				1E7E5507187F3ED800F0858E /* BITFeedbackManager.h in Headers */,
 				1E7E5518187F3EE700F0858E /* BITHockeyBaseManager.h in Headers */,
-				1EC7152619573CB400F72C19 /* BITTextView.h in Headers */,
+				1EC7152619573CB400F72C19 /* BITSDKTextView.h in Headers */,
 				1E5785D619461DDF0014D19A /* BITCrashDetails.h in Headers */,
 				1EC715331957524B00F72C19 /* BITFeedbackMessageCellView.h in Headers */,
 				1E7E551D187F3EE700F0858E /* HockeySDKPrivate.h in Headers */,
@@ -547,12 +547,12 @@
 				1E7E5509187F3ED800F0858E /* BITFeedbackManagerPrivate.h in Headers */,
 				1E260CA617D41E9100C7F9FE /* BITKeychainItem.h in Headers */,
 				1E06CDA41827D9DF00895076 /* PLCrashReportApplicationInfo.h in Headers */,
-				1EBDC051195716F300B5C8A3 /* BITColoredView.h in Headers */,
+				1EBDC051195716F300B5C8A3 /* BITSDKColoredView.h in Headers */,
 				1E7E552A187F62B400F0858E /* BITSystemProfilePrivate.h in Headers */,
 				1E7E550A187F3ED800F0858E /* BITFeedbackMessage.h in Headers */,
 				1E5785ED194652900014D19A /* BITCrashMetaData.h in Headers */,
 				1E06CDB41827D9DF00895076 /* PLCrashReportThreadInfo.h in Headers */,
-				1EBDF2B11957878800C7F49A /* BITTextFieldCell.h in Headers */,
+				1EBDF2B11957878800C7F49A /* BITSDKTextFieldCell.h in Headers */,
 				1E06CDA31827D9DF00895076 /* PLCrashReport.h in Headers */,
 				1E260CAA17D42B1E00C7F9FE /* BITHockeyManagerDelegate.h in Headers */,
 				1E06CDB31827D9DF00895076 /* PLCrashReportTextFormatter.h in Headers */,
@@ -653,12 +653,12 @@
 				1E7E5519187F3EE700F0858E /* BITHockeyBaseManager.m in Sources */,
 				1E5785D719461DDF0014D19A /* BITCrashDetails.m in Sources */,
 				1E7E551C187F3EE700F0858E /* BITHockeyHelper.m in Sources */,
-				1EC7152719573CB400F72C19 /* BITTextView.m in Sources */,
+				1EC7152719573CB400F72C19 /* BITSDKTextView.m in Sources */,
 				1E5785EE194652900014D19A /* BITCrashMetaData.m in Sources */,
 				1EF09DD6152371DC00067A5C /* BITCrashManager.m in Sources */,
 				1EA551FE17B3EB44004A0CB7 /* BITCrashExceptionApplication.m in Sources */,
 				1EF09DD8152371DC00067A5C /* BITCrashReportUI.m in Sources */,
-				1EBDF2B21957878800C7F49A /* BITTextFieldCell.m in Sources */,
+				1EBDF2B21957878800C7F49A /* BITSDKTextFieldCell.m in Sources */,
 				1EF09DDA152371DC00067A5C /* BITCrashReportTextFormatter.m in Sources */,
 				4DD13AF5162CA7C400BF15E8 /* BITSystemProfile.m in Sources */,
 				1EBDF2AC195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m in Sources */,
@@ -667,7 +667,7 @@
 				1E7E550B187F3ED800F0858E /* BITFeedbackMessage.m in Sources */,
 				1E852AEE19509368006E73E0 /* BITFeedbackMessageAttachment.m in Sources */,
 				1E7E5508187F3ED800F0858E /* BITFeedbackManager.m in Sources */,
-				1EBDC052195716F300B5C8A3 /* BITColoredView.m in Sources */,
+				1EBDC052195716F300B5C8A3 /* BITSDKColoredView.m in Sources */,
 				1E7E551E187F3EE700F0858E /* HockeySDKPrivate.m in Sources */,
 				1E5785DC19461DF60014D19A /* BITHockeyAttachment.m in Sources */,
 				1EC715341957524B00F72C19 /* BITFeedbackMessageCellView.m in Sources */,

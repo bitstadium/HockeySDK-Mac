@@ -34,7 +34,7 @@
 #import "BITFeedbackMessageAttachment.h"
 
 #import "HockeySDKPrivate.h"
-#import "BITColoredView.h"
+#import "BITSDKColoredView.h"
 #import "BITActivityIndicatorButton.h"
 
 
@@ -112,7 +112,7 @@
     [self addSubview:_dateTextField];
     
     // bottom border
-    BITColoredView *bottomBorder = [[BITColoredView alloc] initWithFrame:NSMakeRect(frameRect.origin.x, 1, frameRect.size.width, 1)];
+    BITSDKColoredView *bottomBorder = [[BITSDKColoredView alloc] initWithFrame:NSMakeRect(frameRect.origin.x, 1, frameRect.size.width, 1)];
     bottomBorder.viewBackgroundColor = [NSColor colorWithCalibratedRed:0.82 green:0.84 blue:0.85 alpha:1.0];
     bottomBorder.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin;
     [self addSubview:bottomBorder];

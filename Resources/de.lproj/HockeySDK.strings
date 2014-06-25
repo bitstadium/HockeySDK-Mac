@@ -46,7 +46,8 @@
 
 /* Feedback UI */
 
-"Feedback" = "";
+/* Compose view placeholder text */
+"FeedbackComposePlaceHolder" = "Ihr Feedback";
 
 /* Last Update in Status Bar */
 "FeedbackLastUpdate" = "Letzte Aktualisierung:";

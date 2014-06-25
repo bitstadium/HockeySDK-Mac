@@ -28,7 +28,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface BITTextFieldCell : NSTextFieldCell
+@interface BITSDKTextFieldCell : NSTextFieldCell
 
 @property (nonatomic, strong) NSNumber *horizontalInset;
 

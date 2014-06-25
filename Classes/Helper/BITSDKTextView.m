@@ -26,9 +26,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "BITTextView.h"
+#import "BITSDKTextView.h"
 
-@implementation BITTextView
+@implementation BITSDKTextView
 
 - (void)drawRect:(NSRect)rect {
   [super drawRect:rect];
