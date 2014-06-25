@@ -267,20 +267,27 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
   
   CGContextRef context = CGBitmapContextCreate(nil, actualWidth, actualHeight, 8, 0, colorSpace, (CGBitmapInfo)kCGImageAlphaNone);
-  CGContextDrawImage(context, imageRect, [self nsImageToCGImageRef:image]);
+  
+  CGImageRef updatedImage1 = [self newImageRefFromImage:image];
+  CGContextDrawImage(context, imageRect, updatedImage1);
   
   CGImageRef grayImage = CGBitmapContextCreateImage(context);
   CGColorSpaceRelease(colorSpace);
   CGContextRelease(context);
+  CGImageRelease(updatedImage1);
   
   context = CGBitmapContextCreate(nil, actualWidth, actualHeight, 8, 0, nil, (CGBitmapInfo)kCGImageAlphaOnly);
-  CGContextDrawImage(context, imageRect, [self nsImageToCGImageRef:image]);
+  CGImageRef updatedImage2 = [self newImageRefFromImage:image];
+  CGContextDrawImage(context, imageRect, updatedImage2);
   CGImageRef mask = CGBitmapContextCreateImage(context);
   CGContextRelease(context);
+  CGImageRelease(updatedImage2);
   
-  NSImage *grayScaleImage =  [self imageFromCGImageRef:CGImageCreateWithMask(grayImage, mask)];
+  CGImageRef maskedImage = CGImageCreateWithMask(grayImage, mask);
+  NSImage *grayScaleImage =  [self imageFromCGImageRef:maskedImage];
   CGImageRelease(grayImage);
   CGImageRelease(mask);
+  CGImageRelease(maskedImage);
   
   // Return the new grayscale image
   return grayScaleImage;
@@ -303,12 +310,13 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   return newImage;
 }
 
-- (CGImageRef)nsImageToCGImageRef:(NSImage*)image; {
+- (CGImageRef)newImageRefFromImage:(NSImage*)image; {
   NSData * imageData = [image TIFFRepresentation];
   CGImageRef imageRef;
   if(!imageData) return nil;
   CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)imageData, NULL);
   imageRef = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
+  CFRelease(imageSource);
   return imageRef;
 }
 
