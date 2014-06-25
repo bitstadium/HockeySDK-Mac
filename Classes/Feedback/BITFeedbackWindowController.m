@@ -47,7 +47,7 @@
 #import <Quartz/Quartz.h>
 
 
-@interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate, BITTextViewDelegate, QLPreviewPanelDataSource, QLPreviewPanelDelegate, BITFeedbackMessageCellViewDelegate>
+@interface BITFeedbackWindowController () <NSTableViewDataSource, NSTableViewDelegate, BITTextViewDelegate, QLPreviewPanelDataSource, QLPreviewPanelDelegate, BITFeedbackMessageCellViewDelegate, NSMenuDelegate>
 
 @property (nonatomic, unsafe_unretained) BITFeedbackManager *manager;
 @property (nonatomic, strong) NSDateFormatter *lastUpdateDateFormatter;
@@ -71,7 +71,11 @@
 @property (unsafe_unretained) IBOutlet NSImageView *feedbackEmptyAppImageView;
 
 @property (unsafe_unretained) IBOutlet BITColoredView *feedbackComposeBackgroundView;
+@property (unsafe_unretained) IBOutlet NSScrollView *feedbackComposeScrollView;
 @property (unsafe_unretained) IBOutlet BITTextView *feedbackComposeTextView;
+
+@property (unsafe_unretained) IBOutlet NSScrollView *feedbackAttachmentsScrollView;
+@property (unsafe_unretained) IBOutlet NSTableView *feedbackAttachmentsTableView;
 
 @property (unsafe_unretained) IBOutlet NSScrollView *feedbackScrollView;
 @property (unsafe_unretained) IBOutlet NSTableView *feedbackTableView;
@@ -95,6 +99,8 @@
 @property (nonatomic, strong) QLPreviewPanel *previewPanel;
 @property (nonatomic, strong) BITFeedbackMessageAttachment *previewAttachment;
 @property (nonatomic) NSRect previewThumbnailRect;
+
+@property (unsafe_unretained) IBOutlet NSArrayController *composeAttacchmentsArrayController;
 
 - (BOOL)canContinueUserDataView;
 - (BOOL)canSendMessage;
@@ -166,6 +172,12 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
                                                name:BITHockeyFeedbackMessagesLoadingFinished
                                              object:nil];
   
+  [self.composeAttacchmentsArrayController setContent:self.attachments];
+  [self.feedbackAttachmentsTableView setTarget:self];
+  [self.feedbackAttachmentsTableView setDoubleAction:@selector(previewAttachment:)];
+  [self.feedbackAttachmentsTableView registerForDraggedTypes:[NSArray arrayWithObject:(NSString*)kUTTypeFileURL]];
+  [self.feedbackAttachmentsTableView setMenu:[self contextMenuComposeAttachments]];
+  
   [self.statusBarRefreshButton setHidden:YES];
   [self.messageTextField setTypingAttributes:@{NSFontAttributeName: [NSFont userFixedPitchFontOfSize:13.0]}];
   [self.messageTextField setBitDelegate:self];
@@ -173,7 +185,6 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   [self.contactInfoTextField setStringValue:BITHockeyLocalizedString(@"FeedbackContactInfo", @"")];
   [(BITTextFieldCell *)[self.userNameTextField cell] setBitPlaceHolderString: BITHockeyLocalizedString(@"FeedbackName", @"")];
   [(BITTextFieldCell *)[self.userEmailTextField cell] setBitPlaceHolderString: BITHockeyLocalizedString(@"FeedbackEmail", @"")];
-//  [[self.userEmailTextField cell] setPlaceHolderString:BITHockeyLocalizedString(@"FeedbackEmail", @"")];
   [self.userDataContinueButton setTitle:BITHockeyLocalizedString(@"FeedbackContinueButton", @"")];
   
   [self.sendMessageButton setTitle:BITHockeyLocalizedString(@"FeedbackSendButton", @"")];
@@ -201,6 +212,37 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   [[NSNotificationCenter defaultCenter] removeObserver:self name:BITHockeyFeedbackMessagesLoadingFinished object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:self.feedbackTableView];
 
+}
+
+
+#pragma mark - Context menu for compose attachments
+
+- (NSMenu *)contextMenuComposeAttachments {
+  NSMenu *menu = [[NSMenu alloc] init];
+  menu.delegate = self;
+  
+  NSMenuItem *viewItem = [[NSMenuItem alloc] initWithTitle:BITHockeyLocalizedString(@"FeedbackAttachmentMenuPreview", @"") action:@selector(previewAttachment:) keyEquivalent:@""];
+  [viewItem setTarget:self];
+  [viewItem setEnabled:YES];
+  [menu addItem:viewItem];
+  
+  NSMenuItem *deleteItem = [[NSMenuItem alloc] initWithTitle:BITHockeyLocalizedString(@"FeedbackAttachmentMenuRemove", @"") action:@selector(deleteAttachment:) keyEquivalent:@""];
+  [deleteItem setTarget:self];
+  [deleteItem setEnabled:YES];
+  [menu addItem:deleteItem];
+  
+  return menu;
+}
+
+- (void)deleteAttachment:(id)sender {
+  NSInteger clickedRow = [self.feedbackAttachmentsTableView clickedRow];
+  
+  [self.attachments removeObjectAtIndex:clickedRow];
+  [self.composeAttacchmentsArrayController setContent:self.attachments];
+  
+  if ([self.attachments count] == 0) {
+    [self hideComposeAttachments];
+  }
 }
 
 
@@ -414,11 +456,40 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 }
 
 
-#pragma mark - BITTextViewDelegate
+#pragma mark - Compose View
 
-- (void)textView:(BITTextView *)textView dragOperationWithFilename:(NSString *)filename {
-  NSLog(@"Dropped file: %@", filename);
+- (void)showComposeAttachments {
+  if (self.feedbackAttachmentsScrollView.isHidden) {
+    [self.feedbackAttachmentsScrollView setHidden:NO];
+    
+    NSRect frame = self.feedbackComposeScrollView.frame;
+    frame.size.width -= self.feedbackAttachmentsScrollView.frame.size.width;
+    [self.feedbackComposeScrollView setFrame:frame];
+  }
+}
+
+- (void)hideComposeAttachments {
+  if (!self.feedbackAttachmentsScrollView.isHidden) {
+    [self.feedbackAttachmentsScrollView setHidden:YES];
+    
+    NSRect frame = self.feedbackComposeScrollView.frame;
+    frame.size.width += self.feedbackAttachmentsScrollView.frame.size.width;
+    [self.feedbackComposeScrollView setFrame:frame];
+  }
+}
+
+- (void)previewAttachment:(id)sender {
+  NSInteger clickedRow = self.feedbackAttachmentsTableView.clickedRow;
   
+  self.previewAttachment = self.attachments[clickedRow];
+  
+  NSRect thumbnailRect = [self.feedbackAttachmentsTableView frameOfCellAtColumn:0 row:clickedRow];
+  self.previewThumbnailRect = thumbnailRect;
+  
+  [self togglePreviewPanel:self];
+}
+
+- (void)addAttachmentWithFilename:(NSString *)filename {
   NSError *error = nil;
   NSData *data = [NSData dataWithContentsOfFile:filename options:0 error:&error];
   if (!error && data) {
@@ -430,12 +501,73 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
     
     BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment attachmentWithData:data contentType:mimeTypeString];
     attachment.originalFilename = filename;
-
+    
     [self.attachments addObject:attachment];
+    [self.composeAttacchmentsArrayController setContent:self.attachments];
+    [self.feedbackAttachmentsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[self.attachments count] - 1] byExtendingSelection:NO];
+    [self.feedbackAttachmentsTableView scrollRowToVisible:[self.attachments count] - 1];
+    
+    [self showComposeAttachments];
   }
 }
 
+
+#pragma mark - BITTextViewDelegate
+
+- (void)textView:(BITTextView *)textView dragOperationWithFilename:(NSString *)filename {
+  [self addAttachmentWithFilename:filename];
+}
+
+
 #pragma mark - Table view data source
+
+- (NSDragOperation)tableView:(NSTableView *)aTableView validateDrop:(id < NSDraggingInfo >)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation {
+  
+  if (aTableView == self.feedbackAttachmentsTableView) {
+    if (row < aTableView.numberOfRows) return NO;
+    
+    NSPasteboard *pb = [info draggingPasteboard];
+    NSDragOperation dragOperation = [info draggingSourceOperationMask];
+    
+    if ([[pb types] containsObject:NSFilenamesPboardType]) {
+      if (dragOperation & NSDragOperationCopy) {
+        return NSDragOperationCopy;
+      }
+    }
+  }
+  
+  return NSDragOperationNone;
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id < NSDraggingInfo >)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation {
+  
+  if (aTableView == self.feedbackAttachmentsTableView) {
+    if (row < aTableView.numberOfRows) return NO;
+    
+    NSPasteboard *pb = [info draggingPasteboard];
+    
+    if ( [[pb types] containsObject:NSFilenamesPboardType] ) {
+      NSFileManager *fm = [[NSFileManager alloc] init];
+      
+      NSArray *filenames = [pb propertyListForType:NSFilenamesPboardType];
+      
+      BOOL fileFound = NO;
+      
+      for (NSString *filename in filenames) {
+        BOOL isDir = NO;
+        if (![fm fileExistsAtPath:filename isDirectory:&isDir] || isDir) continue;
+        
+        fileFound = YES;
+        
+        [self addAttachmentWithFilename:filename];
+      }
+      return fileFound;
+    }
+  }
+  
+  return NO;
+}
+
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView {
   return [self.manager numberOfMessages];
@@ -593,13 +725,16 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 }
 
 - (NSRect)previewPanel:(QLPreviewPanel *)panel sourceFrameOnScreenForPreviewItem:(id <QLPreviewItem>)item {
-  NSRect visibleRect = [self.feedbackTableView visibleRect];
+  BOOL memberOfComposeAttachments = [self.attachments containsObject:self.previewAttachment];
+  NSTableView *relevantTableView = (memberOfComposeAttachments) ? self.feedbackAttachmentsTableView : self.feedbackTableView;
   
+  NSRect visibleRect = [relevantTableView visibleRect];
+
   if (!NSIntersectsRect(visibleRect, self.previewThumbnailRect)) {
     return NSZeroRect;
   }
   
-  NSRect thumbnailRect = [self.feedbackTableView convertRect:self.previewThumbnailRect toView:nil];
+  NSRect thumbnailRect = [relevantTableView convertRect:self.previewThumbnailRect toView:nil];
   thumbnailRect = [self.window convertRectToScreen:thumbnailRect];
   
   return thumbnailRect;

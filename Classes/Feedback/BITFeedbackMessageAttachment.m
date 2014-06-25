@@ -199,6 +199,9 @@
   return self.thumbnailRepresentations[cacheKey];
 }
 
+- (NSImage *)thumbnailRepresentation {
+  return [self thumbnailWithSize:NSMakeSize(BIT_ATTACHMENT_THUMBNAIL_LENGTH, BIT_ATTACHMENT_THUMBNAIL_LENGTH)];
+}
 
 #pragma mark - Persistence Helpers
 

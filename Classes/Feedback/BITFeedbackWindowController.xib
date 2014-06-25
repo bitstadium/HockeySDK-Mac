@@ -7,8 +7,11 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="BITFeedbackWindowController">
             <connections>
+                <outlet property="composeAttacchmentsArrayController" destination="qlE-az-7zs" id="eHb-7l-lvM"/>
                 <outlet property="contactInfoTextField" destination="77" id="KCn-wy-JQO"/>
                 <outlet property="enterUserData" destination="76" id="93"/>
+                <outlet property="feedbackAttachmentsScrollView" destination="7No-Zb-2jx" id="J4I-jl-EDL"/>
+                <outlet property="feedbackAttachmentsTableView" destination="vi6-mo-5xv" id="biG-nM-sgF"/>
                 <outlet property="feedbackComposeBackgroundView" destination="5DI-pf-otK" id="amy-rC-HBu"/>
                 <outlet property="feedbackComposeTextView" destination="159" id="TyM-fe-ZKm"/>
                 <outlet property="feedbackEmptyAppImageView" destination="lQN-lj-bAd" id="NHe-vk-K5r"/>
@@ -311,6 +314,76 @@ DQ
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
+                                                    <scrollView hidden="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="55" horizontalPageScroll="10" verticalLineScroll="55" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="7No-Zb-2jx" userLabel="Attachments">
+                                                        <rect key="frame" x="530" y="0.0" width="70" height="97"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                                                        <clipView key="contentView" id="KwQ-8c-b4u">
+                                                            <rect key="frame" x="0.0" y="0.0" width="70" height="97"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="55" rowSizeStyle="automatic" viewBased="YES" id="vi6-mo-5xv">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="70" height="97"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                                                    <tableColumns>
+                                                                        <tableColumn editable="NO" width="70" minWidth="40" maxWidth="1000" id="6Xa-8h-UXK">
+                                                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
+                                                                            </tableHeaderCell>
+                                                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="Y4G-bN-BWc">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                            <prototypeCellViews>
+                                                                                <tableCellView id="AHq-N8-rmB">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="70" height="55"/>
+                                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                    <subviews>
+                                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="EUD-XO-ear">
+                                                                                            <rect key="frame" x="13" y="8" width="39" height="39"/>
+                                                                                            <autoresizingMask key="autoresizingMask"/>
+                                                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="TKu-2x-Qa5"/>
+                                                                                            <connections>
+                                                                                                <binding destination="AHq-N8-rmB" name="toolTip" keyPath="objectValue.originalFilename" id="opG-DZ-Agt"/>
+                                                                                                <binding destination="AHq-N8-rmB" name="value" keyPath="objectValue.thumbnailRepresentation" id="LEC-wx-9Fx"/>
+                                                                                            </connections>
+                                                                                        </imageView>
+                                                                                    </subviews>
+                                                                                    <connections>
+                                                                                        <outlet property="imageView" destination="EUD-XO-ear" id="oS0-XL-eFQ"/>
+                                                                                    </connections>
+                                                                                </tableCellView>
+                                                                            </prototypeCellViews>
+                                                                            <connections>
+                                                                                <binding destination="qlE-az-7zs" name="value" keyPath="arrangedObjects.self" id="qh1-uj-V7n">
+                                                                                    <dictionary key="options">
+                                                                                        <bool key="NSAlwaysPresentsApplicationModalAlerts" value="YES"/>
+                                                                                        <bool key="NSConditionallySetsEditable" value="YES"/>
+                                                                                    </dictionary>
+                                                                                </binding>
+                                                                            </connections>
+                                                                        </tableColumn>
+                                                                    </tableColumns>
+                                                                    <connections>
+                                                                        <outlet property="dataSource" destination="-2" id="AC1-lE-rjK"/>
+                                                                    </connections>
+                                                                </tableView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" red="0.98431378602981567" green="0.98823535442352295" blue="0.99215692281723022" alpha="1" colorSpace="deviceRGB"/>
+                                                        </clipView>
+                                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="ieQ-6k-nkZ">
+                                                            <rect key="frame" x="-100" y="-100" width="70" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </scroller>
+                                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="mNG-98-B4q">
+                                                            <rect key="frame" x="224" y="17" width="15" height="102"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </scroller>
+                                                    </scrollView>
                                                 </subviews>
                                             </customView>
                                         </subviews>
@@ -395,6 +468,7 @@ DQ
                 <outlet property="initialFirstResponder" destination="72" id="97"/>
             </connections>
         </window>
+        <arrayController id="qlE-az-7zs" userLabel="Compose Attachments Array Controller"/>
         <userDefaultsController representsSharedInstance="YES" id="162"/>
         <button verticalHuggingPriority="750" id="la1-75-jIa">
             <rect key="frame" x="0.0" y="0.0" width="82" height="32"/>

@@ -72,3 +72,9 @@
 /* Continue button title */
 "FeedbackContinueButton" = "Weiter";
 
+/* Attachment context menu action Preview */
+"FeedbackAttachmentMenuPreview" = "Vorschau";
+
+/* Attachment context menu action Remove */
+"FeedbackAttachmentMenuRemove" = "Entfernen";
+
