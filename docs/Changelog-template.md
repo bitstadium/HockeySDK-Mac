@@ -1,3 +1,22 @@
+## Version 3.0 Beta 1
+
+- [NEW] Requires OS X 10.7 or newer
+- [NEW] Converted source code to ARC
+- [NEW] Added `BITHockeyAttachment` for more customizable attachments to feedback and crash reports (`content-type`, `filename`)
+- [UPDATE] Property `delegate` in all components is now private. Set the delegate on `BITHockeyManager` only!
+- [NEW] Add `[BITHockeyManager testIdentifier]` to check if the SDK reaches the server. The result is shown on the HockeyApp website on success.
+- [NEW] `BITFeedbackManager`: Updated user interface
+- [NEW] `BITFeedbackManager`: Added support for attachments, including preview
+- [NEW] `BITCrashManager`: Crash Report UI is not presented modal any longer!
+- [NEW] `BITCrashManager`: Option to define a custom UI flow before sending a crash report, see `setCrashReportUIHandler:`
+- [NEW] `BITCrashManager`: Provide details on a crash report (see `lastSessionCrashDetails`)
+- [NEW] `BITCrashManager`: Added support for adding a binary attachment to crash reports
+- [NEW] `BITCrashManager`: Added the option to define callbacks that will be executed prior to program termination after a crash has occurred. Callback code has to be async-safe! See `setCrashCallbacks`.
+- [NEW] `BITCrashManager`: Added `generateTestCrash` method to more quickly test the crash reporting
+- [UPDATE] `BITCrashManager`: Updated PLCrashReporter to version 1.2
+- [UPDATE] `BITCrashManager`: Crash reports are now send individually if there are multiple pending
+<br /><br/>
+
 ## Version 2.1
 
 - [NEW] Added Feedback component

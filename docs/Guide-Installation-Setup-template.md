@@ -1,6 +1,6 @@
-## Version 2.1
+## Version 3.0 Beta 1
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/2.1.0/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/3.0-b.1/docs/docs/Changelog.html)
 
 ## Introduction
 
@@ -24,7 +24,7 @@ This document contains the following sections:
 
 2. We also assume that you already have a project in Xcode and that this project is opened in Xcode 4.
 
-3. The SDK runs on devices with Mac OS X 10.6 or higher.
+3. The SDK runs on devices with Mac OS X 10.7 or higher.
 
 <a id="download"></a> 
 ## Download & Extract
