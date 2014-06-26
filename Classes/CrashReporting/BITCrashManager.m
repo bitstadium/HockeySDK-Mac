@@ -43,7 +43,7 @@
 #import "BITHockeyAppClient.h"
 
 #import "BITCrashReportTextFormatter.h"
-#import "CrashReporter.h"
+#import <CrashReporter/CrashReporter.h>
 
 #import <sys/sysctl.h>
 #import <objc/runtime.h>

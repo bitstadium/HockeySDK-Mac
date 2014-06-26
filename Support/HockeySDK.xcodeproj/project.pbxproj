@@ -21,28 +21,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		1E06CDA01827D9DF00895076 /* CrashReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD8A1827D9DF00895076 /* CrashReporter.h */; };
-		1E06CDA11827D9DF00895076 /* PLCrashFeatureConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD8B1827D9DF00895076 /* PLCrashFeatureConfig.h */; };
-		1E06CDA21827D9DF00895076 /* PLCrashNamespace.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD8C1827D9DF00895076 /* PLCrashNamespace.h */; };
-		1E06CDA31827D9DF00895076 /* PLCrashReport.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD8D1827D9DF00895076 /* PLCrashReport.h */; };
-		1E06CDA41827D9DF00895076 /* PLCrashReportApplicationInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD8E1827D9DF00895076 /* PLCrashReportApplicationInfo.h */; };
-		1E06CDA51827D9DF00895076 /* PLCrashReportBinaryImageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD8F1827D9DF00895076 /* PLCrashReportBinaryImageInfo.h */; };
-		1E06CDA61827D9DF00895076 /* PLCrashReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD901827D9DF00895076 /* PLCrashReporter.h */; };
-		1E06CDA71827D9DF00895076 /* PLCrashReporterConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD911827D9DF00895076 /* PLCrashReporterConfig.h */; };
-		1E06CDA81827D9DF00895076 /* PLCrashReportExceptionInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD921827D9DF00895076 /* PLCrashReportExceptionInfo.h */; };
-		1E06CDA91827D9DF00895076 /* PLCrashReportFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD931827D9DF00895076 /* PLCrashReportFormatter.h */; };
-		1E06CDAA1827D9DF00895076 /* PLCrashReportMachExceptionInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD941827D9DF00895076 /* PLCrashReportMachExceptionInfo.h */; };
-		1E06CDAB1827D9DF00895076 /* PLCrashReportMachineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD951827D9DF00895076 /* PLCrashReportMachineInfo.h */; };
-		1E06CDAC1827D9DF00895076 /* PLCrashReportProcessInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD961827D9DF00895076 /* PLCrashReportProcessInfo.h */; };
-		1E06CDAD1827D9DF00895076 /* PLCrashReportProcessorInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD971827D9DF00895076 /* PLCrashReportProcessorInfo.h */; };
-		1E06CDAE1827D9DF00895076 /* PLCrashReportRegisterInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD981827D9DF00895076 /* PLCrashReportRegisterInfo.h */; };
-		1E06CDAF1827D9DF00895076 /* PLCrashReportSignalInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD991827D9DF00895076 /* PLCrashReportSignalInfo.h */; };
-		1E06CDB01827D9DF00895076 /* PLCrashReportStackFrameInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD9A1827D9DF00895076 /* PLCrashReportStackFrameInfo.h */; };
-		1E06CDB11827D9DF00895076 /* PLCrashReportSymbolInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD9B1827D9DF00895076 /* PLCrashReportSymbolInfo.h */; };
-		1E06CDB21827D9DF00895076 /* PLCrashReportSystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD9C1827D9DF00895076 /* PLCrashReportSystemInfo.h */; };
-		1E06CDB31827D9DF00895076 /* PLCrashReportTextFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD9D1827D9DF00895076 /* PLCrashReportTextFormatter.h */; };
-		1E06CDB41827D9DF00895076 /* PLCrashReportThreadInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E06CD9E1827D9DF00895076 /* PLCrashReportThreadInfo.h */; };
-		1E06CDB51827D9DF00895076 /* libCrashReporter-MacOSX-Static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E06CD9F1827D9DF00895076 /* libCrashReporter-MacOSX-Static.a */; };
 		1E20566E15A5F61F008FC20A /* BITCrashManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* BITCrashManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E260C9F17D414F200C7F9FE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E260C9E17D414F200C7F9FE /* Security.framework */; };
 		1E260CA617D41E9100C7F9FE /* BITKeychainItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */; };
@@ -52,6 +30,8 @@
 		1E378AF9195899B400451E28 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E378AF8195899B400451E28 /* Quartz.framework */; };
 		1E378B201959D33700451E28 /* BITActivityIndicatorButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E378B1E1959D33700451E28 /* BITActivityIndicatorButton.h */; };
 		1E378B211959D33700451E28 /* BITActivityIndicatorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E378B1F1959D33700451E28 /* BITActivityIndicatorButton.m */; };
+		1E40340B195C2651002E98E5 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E403409195C2651002E98E5 /* CrashReporter.framework */; };
+		1E40340D195C2675002E98E5 /* CrashReporter.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1E403409195C2651002E98E5 /* CrashReporter.framework */; };
 		1E413D9615A0FA0100620BFE /* HockeySDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E413D9315A0BB8800620BFE /* HockeySDK.strings */; };
 		1E5785D619461DDF0014D19A /* BITCrashDetails.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E5785D319461DDF0014D19A /* BITCrashDetails.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E5785D719461DDF0014D19A /* BITCrashDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785D419461DDF0014D19A /* BITCrashDetails.m */; };
@@ -119,34 +99,13 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				1E40340D195C2675002E98E5 /* CrashReporter.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1E06CD8A1827D9DF00895076 /* CrashReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReporter.h; sourceTree = "<group>"; };
-		1E06CD8B1827D9DF00895076 /* PLCrashFeatureConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashFeatureConfig.h; sourceTree = "<group>"; };
-		1E06CD8C1827D9DF00895076 /* PLCrashNamespace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashNamespace.h; sourceTree = "<group>"; };
-		1E06CD8D1827D9DF00895076 /* PLCrashReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReport.h; sourceTree = "<group>"; };
-		1E06CD8E1827D9DF00895076 /* PLCrashReportApplicationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportApplicationInfo.h; sourceTree = "<group>"; };
-		1E06CD8F1827D9DF00895076 /* PLCrashReportBinaryImageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportBinaryImageInfo.h; sourceTree = "<group>"; };
-		1E06CD901827D9DF00895076 /* PLCrashReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReporter.h; sourceTree = "<group>"; };
-		1E06CD911827D9DF00895076 /* PLCrashReporterConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReporterConfig.h; sourceTree = "<group>"; };
-		1E06CD921827D9DF00895076 /* PLCrashReportExceptionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportExceptionInfo.h; sourceTree = "<group>"; };
-		1E06CD931827D9DF00895076 /* PLCrashReportFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportFormatter.h; sourceTree = "<group>"; };
-		1E06CD941827D9DF00895076 /* PLCrashReportMachExceptionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportMachExceptionInfo.h; sourceTree = "<group>"; };
-		1E06CD951827D9DF00895076 /* PLCrashReportMachineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportMachineInfo.h; sourceTree = "<group>"; };
-		1E06CD961827D9DF00895076 /* PLCrashReportProcessInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportProcessInfo.h; sourceTree = "<group>"; };
-		1E06CD971827D9DF00895076 /* PLCrashReportProcessorInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportProcessorInfo.h; sourceTree = "<group>"; };
-		1E06CD981827D9DF00895076 /* PLCrashReportRegisterInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportRegisterInfo.h; sourceTree = "<group>"; };
-		1E06CD991827D9DF00895076 /* PLCrashReportSignalInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportSignalInfo.h; sourceTree = "<group>"; };
-		1E06CD9A1827D9DF00895076 /* PLCrashReportStackFrameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportStackFrameInfo.h; sourceTree = "<group>"; };
-		1E06CD9B1827D9DF00895076 /* PLCrashReportSymbolInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportSymbolInfo.h; sourceTree = "<group>"; };
-		1E06CD9C1827D9DF00895076 /* PLCrashReportSystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportSystemInfo.h; sourceTree = "<group>"; };
-		1E06CD9D1827D9DF00895076 /* PLCrashReportTextFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportTextFormatter.h; sourceTree = "<group>"; };
-		1E06CD9E1827D9DF00895076 /* PLCrashReportThreadInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportThreadInfo.h; sourceTree = "<group>"; };
-		1E06CD9F1827D9DF00895076 /* libCrashReporter-MacOSX-Static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCrashReporter-MacOSX-Static.a"; sourceTree = "<group>"; };
 		1E14CB2117E1F1EA00EEFF50 /* Troubleshooting-Crash-Reporting-Not-Working-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Troubleshooting-Crash-Reporting-Not-Working-template.md"; sourceTree = "<group>"; };
 		1E260C7817D401D000C7F9FE /* Changelog-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Changelog-template.md"; sourceTree = "<group>"; };
 		1E260C7917D401D000C7F9FE /* Guide-Installation-Mac-App-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Guide-Installation-Mac-App-template.md"; sourceTree = "<group>"; };
@@ -168,6 +127,7 @@
 		1E378AF8195899B400451E28 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		1E378B1E1959D33700451E28 /* BITActivityIndicatorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITActivityIndicatorButton.h; sourceTree = "<group>"; };
 		1E378B1F1959D33700451E28 /* BITActivityIndicatorButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITActivityIndicatorButton.m; sourceTree = "<group>"; };
+		1E403409195C2651002E98E5 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		1E413D9215A0BB8800620BFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E413D9515A0BB9700620BFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		1E5785D319461DDF0014D19A /* BITCrashDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashDetails.h; sourceTree = "<group>"; };
@@ -249,7 +209,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E06CDB51827D9DF00895076 /* libCrashReporter-MacOSX-Static.a in Frameworks */,
+				1E40340B195C2651002E98E5 /* CrashReporter.framework in Frameworks */,
 				1E378AF419586A6900451E28 /* QuickLook.framework in Frameworks */,
 				1E378AF9195899B400451E28 /* Quartz.framework in Frameworks */,
 				1E260C9F17D414F200C7F9FE /* Security.framework in Frameworks */,
@@ -262,43 +222,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1E06CD881827D9DF00895076 /* CrashReporter */ = {
-			isa = PBXGroup;
-			children = (
-				1E06CD891827D9DF00895076 /* Headers */,
-				1E06CD9F1827D9DF00895076 /* libCrashReporter-MacOSX-Static.a */,
-			);
-			path = CrashReporter;
-			sourceTree = "<group>";
-		};
-		1E06CD891827D9DF00895076 /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				1E06CD8A1827D9DF00895076 /* CrashReporter.h */,
-				1E06CD8B1827D9DF00895076 /* PLCrashFeatureConfig.h */,
-				1E06CD8C1827D9DF00895076 /* PLCrashNamespace.h */,
-				1E06CD8D1827D9DF00895076 /* PLCrashReport.h */,
-				1E06CD8E1827D9DF00895076 /* PLCrashReportApplicationInfo.h */,
-				1E06CD8F1827D9DF00895076 /* PLCrashReportBinaryImageInfo.h */,
-				1E06CD901827D9DF00895076 /* PLCrashReporter.h */,
-				1E06CD911827D9DF00895076 /* PLCrashReporterConfig.h */,
-				1E06CD921827D9DF00895076 /* PLCrashReportExceptionInfo.h */,
-				1E06CD931827D9DF00895076 /* PLCrashReportFormatter.h */,
-				1E06CD941827D9DF00895076 /* PLCrashReportMachExceptionInfo.h */,
-				1E06CD951827D9DF00895076 /* PLCrashReportMachineInfo.h */,
-				1E06CD961827D9DF00895076 /* PLCrashReportProcessInfo.h */,
-				1E06CD971827D9DF00895076 /* PLCrashReportProcessorInfo.h */,
-				1E06CD981827D9DF00895076 /* PLCrashReportRegisterInfo.h */,
-				1E06CD991827D9DF00895076 /* PLCrashReportSignalInfo.h */,
-				1E06CD9A1827D9DF00895076 /* PLCrashReportStackFrameInfo.h */,
-				1E06CD9B1827D9DF00895076 /* PLCrashReportSymbolInfo.h */,
-				1E06CD9C1827D9DF00895076 /* PLCrashReportSystemInfo.h */,
-				1E06CD9D1827D9DF00895076 /* PLCrashReportTextFormatter.h */,
-				1E06CD9E1827D9DF00895076 /* PLCrashReportThreadInfo.h */,
-			);
-			path = Headers;
-			sourceTree = "<group>";
-		};
 		1E260C7717D401D000C7F9FE /* docs */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,6 +268,14 @@
 				1E378AF11958498400451E28 /* BITSDKTextViewDelegate.h */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		1E403408195C2651002E98E5 /* CrashReporter */ = {
+			isa = PBXGroup;
+			children = (
+				1E403409195C2651002E98E5 /* CrashReporter.framework */,
+			);
+			path = CrashReporter;
 			sourceTree = "<group>";
 		};
 		1E7E54FC187F3ED800F0858E /* Feedback */ = {
@@ -456,7 +387,7 @@
 		1EF09DBF152357A500067A5C /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				1E06CD881827D9DF00895076 /* CrashReporter */,
+				1E403408195C2651002E98E5 /* CrashReporter */,
 			);
 			name = Vendor;
 			path = ../Vendor;
@@ -502,7 +433,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E06CDAA1827D9DF00895076 /* PLCrashReportMachExceptionInfo.h in Headers */,
 				1E7E551B187F3EE700F0858E /* BITHockeyHelper.h in Headers */,
 				1E7F5A2415A46249001081FC /* HockeySDK.h in Headers */,
 				1EBDF2AB195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.h in Headers */,
@@ -519,43 +449,23 @@
 				1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */,
 				1EF09DD5152371DC00067A5C /* BITCrashManager.h in Headers */,
 				1E852AED19509368006E73E0 /* BITFeedbackMessageAttachment.h in Headers */,
-				1E06CDAF1827D9DF00895076 /* PLCrashReportSignalInfo.h in Headers */,
 				1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */,
 				4DD13AF4162CA7C400BF15E8 /* BITSystemProfile.h in Headers */,
-				1E06CDA61827D9DF00895076 /* PLCrashReporter.h in Headers */,
-				1E06CDA81827D9DF00895076 /* PLCrashReportExceptionInfo.h in Headers */,
-				1E06CDB01827D9DF00895076 /* PLCrashReportStackFrameInfo.h in Headers */,
 				1E7E551A187F3EE700F0858E /* BITHockeyBaseManagerPrivate.h in Headers */,
 				1EF09DD7152371DC00067A5C /* BITCrashReportUI.h in Headers */,
-				1E06CDB11827D9DF00895076 /* PLCrashReportSymbolInfo.h in Headers */,
-				1E06CDAB1827D9DF00895076 /* PLCrashReportMachineInfo.h in Headers */,
 				1EF09DD9152371DC00067A5C /* BITCrashReportTextFormatter.h in Headers */,
-				1E06CDAD1827D9DF00895076 /* PLCrashReportProcessorInfo.h in Headers */,
 				1EA551FD17B3EB44004A0CB7 /* BITCrashExceptionApplication.h in Headers */,
-				1E06CDAC1827D9DF00895076 /* PLCrashReportProcessInfo.h in Headers */,
-				1E06CDB21827D9DF00895076 /* PLCrashReportSystemInfo.h in Headers */,
-				1E06CDA51827D9DF00895076 /* PLCrashReportBinaryImageInfo.h in Headers */,
 				1E5785E1194646C00014D19A /* BITHockeyAppClient.h in Headers */,
-				1E06CDAE1827D9DF00895076 /* PLCrashReportRegisterInfo.h in Headers */,
-				1E06CDA21827D9DF00895076 /* PLCrashNamespace.h in Headers */,
-				1E06CDA11827D9DF00895076 /* PLCrashFeatureConfig.h in Headers */,
 				1E5785D819461DDF0014D19A /* BITCrashDetailsPrivate.h in Headers */,
-				1E06CDA91827D9DF00895076 /* PLCrashReportFormatter.h in Headers */,
 				1E20566E15A5F61F008FC20A /* BITCrashManagerDelegate.h in Headers */,
-				1E06CDA01827D9DF00895076 /* CrashReporter.h in Headers */,
-				1E06CDA71827D9DF00895076 /* PLCrashReporterConfig.h in Headers */,
 				1E7E5509187F3ED800F0858E /* BITFeedbackManagerPrivate.h in Headers */,
 				1E260CA617D41E9100C7F9FE /* BITKeychainItem.h in Headers */,
-				1E06CDA41827D9DF00895076 /* PLCrashReportApplicationInfo.h in Headers */,
 				1EBDC051195716F300B5C8A3 /* BITSDKColoredView.h in Headers */,
 				1E7E552A187F62B400F0858E /* BITSystemProfilePrivate.h in Headers */,
 				1E7E550A187F3ED800F0858E /* BITFeedbackMessage.h in Headers */,
 				1E5785ED194652900014D19A /* BITCrashMetaData.h in Headers */,
-				1E06CDB41827D9DF00895076 /* PLCrashReportThreadInfo.h in Headers */,
 				1EBDF2B11957878800C7F49A /* BITSDKTextFieldCell.h in Headers */,
-				1E06CDA31827D9DF00895076 /* PLCrashReport.h in Headers */,
 				1E260CAA17D42B1E00C7F9FE /* BITHockeyManagerDelegate.h in Headers */,
-				1E06CDB31827D9DF00895076 /* PLCrashReportTextFormatter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,6 +481,7 @@
 				1EF09D881523574200067A5C /* Frameworks */,
 				4C7E213C159C900B00D02AD1 /* CopyFiles */,
 				1EF09D891523574200067A5C /* Headers */,
+				1E40340E195C2A0A002E98E5 /* Change CrashReporter framework load path */,
 			);
 			buildRules = (
 			);
@@ -628,6 +539,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1E40340E195C2A0A002E98E5 /* Change CrashReporter framework load path */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Change CrashReporter framework load path";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -change \"@rpath/CrashReporter.framework/Versions/A/CrashReporter\"  \"@loader_path/Frameworks/CrashReporter.framework/Versions/A/CrashReporter\" \"$TARGET_BUILD_DIR/HockeySDK.framework/Versions/A/HockeySDK\"\n\nif [ ! -e \"$TARGET_BUILD_DIR/HockeySDK.framework/Frameworks\" ];\nthen\ncd \"$TARGET_BUILD_DIR/HockeySDK.framework\"\nln -s \"Versions/Current/Frameworks\" \"Frameworks\"\nfi";
+		};
 		1E7FB96017D3F37100B7E10D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -782,11 +707,15 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Vendor/CrashReporter\"",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "../Resources/HockeySDK-Prefix.pch";
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
-				INSTALL_PATH = "@loader_path/../Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					../Vendor/CrashReporter,
@@ -805,11 +734,15 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Vendor/CrashReporter\"",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "../Resources/HockeySDK-Prefix.pch";
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
-				INSTALL_PATH = "@loader_path/../Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					../Vendor/CrashReporter,

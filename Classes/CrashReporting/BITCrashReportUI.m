@@ -38,7 +38,6 @@
 #import "BITCrashMetaData.h"
 
 #import <sys/sysctl.h>
-#import "CrashReporter.h"
 
 
 @interface BITCrashReportUI(private)

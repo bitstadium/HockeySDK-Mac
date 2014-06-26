@@ -31,7 +31,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "CrashReporter.h"
+#import <CrashReporter/CrashReporter.h>
 
 #import <mach-o/dyld.h>
 #import <mach-o/getsect.h>
