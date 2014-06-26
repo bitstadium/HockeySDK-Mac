@@ -138,13 +138,6 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerUserInput) {
  */
 @interface BITCrashManager : BITHockeyBaseManager
 
-///-----------------------------------------------------------------------------
-/// @name Delegate
-///-----------------------------------------------------------------------------
-
-// delegate is required
-@property (nonatomic, unsafe_unretained) id <BITCrashManagerDelegate> delegate;
-
 
 ///-----------------------------------------------------------------------------
 /// @name Configuration

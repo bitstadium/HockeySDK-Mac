@@ -46,6 +46,13 @@
 
 @interface BITCrashManager ()
 
+///-----------------------------------------------------------------------------
+/// @name Delegate
+///-----------------------------------------------------------------------------
+
+// delegate is required
+@property (nonatomic, unsafe_unretained) id <BITCrashManagerDelegate> delegate;
+
 @property (nonatomic, strong) BITHockeyAppClient *hockeyAppClient;
 
 @property (nonatomic, getter = isCrashManagerActivated) BOOL crashManagerActivated;
