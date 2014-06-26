@@ -25,17 +25,17 @@ The main SDK class is `BITHockeyManager`. It initializes all modules and provide
 
 - [Installation & Setup](Guide-Installation-Setup)
 - [Migration from previous SDK Versions](Guide-Migration)
-- [Mac Desktop Uploader](Guide-Installation-Mac-App)
+- [Mac Desktop Uploader](http://support.hockeyapp.net/kb/services-webhooks-desktop-apps/how-to-upload-to-hockeyapp-on-a-mac)
 
 ## HowTos
 
 - [How to do app versioning](HowTo-App-Versioning)
 - [How to upload symbols for crash reporting](HowTo-Upload-Symbols)
-- [How to add application specific log data](HowTo-Add-Application-Log)
+- [How to add application specific log data](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/how-to-add-application-specific-log-data-on-ios)
 
 ## Troubleshooting
 
-- [Symbolication doesn't work](Symbolication-Doesnt-Work) (Or the rules of binary UUIDs and dSYMs)
+- [Symbolication doesn't work](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/how-to-solve-symbolication-problems) (Or the rules of binary UUIDs and dSYMs)
 - [Crash Reporting is not working](Troubleshooting-Crash-Reporting-Not-Working)
 
 ## Xcode Documentation

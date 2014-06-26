@@ -88,7 +88,6 @@ This document contains the following sections:
 
 - [Catch additional exceptions](#exceptions)
 - [Automatic sending of crash reports](#automatic)
-- [Improved startup crashes handling](#improvedstartup)
 - [Add analytics data to Sparkle setup](#sparkle)
 - [Show debug log messages](#debug)
 - [Optional Delegate Methods](#delegates)
@@ -156,32 +155,6 @@ Alternatively, if you have your own NSApplication subclass, change it to be a su
 If you want to send all crash reports automatically, configure the SDK with the following code:
 
     [[BITHockeyManager sharedHockeyManager].crashManager setAutoSubmitCrashReport: YES];
-<br/><br/>
-
-
-<a id"improvedstartup"></a>
-### Improved startup crashes handling
-
-If you have a window based app, you could set the main window not to show app automatically, allowing the SDK to show a crash reporter window before the app shows the main window and possibly crash right away before the crash could be reported to the servers.
-
-Make sure to set the `delegate` property via `[[BITHockeyManager sharedHockeyManager] setDelegate: self];` and add the following protocol to your AppDelegate: `BITHockeyManagerDelegate`:<pre><code>@interface AppDelegate() &lt;BITHockeyManagerDelegate&gt; {}
-@end</code></pre>
-
-Now implement the optional `BITCrashManagerDelegate` protocol method `showMainApplicationWindowForCrashManager:` method like this:
-
-    // this delegate method is required
-    - (void) showMainApplicationWindowForCrashManager:(id)crashManager
-    {
-        // launch the main app window
-        [self.window makeFirstResponder: nil];
-        [self.window makeKeyAndOrderFront: nil];
-    }
-
-If you are using NIBs, make sure to change the main window to NOT automatically show when the NIB is loaded!
- 
-Crash reports are normally sent to our server asynchronously. If your application is crashing near startup and you implemented the above method, BITHockeyManager will send crash reports synchronously to make sure they are being received. For adjusting the default 5 seconds maximum time interval between app start and crash being considered to send crashes synchronously, use the following line:
-
-    [[BITHockeyManager sharedHockeyManager] setMaxTimeIntervalOfCrashForReturnMainApplicationDelay:<NewTimeInterval>];
 <br/><br/>
 
 
@@ -312,7 +285,7 @@ This documentation provides integrated help in Xcode for all public APIs and a s
 
 3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSets`
 
-The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/2.1.0/](http://hockeyapp.net/help/sdk/mac/2.1.0/)
+The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/3.0-b.1/](http://hockeyapp.net/help/sdk/mac/3.0-b.1/)
 
 ### Checklist if Crashes Do Not Appear in HockeyApp
 
