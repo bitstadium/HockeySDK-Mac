@@ -38,16 +38,10 @@
 #import <sys/sysctl.h>
 #import <mach-o/ldsyms.h>
 
-@implementation BITHockeyBaseManager
 
-@synthesize appIdentifier = _appIdentifier;
-
-@synthesize userID = _userID;
-@synthesize userName = _userName;
-@synthesize userEmail = _userEmail;
-
-@synthesize serverURL = _serverURL;
-
+@implementation BITHockeyBaseManager {
+  NSDateFormatter *_rfc3339Formatter;
+}
 
 - (id)init {
   if ((self = [super init])) {
