@@ -469,14 +469,6 @@ DQ
         </window>
         <arrayController id="qlE-az-7zs" userLabel="Compose Attachments Array Controller"/>
         <userDefaultsController representsSharedInstance="YES" id="162"/>
-        <button verticalHuggingPriority="750" id="la1-75-jIa">
-            <rect key="frame" x="0.0" y="0.0" width="82" height="32"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hoV-6Q-QM1">
-                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                <font key="font" metaFont="system"/>
-            </buttonCell>
-        </button>
     </objects>
     <resources>
         <image name="NSApplicationIcon" width="128" height="128"/>
