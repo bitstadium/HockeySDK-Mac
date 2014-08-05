@@ -367,6 +367,11 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   [self.feedbackTableView becomeFirstResponder];
 }
 
+- (void)reloadTableAndScrollToBottom {
+  [self.feedbackTableView reloadData];
+  [self.feedbackTableView scrollToEndOfDocument:self];
+}
+
 + (NSSet *)keyPathsForValuesAffectingCanSendMessage {
   return [NSSet setWithObjects:@"messageText", nil];
 }
@@ -378,12 +383,12 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 - (IBAction)sendMessage:(id)sender {
   [self.manager submitMessageWithText:[self.messageText string] andAttachments:self.attachments];
   self.messageText = nil;
-  [self.feedbackTableView reloadData];
+  [self reloadTableAndScrollToBottom];
 }
 
 - (void)deleteAllMessages {
   [_manager deleteAllMessages];
-  [self.feedbackTableView reloadData];
+  [self reloadTableAndScrollToBottom];
 }
 
 - (IBAction)reloadList:(id)sender {
@@ -407,7 +412,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   }
   
   if ([self.manager numberOfMessages] > 0) {
-    [self.feedbackTableView reloadData];
+    [self reloadTableAndScrollToBottom];
   }
 }
 
