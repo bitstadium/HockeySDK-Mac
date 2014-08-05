@@ -242,7 +242,7 @@
 
 
 + (NSRect)messageUsedRect:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width {
-  CGRect maxMessageHeightFrame = CGRectMake(0, 0, width - FRAME_SIDE_BORDER * 2, CGFLOAT_MAX);
+  CGRect maxMessageHeightFrame = CGRectMake(0, 0, width - FRAME_SIDE_BORDER * 2 - 4, CGFLOAT_MAX);
   
   NSTextStorage *textStorage = [[NSTextStorage alloc] initWithString:message.text];
   NSTextContainer *textContainer = [[NSTextContainer alloc] initWithContainerSize:NSSizeFromCGSize(maxMessageHeightFrame.size)];
