@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		1E3B4F6B1996796B00203B89 /* HockeySDK Distribution */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 1E3B4F6E1996796B00203B89 /* Build configuration list for PBXAggregateTarget "HockeySDK Distribution" */;
+			buildPhases = (
+				1E3B4F731996797B00203B89 /* ShellScript */,
+			);
+			dependencies = (
+				1E3B4F701996797200203B89 /* PBXTargetDependency */,
+			);
+			name = "HockeySDK Distribution";
+			productName = "HockeySDK Distribution";
+		};
 		1E7FB95C17D3F36B00B7E10D /* HockeySDK Documentation */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 1E7FB95F17D3F36B00B7E10D /* Build configuration list for PBXAggregateTarget "HockeySDK Documentation" */;
@@ -91,6 +103,16 @@
 		4DD13AF5162CA7C400BF15E8 /* BITSystemProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */; };
 		4DD13AF7162CAA2200BF15E8 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DD13AF6162CAA2200BF15E8 /* IOKit.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1E3B4F6F1996797200203B89 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1EF09D821523574200067A5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E7FB95C17D3F36B00B7E10D;
+			remoteInfo = "HockeySDK Documentation";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		4C7E213C159C900B00D02AD1 /* CopyFiles */ = {
@@ -521,6 +543,7 @@
 			targets = (
 				1EF09D8B1523574200067A5C /* HockeySDK */,
 				1E7FB95C17D3F36B00B7E10D /* HockeySDK Documentation */,
+				1E3B4F6B1996796B00203B89 /* HockeySDK Distribution */,
 			);
 		};
 /* End PBXProject section */
@@ -539,6 +562,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1E3B4F731996797B00203B89 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Sets the target folders and the final framework product.\nFMK_NAME=HockeySDK\n\n# Documentation\nHOCKEYSDK_DOCSET_VERSION_NAME=\"de.bitstadium.${HOCKEYSDK_DOCSET_NAME}-${VERSION_STRING}\"\n\n# Install dir will be the final output to the framework.\n# The following line create it in the root folder of the current project.\nPRODUCTS_DIR=${SRCROOT}/../Products\nZIP_FOLDER=HockeySDK-Mac\nTEMP_DIR=${PRODUCTS_DIR}/${ZIP_FOLDER}\n\n# Working dir will be deleted after the framework creation.\nWRK_DIR=build\n\n# Building the framework.\nxcodebuild -project \"HockeySDK.xcodeproj\" -configuration \"Release\" -target \"${FMK_NAME}\"\n\n# Codesign frameworks\ncodesign --verbose --force --sign \"Developer ID Application: Bit Stadium GmbH\" \"${WRK_DIR}/Release/${FMK_NAME}.framework/Versions/Current/Frameworks/CrashReporter.framework\"\ncodesign --verbose --force --sign \"Developer ID Application: Bit Stadium GmbH\" \"${WRK_DIR}/Release/${FMK_NAME}.framework\"\n\n# Cleaning the oldest.\nif [ -d \"${TEMP_DIR}\" ]\nthen\nrm -rf \"${TEMP_DIR}\"\nfi\n\n# Creates and renews the final product folder.\nmkdir -p \"${TEMP_DIR}\"\n\n# Copy build frameworks into product folder\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework\" \"${TEMP_DIR}\"\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework.dSYM\" \"${TEMP_DIR}\"\ncp -R \"${SRCROOT}/../Vendor/CrashReporter/CrashReporter.framework.dSYM\" \"${TEMP_DIR}\"\n\nrm -r \"${WRK_DIR}\"\n\n# copy license, changelog, documentation, integration json\ncp -f \"${SRCROOT}/../docs/Changelog-template.md\" \"${TEMP_DIR}/CHANGELOG\"\ncp -f \"${SRCROOT}/../docs/Guide-Installation-Setup-template.md\" \"${TEMP_DIR}/README.md\"\ncp -f \"${SRCROOT}/../LICENSE.txt\" \"${TEMP_DIR}\"\nmkdir \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\ncp -R \"${SRCROOT}/../documentation/docset/Contents\" \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\n\n# build zip\ncd \"${PRODUCTS_DIR}\"\nrm -f \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\"\nzip -yr \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\" \"${ZIP_FOLDER}\" -x \\*/.*\n";
+		};
 		1E40340E195C2A0A002E98E5 /* Change CrashReporter framework load path */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -603,6 +639,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		1E3B4F701996797200203B89 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E7FB95C17D3F36B00B7E10D /* HockeySDK Documentation */;
+			targetProxy = 1E3B4F6F1996797200203B89 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		1E413D9315A0BB8800620BFE /* HockeySDK.strings */ = {
 			isa = PBXVariantGroup;
@@ -622,6 +666,20 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1E3B4F6C1996796B00203B89 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1E3B4F6D1996796B00203B89 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		1E7FB95D17D3F36B00B7E10D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -756,6 +814,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1E3B4F6E1996796B00203B89 /* Build configuration list for PBXAggregateTarget "HockeySDK Distribution" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E3B4F6C1996796B00203B89 /* Debug */,
+				1E3B4F6D1996796B00203B89 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		1E7FB95F17D3F36B00B7E10D /* Build configuration list for PBXAggregateTarget "HockeySDK Documentation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
