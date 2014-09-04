@@ -813,6 +813,13 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     }
   }
   
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+  if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMainApplicationWindowForCrashManager:)]) {
+    [self.delegate showMainApplicationWindowForCrashManager:self];
+  }
+#pragma clang diagnostic pop
+
   [self invokeProcessing];
 }
 

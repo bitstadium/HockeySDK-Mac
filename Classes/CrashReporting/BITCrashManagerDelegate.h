@@ -43,7 +43,7 @@
  * @param crashManager The `BITCrashManager` instance invoking the method
  * @deprecated The default crash report UI is not shown modal any longer, so this delegate is not being used any more!
  */
-- (void) showMainApplicationWindowForCrashManager:(BITCrashManager *)crashManager __attribute__((deprecated("The default crash report UI is not shown modal any longer, so this delegate is not being used any more!")));
+- (void) showMainApplicationWindowForCrashManager:(BITCrashManager *)crashManager __attribute__((deprecated("The default crash report UI is not shown modal any longer, so this delegate is now called right away. We recommend to remove the implementation of this method.")));
 
 ///-----------------------------------------------------------------------------
 /// @name Additional meta data
