@@ -224,6 +224,7 @@
 		4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BITSystemProfile.h; path = BetaDistribution/BITSystemProfile.h; sourceTree = "<group>"; };
 		4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BITSystemProfile.m; path = BetaDistribution/BITSystemProfile.m; sourceTree = "<group>"; };
 		4DD13AF6162CAA2200BF15E8 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		576C8B03174ED416003EE7FF /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HockeySDK.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -535,6 +536,7 @@
 				nb,
 				sv,
 				ja,
+				"pt-BR",
 			);
 			mainGroup = 1EF09D801523574200067A5C;
 			productRefGroup = 1EF09D8D1523574200067A5C /* Products */;
@@ -659,6 +661,7 @@
 				1E66F5E415A1C4BF00C0816F /* nb */,
 				1E66F5E515A1C4D100C0816F /* sv */,
 				1EE8CF7E17147CF20088444D /* ja */,
+				576C8B03174ED416003EE7FF /* pt-BR */,
 			);
 			name = HockeySDK.strings;
 			sourceTree = "<group>";
