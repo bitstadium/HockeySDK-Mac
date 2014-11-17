@@ -924,6 +924,11 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
       BITHockeyLog(@"ERROR: Reading crash meta data. %@", error);
     }
 
+    NSString *descriptionMetaFilePath = [filename stringByAppendingPathExtension:@"desc"];
+    if ([_fileManager fileExistsAtPath:descriptionMetaFilePath]) {
+      description = [NSString stringWithContentsOfFile:descriptionMetaFilePath encoding:NSUTF8StringEncoding error:&error] ?: @"";
+    }
+    
     if ([applicationLog length] > 0) {
       if ([description length] > 0) {
         description = [NSString stringWithFormat:@"%@\n\nLog:\n%@", description, applicationLog];
