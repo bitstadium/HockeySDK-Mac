@@ -530,6 +530,18 @@
   return NO;
 }
 
+- (BOOL)optionalManualUserDataMissing {
+  [self updateAppDefinedUserData];
+  
+  if (self.requireUserName == BITFeedbackUserDataElementOptional && !self.userName)
+    return YES;
+  
+  if (self.requireUserEmail == BITFeedbackUserDataElementOptional && !self.userEmail)
+    return YES;
+  
+  return NO;
+}
+
 - (BOOL)isManualUserDataAvailable {
   [self updateAppDefinedUserData];
 
