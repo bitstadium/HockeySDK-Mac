@@ -9,7 +9,6 @@
             <connections>
                 <outlet property="composeAttacchmentsArrayController" destination="qlE-az-7zs" id="eHb-7l-lvM"/>
                 <outlet property="contactInfoTextField" destination="77" id="KCn-wy-JQO"/>
-                <outlet property="enterUserData" destination="76" id="93"/>
                 <outlet property="feedbackAttachmentsScrollView" destination="7No-Zb-2jx" id="J4I-jl-EDL"/>
                 <outlet property="feedbackAttachmentsTableView" destination="vi6-mo-5xv" id="biG-nM-sgF"/>
                 <outlet property="feedbackComposeBackgroundView" destination="5DI-pf-otK" id="amy-rC-HBu"/>
