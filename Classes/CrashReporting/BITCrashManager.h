@@ -152,23 +152,33 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerUserInput) {
 
 
 /**
- *  Trap fatal signals via a Mach exception server.
+ *  Trap fatal signals via a Mach exception server. This is now used by default!
  *
- *  By default the SDK is using the safe and proven in-process BSD Signals for catching crashes.
- *  This option provides an option to enable catching fatal signals via a Mach exception server
- *  instead.
+ *  Default: _YES_
  *
- *  We strongly advice _NOT_ to enable Mach exception handler in release versions of your apps!
+ * @deprecated Mach Exception Handler is now enabled by default!
+ */
+@property (nonatomic, assign, getter=isMachExceptionHandlerEnabled) BOOL enableMachExceptionHandler __attribute__((deprecated("Mach Exceptions are now enabled by default. If you want to disable them, please use the new property disableMachExceptionHandler")));
+
+
+/**
+ *  Disable trap fatal signals via a Mach exception server.
+ *
+ *  By default the SDK is catching fatal signals via a Mach exception server.
+ *  This option allows you to use in-process BSD Signals for catching crashes instead.
  *
  *  Default: _NO_
  *
  * @warning The Mach exception handler executes in-process, and will interfere with debuggers when
  *  they attempt to suspend all active threads (which will include the Mach exception handler).
  *  Mach-based handling should _NOT_ be used when a debugger is attached. The SDK will not
- *  enabled catching exceptions if the app is started with the debugger running. If you attach
- *  the debugger during runtime, this may cause issues the Mach exception handler is enabled!
+ *  enable catching exceptions if the app is started with the debugger running. If you attach
+ *  the debugger during runtime, this may cause issues if it is not disabled!
+ *
+ * @deprecated Mach Exception Handler is now enabled by default!
  */
-@property (nonatomic, assign, getter=isMachExceptionHandlerEnabled) BOOL enableMachExceptionHandler;
+@property (nonatomic, assign, getter=isMachExceptionHandlerDisabled) BOOL disableMachExceptionHandler;
+
 
 /**
  *  Submit crash reports without asking the user
