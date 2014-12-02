@@ -753,9 +753,9 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   if (!_plCrashReporter) {
     /* Configure our reporter */
     
-    PLCrashReporterSignalHandlerType signalHandlerType = PLCrashReporterSignalHandlerTypeBSD;
-    if (self.isMachExceptionHandlerEnabled) {
-      signalHandlerType = PLCrashReporterSignalHandlerTypeMach;
+    PLCrashReporterSignalHandlerType signalHandlerType = PLCrashReporterSignalHandlerTypeMach;
+    if (self.isMachExceptionHandlerDisabled) {
+      signalHandlerType = PLCrashReporterSignalHandlerTypeBSD;
     }
     BITPLCrashReporterConfig *config = [[BITPLCrashReporterConfig alloc] initWithSignalHandlerType: signalHandlerType
                                                                              symbolicationStrategy: PLCrashReporterSymbolicationStrategySymbolTable];
