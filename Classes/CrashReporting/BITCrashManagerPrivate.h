@@ -28,7 +28,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "CrashReporter.h"
+#import <CrashReporter/CrashReporter.h>
 
 // stores the set of crashreports that have been approved but aren't sent yet
 #define kHockeySDKApprovedCrashReports @"HockeySDKApprovedCrashReports"
@@ -40,26 +40,46 @@
 #define kHockeySDKUserEmail @"HockeySDKUserEmail"
 
 
+@class BITHockeyAppClient;
+@class BITHockeyAttachment;
+
+
 @interface BITCrashManager ()
+
+///-----------------------------------------------------------------------------
+/// @name Delegate
+///-----------------------------------------------------------------------------
+
+// delegate is required
+@property (nonatomic, unsafe_unretained) id <BITCrashManagerDelegate> delegate;
+
+@property (nonatomic, strong) BITHockeyAppClient *hockeyAppClient;
 
 @property (nonatomic, getter = isCrashManagerActivated) BOOL crashManagerActivated;
 
 @property (nonatomic) NSUncaughtExceptionHandler *plcrExceptionHandler;
 
+@property (nonatomic) PLCrashReporterCallbacks *crashCallBacks;
+
+@property (nonatomic) NSString *lastCrashFilename;
+
+@property (nonatomic, copy, setter = setCrashReportUIHandler:) BITCustomCrashReportUIHandler crashReportUIHandler;
+
+@property (nonatomic, strong) NSString *crashesDir;
+
 - (NSString *)applicationName;
 - (NSString *)applicationVersion;
-
-- (void)returnToMainApplication;
-
-- (void)cancelReport;
-- (void)sendReportWithCrash:(NSString*)crashFile crashDescription:(NSString *)crashDescription;
 
 - (void)handleCrashReport;
 - (BOOL)hasPendingCrashReport;
 - (void)cleanCrashReports;
 - (NSString *)extractAppUUIDs:(BITPLCrashReport *)report;
 
-- (void)postXML:(NSString*)xml;
+- (void)persistAttachment:(BITHockeyAttachment *)attachment withFilename:(NSString *)filename;
+
+- (BITHockeyAttachment *)attachmentForCrashReport:(NSString *)filename;
+
+- (void)setLastCrashFilename:(NSString *)lastCrashFilename;
 
 /**
  *  Initialize the crash reporter and check if there are any pending crash reports

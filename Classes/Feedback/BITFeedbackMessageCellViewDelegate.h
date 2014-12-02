@@ -1,7 +1,7 @@
 /*
  * Author: Andreas Linde <mail@andreaslinde.de>
  *
- * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -26,20 +26,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
-@class BITFeedbackMessage;
+@class BITFeedbackMessageCellView;
+@class BITFeedbackMessageAttachment;
 
-@interface BITFeedbackMessageCell : NSTextFieldCell {
-@private
-  NSDateFormatter *_dateFormatter;
-  NSDateFormatter *_timeFormatter;
-  
-  NSInteger _row;
-}
+@protocol BITFeedbackMessageCellViewDelegate <NSObject>
 
-@property (nonatomic) NSInteger row;
-
-+ (CGFloat) heightForRowWithMessage:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width;
+- (void)messageCellView:(BITFeedbackMessageCellView *)messaggeCellView clickOnButton:(NSButton *)button withAttachment:(BITFeedbackMessageAttachment *)attachment;
 
 @end

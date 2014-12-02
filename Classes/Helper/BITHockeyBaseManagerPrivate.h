@@ -49,8 +49,6 @@
 - (NSString *)getDevicePlatform;
 //- (NSString *)executableUUID;
 
-- (NSData *)appendPostValue:(NSString *)value forKey:(NSString *)key;
-
 - (NSDate *)parseRFC3339Date:(NSString *)dateString;
 
 @end

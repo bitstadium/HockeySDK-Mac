@@ -29,21 +29,25 @@
 #import "BITCrashManagerPrivate.h"
 #import "BITFeedbackManagerPrivate.h"
 #import "BITHockeyHelper.h"
+#import "BITHockeyAppClient.h"
 
+NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 
-@implementation BITHockeyManager
+@implementation BITHockeyManager {
+  NSString *_appIdentifier;
+  
+  BOOL _validAppIdentifier;
+  
+  BOOL _startManagerIsInvoked;
+  
+  NSInteger         _statusCode;
+  NSURLConnection   *_urlConnection;
 
-@synthesize delegate = _delegate;
-@synthesize serverURL = _serverURL;
-@synthesize crashManager = _crashManager;
-@synthesize disableCrashManager = _disableCrashManager;
-@synthesize feedbackManager = _feedbackManager;
-@synthesize disableFeedbackManager = _disableFeedbackManager;
-@synthesize debugLogEnabled = _debugLogEnabled;
+  BITHockeyAppClient *_hockeyAppClient;
+}
 
 #pragma mark - Public Class Methods
 
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
 + (BITHockeyManager *)sharedHockeyManager {
   static BITHockeyManager *sharedInstance = nil;
   static dispatch_once_t pred;
@@ -55,22 +59,12 @@
   
   return sharedInstance;
 }
-#else
-+ (BITHockeyManager *)sharedHockeyManager {
-  static BITHockeyManager *hockeyManager = nil;
-  
-  if (hockeyManager == nil) {
-    hockeyManager = [[BITHockeyManager alloc] init];
-  }
-  
-  return hockeyManager;
-}
-#endif
 
 - (id) init {
   if ((self = [super init])) {
     _serverURL = nil;
     _delegate = nil;
+    _hockeyAppClient = nil;
     
     _disableCrashManager = NO;
     _disableFeedbackManager = NO;
@@ -83,9 +77,8 @@
 }
 
 - (void)dealloc {
-  [_appIdentifier release], _appIdentifier = nil;
+  _appIdentifier = nil;
   
-  [super dealloc];
 }
 
 
@@ -128,8 +121,8 @@
     return NO;
   }
   
-  NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-  NSLocale *enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
   [dateFormatter setLocale:enUSPOSIXLocale];
   [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
   NSDate *integrationFlowStartDate = [dateFormatter dateFromString:timeString];
@@ -146,56 +139,44 @@
     return;
   }
   
-  NSString *serverString = [[BITHOCKEYSDK_URL copy] autorelease];
-  if (_serverURL)
-    serverString = [[_serverURL copy] autorelease];
+  NSString *integrationPath = [NSString stringWithFormat:@"api/3/apps/%@/integration", [_appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
   
-  NSMutableURLRequest *request = nil;
-  NSString *boundary = @"----FOO";
+  BITHockeyLog(@"INFO: Sending integration workflow ping to %@", integrationPath);
   
-  NSString *url = [NSString stringWithFormat:@"%@api/3/apps/%@/integration",
-                   serverString,
-                   [_appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
-                   ];
-  
-  BITHockeyLog(@"INFO: Sending integration workflow ping to %@", url);
-  
-  request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-  
-  [request setValue:BITHOCKEY_NAME forHTTPHeaderField:@"User-Agent"];
-  [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-  [request setTimeoutInterval: 15];
-  [request setHTTPMethod:@"POST"];
-  NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-  [request setValue:contentType forHTTPHeaderField:@"Content-type"];
-  
-  NSMutableData *postBody =  [NSMutableData data];
-  [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [postBody appendData:[@"Content-Disposition: form-data; name=\"timestamp\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-  [postBody appendData:[timeString dataUsingEncoding:NSUTF8StringEncoding]];
-  [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [request setHTTPBody:postBody];
-  
-  _statusCode = 200;
-  
-  _urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-  if (!_urlConnection) {
-    BITHockeyLog(@"INFO: Pinging server could not start!");
-  }
+  [[self hockeyAppClient] postPath:integrationPath
+                        parameters:@{@"timestamp": timeString,
+                                     @"sdk": BITHOCKEY_NAME,
+                                     @"sdk_version": BITHOCKEY_VERSION,
+                                     @"bundle_version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]
+                                     }
+                        completion:^(BITHTTPOperation *operation, NSData* responseData, NSError *error) {
+                          switch (operation.response.statusCode) {
+                            case 400:
+                              BITHockeyLog(@"ERROR: App ID not found");
+                              break;
+                            case 201:
+                              BITHockeyLog(@"INFO: Ping accepted.");
+                              break;
+                            case 200:
+                              BITHockeyLog(@"INFO: Ping accepted. Server already knows.");
+                              break;
+                            default:
+                              BITHockeyLog(@"ERROR: Unknown error");
+                              break;
+                          }
+                        }];
 }
 
 
 #pragma mark - Public Instance Methods (Configuration)
 
 - (void)configureWithIdentifier:(NSString *)appIdentifier {
-  [_appIdentifier release];
   _appIdentifier = [appIdentifier copy];
   
   [self initializeModules];
 }
 
 - (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id <BITHockeyManagerDelegate>)delegate {
-  [_appIdentifier release];
   _appIdentifier = [appIdentifier copy];
   
   self.delegate = delegate;
@@ -205,7 +186,6 @@
 
 
 - (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *)companyName delegate:(id <BITHockeyManagerDelegate>)delegate {
-  [_appIdentifier release];
   _appIdentifier = [appIdentifier copy];
   
   self.delegate = delegate;
@@ -215,7 +195,6 @@
 
 - (void)startManager {
   if (!_validAppIdentifier || ![self isSetUpOnMainThread]) {
-    [_crashManager returnToMainApplication];
     return;
   }
   
@@ -229,8 +208,6 @@
       [_crashManager setServerURL:_serverURL];
     }
     [_crashManager startManager];
-  } else {
-    [_crashManager returnToMainApplication];
   }
   
   // start FeedbackManager
@@ -269,6 +246,10 @@
   
   if (_serverURL != aServerURL) {
     _serverURL = [aServerURL copy];
+
+    if (_hockeyAppClient) {
+      _hockeyAppClient.baseURL = [NSURL URLWithString:_serverURL ?: kBITHockeySDKURL];
+    }
   }
 }
 
@@ -319,6 +300,14 @@
 
 #pragma mark - Private Instance Methods
 
+- (BITHockeyAppClient *)hockeyAppClient {
+  if (!_hockeyAppClient) {
+    _hockeyAppClient = [[BITHockeyAppClient alloc] initWithBaseURL:[NSURL URLWithString:_serverURL ?: kBITHockeySDKURL]];
+  }
+  
+  return _hockeyAppClient;
+}
+
 - (void)initializeModules {
   _validAppIdentifier = [self checkValidityOfAppIdentifier:_appIdentifier];
   
@@ -329,6 +318,7 @@
   BITHockeyLog(@"INFO: Setup CrashManager");
   _crashManager = [[BITCrashManager alloc] initWithAppIdentifier:_appIdentifier];
   _crashManager.delegate = self.delegate;
+  _crashManager.hockeyAppClient = [self hockeyAppClient];
   
   // if we don't initialize the BITCrashManager instance, then the delegate will not be invoked
   // leaving the app to never show the window if the developer provided an invalid app identifier
@@ -342,40 +332,6 @@
   
   if ([self isCrashManagerDisabled])
     _crashManager.crashManagerActivated = NO;
-}
-
-#pragma mark - NSURLConnection Delegate
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-  if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-    _statusCode = [(NSHTTPURLResponse *)response statusCode];
-  }
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-  BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
-  
-  [_urlConnection release];
-  _urlConnection = nil;
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-  [_urlConnection release];
-  _urlConnection = nil;
-  
-  [self processServerResult];
-}
-
-- (void)processServerResult {
-  if (_statusCode == 201) {
-    BITHockeyLog(@"INFO: Ping accepted.");
-  } else if (_statusCode == 200) {
-    BITHockeyLog(@"INFO: Ping accepted. Server already knows.");
-  } else if (_statusCode == 400) {
-    BITHockeyLog(@"ERROR: App ID not found");
-  } else {
-    BITHockeyLog(@"ERROR: Unknown error");
-  }
 }
 
 @end

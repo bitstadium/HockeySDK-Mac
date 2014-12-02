@@ -43,3 +43,39 @@
 /* Send Button */
 "SendButtonTitle" = "Lähetä";
 
+
+/* Feedback UI */
+
+/* Compose view placeholder text */
+"FeedbackComposePlaceHolder" = "Your Feedback";
+
+/* Last Update in Status Bar */
+"FeedbackLastUpdate" = "Last Update:";
+
+/* Never in Status Bar */
+"FeedbackLastUpdateNever" = "Never";
+
+/* From text between timestamp and author */
+"FeedbackFrom" = "from";
+
+/* Send button title */
+"FeedbackSendButton" = "Send";
+
+/* Contact info text */
+"FeedbackContactInfo" = "Please provide your contact information";
+
+/* Name placeholder text */
+"FeedbackName" = "Name";
+
+/* Email placeholder text */
+"FeedbackEmail" = "Email";
+
+/* Continue button title */
+"FeedbackContinueButton" = "Continue";
+
+/* Attachment context menu action Preview */
+"FeedbackAttachmentMenuPreview" = "Preview";
+
+/* Attachment context menu action Remove */
+"FeedbackAttachmentMenuRemove" = "Remove";
+

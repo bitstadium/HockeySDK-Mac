@@ -32,52 +32,20 @@
 
 @class BITCrashManager;
 
-@interface BITCrashReportUI : NSWindowController {
-  IBOutlet NSTextField  *nameTextField;
-  IBOutlet NSTextField  *emailTextField;
-  IBOutlet NSTextField  *descriptionTextField;
-  IBOutlet NSTextView   *crashLogTextView;
-  
-  IBOutlet NSTextField  *nameTextFieldTitle;
-  IBOutlet NSTextField  *emailTextFieldTitle;
-
-  IBOutlet NSTextField  *introductionText;
-  IBOutlet NSTextField  *commentsTextFieldTitle;
-  IBOutlet NSTextField  *problemDescriptionTextFieldTitle;
-  
-  IBOutlet NSTextField  *noteText;
-  
-  IBOutlet NSButton   *disclosureButton;
-  IBOutlet NSButton   *showButton;
-  IBOutlet NSButton   *hideButton;
-  IBOutlet NSButton   *cancelButton;
-  IBOutlet NSButton   *submitButton;
-  
-  NSMenu              *_mainAppMenu;
-  
-  BITCrashManager   *_crashManager;
-  
-  NSString      *_applicationName;
-  
-  NSMutableString   *_logContent;
-  NSString          *_userName;
-  NSString          *_userEmail;
-  NSString          *_crashLogContent;
-  NSString          *_crashFile;
-  
-  BOOL showUserDetails;
-  BOOL showComments;
-  BOOL showDetails;
-}
+@interface BITCrashReportUI : NSWindowController
 
 // defines the users name or user id
-@property (nonatomic, retain) NSString *userName;
+@property (nonatomic, strong) NSString *userName;
 
 // defines the users email address
-@property (nonatomic, retain) NSString *userEmail;
+@property (nonatomic, strong) NSString *userEmail;
 
 
-- (instancetype)initWithManager:(BITCrashManager *)crashManager crashReportFile:(NSString *)crashReportFile crashReport:(NSString *)crashReport logContent:(NSString *)logContent applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails;
+- (instancetype)initWithManager:(BITCrashManager *)crashManager
+                    crashReport:(NSString *)crashReport
+                     logContent:(NSString *)logContent
+                applicationName:(NSString *)applicationName
+                 askUserDetails:(BOOL)askUserDetails;
 
 - (void)askCrashReportDetails;
 

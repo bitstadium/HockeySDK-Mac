@@ -64,7 +64,7 @@
 - (NSUInteger)numberOfMessages;
 - (BITFeedbackMessage *)messageAtIndex:(NSUInteger)index;
 
-- (void)submitMessageWithText:(NSString *)text;
+- (void)submitMessageWithText:(NSString *)text andAttachments:(NSArray *)photos;
 - (void)submitPendingMessages;
 
 // Returns YES if manual user data can be entered, required or optional
@@ -72,6 +72,9 @@
 
 // Returns YES if required user data is missing?
 - (BOOL)requireManualUserDataMissing;
+
+// Returns YES if optional user data is missing
+- (BOOL)optionalManualUserDataMissing;
 
 // Returns YES if user data is available and can be edited
 - (BOOL)isManualUserDataAvailable;

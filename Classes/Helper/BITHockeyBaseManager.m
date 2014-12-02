@@ -38,26 +38,20 @@
 #import <sys/sysctl.h>
 #import <mach-o/ldsyms.h>
 
-@implementation BITHockeyBaseManager
 
-@synthesize appIdentifier = _appIdentifier;
-
-@synthesize userID = _userID;
-@synthesize userName = _userName;
-@synthesize userEmail = _userEmail;
-
-@synthesize serverURL = _serverURL;
-
+@implementation BITHockeyBaseManager {
+  NSDateFormatter *_rfc3339Formatter;
+}
 
 - (id)init {
   if ((self = [super init])) {
     _appIdentifier = nil;
-    _serverURL = [BITHOCKEYSDK_URL copy];
+    _serverURL = kBITHockeySDKURL;
     _userID = nil;
     _userName = nil;
     _userEmail = nil;
     
-    NSLocale *enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     _rfc3339Formatter = [[NSDateFormatter alloc] init];
     [_rfc3339Formatter setLocale:enUSPOSIXLocale];
     [_rfc3339Formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
@@ -73,15 +67,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [_serverURL release]; _serverURL = nil;
-  
-  [_appIdentifier release]; _appIdentifier = nil;
-  [_userName release]; _userName = nil;
-  [_userEmail release]; _userEmail = nil;
-
-  [super dealloc];
-}
 
 
 #pragma mark - Private
@@ -99,7 +84,7 @@
   sysctlbyname("hw.machine", NULL, &size, NULL, 0);
   char *answer = (char*)malloc(size);
   sysctlbyname("hw.machine", answer, &size, NULL, 0);
-  NSString *platform = [NSString stringWithCString:answer encoding: NSUTF8StringEncoding];
+  NSString *platform = @(answer);
   free(answer);
   return platform;
 }
@@ -108,23 +93,6 @@
 #pragma mark - Manager Control
 
 - (void)startManager {
-}
-
-
-#pragma mark - Networking
-
-- (NSData *)appendPostValue:(NSString *)value forKey:(NSString *)key {
-  NSString *boundary = @"----FOO";
-  
-  NSMutableData *postBody = [NSMutableData data];
-  
-  [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [postBody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\";\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
-  [postBody appendData:[[NSString stringWithFormat:@"Content-Type: text\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-  [postBody appendData:[value dataUsingEncoding:NSUTF8StringEncoding]];    
-  [postBody appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-  
-  return postBody;
 }
 
 

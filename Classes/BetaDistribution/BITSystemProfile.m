@@ -39,7 +39,7 @@
   CFStringGetCString(uuid, buffer, 128, kCFStringEncodingMacRoman);
   CFRelease(uuid);
   
-  return [NSString stringWithCString:buffer encoding:NSUTF8StringEncoding];
+  return @(buffer);
 }
 
 + (NSString *)deviceModel {
@@ -55,7 +55,7 @@
     if (cpuModel != NULL) {
       error = sysctlbyname("hw.model", cpuModel, &length, NULL, 0);
       if (error == 0) {
-        model = [NSString stringWithUTF8String:cpuModel];
+        model = @(cpuModel);
       }
       free(cpuModel);
     }
@@ -111,9 +111,8 @@
 }
 
 - (void)dealloc {
-  [_usageStartTimestamp release], _usageStartTimestamp = nil;
+  _usageStartTimestamp = nil;
   
-  [super dealloc];
 }
 
 - (void)startUsageForBundle:(NSBundle *)bundle {
@@ -134,9 +133,9 @@
     }
     
     if (newVersion) {
-      [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]] forKey:kBITUpdateDateOfVersionInstallation];
+      [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate]) forKey:kBITUpdateDateOfVersionInstallation];
       [[NSUserDefaults standardUserDefaults] setObject:[bundle objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:kBITUpdateUsageTimeForVersionString];
-      [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:0] forKey:kBITUpdateUsageTimeOfCurrentVersion];
+      [[NSUserDefaults standardUserDefaults] setObject:@0.0 forKey:kBITUpdateUsageTimeOfCurrentVersion];
       [[NSUserDefaults standardUserDefaults] synchronize];
     }
   }
@@ -161,7 +160,7 @@
     
     self.usageStartTimestamp = nil;
     
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:previousTimeDifference + timeDifference] forKey:kBITUpdateUsageTimeOfCurrentVersion];
+    [[NSUserDefaults standardUserDefaults] setObject:@(previousTimeDifference + timeDifference) forKey:kBITUpdateUsageTimeOfCurrentVersion];
     [[NSUserDefaults standardUserDefaults] synchronize];
   }
 }
@@ -183,22 +182,22 @@
 	NSArray *keys = [self profileKeys];
   
   NSString *uuid = [[self class] deviceIdentifier];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"udid", @"UDID", uuid, uuid, nil] forKeys:keys]];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"udid", @"UDID", uuid, uuid] forKeys:keys]];
   
   NSString *app_version = [bundle objectForInfoDictionaryKey:@"CFBundleVersion"];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"app_version", @"App Version", app_version, app_version, nil] forKeys:keys]];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"app_version", @"App Version", app_version, app_version] forKeys:keys]];
   
   if ([[bundle preferredLocalizations] count] > 0) {
-    NSString *language = [[bundle preferredLocalizations] objectAtIndex:0];
+    NSString *language = [bundle preferredLocalizations][0];
     [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"used_lang", @"Used Language", language, language] forKeys:keys]];
   }
   
   NSString *os_version = [[self class] systemVersionString];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"os_version", @"OS Version", os_version, os_version, nil] forKeys:keys]];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"os", @"OS", @"Mac OS", @"Mac OS", nil] forKeys:keys]];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"os_version", @"OS Version", os_version, os_version] forKeys:keys]];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"os", @"OS", @"Mac OS", @"Mac OS"] forKeys:keys]];
   
   NSString *model = [[self class] deviceModel];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"model", @"Model", model, model, nil] forKeys:keys]];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"model", @"Model", model, model] forKeys:keys]];
   
   return profileArray;
 }
@@ -212,7 +211,7 @@
 	NSArray *keys = [self profileKeys];
 
   NSString *usageTime = [self currentUsageString];
-  [profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"usage_time", @"Usage Time", usageTime, usageTime, nil] forKeys:keys]];
+  [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"usage_time", @"Usage Time", usageTime, usageTime] forKeys:keys]];
 
   return profileArray;
 }
@@ -222,7 +221,7 @@
 }
 
 - (NSArray *)profileKeys {
-  return [NSArray arrayWithObjects:@"key", @"displayKey", @"value", @"displayValue", nil];
+  return @[@"key", @"displayKey", @"value", @"displayValue"];
 }
 
 @end

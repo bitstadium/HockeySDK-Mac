@@ -1,7 +1,7 @@
 
 ## Introduction
 
-HockeyMac is a simple client application for Mac OS 10.6 or higher to upload files to HockeyApp. After the installation, you can drag & drop either .ipa files or .xcarchive bundles to the dock or menu icon. HockeyMac will then open a window to enter release notes and set the download flag of the version. The upload is shown with a progress bar and there is some minimal error handling.
+HockeyMac is a simple client application for Mac OS 10.8 or higher to upload files to HockeyApp. After the installation, you can drag & drop either .ipa files or .xcarchive bundles to the dock or menu icon. HockeyMac will then open a window to enter release notes and set the download flag of the version. The upload is shown with a progress bar and there is some minimal error handling.
 
 This document contains the following sections:
 

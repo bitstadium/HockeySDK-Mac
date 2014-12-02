@@ -31,7 +31,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "CrashReporter.h"
+#import <CrashReporter/CrashReporter.h>
 
 #import <mach-o/dyld.h>
 #import <mach-o/getsect.h>
@@ -62,6 +62,25 @@
 #ifndef CPU_SUBTYPE_ARM_V8
 # define CPU_SUBTYPE_ARM_V8 13
 #endif
+
+
+/**
+ *  HockeySDK Crash Reporter error domain
+ */
+typedef NS_ENUM (NSInteger, BITBinaryImageType) {
+    /**
+     *  App binary
+     */
+    BITBinaryImageTypeAppBinary,
+    /**
+     *  App provided framework
+     */
+    BITBinaryImageTypeAppFramework,
+    /**
+     *  Image not related to the app
+     */
+    BITBinaryImageTypeOther
+};
 
 
 @interface BITCrashReportTextFormatter (PrivateAPI)
@@ -322,8 +341,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         
         NSString *incidentIdentifier = @"???";
         if (report.uuidRef != NULL) {
-            incidentIdentifier = (NSString *) CFUUIDCreateString(NULL, report.uuidRef);
-            [incidentIdentifier autorelease];
+            incidentIdentifier = (NSString *) CFBridgingRelease(CFUUIDCreateString(NULL, report.uuidRef));
         }
         
         [text appendFormat: @"Incident Identifier: %@\n", incidentIdentifier];
@@ -348,7 +366,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
                 processName = report.processInfo.processName;
             
             /* PID */
-            processId = [[NSNumber numberWithUnsignedInteger: report.processInfo.processID] stringValue];
+            processId = [@(report.processInfo.processID) stringValue];
             
             /* Process Path */
             if (report.processInfo.processPath != nil) {
@@ -446,7 +464,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         /* Write out the frames. In raw reports, Apple writes this out as a simple list of PCs. In the minimally
          * post-processed report, Apple writes this out as full frame entries. We use the latter format. */
         for (NSUInteger frame_idx = 0; frame_idx < [exception.stackFrames count]; frame_idx++) {
-            BITPLCrashReportStackFrameInfo *frameInfo = [exception.stackFrames objectAtIndex: frame_idx];
+            BITPLCrashReportStackFrameInfo *frameInfo = (exception.stackFrames)[frame_idx];
             [text appendString: [self bit_formatStackFrame: frameInfo frameIndex: frame_idx report: report lp64: lp64]];
         }
         [text appendString: @"\n"];
@@ -462,7 +480,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
             [text appendFormat: @"Thread %ld:\n", (long) thread.threadNumber];
         }
         for (NSUInteger frame_idx = 0; frame_idx < [thread.stackFrames count]; frame_idx++) {
-            BITPLCrashReportStackFrameInfo *frameInfo = [thread.stackFrames objectAtIndex: frame_idx];
+            BITPLCrashReportStackFrameInfo *frameInfo = (thread.stackFrames)[frame_idx];
             [text appendString: [self bit_formatStackFrame: frameInfo frameIndex: frame_idx report: report lp64: lp64]];
         }
         [text appendString: @"\n"];
@@ -526,11 +544,11 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         
         /* Determine if this is the main executable or an app specific framework*/
         NSString *binaryDesignator = @" ";
-        NSString *imagePath = [imageInfo.imageName stringByStandardizingPath];
-        NSString *appBundleContentsPath = [[report.processInfo.processPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-        
-        if ([imagePath isEqual: report.processInfo.processPath] || [imagePath hasPrefix:appBundleContentsPath])
+        BITBinaryImageType imageType = [[self class] bit_imageTypeForImagePath:imageInfo.imageName
+                                                                   processPath:report.processInfo.processPath];
+        if (imageType != BITBinaryImageTypeOther) {
             binaryDesignator = @"+";
+        }
         
         /* base_address - terminating_address [designator]file_name arch <uuid> file_path */
         NSString *fmt = nil;
@@ -590,7 +608,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         const char *foundSelector = findSEL([imageForRegAddress.imageName UTF8String], imageForRegAddress.imageUUID, regAddress - (uint64_t)imageForRegAddress.imageBaseAddress);
         
         if (foundSelector != NULL) {
-            return [NSString stringWithUTF8String:foundSelector];
+            return @(foundSelector);
         }
     }
     
@@ -621,29 +639,51 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         NSString *archName = [[self class] bit_archNameFromImageInfo:imageInfo];
         
         /* Determine if this is the app executable or app specific framework */
-        NSString *imagePath = [imageInfo.imageName stringByStandardizingPath];
-        NSString *appBundleContentsPath = [[report.processInfo.processPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-        NSString *imageType = @"";
+        BITBinaryImageType imageType = [[self class] bit_imageTypeForImagePath:[imageInfo.imageName stringByStandardizingPath]
+                                                                   processPath:report.processInfo.processPath];
+        NSString *imageTypeString = @"";
         
-        if ([imageInfo.imageName isEqual: report.processInfo.processPath]) {
-            imageType = @"app";
-        } else {
-            imageType = @"framework";
-        }
+        if (imageType != BITBinaryImageTypeOther) {
+            if (imageType == BITBinaryImageTypeAppBinary) {
+                imageTypeString = @"app";
+            } else {
+                imageTypeString = @"framework";
+            }
         
-        if ([imagePath isEqual: report.processInfo.processPath] || [imagePath hasPrefix:appBundleContentsPath]) {
-            [appUUIDs addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                 uuid, kBITBinaryImageKeyUUID,
-                                 archName, kBITBinaryImageKeyArch,
-                                 imageType, kBITBinaryImageKeyType,
-                                 nil
-                                 ]
+            [appUUIDs addObject:@{kBITBinaryImageKeyUUID: uuid,
+                                 kBITBinaryImageKeyArch: archName,
+                                 kBITBinaryImageKeyType: imageTypeString}
              ];
         }
     }
     
-    
     return appUUIDs;
+}
+
+/* Determine if in binary image is the app executable or app specific framework */
++ (BITBinaryImageType)bit_imageTypeForImagePath:(NSString *)imagePath processPath:(NSString *)processPath {
+    BITBinaryImageType imageType = BITBinaryImageTypeOther;
+    
+    imagePath = [[imagePath stringByStandardizingPath] lowercaseString];
+    processPath = [processPath lowercaseString];
+    
+    NSRange appRange = [imagePath rangeOfString: @".app/"];
+    
+    // Exclude iOS swift dylibs. These are provided as part of the app binary by Xcode for now, but we never get a dSYM for those.
+    NSRange swiftLibRange = [imagePath rangeOfString:@"frameworks/libswift"];
+    BOOL dylibSuffix = [imagePath hasSuffix:@".dylib"];
+    
+    if (appRange.location != NSNotFound && !(swiftLibRange.location != NSNotFound && dylibSuffix)) {
+        NSString *appBundleContentsPath = [imagePath substringToIndex:appRange.location + 5];
+        
+        if ([imagePath isEqual: processPath]) {
+            imageType = BITBinaryImageTypeAppBinary;
+        } else if ([imagePath hasPrefix:appBundleContentsPath]) {
+            imageType = BITBinaryImageTypeAppFramework;
+        }
+    }
+    
+    return imageType;
 }
 
 @end
@@ -764,12 +804,9 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
     
     /* If symbol info is available, the format used in Apple's reports is Sym + OffsetFromSym. Otherwise,
      * the format used is imageBaseAddress + offsetToIP */
-    NSString *imagePath = [imageInfo.imageName stringByStandardizingPath];
-    NSString *appBundleContentsPath = [[report.processInfo.processPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-    
-    if (frameInfo.symbolInfo != nil &&
-        ![imagePath isEqual: report.processInfo.processPath] &&
-        ![imagePath hasPrefix:appBundleContentsPath]) {
+    BITBinaryImageType imageType = [[self class] bit_imageTypeForImagePath:imageInfo.imageName
+                                                               processPath:report.processInfo.processPath];
+    if (frameInfo.symbolInfo != nil && imageType == BITBinaryImageTypeOther) {
         NSString *symbolName = frameInfo.symbolInfo.symbolName;
         
         /* Apple strips the _ symbol prefix in their reports. Only OS X makes use of an

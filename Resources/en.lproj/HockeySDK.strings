@@ -7,6 +7,9 @@
   Copyright (c) 2012 Codenauts UG (haftungsbeschränkt). All rights reserved.
 */
 
+
+/* Crash dialog */
+
 /* Window title string, with placeholder for the AppName */
 "WindowTitle" = "Problem Report for %@";
 
@@ -34,7 +37,7 @@
 /* Show Details Button */
 "ShowDetailsButtonTitle" = "Show Details";
 
-/* HIde Details Button */
+/* Hide Details Button */
 "HideDetailsButtonTitle" = "Hide Details";
 
 /* Cancel Button */
@@ -43,3 +46,38 @@
 /* Send Button */
 "SendButtonTitle" = "Send";
 
+
+/* Feedback UI */
+
+/* Compose view placeholder text */
+"FeedbackComposePlaceHolder" = "Your Feedback";
+
+/* Last Update in Status Bar */
+"FeedbackLastUpdate" = "Last Update:";
+
+/* Never in Status Bar */
+"FeedbackLastUpdateNever" = "Never";
+
+/* From text between timestamp and author */
+"FeedbackFrom" = "from";
+
+/* Send button title */
+"FeedbackSendButton" = "Send";
+
+/* Contact info text */
+"FeedbackContactInfo" = "Please provide your contact information";
+
+/* Name placeholder text */
+"FeedbackName" = "Name";
+
+/* Email placeholder text */
+"FeedbackEmail" = "Email";
+
+/* Continue button title */
+"FeedbackContinueButton" = "Continue";
+
+/* Attachment context menu action Preview */
+"FeedbackAttachmentMenuPreview" = "Preview";
+
+/* Attachment context menu action Remove */
+"FeedbackAttachmentMenuRemove" = "Remove";

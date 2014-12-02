@@ -2,7 +2,6 @@
  * Author: Andreas Linde <mail@andreaslinde.de>
  *
  * Copyright (c) 2014 HockeyApp, Bit Stadium GmbH.
- * Copyright (c) 2013 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -27,18 +26,23 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#import <Cocoa/Cocoa.h>
 
-#import <Foundation/Foundation.h>
 
-@interface NSURLConnection (BITAdditions)
+@class BITFeedbackMessage;
+@protocol BITFeedbackMessageCellViewDelegate;
 
-+ (void) bit_sendAsynchronousRequest: (NSURLRequest *)request
-                               queue: (NSOperationQueue *)queue
-                   completionHandler: (void (^)(NSURLResponse *response, NSData *data, NSError *error)) handler;
+@interface BITFeedbackMessageCellView : NSTableCellView
 
-+ (void) bit_sendAsynchronousRequest: (NSURLRequest *)request
-               maximumResourceLength: (NSUInteger) maximumResourceLength
-                               queue: (NSOperationQueue *) queue
-                   completionHandler: (void (^)(NSURLResponse *response, NSData *data, NSError *error)) handler;
+@property (nonatomic, strong) BITFeedbackMessage *message;
+@property (nonatomic, strong) NSTextField *messageTextField;
+@property (nonatomic, strong) NSTextField *dateTextField;
+
+- (instancetype)initWithFrame:(NSRect)frameRect delegate:(id<BITFeedbackMessageCellViewDelegate>)delegate;
+
++ (NSString *)identifier;
++ (CGFloat) heightForRowWithMessage:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width;
+
+- (void)updateAttachmentViews;
 
 @end
