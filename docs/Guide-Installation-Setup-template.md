@@ -1,6 +1,6 @@
-## Version 3.0 Beta 1
+## Version 3.0
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/3.0-b.1/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/3.0/docs/docs/Changelog.html)
 
 ## Introduction
 
@@ -285,7 +285,7 @@ This documentation provides integrated help in Xcode for all public APIs and a s
 
 3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSets`
 
-The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/3.0-b.1/](http://hockeyapp.net/help/sdk/mac/3.0-b.1/)
+The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/3.0/](http://hockeyapp.net/help/sdk/mac/3.0/)
 
 ### Checklist if Crashes Do Not Appear in HockeyApp
 

@@ -1,6 +1,6 @@
-## Version 3.0 Beta 1
+## Version 3.0
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/3.0-b.1/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/3.0/docs/docs/Changelog.html)
 
 
 ## Introduction
@@ -27,7 +27,7 @@ The main SDK class is `BITHockeyManager`. It initializes all modules and provide
 
 ## Installation & Setup
 
-- [Installation & Setup](http://www.hockeyapp.net/help/sdk/mac/3.0-b.1/docs/docs/Guide-Installation-Setup.html)
+- [Installation & Setup](http://www.hockeyapp.net/help/sdk/mac/3.0/docs/docs/Guide-Installation-Setup.html)
 - [Mac Desktop Uploader](http://support.hockeyapp.net/kb/how-tos/how-to-upload-to-hockeyapp-on-a-mac)
 
 
@@ -41,5 +41,5 @@ This documentation provides integrated help in Xcode for all public APIs and a s
 
 3. Copy the content into ~`/Library/Developer/Shared/Documentation/DocSets`
 
-The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/3.0-b.1/](http://hockeyapp.net/help/sdk/mac/3.0-b.1/)
+The documentation is also available via the following URL: [http://hockeyapp.net/help/sdk/mac/3.0/](http://hockeyapp.net/help/sdk/mac/3.0/)
 
