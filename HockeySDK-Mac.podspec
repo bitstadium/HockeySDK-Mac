@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
 
   s.platform              = :osx, '10.7'
   s.osx.deployment_target = 10.7
+  s.requires_arc          = false
   
   s.vendored_frameworks   = "HockeySDK-Mac/HockeySDK.framework"
   s.public_header_files   = "HockeySDK-Mac/HockeySDK.framework/Headers/*.h*"
