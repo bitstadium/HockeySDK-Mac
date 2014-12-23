@@ -11,8 +11,8 @@ Pod::Spec.new do |s|
                         and App Store builds.
                         DESC
 
-  s.homepage          = 'http://hockeyapp.net/'
-  s.documentation_url = 'http://hockeyapp.net/help/sdk/mac/3.0/'
+  s.homepage          = 'http://www.hockeyapp.net/'
+  s.documentation_url = 'http://www.hockeyapp.net/help/sdk/mac/3.0/'
 
   s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.txt' }
   s.author            = { 'Andreas Linde' => 'mail@andreaslinde.de', 'Thomas Dohmke' => "thomas@dohmke.de" }
