@@ -726,9 +726,13 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
           [_crashReportUI setUserName:[self userNameForCrashReport]];
           [_crashReportUI setUserEmail:[self userEmailForCrashReport]];
           
-          [_crashReportUI askCrashReportDetails];
-          [_crashReportUI showWindow:self];
-          [_crashReportUI.window makeKeyAndOrderFront:self];
+          if (_crashReportUI.nibDidLoadSuccessfully) {
+            [_crashReportUI askCrashReportDetails];
+            [_crashReportUI showWindow:self];
+            [_crashReportUI.window makeKeyAndOrderFront:self];
+          } else {
+            [self sendNextCrashReport];
+          }
         }
       } else {
         [self cleanCrashReportWithFilename:_lastCrashFilename];
