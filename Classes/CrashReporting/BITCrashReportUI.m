@@ -69,9 +69,7 @@ const CGFloat kDetailsHeight = 285;
   IBOutlet NSButton *hideButton;
   IBOutlet NSButton *cancelButton;
   IBOutlet NSButton *submitButton;
-  
-  NSMenu          *_mainAppMenu;
-  
+
   BITCrashManager *_crashManager;
   
   NSString *_applicationName;
@@ -90,7 +88,6 @@ const CGFloat kDetailsHeight = 285;
   self = [super initWithWindowNibName: @"BITCrashReportUI"];
   
   if ( self != nil) {
-    _mainAppMenu = [NSApp mainMenu];
     _crashManager = crashManager;
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
@@ -143,8 +140,6 @@ const CGFloat kDetailsHeight = 285;
 
 - (void)endCrashReporter {
   [self close];
-  [NSApp stopModal];
-  [NSApp setMainMenu:_mainAppMenu];
 }
 
 
