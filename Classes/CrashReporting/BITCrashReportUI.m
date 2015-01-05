@@ -80,6 +80,7 @@ const CGFloat kDetailsHeight = 285;
   BOOL _showUserDetails;
   BOOL _showComments;
   BOOL _showDetails;
+  BOOL _runModally;
 }
 
 
@@ -98,6 +99,7 @@ const CGFloat kDetailsHeight = 285;
     _showDetails = NO;
     _showUserDetails = askUserDetails;
     _nibDidLoadSuccessfully = NO;
+    _runModally = NO;
 
     NSRect windowFrame = [[self window] frame];
     windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height - kDetailsHeight);
@@ -129,6 +131,12 @@ const CGFloat kDetailsHeight = 285;
 }
 
 
+- (void)runModally {
+  _runModally = YES;
+  [NSApp runModalForWindow:[self window]];
+}
+
+
 - (void)awakeFromNib {
   _nibDidLoadSuccessfully = YES;
   [crashLogTextView setEditable:NO];
@@ -140,6 +148,9 @@ const CGFloat kDetailsHeight = 285;
 
 - (void)endCrashReporter {
   [self close];
+  if (_runModally) {
+    [NSApp stopModal];
+  }
 }
 
 

@@ -190,6 +190,15 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerUserInput) {
  */
 @property (nonatomic, assign, getter=isAutoSubmitCrashReport) BOOL autoSubmitCrashReport;
 
+
+/**
+ *  Defines if the crash report UI should be shown modally
+ *
+ *  Default: _NO_
+ */
+@property (nonatomic, assign) BOOL submitModally;
+
+
 /**
  * Set the callbacks that will be executed prior to program termination after a crash has occurred
  *
