@@ -1,0 +1,83 @@
+/*
+ Localizable.strings
+ HockeySDK
+ 
+ Created by Andreas Linde on 01.07.12.
+ Copyright (c) 2012-2013 HockeyApp, Bit Stadium GmbH. All rights reserved.
+ Copyright (c) 2012 Codenauts UG (haftungsbeschränkt). All rights reserved.
+ */
+
+
+/* Crash dialog */
+
+/* Window title string, with placeholder for the AppName */
+"WindowTitle" = "%@ 问题报告";
+
+/* Introduction text, with app name placeholder first and company placeholder second */
+"IntroductionText" = "%@ 异常退出了. 你是否愿意发送报告以便我们修复问题？";
+
+/* Name Text Title */
+"NameTextTitle" = "姓名";
+
+/* Email Text Title */
+"EmailTextTitle" = "Email";
+
+/* Comments Disclosure Text */
+"CommentsDisclosureTitle" = "备注";
+
+/* User description placeholder */
+"UserDescriptionPlaceholder" = "请描述可以触发问题的详细步骤";
+
+/* Problems Details Box  Title */
+"ProblemDetailsTitle" = "问题细节和系统配置";
+
+/* Privacy note text */
+"PrivacyNote" = "仅显示的内容会被包含在报告中。";
+
+/* Show Details Button */
+"ShowDetailsButtonTitle" = "显示详情";
+
+/* Hide Details Button */
+"HideDetailsButtonTitle" = "隐藏详情";
+
+/* Cancel Button */
+"CancelButtonTitle" = "取消";
+
+/* Send Button */
+"SendButtonTitle" = "发送";
+
+
+/* Feedback UI */
+
+/* Compose view placeholder text */
+"FeedbackComposePlaceHolder" = "你的反馈";
+
+/* Last Update in Status Bar */
+"FeedbackLastUpdate" = "最后更新：";
+
+/* Never in Status Bar */
+"FeedbackLastUpdateNever" = "从未";
+
+/* From text between timestamp and author */
+"FeedbackFrom" = "来自";
+
+/* Send button title */
+"FeedbackSendButton" = "发送";
+
+/* Contact info text */
+"FeedbackContactInfo" = "请提供你的联系信息";
+
+/* Name placeholder text */
+"FeedbackName" = "姓名";
+
+/* Email placeholder text */
+"FeedbackEmail" = "Email";
+
+/* Continue button title */
+"FeedbackContinueButton" = "继续";
+
+/* Attachment context menu action Preview */
+"FeedbackAttachmentMenuPreview" = "预览";
+
+/* Attachment context menu action Remove */
+"FeedbackAttachmentMenuRemove" = "移除";
