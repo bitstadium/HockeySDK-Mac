@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6751"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="BITCrashReportUI">
@@ -72,6 +72,7 @@
                                                 <accessibility description="Please describe any steps needed to trigger the problem" help="Please describe any steps needed to trigger the problem"/>
                                                 <connections>
                                                     <binding destination="-2" name="value" keyPath="self" id="419"/>
+                                                    <outlet property="nextKeyView" destination="411" id="Ib8-So-CjV"/>
                                                 </connections>
                                             </textView>
                                         </subviews>
@@ -114,6 +115,7 @@
                                 </dictionary>
                             </binding>
                             <outlet property="delegate" destination="-2" id="486"/>
+                            <outlet property="nextKeyView" destination="391" id="rAo-nh-zqg"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="496">
@@ -131,6 +133,7 @@
                                 </dictionary>
                             </binding>
                             <outlet property="delegate" destination="-2" id="498"/>
+                            <outlet property="nextKeyView" destination="500" id="CRF-0N-Abk"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="500">
@@ -148,6 +151,7 @@
                                 </dictionary>
                             </binding>
                             <outlet property="delegate" destination="-2" id="502"/>
+                            <outlet property="nextKeyView" destination="367" id="UjO-7Q-SIE"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="370">
@@ -169,6 +173,7 @@
                         <connections>
                             <action selector="showDetails:" target="-2" id="416"/>
                             <binding destination="-2" name="hidden" keyPath="showDetails" id="453"/>
+                            <outlet property="nextKeyView" destination="368" id="1Z6-ot-fBV"/>
                         </connections>
                     </button>
                     <button hidden="YES" verticalHuggingPriority="750" id="411">
@@ -185,6 +190,7 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
+                            <outlet property="nextKeyView" destination="396" id="f1Y-uB-NQ4"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="368">
@@ -199,6 +205,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="cancelReport:" target="-2" id="454"/>
+                            <outlet property="nextKeyView" destination="369" id="J6g-CS-dEw"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="369">
@@ -213,6 +220,7 @@ DQ
                         </buttonCell>
                         <connections>
                             <action selector="submitReport:" target="-2" id="398"/>
+                            <outlet property="nextKeyView" destination="496" id="ISZ-Vw-xxx"/>
                         </connections>
                     </button>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="367">
@@ -225,6 +233,7 @@ DQ
                         <connections>
                             <action selector="showComments:" target="-2" id="417"/>
                             <binding destination="-2" name="value" keyPath="showComments" id="438"/>
+                            <outlet property="nextKeyView" destination="455" id="k5s-qC-Hnb"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="366">
@@ -286,7 +295,7 @@ DQ
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="399"/>
-                <outlet property="initialFirstResponder" destination="369" id="395"/>
+                <outlet property="initialFirstResponder" destination="369" id="wGX-dL-cBk"/>
             </connections>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="440"/>
