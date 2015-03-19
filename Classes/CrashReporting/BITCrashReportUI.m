@@ -101,11 +101,11 @@ const CGFloat kDetailsHeight = 285;
 
     NSRect windowFrame = [[self window] frame];
     windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height - kDetailsHeight);
-    windowFrame.origin.y -= kDetailsHeight;
+    windowFrame.origin.y += kDetailsHeight / 2;
     
     if (!askUserDetails) {
       windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height - kUserHeight);
-      windowFrame.origin.y -= kUserHeight;
+      windowFrame.origin.y += kUserHeight / 2;
       
       NSRect frame = commentsTextFieldTitle.frame;
       frame.origin.y += kUserHeight;
