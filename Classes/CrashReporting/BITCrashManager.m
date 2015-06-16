@@ -38,6 +38,7 @@
 #import "BITCrashDetails.h"
 #import "BITCrashDetailsPrivate.h"
 #import "BITCrashMetaData.h"
+#import "BITCrashCXXExceptionHandler.h"
 
 #import "BITHockeyHelper.h"
 #import "BITHockeyAppClient.h"
@@ -81,6 +82,52 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   .context = NULL,
   .handleSignal = plcr_post_crash_callback
 };
+
+
+// Temporary class until PLCR catches up
+// We trick PLCR with an Objective-C exception.
+//
+// This code provides us access to the C++ exception message and stack trace.
+//
+@interface BITCrashCXXExceptionWrapperException : NSException
+- (instancetype)initWithCXXExceptionInfo:(const BITCrashUncaughtCXXExceptionInfo *)info;
+@end
+
+@implementation BITCrashCXXExceptionWrapperException {
+  const BITCrashUncaughtCXXExceptionInfo *_info;
+}
+
+- (instancetype)initWithCXXExceptionInfo:(const BITCrashUncaughtCXXExceptionInfo *)info {
+  extern char* __cxa_demangle(const char* mangled_name, char* output_buffer, size_t* length, int* status);
+  char *demangled_name = __cxa_demangle ? __cxa_demangle(info->exception_type_name ?: "", NULL, NULL, NULL) : NULL;
+  
+  if ((self = [super
+               initWithName:[NSString stringWithUTF8String:demangled_name ?: info->exception_type_name ?: ""]
+               reason:[NSString stringWithUTF8String:info->exception_message ?: ""]
+               userInfo:nil])) {
+    _info = info;
+  }
+  return self;
+}
+
+- (NSArray *)callStackReturnAddresses {
+  NSMutableArray *cxxFrames = [NSMutableArray arrayWithCapacity:_info->exception_frames_count];
+  
+  for (uint32_t i = 0; i < _info->exception_frames_count; ++i) {
+    [cxxFrames addObject:[NSNumber numberWithUnsignedLongLong:_info->exception_frames[i]]];
+  }
+  return cxxFrames;
+}
+
+@end
+
+
+// C++ Exception Handler
+static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInfo *info) {
+  // This relies on a LOT of sneaky internal knowledge of how PLCR works and should not be considered a long-term solution.
+  NSGetUncaughtExceptionHandler()([[BITCrashCXXExceptionWrapperException alloc] initWithCXXExceptionInfo:info]);
+  abort();
+}
 
 
 @implementation BITCrashManager {
@@ -812,6 +859,9 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
         // this should never happen, theoretically only if NSSetUncaugtExceptionHandler() has some internal issues
         NSLog(@"[HockeySDK] ERROR: Exception handler could not be set. Make sure there is no other exception handler set up!");
       }
+        
+      // Add the C++ uncaught exception handler, which is currently not handled by PLCrashReporter internally
+      [BITCrashUncaughtCXXExceptionHandlerManager addCXXExceptionHandler:uncaught_cxx_exception_handler];
     } else {
       NSLog(@"[HockeySDK] WARNING: Detecting crashes is NOT enabled due to running the app with a debugger attached.");
     }
