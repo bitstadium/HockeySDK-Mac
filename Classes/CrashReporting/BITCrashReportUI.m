@@ -123,9 +123,10 @@ const CGFloat kDetailsHeight = 285;
     [[self window] setFrame: windowFrame
                     display: YES
                     animate: NO];
+    [[self window] center];
     
   }
-  return self;  
+  return self;
 }
 
 
