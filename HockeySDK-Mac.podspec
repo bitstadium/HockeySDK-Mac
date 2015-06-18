@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 
   s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.txt' }
   s.author            = { 'Andreas Linde' => 'mail@andreaslinde.de', 'Thomas Dohmke' => "thomas@dohmke.de" }
-  s.source            = { :http => "http://download.hockeyapp.net/sdk/mac/HockeySDK-Mac-3.0.zip" }
+  s.source            = { :http => "http://download.hockeyapp.net/sdk/mac/HockeySDK-Mac-#{s.version}.zip" }
 
   s.platform              = :osx, '10.7'
   s.osx.deployment_target = 10.7
