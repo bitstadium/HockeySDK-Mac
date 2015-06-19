@@ -44,7 +44,7 @@
 #import "BITHockeyAppClient.h"
 
 #import "BITCrashReportTextFormatter.h"
-#import <CrashReporter/CrashReporter.h>
+#import "CrashReporter.h"
 
 #import <sys/sysctl.h>
 #import <objc/runtime.h>
@@ -649,6 +649,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
                                                                              crashTime:appCrashTime
                                                                              osVersion:report.systemInfo.operatingSystemVersion
                                                                                osBuild:report.systemInfo.operatingSystemBuild
+                                                                            appVersion:report.applicationInfo.applicationMarketingVersion
                                                                               appBuild:report.applicationInfo.applicationVersion
                                     ];
       }
@@ -919,6 +920,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     NSString *installString = nil;
     NSString *crashLogString = nil;
     NSString *appBundleIdentifier = nil;
+    NSString *appBundleMarketingVersion = nil;
     NSString *appBundleVersion = nil;
     NSString *osVersion = nil;
     NSString *deviceModel = nil;
@@ -946,6 +948,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     metaFilename = [filename stringByAppendingPathExtension:@"meta"];
     crashLogString = [BITCrashReportTextFormatter stringValueForCrashReport:report crashReporterKey:installString];
     appBundleIdentifier = report.applicationInfo.applicationIdentifier;
+    appBundleMarketingVersion = report.applicationInfo.applicationMarketingVersion ?: @"";
     appBundleVersion = report.applicationInfo.applicationVersion;
     osVersion = report.systemInfo.operatingSystemVersion;
     deviceModel = [BITSystemProfile deviceModel];
@@ -991,13 +994,14 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
       }
     }
     
-    crashXML = [NSString stringWithFormat:@"<crashes><crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><platform>%@</platform><senderversion>%@</senderversion><version>%@</version><uuid>%@</uuid><log><![CDATA[%@]]></log><userid>%@</userid><username>%@</username><contact>%@</contact><installstring>%@</installstring><description><![CDATA[%@]]></description></crash></crashes>",
+    crashXML = [NSString stringWithFormat:@"<crashes><crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><platform>%@</platform><senderversion>%@</senderversion><versionstring>%@</versionstring><version>%@</version><uuid>%@</uuid><log><![CDATA[%@]]></log><userid>%@</userid><username>%@</username><contact>%@</contact><installstring>%@</installstring><description><![CDATA[%@]]></description></crash></crashes>",
                 [[self applicationName] UTF8String],
                 appBinaryUUIDs,
                 appBundleIdentifier,
                 osVersion,
                 deviceModel,
                 [self applicationVersion],
+                appBundleMarketingVersion,
                 appBundleVersion,
                 crashUUID,
                 [crashLogString stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,crashLogString.length)],

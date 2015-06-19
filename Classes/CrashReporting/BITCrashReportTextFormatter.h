@@ -34,8 +34,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import <CrashReporter/PLCrashNamespace.h>
-#import <CrashReporter/PLCrashReport.h>
+#import "PLCrashNamespace.h"
+#import "PLCrashReport.h"
 
 // Dictionary keys for array elements returned by arrayOfAppUUIDsForCrashReport:
 #ifndef kBITBinaryImageKeyUUID
