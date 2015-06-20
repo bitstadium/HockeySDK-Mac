@@ -16,8 +16,8 @@ The main SDK class is `BITHockeyManager`. It initializes all modules and provide
 ## Prerequisites
 
 1. Before you integrate HockeySDK into your own app, you should add the app to HockeyApp if you haven't already. Read [this how-to](http://support.hockeyapp.net/kb/how-tos/how-to-create-a-new-app) on how to do it.
-2. We also assume that you already have a project in Xcode and that this project is opened in Xcode 4.
-3. The SDK supports Mac OS X 10.7.0 or newer.
+2. We also assume that you already have a project in Xcode and that this project is opened in Xcode 6.
+3. The SDK supports Mac OS X 10.7 or newer.
 
 ## Release Notes
 
@@ -33,7 +33,7 @@ The main SDK class is `BITHockeyManager`. It initializes all modules and provide
 
 - [How to do app versioning](HowTo-App-Versioning)
 - [How to upload symbols for crash reporting](HowTo-Upload-Symbols)
-- [How to add application specific log data](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/how-to-add-application-specific-log-data-on-ios)
+- [How to add application specific log data](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/how-to-add-application-specific-log-data-on-ios-or-osx)
 
 ## Troubleshooting
 
