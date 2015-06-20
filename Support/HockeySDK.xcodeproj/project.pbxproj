@@ -881,10 +881,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../Vendor/CrashReporter\"",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "../Resources/HockeySDK-Prefix.pch";
@@ -892,8 +888,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../Vendor/CrashReporter,
-					"/Users/andreaslinde/Sourcecode/HA/HockeySDK-MacDemo/Vendor/HockeySDK/Vendor/CrashReporter",
+					"\"$(SRCROOT)/../Vendor/CrashReporter\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -909,10 +904,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../Vendor/CrashReporter\"",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "../Resources/HockeySDK-Prefix.pch";
@@ -920,8 +911,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../Vendor/CrashReporter,
-					"/Users/andreaslinde/Sourcecode/HA/HockeySDK-MacDemo/Vendor/HockeySDK/Vendor/CrashReporter",
+					"\"$(SRCROOT)/../Vendor/CrashReporter\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
