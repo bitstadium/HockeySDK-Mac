@@ -47,7 +47,7 @@
   [super reportException: exception];
   
   // Don't invoke the registered UncaughtExceptionHandler if we are currently debugging this app!
-  if (![[BITHockeyManager sharedHockeyManager].crashManager isDebuggerAttached]) {
+  if (![[BITHockeyManager sharedHockeyManager].crashManager isDebuggerAttached] && exception) {
     // We forward this exception to PLCrashReporters UncaughtExceptionHandler
     // If the developer has implemented their own exception handler and that one is
     // invoked before PLCrashReporters exception handler and the developers
@@ -56,7 +56,7 @@
     // If we wouldn't do this, this call would lead to an infinite loop.
     
     NSUncaughtExceptionHandler *plcrExceptionHandler = [[BITHockeyManager sharedHockeyManager].crashManager plcrExceptionHandler];
-    if (plcrExceptionHandler && exception) {
+    if (plcrExceptionHandler) {
       plcrExceptionHandler(exception);
     }
   }
@@ -75,14 +75,7 @@
   @try {
     [super sendEvent:theEvent];
   } @catch (NSException *exception) {
-    // Don't invoke the registered UncaughtExceptionHandler if we are currently debugging this app!
-    if (![[BITHockeyManager sharedHockeyManager].crashManager isDebuggerAttached]) {
-      // We forward this exception to PLCrashReporters UncaughtExceptionHandler only
-      NSUncaughtExceptionHandler *plcrExceptionHandler = [[BITHockeyManager sharedHockeyManager].crashManager plcrExceptionHandler];
-      if (plcrExceptionHandler && exception) {
-        plcrExceptionHandler(exception);
-      }
-    }
+    [self reportException:exception];
   }
 }
 
