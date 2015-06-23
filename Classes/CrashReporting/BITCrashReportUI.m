@@ -69,9 +69,7 @@ const CGFloat kDetailsHeight = 285;
   IBOutlet NSButton *hideButton;
   IBOutlet NSButton *cancelButton;
   IBOutlet NSButton *submitButton;
-  
-  NSMenu          *_mainAppMenu;
-  
+
   BITCrashManager *_crashManager;
   
   NSString *_applicationName;
@@ -90,7 +88,6 @@ const CGFloat kDetailsHeight = 285;
   self = [super initWithWindowNibName: @"BITCrashReportUI"];
   
   if ( self != nil) {
-    _mainAppMenu = [NSApp mainMenu];
     _crashManager = crashManager;
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
@@ -100,7 +97,8 @@ const CGFloat kDetailsHeight = 285;
     _showComments = YES;
     _showDetails = NO;
     _showUserDetails = askUserDetails;
-    
+    _nibDidLoadSuccessfully = NO;
+
     NSRect windowFrame = [[self window] frame];
     windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height - kDetailsHeight);
     windowFrame.origin.y -= kDetailsHeight;
@@ -125,13 +123,15 @@ const CGFloat kDetailsHeight = 285;
     [[self window] setFrame: windowFrame
                     display: YES
                     animate: NO];
+    [[self window] center];
     
   }
-  return self;  
+  return self;
 }
 
 
 - (void)awakeFromNib {
+  _nibDidLoadSuccessfully = YES;
   [crashLogTextView setEditable:NO];
   if ([crashLogTextView respondsToSelector:@selector(setAutomaticSpellingCorrectionEnabled:)]) {
     [crashLogTextView setAutomaticSpellingCorrectionEnabled:NO];
@@ -141,8 +141,6 @@ const CGFloat kDetailsHeight = 285;
 
 - (void)endCrashReporter {
   [self close];
-  [NSApp stopModal];
-  [NSApp setMainMenu:_mainAppMenu];
 }
 
 

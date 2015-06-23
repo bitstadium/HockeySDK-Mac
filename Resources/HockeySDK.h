@@ -22,6 +22,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
+
 #import <HockeySDK/BITHockeyManager.h>
 #import <HockeySDK/BITHockeyManagerDelegate.h>
 

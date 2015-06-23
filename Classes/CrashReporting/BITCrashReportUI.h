@@ -40,6 +40,8 @@
 // defines the users email address
 @property (nonatomic, strong) NSString *userEmail;
 
+// set if the nib was loaded correctly
+@property (nonatomic, readonly) BOOL nibDidLoadSuccessfully;
 
 - (instancetype)initWithManager:(BITCrashManager *)crashManager
                     crashReport:(NSString *)crashReport

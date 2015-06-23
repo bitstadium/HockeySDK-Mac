@@ -29,8 +29,6 @@
  */
 
 
-#import <Foundation/Foundation.h>
-
 #ifndef HockeySDK_HockeySDKPrivate_h
 #define HockeySDK_HockeySDKPrivate_h
 
