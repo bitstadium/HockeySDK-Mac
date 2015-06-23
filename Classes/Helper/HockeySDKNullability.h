@@ -1,5 +1,5 @@
 //
-//  HockeyNullability.h
+//  HockeySDKNullability.h
 //  HockeySDK
 //
 //  Created by Andreas Linde on 12/06/15.

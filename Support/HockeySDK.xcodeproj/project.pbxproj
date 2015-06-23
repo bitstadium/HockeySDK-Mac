@@ -106,7 +106,7 @@
 		1EBDF2AC195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */; };
 		1EBDF2B11957878800C7F49A /* BITSDKTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDF2AF1957878800C7F49A /* BITSDKTextFieldCell.h */; };
 		1EBDF2B21957878800C7F49A /* BITSDKTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2B01957878800C7F49A /* BITSDKTextFieldCell.m */; };
-		1EC2956C1B30572000CD53B2 /* HockeyNullability.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC2956B1B30572000CD53B2 /* HockeyNullability.h */; };
+		1EC2956C1B30572000CD53B2 /* HockeySDKNullability.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC2956B1B30572000CD53B2 /* HockeySDKNullability.h */; };
 		1EC2956F1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC2956D1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.h */; };
 		1EC295701B30572D00CD53B2 /* BITCrashCXXExceptionHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1EC2956E1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.mm */; };
 		1EC7152619573CB400F72C19 /* BITSDKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC7152419573CB400F72C19 /* BITSDKTextView.h */; };
@@ -243,7 +243,7 @@
 		1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITFeedbackMessageDateValueTransformer.m; sourceTree = "<group>"; };
 		1EBDF2AF1957878800C7F49A /* BITSDKTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITSDKTextFieldCell.h; sourceTree = "<group>"; };
 		1EBDF2B01957878800C7F49A /* BITSDKTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITSDKTextFieldCell.m; sourceTree = "<group>"; };
-		1EC2956B1B30572000CD53B2 /* HockeyNullability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeyNullability.h; sourceTree = "<group>"; };
+		1EC2956B1B30572000CD53B2 /* HockeySDKNullability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDKNullability.h; sourceTree = "<group>"; };
 		1EC2956D1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashCXXExceptionHandler.h; sourceTree = "<group>"; };
 		1EC2956E1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BITCrashCXXExceptionHandler.mm; sourceTree = "<group>"; };
 		1EC7152419573CB400F72C19 /* BITSDKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITSDKTextView.h; sourceTree = "<group>"; };
@@ -327,7 +327,7 @@
 				1E5785DA19461DF60014D19A /* BITHockeyAttachment.m */,
 				1E7E5516187F3EE700F0858E /* HockeySDKPrivate.h */,
 				1E7E5517187F3EE700F0858E /* HockeySDKPrivate.m */,
-				1EC2956B1B30572000CD53B2 /* HockeyNullability.h */,
+				1EC2956B1B30572000CD53B2 /* HockeySDKNullability.h */,
 				1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */,
 				1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */,
 				1EBDC04F195716F300B5C8A3 /* BITSDKColoredView.h */,
@@ -587,7 +587,7 @@
 				1EC2956F1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.h in Headers */,
 				1E7E550A187F3ED800F0858E /* BITFeedbackMessage.h in Headers */,
 				1E5785ED194652900014D19A /* BITCrashMetaData.h in Headers */,
-				1EC2956C1B30572000CD53B2 /* HockeyNullability.h in Headers */,
+				1EC2956C1B30572000CD53B2 /* HockeySDKNullability.h in Headers */,
 				1E85C5941B343E2100CE2C0D /* PLCrashReportThreadInfo.h in Headers */,
 				1EBDF2B11957878800C7F49A /* BITSDKTextFieldCell.h in Headers */,
 				1E85C5831B343E2100CE2C0D /* PLCrashReport.h in Headers */,
@@ -678,7 +678,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Sets the target folders and the final framework product.\nFMK_NAME=HockeySDK\n\n# Documentation\nHOCKEYSDK_DOCSET_VERSION_NAME=\"de.bitstadium.${HOCKEYSDK_DOCSET_NAME}-${VERSION_STRING}\"\n\n# Install dir will be the final output to the framework.\n# The following line create it in the root folder of the current project.\nPRODUCTS_DIR=${SRCROOT}/../Products\nZIP_FOLDER=HockeySDK-Mac\nTEMP_DIR=${PRODUCTS_DIR}/${ZIP_FOLDER}\n\n# Working dir will be deleted after the framework creation.\nWRK_DIR=build\n\n# Building the framework.\nxcodebuild -project \"HockeySDK.xcodeproj\" -configuration \"Release\" -target \"${FMK_NAME}\"\n\n# Codesign frameworks\ncodesign --verbose --force --sign \"Developer ID Application: Bit Stadium GmbH\" \"${WRK_DIR}/Release/${FMK_NAME}.framework/Versions/Current/Frameworks/CrashReporter.framework\"\ncodesign --verbose --force --sign \"Developer ID Application: Bit Stadium GmbH\" \"${WRK_DIR}/Release/${FMK_NAME}.framework\"\n\n# Cleaning the oldest.\nif [ -d \"${TEMP_DIR}\" ]\nthen\nrm -rf \"${TEMP_DIR}\"\nfi\n\n# Creates and renews the final product folder.\nmkdir -p \"${TEMP_DIR}\"\n\n# Copy build frameworks into product folder\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework\" \"${TEMP_DIR}\"\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework.dSYM\" \"${TEMP_DIR}\"\n\nrm -r \"${WRK_DIR}\"\n\n# copy license, changelog, documentation, integration json\ncp -f \"${SRCROOT}/../docs/Changelog-template.md\" \"${TEMP_DIR}/CHANGELOG\"\ncp -f \"${SRCROOT}/../docs/Guide-Installation-Setup-template.md\" \"${TEMP_DIR}/README.md\"\ncp -f \"${SRCROOT}/../LICENSE.txt\" \"${TEMP_DIR}\"\nmkdir \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\ncp -R \"${SRCROOT}/../documentation/docset/Contents\" \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\n\n# build zip\ncd \"${PRODUCTS_DIR}\"\nrm -f \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\"\nzip -yr \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\" \"${ZIP_FOLDER}\" -x \\*/.*\n";
+			shellScript = "# Sets the target folders and the final framework product.\nFMK_NAME=HockeySDK\n\n# Documentation\nHOCKEYSDK_DOCSET_VERSION_NAME=\"de.bitstadium.${HOCKEYSDK_DOCSET_NAME}-${VERSION_STRING}\"\n\n# Install dir will be the final output to the framework.\n# The following line create it in the root folder of the current project.\nPRODUCTS_DIR=${SRCROOT}/../Products\nZIP_FOLDER=HockeySDK-Mac\nTEMP_DIR=${PRODUCTS_DIR}/${ZIP_FOLDER}\n\n# Working dir will be deleted after the framework creation.\nWRK_DIR=build\n\n# Building the framework.\nxcodebuild -project \"HockeySDK.xcodeproj\" -configuration \"Release\" -target \"${FMK_NAME}\"\n\n# Codesign frameworks\ncodesign --verbose --force --sign \"Developer ID Application: Bit Stadium GmbH\" \"${WRK_DIR}/Release/${FMK_NAME}.framework\"\n\n# Cleaning the oldest.\nif [ -d \"${TEMP_DIR}\" ]\nthen\nrm -rf \"${TEMP_DIR}\"\nfi\n\n# Creates and renews the final product folder.\nmkdir -p \"${TEMP_DIR}\"\n\n# Copy build frameworks into product folder\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework\" \"${TEMP_DIR}\"\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework.dSYM\" \"${TEMP_DIR}\"\n\nrm -r \"${WRK_DIR}\"\n\n# copy license, changelog, documentation, integration json\ncp -f \"${SRCROOT}/../docs/Changelog-template.md\" \"${TEMP_DIR}/CHANGELOG\"\ncp -f \"${SRCROOT}/../docs/Guide-Installation-Setup-template.md\" \"${TEMP_DIR}/README.md\"\ncp -f \"${SRCROOT}/../LICENSE.txt\" \"${TEMP_DIR}\"\nmkdir \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\ncp -R \"${SRCROOT}/../documentation/docset/Contents\" \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\n\n# build zip\ncd \"${PRODUCTS_DIR}\"\nrm -f \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\"\nzip -yr \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\" \"${ZIP_FOLDER}\" -x \\*/.*\n";
 		};
 		1E40340E195C2A0A002E98E5 /* Change CrashReporter framework load path */ = {
 			isa = PBXShellScriptBuildPhase;
