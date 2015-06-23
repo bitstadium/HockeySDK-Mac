@@ -1,3 +1,14 @@
+## Version 3.1.0
+
+- [NEW] `BITCrashManager`: Added support for unhandled C++ exceptions
+- [NEW] `BITCrashManager`: Added process ID to `BITCrashDetails`
+- [NEW] `BITCrashManager`: Added `CFBundleShortVersionString` value to crash reports
+- [UPDATE] Restructured installation documentation
+- [BUGFIX] `BITCrashManager`: Fixed UI not showing centered
+- [BUGFIX] `BITCrashManager`: Fixed offline issue showing crash alert over and over again with unsent crash reports
+- [BUGFIX] Fixed various compiler warnings & other improvements
+
+
 ## Version 3.0
 
 - [NEW] Requires OS X 10.7 or newer

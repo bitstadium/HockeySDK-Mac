@@ -572,6 +572,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
       if (userProvidedMetaData)
         [self persistUserProvidedMetaData:userProvidedMetaData];
       
+      [self approveLatestCrashReport];
       [self sendNextCrashReport];
       return YES;
       
@@ -581,6 +582,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
       if (userProvidedMetaData)
         [self persistUserProvidedMetaData:userProvidedMetaData];
       
+      [self approveLatestCrashReport];
       [self sendNextCrashReport];
       return YES;
       
@@ -733,6 +735,12 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 
 #pragma mark - Crash Report Processing
 
+// store the latest crash report as user approved, so if it fails it will retry automatically
+- (void)approveLatestCrashReport {
+  [_approvedCrashReports setObject:[NSNumber numberWithBool:YES] forKey:[_crashesDir stringByAppendingPathComponent: _lastCrashFilename]];
+  [self saveSettings];
+}
+
 - (void)invokeProcessing {
   BITHockeyLog(@"INFO: Start CrashManager processing");
   
@@ -779,6 +787,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
             [_crashReportUI showWindow:self];
             [_crashReportUI.window makeKeyAndOrderFront:self];
           } else {
+            [self approveLatestCrashReport];
             [self sendNextCrashReport];
           }
         }
@@ -786,6 +795,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
         [self cleanCrashReportWithFilename:_lastCrashFilename];
       }
     } else {
+      [self approveLatestCrashReport];
       [self sendNextCrashReport];
     }
   }
@@ -912,6 +922,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   NSString *crashXML = nil;
   BITHockeyAttachment *attachment = nil;
   
+  // we start sending always with the oldest pending one
   NSString *filename = _crashFiles[0];
   NSData *crashData = [NSData dataWithContentsOfFile:filename];
   if ([crashData length] > 0) {
@@ -1010,11 +1021,6 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
                 useremail,
                 installString,
                 [description stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,description.length)]];
-    
-    // store this crash report as user approved, so if it fails it will retry automatically
-    _approvedCrashReports[filename] = @YES;
-    
-    [self saveSettings];
     
     BITHockeyLog(@"INFO: Sending crash reports:\n%@", crashXML);
     [self sendCrashReportWithFilename:filename xml:crashXML attachment:attachment];
