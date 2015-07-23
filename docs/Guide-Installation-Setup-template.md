@@ -70,36 +70,36 @@ From our experience, 3rd-party libraries usually reside inside a subdirectory (l
 1. Open your `AppDelegate.m` file.
 2. Add the following line at the top of the file below your own `import` statements:
 
-	```objectivec
+    ```objectivec
     @import HockeySDK
-	```
+    ```
 
 3. Search for the method `applicationDidFinishLaunching:`
 4. Add the following lines to setup and start the Application Insights SDK:
 
-	```objectivec
+    ```objectivec
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-	// Do some additional configuration if needed here
+    // Do some additional configuration if needed here
     [[BITHockeyManager sharedHockeyManager] startManager];
-	```
+    ```
 
 **Swift**
 
 1. Open your `AppDelegate.swift` file.
 2. Add the following line at the top of the file below your own import statements:
     
-	```swift
-	import HockeySDK
-	```
+    ```swift
+    import HockeySDK
+    ```
 
 3. Search for the method `applicationWillFinishLaunching`
 4. Add the following lines to setup and start the Application Insights SDK:
     
-	```swift
+    ```swift
     BITHockeyManager.sharedHockeyManager().configureWithIdentifier("APP_IDENTIFIER");
-	// Do some additional configuration if needed here
+    // Do some additional configuration if needed here
     BITHockeyManager.sharedHockeyManager().startManager();
-	```
+    ```
 
 *Note:* In case of document based apps, invoke `startManager` at the end of `applicationDidFinishLaunching`, since otherwise you may lose the Apple events to restore, open untitled document etc.
 
@@ -136,9 +136,9 @@ This feature can be disabled as follows:
 
     ```objectivec
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-
+    
     [[BITHockeyManager sharedHockeyManager] setDisableCrashManager: YES]; //disable crash reporting
-
+    
     [[BITHockeyManager sharedHockeyManager] startManager];
     ```
 
@@ -148,9 +148,9 @@ Crashes are send the next time the app starts. If `crashManagerStatus` is set to
 
     ```objectivec
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-
+    
     [[BITHockeyManager sharedHockeyManager].crashManager setAutoSubmitCrashReport: YES];
-
+    
     [[BITHockeyManager sharedHockeyManager] startManager];
     ```
 
@@ -229,7 +229,7 @@ Make sure to implement the protocol
 
     ```objectivec
     @interface YourAppDelegate () <BITHockeyManagerDelegate> {}
-
+    
     @end
     ```
 
@@ -237,9 +237,9 @@ and set the delegate:
 
     ```objectivec
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-
+    
     [[BITHockeyManager sharedHockeyManager] setDelegate: self];
-
+    
     [[BITHockeyManager sharedHockeyManager] startManager];
     ```
 
@@ -311,9 +311,9 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 
     ```objectivec
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-
+    
     [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled:YES];
-
+    
     [[BITHockeyManager sharedHockeyManager] startManager];
     ```
 
