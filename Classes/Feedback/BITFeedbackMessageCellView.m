@@ -195,7 +195,7 @@
       
       BITActivityIndicatorButton *imageButton = [[BITActivityIndicatorButton alloc] initWithFrame:frame];
       
-      imageButton.title = nil;
+      imageButton.title = @"";
       imageButton.imagePosition = NSImageOnly;
       [imageButton setBordered:NO];
       
