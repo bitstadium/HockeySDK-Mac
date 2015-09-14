@@ -40,6 +40,8 @@
 #import <HockeySDK/BITFeedbackManager.h>
 #import <HockeySDK/BITFeedbackWindowController.h>
 
+#import <HockeySDK/BITTelemetryManager.h>
+
 
 // Notification message which HockeyManager is listening to, to retry requesting updated from the server
 #define BITHockeyNetworkDidBecomeReachableNotification @"BITHockeyNetworkDidBecomeReachable"

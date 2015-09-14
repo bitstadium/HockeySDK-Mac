@@ -1,7 +1,7 @@
 /*
- * Author: Andreas Linde <mail@andreaslinde.de>
+ * Author: Benjamin Reimold <bereimol@microsoft.com>
  *
- * Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH.
+ * Copyright (c) 2012-2015 HockeyApp, Bit Stadium GmbH.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -25,35 +25,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-
 #import <Foundation/Foundation.h>
 
-/* NSString helpers */
-NSString *bit_URLEncodedString(NSString *inputString);
-NSString *bit_URLDecodedString(NSString *inputString);
-NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB);
-NSString *bit_mainBundleIdentifier(void);
-NSString *bit_appIdentifierToGuid(NSString *appIdentifier);
-NSString *bit_appName(NSString *placeHolderString);
+/**
+ * A simple class that handles serialisation and deserialisation of bundles of data.
+ */
+@interface BITPersistence : NSObject
 
-NSString *bit_appAnonID(BOOL forceNewAnonID);
-NSString *bit_UUID(void);
+@end
 
-NSString *bit_settingsDir(void);
-
-BOOL bit_addStringValueToKeychain(NSString *stringValue, NSString *key);
-NSString *bit_stringValueFromKeychainForKey(NSString *key);
-BOOL bit_removeKeyFromKeychain(NSString *key);
-
-/* Context helpers */
-NSString *bit_utcDateString(NSDate *date);
-NSString *bit_devicePlatform(void);
-NSString *bit_devicePlatform(void);
-NSString *bit_deviceType(void);
-NSString *bit_osVersionBuild(void);
-NSString *bit_osName(void);
-NSString *bit_deviceLocale(void);
-NSString *bit_deviceLanguage(void);
-NSString *bit_screenSize(void);
-NSString *bit_sdkVersion(void);
-NSString *bit_appVersion(void);
