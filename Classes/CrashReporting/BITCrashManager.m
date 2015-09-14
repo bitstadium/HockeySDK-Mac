@@ -137,10 +137,6 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   
   BOOL _crashIdenticalCurrentVersion;
   
-  NSInteger       _statusCode;
-  NSURLConnection *_urlConnection;
-  NSMutableData   *_responseData;
-  
   NSMutableArray *_crashFiles;
   NSString       *_settingsFile;
   NSString       *_analyzerInProgressFile;
@@ -209,8 +205,6 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 
 - (void)dealloc {
   _delegate = nil;
-
-   _responseData = nil;
 
    _fileManager = nil;
   
@@ -1053,58 +1047,120 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 
 #pragma mark - Networking
 
-- (NSURLRequest *)requestWithXML:(NSString*)xml attachment:(BITHockeyAttachment *)attachment {
-  NSString *postCrashPath = [NSString stringWithFormat:@"api/2/apps/%@/crashes", self.encodedAppIdentifier];
-  
-  NSMutableURLRequest *request = [self.hockeyAppClient requestWithMethod:@"POST"
-                                                                    path:postCrashPath
-                                                              parameters:nil];
-  
-  [request setCachePolicy: NSURLRequestReloadIgnoringLocalCacheData];
-  [request setValue:@"HockeySDK/iOS" forHTTPHeaderField:@"User-Agent"];
-  [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-  
-  NSString *boundary = @"----FOO";
-  NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-  [request setValue:contentType forHTTPHeaderField:@"Content-type"];
-	
-  NSMutableData *postBody =  [NSMutableData data];
-  
-  [postBody appendData:[BITHockeyAppClient dataWithPostValue:BITHOCKEY_NAME
-                                                      forKey:@"sdk"
-                                                    boundary:boundary]];
-  
-  [postBody appendData:[BITHockeyAppClient dataWithPostValue:BITHOCKEY_VERSION
-                                                      forKey:@"sdk_version"
-                                                    boundary:boundary]];
-  
-  [postBody appendData:[BITHockeyAppClient dataWithPostValue:@"no"
-                                                      forKey:@"feedbackEnabled"
-                                                    boundary:boundary]];
-  
-  [postBody appendData:[BITHockeyAppClient dataWithPostValue:[xml dataUsingEncoding:NSUTF8StringEncoding]
-                                                      forKey:@"xml"
-                                                 contentType:@"text/xml"
-                                                    boundary:boundary
-                                                    filename:@"crash.xml"]];
-  
-  if (attachment && attachment.hockeyAttachmentData) {
-    NSString *attachmentFilename = attachment.filename;
-    if (!attachmentFilename) {
-      attachmentFilename = @"Attachment_0";
-    }
-    [postBody appendData:[BITHockeyAppClient dataWithPostValue:attachment.hockeyAttachmentData
-                                                        forKey:@"attachment0"
-                                                   contentType:attachment.contentType
+- (NSData *)postBodyWithXML:(NSString *)xml attachment:(BITHockeyAttachment *)attachment boundary:(NSString *)boundary {
+    NSMutableData *postBody =  [NSMutableData data];
+    
+    //  [postBody appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:BITHOCKEY_NAME
+                                                        forKey:@"sdk"
+                                                      boundary:boundary]];
+    
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:BITHOCKEY_VERSION
+                                                        forKey:@"sdk_version"
+                                                      boundary:boundary]];
+    
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:@"no"
+                                                        forKey:@"feedbackEnabled"
+                                                      boundary:boundary]];
+    
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[xml dataUsingEncoding:NSUTF8StringEncoding]
+                                                        forKey:@"xml"
+                                                   contentType:@"text/xml"
                                                       boundary:boundary
-                                                      filename:attachmentFilename]];
-  }
-  
-  [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  
-  [request setHTTPBody:postBody];
-  
-  return request;
+                                                      filename:@"crash.xml"]];
+    
+    if (attachment && attachment.hockeyAttachmentData) {
+        NSString *attachmentFilename = attachment.filename;
+        if (!attachmentFilename) {
+            attachmentFilename = @"Attachment_0";
+        }
+        [postBody appendData:[BITHockeyAppClient dataWithPostValue:attachment.hockeyAttachmentData
+                                                            forKey:@"attachment0"
+                                                       contentType:attachment.contentType
+                                                          boundary:boundary
+                                                          filename:attachmentFilename]];
+    }
+    
+    [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    return postBody;
+}
+
+- (NSMutableURLRequest *)requestWithBoundary:(NSString *)boundary {
+    NSString *postCrashPath = [NSString stringWithFormat:@"api/2/apps/%@/crashes", self.encodedAppIdentifier];
+    
+    NSMutableURLRequest *request = [self.hockeyAppClient requestWithMethod:@"POST"
+                                                                      path:postCrashPath
+                                                                parameters:nil];
+    
+    [request setCachePolicy: NSURLRequestReloadIgnoringLocalCacheData];
+    [request setValue:@"HockeySDK/iOS" forHTTPHeaderField:@"User-Agent"];
+    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+    
+    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+    [request setValue:contentType forHTTPHeaderField:@"Content-type"];
+    
+    return request;
+}
+
+// process upload response
+- (void)processUploadResultWithFilename:(NSString *)filename responseData:(NSData *)responseData statusCode:(NSInteger)statusCode error:(NSError *)error {
+    __block NSError *theError = error;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _sendingInProgress = NO;
+        
+        if (nil == theError) {
+            if (nil == responseData || [responseData length] == 0) {
+                theError = [NSError errorWithDomain:kBITCrashErrorDomain
+                                               code:BITCrashAPIReceivedEmptyResponse
+                                           userInfo:@{
+                                                      NSLocalizedDescriptionKey: @"Sending failed with an empty response!"
+                                                      }
+                            ];
+            } else if (statusCode >= 200 && statusCode < 400) {
+                [self cleanCrashReportWithFilename:filename];
+                
+                // HockeyApp uses PList XML format
+                NSMutableDictionary *response = [NSPropertyListSerialization propertyListWithData:responseData
+                                                                                          options:NSPropertyListMutableContainersAndLeaves
+                                                                                           format:nil
+                                                                                            error:&theError];
+                BITHockeyLog(@"INFO: Received API response: %@", response);
+                
+                if ([self.delegate respondsToSelector:@selector(crashManagerDidFinishSendingCrashReport:)]) {
+                    [self.delegate crashManagerDidFinishSendingCrashReport:self];
+                }
+                
+                // only if sending the crash report went successfully, continue with the next one (if there are more)
+                [self sendNextCrashReport];
+            } else if (statusCode == 400) {
+                [self cleanCrashReportWithFilename:filename];
+                
+                theError = [NSError errorWithDomain:kBITCrashErrorDomain
+                                               code:BITCrashAPIAppVersionRejected
+                                           userInfo:@{
+                                                      NSLocalizedDescriptionKey: @"The server rejected receiving crash reports for this app version!"
+                                                      }
+                            ];
+            } else {
+                theError = [NSError errorWithDomain:kBITCrashErrorDomain
+                                               code:BITCrashAPIErrorWithStatusCode
+                                           userInfo:@{
+                                                      NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Sending failed with status code: %li", (long)statusCode]
+                                                      }
+                            ];
+            }
+        }
+        
+        if (theError) {
+            if ([self.delegate respondsToSelector:@selector(crashManager:didFailWithError:)]) {
+                [self.delegate crashManager:self didFailWithError:theError];
+            }
+            
+            BITHockeyLog(@"ERROR: %@", [theError localizedDescription]);
+        }
+    });
 }
 
 /**
@@ -1115,80 +1171,56 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
  *	@param	xml	The XML data that needs to be send to the server
  */
 - (void)sendCrashReportWithFilename:(NSString *)filename xml:(NSString*)xml attachment:(BITHockeyAttachment *)attachment {
-  NSURLRequest* request = [self requestWithXML:xml attachment:attachment];
-  
-  __unsafe_unretained typeof(self) weakSelf = self;
-  BITHTTPOperation *operation = [self.hockeyAppClient
-                                 operationWithURLRequest:request
-                                 completion:^(BITHTTPOperation *operation, NSData* responseData, NSError *error) {
-                                   typeof (self) strongSelf = weakSelf;
-                                   
-                                   _sendingInProgress = NO;
-                                   
-                                   NSInteger statusCode = [operation.response statusCode];
-                                   
-                                   if (nil == error) {
-                                     if (nil == responseData || [responseData length] == 0) {
-                                       error = [NSError errorWithDomain:kBITCrashErrorDomain
-                                                                   code:BITCrashAPIReceivedEmptyResponse
-                                                               userInfo:@{
-                                                                          NSLocalizedDescriptionKey: @"Sending failed with an empty response!"
-                                                                          }
-                                                ];
-                                     } else if (statusCode >= 200 && statusCode < 400) {
-                                       [strongSelf cleanCrashReportWithFilename:filename];
-                                       
-                                       // HockeyApp uses PList XML format
-                                       NSMutableDictionary *response = [NSPropertyListSerialization propertyListFromData:responseData
-                                                                                                        mutabilityOption:NSPropertyListMutableContainersAndLeaves
-                                                                                                                  format:nil
-                                                                                                        errorDescription:NULL];
-                                       BITHockeyLog(@"INFO: Received API response: %@", response);
-                                       
-                                       if (strongSelf.delegate != nil &&
-                                           [strongSelf.delegate respondsToSelector:@selector(crashManagerDidFinishSendingCrashReport:)]) {
-                                         [strongSelf.delegate crashManagerDidFinishSendingCrashReport:self];
-                                       }
-                                       
-                                       // only if sending the crash report went successfully, continue with the next one (if there are more)
-                                       [strongSelf performSelector:@selector(sendNextCrashReport) withObject:nil afterDelay:2];
-                                     } else if (statusCode == 400) {
-                                       [strongSelf cleanCrashReportWithFilename:filename];
-                                       
-                                       error = [NSError errorWithDomain:kBITCrashErrorDomain
-                                                                   code:BITCrashAPIAppVersionRejected
-                                                               userInfo:@{
-                                                                          NSLocalizedDescriptionKey: @"The server rejected receiving crash reports for this app version!"
-                                                                          }
-                                                ];
-                                     } else {
-                                       error = [NSError errorWithDomain:kBITCrashErrorDomain
-                                                                   code:BITCrashAPIErrorWithStatusCode
-                                                               userInfo:@{
-                                                                          NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Sending failed with status code: %li", (long)statusCode]
-                                                                          }
-                                                ];
-                                     }
-                                   }
-                                   
-                                   if (error) {
-                                     if (strongSelf.delegate != nil &&
-                                         [strongSelf.delegate respondsToSelector:@selector(crashManager:didFailWithError:)]) {
-                                       [strongSelf.delegate crashManager:self didFailWithError:error];
-                                     }
-                                     
-                                     BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
-                                   }
-                                   
-                                 }];
-  
-  if (self.delegate != nil && [self.delegate respondsToSelector:@selector(crashManagerWillSendCrashReport:)]) {
-    [self.delegate crashManagerWillSendCrashReport:self];
-  }
-  
-  BITHockeyLog(@"INFO: Sending crash reports started.");
-  
-  [self.hockeyAppClient enqeueHTTPOperation:operation];
+    BOOL sendingWithURLSession = NO;
+    
+    id nsurlsessionClass = NSClassFromString(@"NSURLSessionUploadTask");
+    if (nsurlsessionClass) {
+        NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+        
+        NSURLRequest *request = [self requestWithBoundary:kBITHockeyAppClientBoundary];
+        NSData *data = [self postBodyWithXML:xml attachment:attachment boundary:kBITHockeyAppClientBoundary];
+        
+        if (request && data) {
+            __weak typeof (self) weakSelf = self;
+            NSURLSessionUploadTask *uploadTask = [session uploadTaskWithRequest:request
+                                                                       fromData:data
+                                                              completionHandler:^(NSData *responseData, NSURLResponse *response, NSError *error) {
+                                                                  typeof (self) strongSelf = weakSelf;
+                                                                  
+                                                                  NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*) response;
+                                                                  NSInteger statusCode = [httpResponse statusCode];
+                                                                  [strongSelf processUploadResultWithFilename:filename responseData:responseData statusCode:statusCode error:error];
+                                                              }];
+            
+            [uploadTask resume];
+            sendingWithURLSession = YES;
+        }
+    }
+    
+    if (!sendingWithURLSession) {
+        NSMutableURLRequest *request = [self requestWithBoundary:kBITHockeyAppClientBoundary];
+        
+        NSData *postBody = [self postBodyWithXML:xml attachment:attachment boundary:kBITHockeyAppClientBoundary];
+        [request setHTTPBody:postBody];
+        
+        __unsafe_unretained typeof(self) weakSelf = self;
+        BITHTTPOperation *operation = [self.hockeyAppClient
+                                       operationWithURLRequest:request
+                                       completion:^(BITHTTPOperation *operation, NSData* responseData, NSError *error) {
+                                           typeof (self) strongSelf = weakSelf;
+                                           
+                                           NSInteger statusCode = [operation.response statusCode];
+                                           [strongSelf processUploadResultWithFilename:filename responseData:responseData statusCode:statusCode error:error];
+                                       }];
+        [self.hockeyAppClient enqeueHTTPOperation:operation];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(crashManagerWillSendCrashReport:)]) {
+        [self.delegate crashManagerWillSendCrashReport:self];
+    }
+    
+    BITHockeyLog(@"INFO: Sending crash reports started.");
 }
 
 
