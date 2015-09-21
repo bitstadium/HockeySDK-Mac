@@ -40,9 +40,6 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
   
   BOOL _startManagerIsInvoked;
   
-  NSInteger         _statusCode;
-  NSURLConnection   *_urlConnection;
-
   BITHockeyAppClient *_hockeyAppClient;
 }
 
