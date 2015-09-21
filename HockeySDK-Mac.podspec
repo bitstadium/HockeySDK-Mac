@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name              = 'HockeySDK-Mac'
-  s.version           = '3.1.0'
+  s.version           = '3.2.0'
 
   s.summary           = 'Collect crash reports with HockeyApp.'
   s.description       = <<-DESC
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
                         DESC
 
   s.homepage          = 'http://www.hockeyapp.net/'
-  s.documentation_url = 'http://www.hockeyapp.net/help/sdk/mac/3.1.0/'
+  s.documentation_url = 'http://www.hockeyapp.net/help/sdk/mac/3.2.0/'
 
   s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.txt' }
   s.author            = { 'Andreas Linde' => 'mail@andreaslinde.de', 'Thomas Dohmke' => "thomas@dohmke.de" }
@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
   s.vendored_frameworks   = "HockeySDK-Mac/HockeySDK.framework"
   s.public_header_files   = "HockeySDK-Mac/HockeySDK.framework/Versions/A/Headers/*.h*"
   s.resource              = "HockeySDK-Mac/HockeySDK.framework"
-  s.xcconfig              = { 'LD_RUNPATH_SEARCH_PATHS' => '@loader_path/../Frameworks' }
+  s.xcconfig              = { 'LD_RUNPATH_SEARCH_PATHS' => '@executable_path/../Frameworks' }
 
 end
