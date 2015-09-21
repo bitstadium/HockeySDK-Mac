@@ -29,8 +29,6 @@
 #import "BITCrashDetails.h"
 #import "BITCrashDetailsPrivate.h"
 
-NSString *const kBITCrashKillSignal = @"SIGKILL";
-
 @implementation BITCrashDetails
 
 - (instancetype)initWithIncidentIdentifier:(NSString *)incidentIdentifier
@@ -59,15 +57,6 @@ NSString *const kBITCrashKillSignal = @"SIGKILL";
     _appBuild = appBuild;
   }
   return self;
-}
-
-- (BOOL)isAppKill {
-  BOOL result = NO;
-  
-  if (_signal && [[_signal uppercaseString] isEqualToString:kBITCrashKillSignal])
-    result = YES;
-  
-  return result;
 }
 
 @end
