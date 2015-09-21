@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
+[![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=master)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
 
-## Version 3.1.0
+## Version 3.2.0
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/3.1.0/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/3.2.0/docs/docs/Changelog.html)
 
 
 ## Introduction
@@ -28,9 +28,10 @@ This document contains the following sections:
    4. [Sparkle](#sparkle)
    5. [Debug information](#debug)
 4. [Documentation](#documentation)
-5. [Contributing](#contributing)
-6. [Contributor License](#contributorlicense)
-7. [Contact](#contact)
+5. [Troubleshooting](#troubleshooting)
+6. [Contributing](#contributing)
+7. [Contributor License](#contributorlicense)
+8. [Contact](#contact)
 
 <a id="requirements"></a> 
 ## 1. Requirements
@@ -142,7 +143,7 @@ The following options only show some of possibilities to interact and fine-tune 
 #### 3.2.1 Disable Crash Reporting
 The HockeySDK enables crash reporting **per default**. Crashes will be immediately sent to the server the next time the app is launched.
 
-To provide you with the best crash reporting, we are using [PLCrashReporter]("https://github.com/plausiblelabs/plcrashreporter") in [Version 1.2 / Commit 273a7e7cd4b77485a584ac82e77b7c857558e2f9]("https://github.com/plausiblelabs/plcrashreporter/commit/273a7e7cd4b77485a584ac82e77b7c857558e2f9").
+To provide you with the best crash reporting, we are using [PLCrashReporter]("https://github.com/plausiblelabs/plcrashreporter") in [Version 1.2 / Commit 356901d7f3ca3d46fbc8640f469304e2b755e461]("https://github.com/plausiblelabs/plcrashreporter/commit/356901d7f3ca3d46fbc8640f469304e2b755e461").
 
 This feature can be disabled as follows:
 
@@ -332,11 +333,27 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/3.1.0/index.html).
+Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/3.2.0/index.html).
 
+<a id="troubleshooting"></a>
+## 5.Troubleshooting
+
+1. dlyb crash on startup
+
+    Make sure that the apps build setting has `LD_RUNPATH_SEARCH_PATHS` set to `@executable_path/../Frameworks`
+
+2. Crash on startup with Xcode debugger running
+
+    Make sure there is no `All Exceptions` breakpoint active or limit it to `Objective-C` only and exclude `C++`.
+
+3. Feature are not working as expected
+
+    Enable debug output to the console to see additional information from the SDK initializing the modules,  sending and receiving network requests and more by adding the following code before calling `startManager`:
+
+        [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled: YES];
 
 <a id="contributing"></a>
-## 5. Contributing
+## 6. Contributing
 
 We're looking forward to your contributions via pull requests.
 
@@ -348,12 +365,12 @@ We're looking forward to your contributions via pull requests.
 * [Cocoapods](https://cocoapods.org/)
 
 <a id="contributorlicense"></a>
-## 6. Contributor License
+## 7. Contributor License
 
 You must sign a [Contributor License Agreement](https://cla.microsoft.com/) before submitting your pull request. To complete the Contributor License Agreement (CLA), you will need to submit a request via the [form](https://cla.microsoft.com/) and then electronically sign the CLA when you receive the email containing the link to the document. You need to sign the CLA only once to cover submission to any Microsoft OSS project. 
 
 <a id="contact"></a>
-## 7. Contact
+## 8. Contact
 
 If you have further questions or are running into trouble that cannot be resolved by any of the steps here, feel free to open a Github issue here or contact us at [support@hockeyapp.net](mailto:support@hockeyapp.net)
 

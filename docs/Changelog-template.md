@@ -1,3 +1,13 @@
+## Version 3.2.0
+
+- [NEW] Added module definition
+- [UPDATE] Added full support for `NSURLSession`
+- [UPDATE] Switched to use `@rpath` instead of `@loader_path` (You might need to adjust your `LD_RUNPATH_SEARCH_PATHS` setting to include `@executable_path/../Frameworks`!)
+- [UPDATE] Updated PLCrashReporter build
+- [BUGFIX] Added missing public header files
+- [BUGFIX] Doesn't install the C++ exception when running on 10.7.x
+- [BUGFIX] Various other improvements and fixes
+
 ## Version 3.1.0
 
 - [NEW] `BITCrashManager`: Added support for unhandled C++ exceptions
