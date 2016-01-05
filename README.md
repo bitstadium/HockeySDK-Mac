@@ -277,7 +277,7 @@ Please check the [documentation](#documentation) of the `BITFeedbachManager` cla
 
 1. Install the Sparkle SDK: [http://sparkle-project.org](http://sparkle-project.org)
   
-  As of today (03/2013), Sparkle doesn't support Mac sandboxes. If you require this, check out the following fork [https://github.com/tumult/Sparkle](https://github.com/tumult/Sparkle) and this discussion [https://github.com/andymatuschak/Sparkle/pull/165](https://github.com/andymatuschak/Sparkle/pull/165)
+  As of today (01/2016), Sparkle doesn't support Mac sandboxes. If you require this, check out the following discussion https://github.com/sparkle-project/Sparkle/issues/363
   
 2. Set `SUFeedURL` to `https://rink.hockeyapp.net/api/2/apps/<APP_IDENTIFIER>` and replace `<APP_IDENTIFIER>` with the same value used to initialize the HockeySDK
 
