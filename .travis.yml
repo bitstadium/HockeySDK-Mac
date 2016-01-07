@@ -1,6 +1,7 @@
 language: objective-c
 before_install:
-- gem install xcpretty -N cocoapods
+  - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 script:
 - set -o pipefail
 - cd Support
