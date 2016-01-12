@@ -121,23 +121,14 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
  *
  *  @return the path of the item, which should be sent next
  */
-- (NSString *)requestNextPath;
+- (NSString *)requestNextFilePath;
 
 /**
  *  Release a requested path. This method should be called after sending a file failed.
  *
  *  @param path the path that should be available for sending again.
  */
-- (void)giveBackRequestedPath:(NSString *)path;
-
-/**
- *  Return the bundle for a given path.
- *
- *  @param path the path of the bundle.
- *
- *  @return All envelope objects.
- */
-- (id)bundleAtPath:(NSString *)path;
+- (void)giveBackRequestedFilePath:(NSString *)filePath;
 
 /**
  *  Return the json data for a given path
@@ -146,7 +137,7 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
  *
  *  @return a data object which contains telemetry data in json representation
  */
-- (NSData *)dataAtPath:(NSString *)path;
+- (NSData *)dataAtFilePath:(NSString *)filePath;
 
 /**
  *  Returns the content of the session Ids file.
@@ -177,6 +168,5 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
  * @param the type that you want the fileURL for
 */
 - (NSString *)fileURLForType:(BITPersistenceType)type;
-
 
 @end

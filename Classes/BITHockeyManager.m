@@ -28,7 +28,8 @@
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITCrashManagerPrivate.h"
 #import "BITFeedbackManagerPrivate.h"
-#import "BITTelemetryManagerPrivate.h"
+#import "BITMetricsManagerPrivate.h"
+#import "BITCategoryContainer.h"
 #import "BITHockeyHelper.h"
 #import "BITHockeyAppClient.h"
 
@@ -66,7 +67,7 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
     
     _disableCrashManager = NO;
     _disableFeedbackManager = NO;
-    _disableTelemetryManager = NO;
+    _disableMetricsManager = NO;
     
     _startManagerIsInvoked = NO;
     
@@ -218,11 +219,12 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
     [_feedbackManager performSelector:@selector(startManager) withObject:nil afterDelay:1.0f];
   }
 
-  // start TelemetryManager
-  if (![self isTelemetryManagerDisabled]) {
-    BITHockeyLog(@"INFO: Start Telemetry Manager");
-    [_telemetryManager startManager];
-  }
+	// start MetricsManager
+	if (!self.disableMetricsManager) {
+		BITHockeyLog(@"INFO: Start MetricsManager");
+		[_metricsManager startManager];
+		[BITCategoryContainer activateCategory];
+	}
 
   NSString *integrationFlowTime = [self integrationFlowTimeString];
   if (integrationFlowTime && [self integrationFlowStartedWithTimeString:integrationFlowTime]) {
@@ -334,11 +336,11 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
     BITHockeyLog(@"INFO: Setup FeedbackManager");
     _feedbackManager = [[BITFeedbackManager alloc] initWithAppIdentifier:_appIdentifier];
     
-    BITHockeyLog(@"INFO: Setup TelemetryManager");
-    NSString *iKey = bit_appIdentifierToGuid(_appIdentifier);
-    _telemetryManager = [[BITTelemetryManager alloc] initWithAppIdentifier:iKey];
+		BITHockeyLog(@"INFO: Setup MetricsManager");
+		NSString *iKey = bit_appIdentifierToGuid(_appIdentifier);
+		_metricsManager = [[BITMetricsManager alloc] initWithAppIdentifier:iKey];
   }
-  
+	
   if ([self isCrashManagerDisabled])
     _crashManager.crashManagerActivated = NO;
 }

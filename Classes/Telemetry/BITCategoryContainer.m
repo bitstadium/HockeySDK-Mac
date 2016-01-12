@@ -1,6 +1,14 @@
 #import "BITCategoryContainer.h"
 #import <objc/runtime.h>
 
+@implementation BITCategoryContainer
+
++ (void)activateCategory {
+
+}
+
+@end
+
 
 #pragma mark - GZIP library
 

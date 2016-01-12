@@ -1,6 +1,5 @@
 #import <Foundation/Foundation.h>
 #import "HockeySDK.h"
-
 #import "HockeySDKPrivate.h"
 #import "BITApplication.h"
 #import "BITDevice.h"
@@ -36,7 +35,7 @@ FOUNDATION_EXPORT NSString *const kBITApplicationWasLaunched;
 /**
  *  A queue which makes array operations thread safe.
  */
-@property (nonatomic, assign) dispatch_queue_t operationsQueue;
+@property (nonatomic,  assign) dispatch_queue_t operationsQueue;
 
 /**
  *  The application context.
