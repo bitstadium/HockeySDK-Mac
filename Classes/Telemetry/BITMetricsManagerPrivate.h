@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "HockeySDK.h"
+#import "BITMetricsManager.h"
 #import "BITSessionState.h"
 
 @class BITChannel;
