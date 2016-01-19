@@ -795,11 +795,14 @@
   id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
   if (nsurlsessionClass) {
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+    __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
     
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                             completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
                                               typeof (self) strongSelf = weakSelf;
+                                              
+                                              [session finishTasksAndInvalidate];
+
                                               [strongSelf handleFeedbackMessageResponse:response data:data error:error completion:completionHandler];
                                             }];
     [task resume];
