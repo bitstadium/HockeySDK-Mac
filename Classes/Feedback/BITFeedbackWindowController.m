@@ -613,11 +613,14 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
       id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
       if (nsurlsessionClass) {
         NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+        __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
         
         NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                                 completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
                                                   typeof (self) strongSelf = weakSelf;
+                                                  
+                                                  [session finishTasksAndInvalidate];
+                                                  
                                                   [strongSelf handleResponseForAttachment:attachment responseData:data error:error];
                                                 }];
         [task resume];
@@ -735,12 +738,15 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
     id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
     if (nsurlsessionClass) {
       NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-      NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+      __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
       
       NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                               completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
                                                 dispatch_async(dispatch_get_main_queue(), ^{
                                                   typeof (self) strongSelf = weakSelf;
+                                                  
+                                                  [session finishTasksAndInvalidate];
+
                                                   [strongSelf previewPanel:blockPanel updateAttachment:strongSelf.previewAttachment data:data];
                                                 });
                                               }];
