@@ -24,6 +24,7 @@ NSString *const BITMetricsEndpoint = @"https://gate.hockeyapp.net/v2/track";
 @implementation BITMetricsManager {
   id _appWillEnterForegroundObserver;
   id _appDidEnterBackgroundObserver;
+	NSTimeInterval _firstSessionCreation;
 }
 
 @synthesize channel = _channel;
@@ -59,6 +60,7 @@ NSString *const BITMetricsEndpoint = @"https://gate.hockeyapp.net/v2/track";
   _sender = [[BITSender alloc] initWithPersistence:self.persistence serverURL:[NSURL URLWithString:self.serverURL]];
   [_sender sendSavedDataAsync];
   [self startNewSessionWithId:bit_UUID()];
+	_firstSessionCreation = [[NSDate date] timeIntervalSince1970];
   [self registerObservers];
 }
 
@@ -101,19 +103,25 @@ NSString *const BITMetricsEndpoint = @"https://gate.hockeyapp.net/v2/track";
 }
 
 - (void)startNewSessionIfNeeded {
-  if(self.appBackgroundTimeBeforeSessionExpires == 0) {
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(_metricsEventQueue, ^{
-      typeof(self) strongSelf = weakSelf;
-      [strongSelf startNewSessionWithId:bit_UUID()];
-    });
-  }
-  
-  double appDidEnterBackgroundTime = [self.userDefaults doubleForKey:kBITApplicationDidEnterBackgroundTime];
-  double timeSinceLastBackground = [[NSDate date] timeIntervalSince1970] - appDidEnterBackgroundTime;
-  if(timeSinceLastBackground > self.appBackgroundTimeBeforeSessionExpires) {
-    [self startNewSessionWithId:bit_UUID()];
-  }
+	
+	// Check for duplicate start session: NSApplicationWillBecomeActiveNotification vs. startManager()
+	NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+	NSTimeInterval timeSinceFirstSession = now - _firstSessionCreation;
+	if(timeSinceFirstSession < 0.5){
+		return;
+	}
+	
+	// Check if app was in background longer than the defined session interval time
+	double appDidEnterBackgroundTime = [self.userDefaults doubleForKey:kBITApplicationDidEnterBackgroundTime];
+	double timeSinceLastBackground = now - appDidEnterBackgroundTime;
+	if(timeSinceLastBackground > self.appBackgroundTimeBeforeSessionExpires) {
+		
+		__weak typeof(self) weakSelf = self;
+		dispatch_async(_metricsEventQueue, ^{
+			typeof(self) strongSelf = weakSelf;
+			[strongSelf startNewSessionWithId:bit_UUID()];
+		});
+	}
 }
 
 - (void)startNewSessionWithId:(NSString *)sessionId {
