@@ -45,7 +45,7 @@
 		1BFE83E21C45B21100DE0B39 /* BITTelemetryContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE83D11C45B21100DE0B39 /* BITTelemetryContext.m */; };
 		1BFE83E31C45B21100DE0B39 /* BITTelemetryData.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BFE83D21C45B21100DE0B39 /* BITTelemetryData.h */; };
 		1BFE83E41C45B21100DE0B39 /* BITTelemetryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE83D31C45B21100DE0B39 /* BITTelemetryData.m */; };
-		1BFE83E51C45B21100DE0B39 /* BITMetricsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BFE83D41C45B21100DE0B39 /* BITMetricsManager.h */; };
+		1BFE83E51C45B21100DE0B39 /* BITMetricsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BFE83D41C45B21100DE0B39 /* BITMetricsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BFE83E61C45B21100DE0B39 /* BITMetricsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE83D51C45B21100DE0B39 /* BITMetricsManager.m */; };
 		1BFE83E71C45B21100DE0B39 /* BITMetricsManagerPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BFE83D61C45B21100DE0B39 /* BITMetricsManagerPrivate.h */; };
 		1BFE84241C45BD5100DE0B39 /* BITApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BFE84201C45BD5100DE0B39 /* BITApplication.h */; };
@@ -680,6 +680,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BFE83E51C45B21100DE0B39 /* BITMetricsManager.h in Headers */,
 				1E85C58C1B343E2100CE2C0D /* PLCrashReportProcessInfo.h in Headers */,
 				1E7E551B187F3EE700F0858E /* BITHockeyHelper.h in Headers */,
 				1BFE83DE1C45B21100DE0B39 /* BITPersistencePrivate.h in Headers */,
@@ -710,7 +711,6 @@
 				1E7E550E187F3ED800F0858E /* BITFeedbackWindowController.h in Headers */,
 				1BFE84431C45BD7C00DE0B39 /* BITOrderedDictionary.h in Headers */,
 				1E5785E7194647180014D19A /* BITHTTPOperation.h in Headers */,
-				1BFE83E51C45B21100DE0B39 /* BITMetricsManager.h in Headers */,
 				1E378B201959D33700451E28 /* BITActivityIndicatorButton.h in Headers */,
 				1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */,
 				1E85C5901B343E2100CE2C0D /* PLCrashReportStackFrameInfo.h in Headers */,
