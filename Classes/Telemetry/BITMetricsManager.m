@@ -24,7 +24,7 @@ NSString *const BITMetricsEndpoint = @"https://gate.hockeyapp.net/v2/track";
 @implementation BITMetricsManager {
   id _appWillEnterForegroundObserver;
   id _appDidEnterBackgroundObserver;
-	NSTimeInterval _firstSessionCreation;
+  NSTimeInterval _firstSessionCreation;
 }
 
 @synthesize channel = _channel;
@@ -60,7 +60,7 @@ NSString *const BITMetricsEndpoint = @"https://gate.hockeyapp.net/v2/track";
   _sender = [[BITSender alloc] initWithPersistence:self.persistence serverURL:[NSURL URLWithString:self.serverURL]];
   [_sender sendSavedDataAsync];
   [self startNewSessionWithId:bit_UUID()];
-	_firstSessionCreation = [[NSDate date] timeIntervalSince1970];
+  _firstSessionCreation = [[NSDate date] timeIntervalSince1970];
   [self registerObservers];
 }
 
@@ -71,24 +71,24 @@ NSString *const BITMetricsEndpoint = @"https://gate.hockeyapp.net/v2/track";
   
   __weak typeof(self) weakSelf = self;
   
-	if(nil == _appDidEnterBackgroundObserver) {
-		_appDidEnterBackgroundObserver = [nc addObserverForName:NSApplicationDidResignActiveNotification
-																										 object:nil
-																											queue:NSOperationQueue.mainQueue
-																								 usingBlock:^(NSNotification *note) {
-																									 typeof(self) strongSelf = weakSelf;
-																									 [strongSelf updateDidEnterBackgroundTime];
-																								 }];
-	}
-	if(nil == _appWillEnterForegroundObserver) {
-		_appWillEnterForegroundObserver = [nc addObserverForName:NSApplicationWillBecomeActiveNotification
-																											object:nil
-																											 queue:NSOperationQueue.mainQueue
-																									usingBlock:^(NSNotification *note) {
-																										typeof(self) strongSelf = weakSelf;
-																										[strongSelf startNewSessionIfNeeded];
-																									}];
-	}
+  if(nil == _appDidEnterBackgroundObserver) {
+    _appDidEnterBackgroundObserver = [nc addObserverForName:NSApplicationDidResignActiveNotification
+                                                     object:nil
+                                                      queue:NSOperationQueue.mainQueue
+                                                 usingBlock:^(NSNotification *note) {
+                                                   typeof(self) strongSelf = weakSelf;
+                                                   [strongSelf updateDidEnterBackgroundTime];
+                                                 }];
+  }
+  if(nil == _appWillEnterForegroundObserver) {
+    _appWillEnterForegroundObserver = [nc addObserverForName:NSApplicationWillBecomeActiveNotification
+                                                      object:nil
+                                                       queue:NSOperationQueue.mainQueue
+                                                  usingBlock:^(NSNotification *note) {
+                                                    typeof(self) strongSelf = weakSelf;
+                                                    [strongSelf startNewSessionIfNeeded];
+                                                  }];
+  }
 }
 
 - (void)unregisterObservers {
@@ -103,33 +103,32 @@ NSString *const BITMetricsEndpoint = @"https://gate.hockeyapp.net/v2/track";
 }
 
 - (void)startNewSessionIfNeeded {
-	
-	// Check for duplicate start session: NSApplicationWillBecomeActiveNotification vs. startManager()
-	NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-	NSTimeInterval timeSinceFirstSession = now - _firstSessionCreation;
-	if(timeSinceFirstSession < 0.5){
-		return;
-	}
-	
-	// Check if app was in background longer than the defined session interval time
-	double appDidEnterBackgroundTime = [self.userDefaults doubleForKey:kBITApplicationDidEnterBackgroundTime];
-	double timeSinceLastBackground = now - appDidEnterBackgroundTime;
-	if(timeSinceLastBackground > self.appBackgroundTimeBeforeSessionExpires) {
-		
-		__weak typeof(self) weakSelf = self;
-		dispatch_async(_metricsEventQueue, ^{
-			typeof(self) strongSelf = weakSelf;
-			[strongSelf startNewSessionWithId:bit_UUID()];
-		});
-	}
+  
+  // Check for duplicate start session: NSApplicationWillBecomeActiveNotification vs. startManager()
+  NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+  NSTimeInterval timeSinceFirstSession = now - _firstSessionCreation;
+  if(timeSinceFirstSession < 0.5){
+    return;
+  }
+  
+  // Check if app was in background longer than the defined session interval time
+  double appDidEnterBackgroundTime = [self.userDefaults doubleForKey:kBITApplicationDidEnterBackgroundTime];
+  double timeSinceLastBackground = now - appDidEnterBackgroundTime;
+  if(timeSinceLastBackground > self.appBackgroundTimeBeforeSessionExpires) {
+    [self startNewSessionWithId:bit_UUID()];
+  }
 }
 
 - (void)startNewSessionWithId:(NSString *)sessionId {
-  BITSession *newSession = [self createNewSessionWithId:sessionId];
-  [self.telemetryContext setSessionId:newSession.sessionId];
-  [self.telemetryContext setIsFirstSession:newSession.isFirst];
-  [self.telemetryContext setIsNewSession:newSession.isNew];
-  [self trackSessionWithState:BITSessionState_start];
+  __weak typeof(self) weakSelf = self;
+  dispatch_async(_metricsEventQueue, ^{
+    typeof(self) strongSelf = weakSelf;
+    BITSession *newSession = [strongSelf createNewSessionWithId:sessionId];
+    [strongSelf.telemetryContext setSessionId:newSession.sessionId];
+    [strongSelf.telemetryContext setIsFirstSession:newSession.isFirst];
+    [strongSelf.telemetryContext setIsNewSession:newSession.isNew];
+    [strongSelf trackSessionWithState:BITSessionState_start];
+  });
 }
 
 // iOS 8 Sim Bug: iOS Simulator -> Reset Content and Settings
