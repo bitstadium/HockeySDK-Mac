@@ -239,12 +239,10 @@
 		1E260C7817D401D000C7F9FE /* Changelog-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Changelog-template.md"; sourceTree = "<group>"; };
 		1E260C7917D401D000C7F9FE /* Guide-Installation-Mac-App-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Guide-Installation-Mac-App-template.md"; sourceTree = "<group>"; };
 		1E260C7A17D401D000C7F9FE /* Guide-Installation-Setup-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Guide-Installation-Setup-template.md"; sourceTree = "<group>"; };
-		1E260C7B17D401D100C7F9FE /* HowTo-Add-Application-Log-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "HowTo-Add-Application-Log-template.md"; sourceTree = "<group>"; };
 		1E260C7C17D401D100C7F9FE /* HowTo-App-Versioning-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "HowTo-App-Versioning-template.md"; sourceTree = "<group>"; };
 		1E260C7D17D401D100C7F9FE /* HowTo-Upload-Symbols-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "HowTo-Upload-Symbols-template.md"; sourceTree = "<group>"; };
 		1E260C7E17D401D100C7F9FE /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		1E260C7F17D401D200C7F9FE /* index.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = index.md; sourceTree = "<group>"; };
-		1E260C8017D401D200C7F9FE /* Troubleshooting-Symbolication-Doesnt-Work-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Troubleshooting-Symbolication-Doesnt-Work-template.md"; sourceTree = "<group>"; };
 		1E260C9E17D414F200C7F9FE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITKeychainItem.h; sourceTree = "<group>"; };
 		1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITKeychainItem.m; sourceTree = "<group>"; };
@@ -418,12 +416,10 @@
 				1E260C7917D401D000C7F9FE /* Guide-Installation-Mac-App-template.md */,
 				1E260C7A17D401D000C7F9FE /* Guide-Installation-Setup-template.md */,
 				1EFFB86117D49DE1003FA1FD /* Guide-Migration-template.md */,
-				1E260C7B17D401D100C7F9FE /* HowTo-Add-Application-Log-template.md */,
 				1E260C7C17D401D100C7F9FE /* HowTo-App-Versioning-template.md */,
 				1E260C7D17D401D100C7F9FE /* HowTo-Upload-Symbols-template.md */,
 				1E260C7E17D401D100C7F9FE /* index.html */,
 				1E260C7F17D401D200C7F9FE /* index.md */,
-				1E260C8017D401D200C7F9FE /* Troubleshooting-Symbolication-Doesnt-Work-template.md */,
 				1E14CB2117E1F1EA00EEFF50 /* Troubleshooting-Crash-Reporting-Not-Working-template.md */,
 			);
 			name = docs;
