@@ -115,20 +115,21 @@ NSString *const BITMetricsEndpoint = @"https://gate.hockeyapp.net/v2/track";
   double appDidEnterBackgroundTime = [self.userDefaults doubleForKey:kBITApplicationDidEnterBackgroundTime];
   double timeSinceLastBackground = now - appDidEnterBackgroundTime;
   if(timeSinceLastBackground > self.appBackgroundTimeBeforeSessionExpires) {
-    [self startNewSessionWithId:bit_UUID()];
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(_metricsEventQueue, ^{
+      typeof(self) strongSelf = weakSelf;
+      [strongSelf startNewSessionWithId:bit_UUID()];
+    });
   }
 }
 
 - (void)startNewSessionWithId:(NSString *)sessionId {
-  __weak typeof(self) weakSelf = self;
-  dispatch_async(_metricsEventQueue, ^{
-    typeof(self) strongSelf = weakSelf;
-    BITSession *newSession = [strongSelf createNewSessionWithId:sessionId];
-    [strongSelf.telemetryContext setSessionId:newSession.sessionId];
-    [strongSelf.telemetryContext setIsFirstSession:newSession.isFirst];
-    [strongSelf.telemetryContext setIsNewSession:newSession.isNew];
-    [strongSelf trackSessionWithState:BITSessionState_start];
-  });
+  BITSession *newSession = [self createNewSessionWithId:sessionId];
+  [self.telemetryContext setSessionId:newSession.sessionId];
+  [self.telemetryContext setIsFirstSession:newSession.isFirst];
+  [self.telemetryContext setIsNewSession:newSession.isNew];
+  [self trackSessionWithState:BITSessionState_start];
 }
 
 // iOS 8 Sim Bug: iOS Simulator -> Reset Content and Settings
