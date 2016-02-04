@@ -118,10 +118,10 @@ If any crash report has been saved from the last time your application ran, `sta
 
 **Podfile**
 
-    ```ruby
-    platform :osx, '10.7'
-    pod "HockeySDK-Mac"
-    ```
+```ruby
+platform :osx, '10.7'
+pod "HockeySDK-Mac"
+```
 
 <a name="crashreporting"></a>
 ### 3.2 Crash Reporting
@@ -135,25 +135,25 @@ To provide you with the best crash reporting, we are using [PLCrashReporter]("ht
 
 This feature can be disabled as follows:
 
-    ```objectivec
-    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-    
-    [[BITHockeyManager sharedHockeyManager] setDisableCrashManager: YES]; //disable crash reporting
-    
-    [[BITHockeyManager sharedHockeyManager] startManager];
-    ```
+```objectivec
+[[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
+
+[[BITHockeyManager sharedHockeyManager] setDisableCrashManager: YES]; //disable crash reporting
+
+[[BITHockeyManager sharedHockeyManager] startManager];
+```
 
 #### 3.2.2 Autosend crash reports
 
 Crashes are send the next time the app starts. If `crashManagerStatus` is set to `BITCrashManagerStatusAutoSend`, crashes will be send without any user interaction, otherwise an alert will appear allowing the users to decide whether they want to send the report or not.
 
-    ```objectivec
-    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-    
-    [[BITHockeyManager sharedHockeyManager].crashManager setAutoSubmitCrashReport: YES];
-    
-    [[BITHockeyManager sharedHockeyManager] startManager];
-    ```
+```objectivec
+[[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
+
+[[BITHockeyManager sharedHockeyManager].crashManager setAutoSubmitCrashReport: YES];
+
+[[BITHockeyManager sharedHockeyManager] startManager];
+```
 
 The SDK is not sending the reports right when the crash happens deliberately, because if is not safe to implement such a mechanism while being async-safe (any Objective-C code is _NOT_ async-safe!) and not causing more danger like a deadlock of the device, than helping. We found that users do start the app again because most don't know what happened, and you will get by far most of the reports.
 
@@ -165,39 +165,41 @@ Sending the reports on startup is done asynchronously (non-blocking). This is th
 On Mac OS X there are three types of crashes that are not reported to a registered `NSUncaughtExceptionHandler`:
 
 1. Custom `NSUncaughtExceptionHandler` don't start working until after `NSApplication` has finished calling all of its delegate methods!
+Example:
 
-   Example:
-       
-       - (void)applicationDidFinishLaunching:(NSNotification *)note {
-         ...
-         [NSException raise:@"ExceptionAtStartup" format:@"This will not be recognized!"];
-         ...
-       }
+    ```objectivec
+    - (void)applicationDidFinishLaunching:(NSNotification *)note {
+      ...
+      [NSException raise:@"ExceptionAtStartup" format:@"This will not be recognized!"];
+      ...
+    }
+    ```
 
+2. The default `NSUncaughtExceptionHandler` in `NSApplication` only logs exceptions to the console and ends their processing. Resulting in exceptions that occur in the `NSApplication` "scope" not occurring in a registered custom `NSUncaughtExceptionHandler`. 
+Example:
 
-2. The default `NSUncaughtExceptionHandler` in `NSApplication` only logs exceptions to the console and ends their processing. Resulting in exceptions that occur in the `NSApplication` "scope" not occurring in a registered custom `NSUncaughtExceptionHandler`.
+    ```objectivec
+    - (void)applicationDidFinishLaunching:(NSNotification *)note {
+      ...
+      [self performSelector:@selector(delayedException) withObject:nil afterDelay:5];
+      ...
+    }
 
-   Example:
-   
-       - (void)applicationDidFinishLaunching:(NSNotification *)note {
-         ...
-         [self performSelector:@selector(delayedException) withObject:nil afterDelay:5];
-        ...
-      }
-
-      - (void)delayedException {
-        NSArray *array = [NSArray array];
-        [array objectAtIndex:23];
-      }
+    - (void)delayedException {
+      NSArray *array = [NSArray array];
+      [array objectAtIndex:23];
+    }
+    ```
 
 3. Any exceptions occurring in IBAction or other GUI does not even reach the NSApplication default UncaughtExceptionHandler.
+Example:
 
-   Example:
-       
-       - (IBAction)doExceptionCrash:(id)sender {
-         NSArray *array = [NSArray array];
-         [array objectAtIndex:23];
-       }
+    ```objective
+    - (IBAction)doExceptionCrash:(id)sender {
+      NSArray *array = [NSArray array];
+      [array objectAtIndex:23];
+    }
+    ```
 
 In general there are two solutions. The first one is to use an `NSExceptionHandler` class instead of an `NSUncaughtExceptionHandler`. But this has a few drawbacks which are detailed in `BITCrashReportExceptionApplication.h`.
 
@@ -223,26 +225,27 @@ The `BITCrashManagerDelegate` protocol (which is automatically included in `BITH
 
 1. Text attachments: `-(NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager`
 
-   Check the following tutorial for an example on how to add CocoaLumberjack log data: [How to Add Application Specific Log Data on iOS or OS X](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/how-to-add-application-specific-log-data-on-ios-or-os-x)
+    Check the following tutorial for an example on how to add CocoaLumberjack log data: [How to Add Application Specific Log Data on iOS or OS X](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/how-to-add-application-specific-log-data-on-ios-or-os-x)
+
 2. Binary attachments: `-(BITHockeyAttachment *)attachmentForCrashManager:(BITCrashManager *)crashManager`
 
 Make sure to implement the protocol
 
-    ```objectivec
-    @interface YourAppDelegate () <BITHockeyManagerDelegate> {}
-    
-    @end
-    ```
+```objectivec
+@interface YourAppDelegate () <BITHockeyManagerDelegate> {}
+
+@end
+```
 
 and set the delegate:
 
-    ```objectivec
-    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-    
-    [[BITHockeyManager sharedHockeyManager] setDelegate: self];
-    
-    [[BITHockeyManager sharedHockeyManager] startManager];
-    ```
+```objectivec
+[[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
+
+[[BITHockeyManager sharedHockeyManager] setDelegate: self];
+
+[[BITHockeyManager sharedHockeyManager] startManager];
+```
 
 <a name="feedback"></a>
 ### 3.3 Feedback
@@ -251,9 +254,9 @@ and set the delegate:
  
 You should never create your own instance of `BITFeedbackManager` but use the one provided by the `[BITHockeyManager sharedHockeyManager]`:
  
-    ```objectivec
-    [BITHockeyManager sharedHockeyManager].feedbackManager
-    ```
+```objectivec
+[BITHockeyManager sharedHockeyManager].feedbackManager
+```
 
 Please check the [documentation](#documentation) of the `BITFeedbachManager` class on more information on how to leverage this feature.
 
@@ -264,8 +267,7 @@ Please check the [documentation](#documentation) of the `BITFeedbachManager` cla
 #### 3.4.1 Setup for beta distribution
 
 1. Install the Sparkle SDK: [http://sparkle-project.org](http://sparkle-project.org)
-  
-  As of today (03/2013), Sparkle doesn't support Mac sandboxes. If you require this, check out the following fork [https://github.com/tumult/Sparkle](https://github.com/tumult/Sparkle) and this discussion [https://github.com/andymatuschak/Sparkle/pull/165](https://github.com/andymatuschak/Sparkle/pull/165)
+    As of today (01/2016), Sparkle doesn't support Mac sandboxes. If you require this, check out the following discussion https://github.com/sparkle-project/Sparkle/issues/363
   
 2. Set `SUFeedURL` to `https://rink.hockeyapp.net/api/2/apps/<APP_IDENTIFIER>` and replace `<APP_IDENTIFIER>` with the same value used to initialize the HockeySDK
 
@@ -276,47 +278,47 @@ Please check the [documentation](#documentation) of the `BITFeedbachManager` cla
 
 1. Set the following additional Sparkle property:
 
-        ```objectivec
-        sparkleUpdater.sendsSystemProfile = YES;
-        ```
+    ```objectivec
+    sparkleUpdater.sendsSystemProfile = YES;
+    ```
 
 2. Add the following Sparkle delegate method (don't forget to bind `SUUpdater` to your appDelegate!):
 
-        ```objectivec
-        - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
-                        sendingSystemProfile:(BOOL)sendingProfile {
-            return [[BITSystemProfile sharedSystemProfile] systemUsageData];
-        }
-        ```
+    ```objectivec
+    - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
+                    sendingSystemProfile:(BOOL)sendingProfile {
+        return [[BITSystemProfile sharedSystemProfile] systemUsageData];
+    }
+    ```
 
 3. Initialize usage tracking depending on your needs.
 
-    On example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
+    One example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
 
-        ```objectivec
-        - (void)applicationWillFinishLaunching:(NSNotification *)aNotification
-            …      
-            NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-            BITSystemProfile *bsp = [BITSystemProfile sharedSystemProfile];
-            [dnc addObserver:bsp selector:@selector(startUsage) name:NSApplicationDidBecomeActiveNotification object:nil];
-            [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillTerminateNotification object:nil];
-            [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillResignActiveNotification object:nil];
-            …
-        };
-        ```
+    ```objectivec
+    - (void)applicationWillFinishLaunching:(NSNotification *)aNotification
+        …      
+        NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+        BITSystemProfile *bsp = [BITSystemProfile sharedSystemProfile];
+        [dnc addObserver:bsp selector:@selector(startUsage) name:NSApplicationDidBecomeActiveNotification object:nil];
+        [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillTerminateNotification object:nil];
+        [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillResignActiveNotification object:nil];
+        …
+    };
+    ```
 
 <a id="debug"></a>
 ### 3.5 Debug information
 
 To check if data is send properly to HockeyApp and also see some additional SDK debug log data in the console, add the following line before `startManager`:
 
-    ```objectivec
-    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-    
-    [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled:YES];
-    
-    [[BITHockeyManager sharedHockeyManager] startManager];
-    ```
+```objectivec
+[[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
+
+[[BITHockeyManager sharedHockeyManager] setDebugLogEnabled:YES];
+
+[[BITHockeyManager sharedHockeyManager] startManager];
+```
 
 <a id="documentation"></a>
 ## 4. Documentation
@@ -361,4 +363,3 @@ You must sign a [Contributor License Agreement](https://cla.microsoft.com/) befo
 ## 8. Contact
 
 If you have further questions or are running into trouble that cannot be resolved by any of the steps here, feel free to open a Github issue here or contact us at [support@hockeyapp.net](mailto:support@hockeyapp.net)
-
