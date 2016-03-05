@@ -672,22 +672,21 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
     }
 
     BITBinaryImageType imageType = BITBinaryImageTypeOther;
+    NSString *standardizedImagePath = [[imagePath stringByStandardizingPath] lowercaseString];
+    NSString *lowercaseProcessPath = [processPath lowercaseString];
     
-    imagePath = [[imagePath stringByStandardizingPath] lowercaseString];
-    processPath = [processPath lowercaseString];
-    
-    NSRange appRange = [imagePath rangeOfString: @".app/"];
+    NSRange appRange = [standardizedImagePath rangeOfString: @".app/"];
     
     // Exclude iOS swift dylibs. These are provided as part of the app binary by Xcode for now, but we never get a dSYM for those.
-    NSRange swiftLibRange = [imagePath rangeOfString:@"frameworks/libswift"];
-    BOOL dylibSuffix = [imagePath hasSuffix:@".dylib"];
+    NSRange swiftLibRange = [standardizedImagePath rangeOfString:@"frameworks/libswift"];
+    BOOL dylibSuffix = [standardizedImagePath hasSuffix:@".dylib"];
     
     if (appRange.location != NSNotFound && !(swiftLibRange.location != NSNotFound && dylibSuffix)) {
-        NSString *appBundleContentsPath = [imagePath substringToIndex:appRange.location + 5];
+        NSString *appBundleContentsPath = [standardizedImagePath substringToIndex:appRange.location + 5];
         
-        if ([imagePath isEqual: processPath]) {
+        if ([standardizedImagePath isEqual: lowercaseProcessPath]) {
             imageType = BITBinaryImageTypeAppBinary;
-        } else if ([imagePath hasPrefix:appBundleContentsPath]) {
+        } else if ([standardizedImagePath hasPrefix:appBundleContentsPath]) {
             imageType = BITBinaryImageTypeAppFramework;
         }
     }
