@@ -36,11 +36,11 @@
 #pragma mark NSString helpers
 
 NSString *bit_URLEncodedString(NSString *inputString) {
-  return CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                   (__bridge CFStringRef)inputString,
-                                                                   NULL,
-                                                                   CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                   kCFStringEncodingUTF8)
+    return CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                     (__bridge CFStringRef)inputString,
+                                                                     NULL,
+                                                                     CFSTR("!*'();:@&=+$,/?%#[] {}"),
+                                                                     kCFStringEncodingUTF8)
                            );
 }
 
