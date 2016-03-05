@@ -373,10 +373,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
                 processPath = report.processInfo.processPath;
                 
                 /* Remove username from the path */
-                if ([processPath length] > 0)
-                    processPath = [processPath stringByAbbreviatingWithTildeInPath];
-                if ([processPath length] > 0 && [[processPath substringToIndex:1] isEqualToString:@"~"])
-                    processPath = [NSString stringWithFormat:@"/Users/USER%@", [processPath substringFromIndex:1]];
+                processPath = [self anonymizedProcessPathFromProcessPath:processPath];
             }
             
             /* Parent Process Name */
@@ -579,7 +576,6 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
          uuid,
          imageName];
     }
-    
     
     return text;
 }
@@ -845,6 +841,30 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
             (const uint16_t *)[imageName cStringUsingEncoding: NSUTF16StringEncoding],
             lp64 ? 16 : 8, frameInfo.instructionPointer,
             symbolString];
+}
+
+/**
+ *  Remove the user's name from a crash's process path.
+ *  This is only necessary when sending crashes from the simulator as the path
+ *  then contains the username of the Mac the simulator is running on.
+ *
+ *  @param processPath A string containing the username
+ *
+ *  @return An anonymized string where the real username is replaced by "USER"
+ */
++ (NSString *)anonymizedProcessPathFromProcessPath:(NSString *)processPath {
+    
+    NSString *anonymizedProcessPath = [NSString string];
+    
+    if (([processPath length] > 0) && [processPath hasPrefix:@"/Users/"]) {
+        NSError *error = nil;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(/Users/[^/]+/)" options:0 error:&error];
+        anonymizedProcessPath = [regex stringByReplacingMatchesInString:processPath options:0 range:NSMakeRange(0, [processPath length]) withTemplate:@"/Users/USER/"];
+        if (error) {
+            BITHockeyLog("ERROR: String replacing failed - %@", error.localizedDescription);
+        }
+    }
+    return anonymizedProcessPath;
 }
 
 @end
