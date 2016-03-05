@@ -667,6 +667,10 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
 
 /* Determine if in binary image is the app executable or app specific framework */
 + (BITBinaryImageType)bit_imageTypeForImagePath:(NSString *)imagePath processPath:(NSString *)processPath {
+    if (!imagePath || !processPath) {
+        return BITBinaryImageTypeOther;
+    }
+
     BITBinaryImageType imageType = BITBinaryImageTypeOther;
     
     imagePath = [[imagePath stringByStandardizingPath] lowercaseString];
