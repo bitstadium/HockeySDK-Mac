@@ -45,7 +45,7 @@
 #define SEL_NAME_SECT "__cstring"
 #endif
 
-#import "BITCrashReportTextFormatter.h"
+#import "BITCrashReportTextFormatterPrivate.h"
 
 /*
  * XXX: The ARM64 CPU type, and ARM_V7S and ARM_V8 Mach-O CPU subtypes are not
