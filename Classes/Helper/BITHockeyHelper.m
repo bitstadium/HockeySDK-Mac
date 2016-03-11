@@ -36,12 +36,21 @@
 #pragma mark NSString helpers
 
 NSString *bit_URLEncodedString(NSString *inputString) {
-  return CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                   (__bridge CFStringRef)inputString,
-                                                                   NULL,
-                                                                   CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                   kCFStringEncodingUTF8)
-                           );
+  
+  if ([inputString respondsToSelector:@selector(stringByAddingPercentEncodingWithAllowedCharacters:)]) {
+    return [inputString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"!*'();:@&=+$,/?%#[] {}"].invertedSet];
+    
+  } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                     (__bridge CFStringRef)inputString,
+                                                                     NULL,
+                                                                     CFSTR("!*'();:@&=+$,/?%#[] {}"),
+                                                                     kCFStringEncodingUTF8)
+                             );
+#pragma clang diagnostic pop
+  }
 }
 
 NSString *bit_URLDecodedString(NSString *inputString) {
@@ -58,20 +67,20 @@ NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB) {
   NSRange letterRange = [plainSelf rangeOfCharacterFromSet: [NSCharacterSet letterCharacterSet]];
   if (letterRange.length)
     plainSelf = [plainSelf substringToIndex: letterRange.location];
-	
+  
   // Extract plain version number from other
   NSString *plainOther = stringB;
   letterRange = [plainOther rangeOfCharacterFromSet: [NSCharacterSet letterCharacterSet]];
   if (letterRange.length)
     plainOther = [plainOther substringToIndex: letterRange.location];
-	
+  
   // Compare plain versions
   NSComparisonResult result = [plainSelf compare:plainOther options:NSNumericSearch];
-	
+  
   // If plain versions are equal, compare full versions
   if (result == NSOrderedSame)
     result = [stringA compare:stringB options:NSNumericSearch];
-	
+  
   // Done
   return result;
 }
@@ -121,8 +130,8 @@ NSString *bit_settingsDir(void) {
 #pragma mark - Keychain
 
 BOOL bit_addStringValueToKeychain(NSString *stringValue, NSString *key) {
-	if (!key || !stringValue)
-		return NO;
+  if (!key || !stringValue)
+    return NO;
   
   NSString *serviceName = [NSString stringWithFormat:@"%@.HockeySDK", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
   
@@ -141,8 +150,8 @@ BOOL bit_addStringValueToKeychain(NSString *stringValue, NSString *key) {
 }
 
 NSString *bit_stringValueFromKeychainForKey(NSString *key) {
-	if (!key)
-		return nil;
+  if (!key)
+    return nil;
   
   NSString *serviceName = [NSString stringWithFormat:@"%@.HockeySDK", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]];
   
