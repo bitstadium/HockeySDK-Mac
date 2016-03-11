@@ -33,6 +33,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		1B9D52781C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B9D52771C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h */; };
 		1E20566E15A5F61F008FC20A /* BITCrashManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE1DFFE1524B3D600C0DA76 /* BITCrashManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E260C9F17D414F200C7F9FE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E260C9E17D414F200C7F9FE /* Security.framework */; };
 		1E260CA617D41E9100C7F9FE /* BITKeychainItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E260CA417D41E9000C7F9FE /* BITKeychainItem.h */; };
@@ -151,6 +152,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1B9D52771C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportTextFormatterPrivate.h; sourceTree = "<group>"; };
 		1E14CB2117E1F1EA00EEFF50 /* Troubleshooting-Crash-Reporting-Not-Working-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Troubleshooting-Crash-Reporting-Not-Working-template.md"; sourceTree = "<group>"; };
 		1E260C7817D401D000C7F9FE /* Changelog-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Changelog-template.md"; sourceTree = "<group>"; };
 		1E260C7917D401D000C7F9FE /* Guide-Installation-Mac-App-template.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Guide-Installation-Mac-App-template.md"; sourceTree = "<group>"; };
@@ -515,6 +517,7 @@
 				1EBDC049195710CA00B5C8A3 /* BITCrashReportUI.xib */,
 				1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */,
 				1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */,
+				1B9D52771C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h */,
 			);
 			path = CrashReporting;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 				1E7E5509187F3ED800F0858E /* BITFeedbackManagerPrivate.h in Headers */,
 				1E260CA617D41E9100C7F9FE /* BITKeychainItem.h in Headers */,
 				1EBDC051195716F300B5C8A3 /* BITSDKColoredView.h in Headers */,
+				1B9D52781C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h in Headers */,
 				1E7E552A187F62B400F0858E /* BITSystemProfilePrivate.h in Headers */,
 				1E85C5811B343E2100CE2C0D /* PLCrashMacros.h in Headers */,
 				1EC2956F1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.h in Headers */,
