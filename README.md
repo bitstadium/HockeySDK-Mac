@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
 
-## Version 3.2.0
+## Version 3.2.1
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/3.2.0/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/3.2.1/docs/docs/Changelog.html)
 
 
 ## Introduction
@@ -335,7 +335,7 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/3.2.0/index.html).
+Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/3.2.1/index.html).
 
 <a id="troubleshooting"></a>
 ## 5.Troubleshooting
