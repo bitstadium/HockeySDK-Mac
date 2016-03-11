@@ -1,3 +1,11 @@
+## Version 3.2.1
+- [UPDATE] Some minor refactorings
+- [BUGFIX] Fix NSURLSession memory leak in Swift apps
+- [BUGFIX] Fix issue preventing attachment from being included when sending non-clean termination report
+- [IMPROVEMENT] Anonymize binary path in crash report
+- [IMPROVEMENT] Support escaping of additional characters (URL encoding)
+- [IMPROVEMENT] Support Bundle Identifiers which contain whitespaces
+
 ## Version 3.2.0
 
 - [NEW] Added module definition
