@@ -87,7 +87,7 @@ static NSUInteger const BITDefaultRequestLimit = 10;
 
 - (BOOL)isURLSessionSupported {
   id nsurlsessionClass = NSClassFromString(@"NSURLSessionUploadTask");
-  BOOL isUrlSessionSupported = (nsurlsessionClass && !bit_isRunningInAppExtension());
+  BOOL isUrlSessionSupported = (nsurlsessionClass != nil);
   return isUrlSessionSupported;
 }
 

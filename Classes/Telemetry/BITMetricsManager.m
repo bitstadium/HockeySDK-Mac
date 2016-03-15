@@ -11,6 +11,7 @@
 #import "BITPersistence.h"
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITSender.h"
+#import "BITEventData.h"
 
 static char *const kBITMetricsEventQueue =
 "net.hockeyapp.telemetryEventQueue";

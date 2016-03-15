@@ -1,5 +1,4 @@
 #import <Foundation/Foundation.h>
-#import "HockeySDKFeatureConfig.h"
 #import "HockeySDKNullability.h"
 
 @class BITConfiguration;
@@ -47,12 +46,12 @@ FOUNDATION_EXPORT char *BITSafeJsonEventsString;
 /**
  *  A timer source which is used to flush the queue after a cretain time.
  */
-@property (nonatomic, strong, nullable) dispatch_source_t timerSource;
+@property (nonatomic, assign, nullable) dispatch_source_t timerSource;
 
 /**
  *  A queue which makes array operations thread safe.
  */
-@property (nonatomic, strong) dispatch_queue_t dataItemsOperations;
+@property (nonatomic, assign) dispatch_queue_t dataItemsOperations;
 
 /**
  *  An integer value that keeps tracks of the number of data items added to the JSON Stream string.

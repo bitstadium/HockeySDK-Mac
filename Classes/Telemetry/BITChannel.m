@@ -1,5 +1,5 @@
-#import "HockeySDKFeatureConfig.h"
 #import "HockeySDKPrivate.h"
+#import "BITHockeyManager.h"
 #import "BITChannel.h"
 #import "BITHockeyHelper.h"
 #import "BITTelemetryContext.h"
