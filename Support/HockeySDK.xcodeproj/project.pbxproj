@@ -58,6 +58,8 @@
 		1B078E491C98847100E2FD59 /* BITTelemetryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E301C98847100E2FD59 /* BITTelemetryObject.m */; };
 		1B078E4A1C98847100E2FD59 /* BITUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B078E311C98847100E2FD59 /* BITUser.h */; };
 		1B078E4B1C98847100E2FD59 /* BITUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E321C98847100E2FD59 /* BITUser.m */; };
+		1B078E4E1C98851300E2FD59 /* BITSender.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B078E4C1C98851300E2FD59 /* BITSender.h */; };
+		1B078E4F1C98851300E2FD59 /* BITSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E4D1C98851300E2FD59 /* BITSender.m */; };
 		1B9D52781C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B9D52771C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h */; };
 		1BFE83D71C45B21100DE0B39 /* BITCategoryContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BFE83C61C45B21100DE0B39 /* BITCategoryContainer.h */; };
 		1BFE83D81C45B21100DE0B39 /* BITCategoryContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE83C71C45B21100DE0B39 /* BITCategoryContainer.m */; };
@@ -217,6 +219,8 @@
 		1B078E301C98847100E2FD59 /* BITTelemetryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITTelemetryObject.m; sourceTree = "<group>"; };
 		1B078E311C98847100E2FD59 /* BITUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITUser.h; sourceTree = "<group>"; };
 		1B078E321C98847100E2FD59 /* BITUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITUser.m; sourceTree = "<group>"; };
+		1B078E4C1C98851300E2FD59 /* BITSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITSender.h; sourceTree = "<group>"; };
+		1B078E4D1C98851300E2FD59 /* BITSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITSender.m; sourceTree = "<group>"; };
 		1B9D52771C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportTextFormatterPrivate.h; sourceTree = "<group>"; };
 		1BFE83C61C45B21100DE0B39 /* BITCategoryContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCategoryContainer.h; sourceTree = "<group>"; };
 		1BFE83C71C45B21100DE0B39 /* BITCategoryContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCategoryContainer.m; sourceTree = "<group>"; };
@@ -536,6 +540,8 @@
 				1BFE83CB1C45B21100DE0B39 /* BITPersistence.h */,
 				1BFE83CC1C45B21100DE0B39 /* BITPersistence.m */,
 				1BFE83CD1C45B21100DE0B39 /* BITPersistencePrivate.h */,
+				1B078E4C1C98851300E2FD59 /* BITSender.h */,
+				1B078E4D1C98851300E2FD59 /* BITSender.m */,
 				1BFE83D01C45B21100DE0B39 /* BITTelemetryContext.h */,
 				1BFE83D11C45B21100DE0B39 /* BITTelemetryContext.m */,
 				1BFE83D21C45B21100DE0B39 /* BITTelemetryData.h */,
@@ -685,6 +691,7 @@
 				1B078E3B1C98847100E2FD59 /* BITDomain.h in Headers */,
 				1E7E5507187F3ED800F0858E /* BITFeedbackManager.h in Headers */,
 				1E85C58F1B343E2100CE2C0D /* PLCrashReportSignalInfo.h in Headers */,
+				1B078E4E1C98851300E2FD59 /* BITSender.h in Headers */,
 				1E7E5518187F3EE700F0858E /* BITHockeyBaseManager.h in Headers */,
 				1EC7152619573CB400F72C19 /* BITSDKTextView.h in Headers */,
 				1B078E431C98847100E2FD59 /* BITSession.h in Headers */,
@@ -874,6 +881,7 @@
 				1B078E421C98847100E2FD59 /* BITInternal.m in Sources */,
 				1EA551FE17B3EB44004A0CB7 /* BITCrashExceptionApplication.m in Sources */,
 				1EF09DD8152371DC00067A5C /* BITCrashReportUI.m in Sources */,
+				1B078E4F1C98851300E2FD59 /* BITSender.m in Sources */,
 				1EBDF2B21957878800C7F49A /* BITSDKTextFieldCell.m in Sources */,
 				1EF09DDA152371DC00067A5C /* BITCrashReportTextFormatter.m in Sources */,
 				4DD13AF5162CA7C400BF15E8 /* BITSystemProfile.m in Sources */,
