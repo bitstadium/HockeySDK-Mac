@@ -149,7 +149,7 @@
 		1EBDF2AC195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */; };
 		1EBDF2B11957878800C7F49A /* BITSDKTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBDF2AF1957878800C7F49A /* BITSDKTextFieldCell.h */; };
 		1EBDF2B21957878800C7F49A /* BITSDKTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2B01957878800C7F49A /* BITSDKTextFieldCell.m */; };
-		1EC2956C1B30572000CD53B2 /* HockeySDKNullability.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC2956B1B30572000CD53B2 /* HockeySDKNullability.h */; };
+		1EC2956C1B30572000CD53B2 /* HockeySDKNullability.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC2956B1B30572000CD53B2 /* HockeySDKNullability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EC2956F1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC2956D1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.h */; };
 		1EC295701B30572D00CD53B2 /* BITCrashCXXExceptionHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1EC2956E1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.mm */; };
 		1EC7152619573CB400F72C19 /* BITSDKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC7152419573CB400F72C19 /* BITSDKTextView.h */; };
@@ -679,6 +679,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EC2956C1B30572000CD53B2 /* HockeySDKNullability.h in Headers */,
 				1BFE83E51C45B21100DE0B39 /* BITMetricsManager.h in Headers */,
 				1E85C58C1B343E2100CE2C0D /* PLCrashReportProcessInfo.h in Headers */,
 				1E7E551B187F3EE700F0858E /* BITHockeyHelper.h in Headers */,
@@ -752,7 +753,6 @@
 				1EC2956F1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.h in Headers */,
 				1E7E550A187F3ED800F0858E /* BITFeedbackMessage.h in Headers */,
 				1E5785ED194652900014D19A /* BITCrashMetaData.h in Headers */,
-				1EC2956C1B30572000CD53B2 /* HockeySDKNullability.h in Headers */,
 				1E85C5941B343E2100CE2C0D /* PLCrashReportThreadInfo.h in Headers */,
 				1B078E391C98847100E2FD59 /* BITDevice.h in Headers */,
 				1EBDF2B11957878800C7F49A /* BITSDKTextFieldCell.h in Headers */,
