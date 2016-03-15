@@ -1,11 +1,10 @@
+#import "HockeySDKFeatureConfig.h"
+#import "HockeySDKPrivate.h"
 #import "BITChannel.h"
-
 #import "BITHockeyHelper.h"
-#import "HockeySDK.h"
 #import "BITTelemetryContext.h"
 #import "BITTelemetryData.h"
 #import "HockeySDKPrivate.h"
-#import "BITOrderedDictionary.h"
 #import "BITEnvelope.h"
 #import "BITData.h"
 #import "BITDevice.h"
@@ -14,8 +13,14 @@
 static char *const BITDataItemsOperationsQueue = "net.hockeyapp.senderQueue";
 char *BITSafeJsonEventsString;
 
-static NSInteger const defaultMaxBatchCount  = 1;
-static NSInteger const schemaVersion  = 2;
+static NSInteger const BITDefaultMaxBatchSize  = 50;
+static NSInteger const BITDefaultBatchInterval = 15;
+static NSInteger const BITSchemaVersion  = 2;
+
+static NSInteger const BITDebugMaxBatchSize = 5;
+static NSInteger const BITDebugBatchInterval = 3;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation BITChannel
 
@@ -27,6 +32,13 @@ static NSInteger const schemaVersion  = 2;
   if(self = [super init]) {
     bit_resetSafeJsonStream(&BITSafeJsonEventsString);
     _dataItemCount = 0;
+    if (bit_isDebuggerAttached()) {
+      _maxBatchSize = BITDebugMaxBatchSize;
+      _batchInterval = BITDebugBatchInterval;
+    } else {
+      _maxBatchSize = BITDefaultMaxBatchSize;
+      _batchInterval = BITDefaultBatchInterval;
+    }
     dispatch_queue_t serialQueue = dispatch_queue_create(BITDataItemsOperationsQueue, DISPATCH_QUEUE_SERIAL);
     _dataItemsOperations = serialQueue;
   }
@@ -50,6 +62,7 @@ static NSInteger const schemaVersion  = 2;
 }
 
 - (void)persistDataItemQueue {
+  [self invalidateTimer];
   if(!BITSafeJsonEventsString || strlen(BITSafeJsonEventsString) == 0) {
     return;
   }
@@ -70,7 +83,7 @@ static NSInteger const schemaVersion  = 2;
 
 - (void)enqueueTelemetryItem:(BITTelemetryData *)item {
   if(item) {
-    BITOrderedDictionary *dict = [self dictionaryForTelemetryData:item];
+    NSDictionary *dict = [self dictionaryForTelemetryData:item];
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(self.dataItemsOperations, ^{
@@ -79,10 +92,13 @@ static NSInteger const schemaVersion  = 2;
       // Enqueue item
       [strongSelf appendDictionaryToJsonStream:dict];
       
-      if(strongSelf->_dataItemCount >= self.maxBatchCount) {
+      if(strongSelf->_dataItemCount >= strongSelf.maxBatchSize) {
         // Max batch count has been reached, so write queue to disk and delete all items.
         [strongSelf persistDataItemQueue];
         
+      } else if(strongSelf->_dataItemCount == 1) {
+        // It is the first item, let's start the timer
+        [strongSelf startTimer];
       }
     });
   }
@@ -90,15 +106,15 @@ static NSInteger const schemaVersion  = 2;
 
 #pragma mark - Envelope telemerty items
 
-- (BITOrderedDictionary *)dictionaryForTelemetryData:(BITTelemetryData *) telemetryData {
+- (NSDictionary *)dictionaryForTelemetryData:(BITTelemetryData *) telemetryData {
   
   BITEnvelope *envelope = [self envelopeForTelemetryData:telemetryData];
-  BITOrderedDictionary *dict = [envelope serializeToDictionary];
+  NSDictionary *dict = [envelope serializeToDictionary];
   return dict;
 }
 
 - (BITEnvelope *)envelopeForTelemetryData:(BITTelemetryData *)telemetryData {
-  telemetryData.version = @(schemaVersion);
+  telemetryData.version = @(BITSchemaVersion);
   
   BITData *data = [BITData new];
   data.baseData = telemetryData;
@@ -117,7 +133,7 @@ static NSInteger const schemaVersion  = 2;
 
 #pragma mark - Serialization Helper
 
-- (NSString *)serializeDictionaryToJSONString:(BITOrderedDictionary *)dictionary {
+- (NSString *)serializeDictionaryToJSONString:(NSDictionary *)dictionary {
   NSError *error;
   NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary options:(NSJSONWritingOptions)0 error:&error];
   if (!data) {
@@ -130,7 +146,7 @@ static NSInteger const schemaVersion  = 2;
 
 #pragma mark JSON Stream
 
-- (void)appendDictionaryToJsonStream:(BITOrderedDictionary *)dictionary {
+- (void)appendDictionaryToJsonStream:(NSDictionary *)dictionary {
   if(dictionary) {
     NSString *string = [self serializeDictionaryToJSONString:dictionary];
     
@@ -167,11 +183,37 @@ void bit_resetSafeJsonStream(char **string) {
 
 #pragma mark - Batching
 
-- (NSUInteger)maxBatchCount {
-  if(_maxBatchCount <= 0){
-    return defaultMaxBatchCount;
+- (NSUInteger)maxBatchSize {
+  if(_maxBatchSize <= 0){
+    return BITDefaultMaxBatchSize;
   }
-  return _maxBatchCount;
+  return _maxBatchSize;
+}
+
+#pragma mark - Batching
+
+- (void)invalidateTimer {
+  if (self.timerSource) {
+    dispatch_source_cancel(self.timerSource);
+    self.timerSource = nil;
+  }
+}
+
+- (void)startTimer {
+  // Reset timer, if it is already running
+  if (self.timerSource) {
+    [self invalidateTimer];
+  }
+  
+  self.timerSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.dataItemsOperations);
+  dispatch_source_set_timer(self.timerSource, dispatch_walltime(NULL, NSEC_PER_SEC * self.batchInterval), 1ull * NSEC_PER_SEC, 1ull * NSEC_PER_SEC);
+  dispatch_source_set_event_handler(self.timerSource, ^{
+    // On completion: Reset timer and persist items
+    [self persistDataItemQueue];
+  });
+  dispatch_resume(self.timerSource);
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

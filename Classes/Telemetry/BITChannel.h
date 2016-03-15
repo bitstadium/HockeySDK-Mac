@@ -1,41 +1,12 @@
-/*
- * Author: Christoph Wendt <chwend@microsoft.com>
- *
- * Copyright (c) 2012-2015 HockeyApp, Bit Stadium GmbH.
- * All rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- */
-
 #import <Foundation/Foundation.h>
-#import "HockeySDK.h"
-
+#import "HockeySDKFeatureConfig.h"
 #import "HockeySDKNullability.h"
 
-@class BITOrderedDictionary;
 @class BITConfiguration;
 @class BITTelemetryData;
 @class BITTelemetryContext;
 @class BITPersistence;
+
 NS_ASSUME_NONNULL_BEGIN
 
 FOUNDATION_EXPORT char *BITSafeJsonEventsString;
@@ -56,15 +27,32 @@ FOUNDATION_EXPORT char *BITSafeJsonEventsString;
  */
 @property (nonatomic, strong) BITPersistence *persistence;
 
-/**
- *  Number of queue items which will trigger a flush (testing).
+/*
+ * Threshold for sending data to the server. Default batch size for debugging is 150, for release
+ * configuration, the batch size is 5.
+ *
+ * Default: 50
+ *
+ * @warning: We advice to not set the batch size below 5 events.
  */
-@property (nonatomic) NSUInteger maxBatchCount;
+@property (nonatomic) NSUInteger maxBatchSize;
+
+/*
+ * Interval for sending data to the server in seconds.
+ *
+ * Default: 15
+ */
+@property (nonatomic, assign) NSInteger batchInterval;
+
+/**
+ *  A timer source which is used to flush the queue after a cretain time.
+ */
+@property (nonatomic, strong, nullable) dispatch_source_t timerSource;
 
 /**
  *  A queue which makes array operations thread safe.
  */
-@property (nonatomic, assign) dispatch_queue_t dataItemsOperations;
+@property (nonatomic, strong) dispatch_queue_t dataItemsOperations;
 
 /**
  *  An integer value that keeps tracks of the number of data items added to the JSON Stream string.
@@ -98,7 +86,7 @@ FOUNDATION_EXPORT char *BITSafeJsonEventsString;
  *
  *  @param dictionary the dictionary object which is to be added to the JSON Stream queue string.
  */
-- (void)appendDictionaryToJsonStream:(BITOrderedDictionary *)dictionary;
+- (void)appendDictionaryToJsonStream:(NSDictionary *)dictionary;
 
 /**
  *  A C function that serializes a given dictionary to JSON and appends it to a char string
