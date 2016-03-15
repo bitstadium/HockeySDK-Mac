@@ -468,43 +468,8 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   _crashReportUIHandler = crashReportUIHandler;
 }
 
-/**
- * Check if the debugger is attached
- *
- * Taken from https://github.com/plausiblelabs/plcrashreporter/blob/2dd862ce049e6f43feb355308dfc710f3af54c4d/Source/Crash%20Demo/main.m#L96
- *
- * @return `YES` if the debugger is attached to the current process, `NO` otherwise
- */
-- (BOOL)isDebuggerAttached {
-  static BOOL debuggerIsAttached = NO;
-  static BOOL debuggerIsChecked = NO;
-  if (debuggerIsChecked) return debuggerIsAttached;
-
-  struct kinfo_proc info;
-  size_t info_size = sizeof(info);
-  int name[4];
-  
-  name[0] = CTL_KERN;
-  name[1] = KERN_PROC;
-  name[2] = KERN_PROC_PID;
-  name[3] = getpid();
-  
-  if (sysctl(name, 4, &info, &info_size, NULL, 0) == -1) {
-    NSLog(@"[HockeySDK] ERROR: Checking for a running debugger via sysctl() failed: %s", strerror(errno));
-    debuggerIsAttached = false;
-  }
-  
-  if (!debuggerIsAttached && (info.kp_proc.p_flag & P_TRACED) != 0)
-    debuggerIsAttached = true;
-
-  debuggerIsChecked = YES;
-  
-  return debuggerIsAttached;
-}
-
-
 - (void)generateTestCrash {
-  if ([self isDebuggerAttached]) {
+  if (bit_isDebuggerAttached()) {
     NSLog(@"[HockeySDK] WARNING: The debugger is attached. The following crash cannot be detected by the SDK!");
   }
   
@@ -827,7 +792,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     // The actual signal and mach handlers are only registered when invoking `enableCrashReporterAndReturnError`
     // So it is safe enough to only disable the following part when a debugger is attached no matter which
     // signal handler type is set
-    if (![self isDebuggerAttached]) {
+    if (!bit_isDebuggerAttached()) {
       // Multiple exception handlers can be set, but we can only query the top level error handler (uncaught exception handler).
       //
       // To check if PLCrashReporter's error handler is successfully added, we compare the top
