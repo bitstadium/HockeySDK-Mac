@@ -1,9 +1,8 @@
  [![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
 
-## Version 4.0.0-alpha.1
+## Version 4.0.0-alpha.2
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.0-Alpha.1/docs/docs/Changelog.html)
-
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.0-alpha.2/docs/docs/Changelog.html)
 
 ## Introduction
 
@@ -183,36 +182,40 @@ On Mac OS X there are three types of crashes that are not reported to a register
 
 Example:
 
-- (void)applicationDidFinishLaunching:(NSNotification *)note {
-...
-[NSException raise:@"ExceptionAtStartup" format:@"This will not be recognized!"];
-...
-}
+    ```objectivec
+    - (void)applicationDidFinishLaunching:(NSNotification *)note {
+      ...
+      [NSException raise:@"ExceptionAtStartup" format:@"This will not be recognized!"];
+      ...
+    }
+    ```
 
-
-2. The default `NSUncaughtExceptionHandler` in `NSApplication` only logs exceptions to the console and ends their processing. Resulting in exceptions that occur in the `NSApplication` "scope" not occurring in a registered custom `NSUncaughtExceptionHandler`.
-
+2. The default `NSUncaughtExceptionHandler` in `NSApplication` only logs exceptions to the console and ends their processing. Resulting in exceptions that occur in the `NSApplication` "scope" not occurring in a registered custom `NSUncaughtExceptionHandler`. 
 Example:
 
-- (void)applicationDidFinishLaunching:(NSNotification *)note {
-...
-[self performSelector:@selector(delayedException) withObject:nil afterDelay:5];
-...
-}
+    ```objectivec
+    - (void)applicationDidFinishLaunching:(NSNotification *)note {
+      ...
+      [self performSelector:@selector(delayedException) withObject:nil afterDelay:5];
+      ...
+    }
 
-- (void)delayedException {
-NSArray *array = [NSArray array];
-[array objectAtIndex:23];
-}
+    - (void)delayedException {
+      NSArray *array = [NSArray array];
+      [array objectAtIndex:23];
+    }
+    ```
 
 3. Any exceptions occurring in IBAction or other GUI does not even reach the NSApplication default UncaughtExceptionHandler.
 
 Example:
 
-- (IBAction)doExceptionCrash:(id)sender {
-NSArray *array = [NSArray array];
-[array objectAtIndex:23];
-}
+    ```objective
+    - (IBAction)doExceptionCrash:(id)sender {
+      NSArray *array = [NSArray array];
+      [array objectAtIndex:23];
+    }
+    ```
 
 In general there are two solutions. The first one is to use an `NSExceptionHandler` class instead of an `NSUncaughtExceptionHandler`. But this has a few drawbacks which are detailed in `BITCrashReportExceptionApplication.h`.
 
@@ -238,7 +241,8 @@ The `BITCrashManagerDelegate` protocol (which is automatically included in `BITH
 
 1. Text attachments: `-(NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager`
 
-Check the following tutorial for an example on how to add CocoaLumberjack log data: [How to Add Application Specific Log Data on iOS or OS X](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/how-to-add-application-specific-log-data-on-ios-or-os-x)
+    Check the following tutorial for an example on how to add CocoaLumberjack log data: [How to Add Application Specific Log Data on iOS or OS X](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/how-to-add-application-specific-log-data-on-ios-or-os-x)
+
 2. Binary attachments: `-(BITHockeyAttachment *)attachmentForCrashManager:(BITCrashManager *)crashManager`
 
 Make sure to implement the protocol
@@ -296,8 +300,8 @@ Please check the [documentation](#documentation) of the `BITFeedbachManager` cla
 
 1. Install the Sparkle SDK: [http://sparkle-project.org](http://sparkle-project.org)
 
-As of today (01/2016), Sparkle doesn't support Mac sandboxes. If you require this, check out the following discussion https://github.com/sparkle-project/Sparkle/issues/363
-
+    As of today (01/2016), Sparkle doesn't support Mac sandboxes. If you require this, check out the following discussion https://github.com/sparkle-project/Sparkle/issues/363
+  
 2. Set `SUFeedURL` to `https://rink.hockeyapp.net/api/2/apps/<APP_IDENTIFIER>` and replace `<APP_IDENTIFIER>` with the same value used to initialize the HockeySDK
 
 3. Create a `.zip` file of your app bundle and upload that to HockeyApp.
@@ -307,34 +311,34 @@ As of today (01/2016), Sparkle doesn't support Mac sandboxes. If you require thi
 
 1. Set the following additional Sparkle property:
 
-```objectivec
-sparkleUpdater.sendsSystemProfile = YES;
-```
+    ```objectivec
+    sparkleUpdater.sendsSystemProfile = YES;
+    ```
 
 2. Add the following Sparkle delegate method (don't forget to bind `SUUpdater` to your appDelegate!):
 
-```objectivec
-- (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
-sendingSystemProfile:(BOOL)sendingProfile {
-return [[BITSystemProfile sharedSystemProfile] systemUsageData];
-}
-```
+    ```objectivec
+    - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
+                    sendingSystemProfile:(BOOL)sendingProfile {
+        return [[BITSystemProfile sharedSystemProfile] systemUsageData];
+    }
+    ```
 
 3. Initialize usage tracking depending on your needs.
 
-On example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
+    One example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
 
-```objectivec
-- (void)applicationWillFinishLaunching:(NSNotification *)aNotification
-…      
-NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-BITSystemProfile *bsp = [BITSystemProfile sharedSystemProfile];
-[dnc addObserver:bsp selector:@selector(startUsage) name:NSApplicationDidBecomeActiveNotification object:nil];
-[dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillTerminateNotification object:nil];
-[dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillResignActiveNotification object:nil];
-…
-};
-```
+    ```objectivec
+    - (void)applicationWillFinishLaunching:(NSNotification *)aNotification
+        …      
+        NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+        BITSystemProfile *bsp = [BITSystemProfile sharedSystemProfile];
+        [dnc addObserver:bsp selector:@selector(startUsage) name:NSApplicationDidBecomeActiveNotification object:nil];
+        [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillTerminateNotification object:nil];
+        [dnc addObserver:bsp selector:@selector(stopUsage) name:NSApplicationWillResignActiveNotification object:nil];
+        …
+    };
+    ```
 
 <a id="debug"></a>
 ### 3.6 Debug information
@@ -352,7 +356,7 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.0-Alpha.1/index.html).
+Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.0-alpha.2/index.html).
 
 <a id="troubleshooting"></a>
 ## 5.Troubleshooting
@@ -392,4 +396,3 @@ You must sign a [Contributor License Agreement](https://cla.microsoft.com/) befo
 ## 8. Contact
 
 If you have further questions or are running into trouble that cannot be resolved by any of the steps here, feel free to open a Github issue here or contact us at [support@hockeyapp.net](mailto:support@hockeyapp.net)
-
