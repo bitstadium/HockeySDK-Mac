@@ -33,6 +33,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		1B9D52781C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B9D52771C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h */; };
 		1BFE83D71C45B21100DE0B39 /* BITCategoryContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BFE83C61C45B21100DE0B39 /* BITCategoryContainer.h */; };
 		1BFE83D81C45B21100DE0B39 /* BITCategoryContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE83C71C45B21100DE0B39 /* BITCategoryContainer.m */; };
 		1BFE83D91C45B21100DE0B39 /* BITChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BFE83C81C45B21100DE0B39 /* BITChannel.h */; };
@@ -193,6 +194,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1B9D52771C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashReportTextFormatterPrivate.h; sourceTree = "<group>"; };
 		1BFE83C61C45B21100DE0B39 /* BITCategoryContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCategoryContainer.h; sourceTree = "<group>"; };
 		1BFE83C71C45B21100DE0B39 /* BITCategoryContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCategoryContainer.m; sourceTree = "<group>"; };
 		1BFE83C81C45B21100DE0B39 /* BITChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITChannel.h; sourceTree = "<group>"; };
@@ -655,6 +657,7 @@
 				1EBDC049195710CA00B5C8A3 /* BITCrashReportUI.xib */,
 				1EF09DD2152371DC00067A5C /* BITCrashReportTextFormatter.h */,
 				1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */,
+				1B9D52771C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h */,
 			);
 			path = CrashReporting;
 			sourceTree = "<group>";
@@ -739,6 +742,7 @@
 				1E7E5509187F3ED800F0858E /* BITFeedbackManagerPrivate.h in Headers */,
 				1E260CA617D41E9100C7F9FE /* BITKeychainItem.h in Headers */,
 				1EBDC051195716F300B5C8A3 /* BITSDKColoredView.h in Headers */,
+				1B9D52781C8A773800D86C09 /* BITCrashReportTextFormatterPrivate.h in Headers */,
 				1E7E552A187F62B400F0858E /* BITSystemProfilePrivate.h in Headers */,
 				1E85C5811B343E2100CE2C0D /* PLCrashMacros.h in Headers */,
 				1BFE84581C45BE5900DE0B39 /* BITSender.h in Headers */,
