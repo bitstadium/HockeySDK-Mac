@@ -222,6 +222,7 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 	// start MetricsManager
 	if (!self.disableMetricsManager) {
 		BITHockeyLog(@"INFO: Start MetricsManager");
+    [_metricsManager setServerURL:_serverURL];
 		[_metricsManager startManager];
 		[BITCategoryContainer activateCategory];
 	}
