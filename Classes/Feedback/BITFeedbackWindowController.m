@@ -512,7 +512,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
     if (UTI) {
       CFStringRef mimeType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
       CFRelease(UTI);
-      mimeTypeString = (__bridge NSString *)mimeType;
+      mimeTypeString = (__bridge_transfer NSString *)mimeType;
     }
     
     BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment attachmentWithData:data contentType:mimeTypeString];
