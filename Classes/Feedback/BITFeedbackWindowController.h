@@ -34,4 +34,6 @@
 
 - (id)initWithManager:(BITFeedbackManager *)feedbackManager;
 
+- (void)addAttachmentWithFilename:(NSString *)filename;
+
 @end

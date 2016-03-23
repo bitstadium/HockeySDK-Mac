@@ -139,6 +139,19 @@
   [_feedbackWindowController.window makeKeyAndOrderFront:self];
 }
 
+- (void)showFeedbackWindowWithAttachments:(NSArray<NSString*>*)attachments {
+  if (!_feedbackWindowController) {
+    _feedbackWindowController = [[BITFeedbackWindowController alloc] initWithManager:self];
+  }
+
+  for (NSString *attachment in attachments) {
+    [_feedbackWindowController addAttachmentWithFilename:attachment];
+  }
+
+  [_feedbackWindowController showWindow:self];
+  [_feedbackWindowController.window makeKeyAndOrderFront:self];
+}
+
 
 #pragma mark - Manager Control
 

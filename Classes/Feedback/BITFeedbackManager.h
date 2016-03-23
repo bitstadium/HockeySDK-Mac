@@ -165,5 +165,12 @@ typedef NS_ENUM(NSInteger, BITFeedbackUserDataElement) {
  */
 - (void)showFeedbackWindow;
 
+/**
+ Present the modal feedback list user interface and attach the given attachments.
+ 
+ Attachments is an array of NSString paths. Please make sure the paths are readable, especially if
+ your app is sandboxed.
+ */
+- (void)showFeedbackWindowWithAttachments:(NSArray<NSString*>*)attachments;
 
 @end
