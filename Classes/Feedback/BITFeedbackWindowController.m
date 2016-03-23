@@ -507,9 +507,13 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   if (!error && data) {
     CFStringRef fileExtension = (__bridge CFStringRef)[filename pathExtension];
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
-    CFStringRef mimeType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
-    CFRelease(UTI);
-    NSString *mimeTypeString = (__bridge NSString *)mimeType;
+
+    NSString *mimeTypeString = nil;
+    if (UTI) {
+      CFStringRef mimeType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
+      CFRelease(UTI);
+      mimeTypeString = (__bridge NSString *)mimeType;
+    }
     
     BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment attachmentWithData:data contentType:mimeTypeString];
     attachment.originalFilename = filename;
