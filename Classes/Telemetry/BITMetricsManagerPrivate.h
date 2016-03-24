@@ -10,7 +10,9 @@
 #import "HockeySDKNullability.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BITMetricsManager ()
+FOUNDATION_EXPORT NSString *const kBITApplicationWasLaunched;
+
+@interface BITMetricsManager()
 
 /**
  *  Create a new BITMetricsManager instance by passing the channel, the telemetry context, and persistence instance to use
