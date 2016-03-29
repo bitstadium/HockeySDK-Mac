@@ -166,11 +166,16 @@ typedef NS_ENUM(NSInteger, BITFeedbackUserDataElement) {
 - (void)showFeedbackWindow;
 
 /**
- Present the modal feedback list user interface and attach the given attachments.
- 
+ Present the modal feedback compose message user interface with the items given.
+
+ All NSString-Content in the array will be concatenated and result in the message,
+ while all UIImage and NSData-instances will be turned into attachments.
+
  Attachments is an array of NSString paths. Please make sure the paths are readable, especially if
- your app is sandboxed.
+ All BITMessageAttachment-instances will be used as is.
+
+ @param items an NSArray with objects that should be attached
  */
-- (void)showFeedbackWindowWithAttachments:(NSArray<NSString*>*)attachments;
+- (void)showFeedbackComposeViewWithPreparedItems:(NSArray *)items;
 
 @end

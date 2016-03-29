@@ -139,14 +139,12 @@
   [_feedbackWindowController.window makeKeyAndOrderFront:self];
 }
 
-- (void)showFeedbackWindowWithAttachments:(NSArray<NSString*>*)attachments {
+- (void)showFeedbackComposeViewWithPreparedItems:(NSArray *)attachmentItems {
   if (!_feedbackWindowController) {
     _feedbackWindowController = [[BITFeedbackWindowController alloc] initWithManager:self];
   }
 
-  for (NSString *attachment in attachments) {
-    [_feedbackWindowController addAttachmentWithFilename:attachment];
-  }
+  [_feedbackWindowController prepareWithItems:attachmentItems];
 
   [_feedbackWindowController showWindow:self];
   [_feedbackWindowController.window makeKeyAndOrderFront:self];
