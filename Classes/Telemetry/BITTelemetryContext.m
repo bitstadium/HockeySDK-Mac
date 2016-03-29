@@ -2,7 +2,6 @@
 #import "BITTelemetryContext.h"
 #import "BITMetricsManagerPrivate.h"
 #import "BITHockeyHelper.h"
-#import "BITOrderedDictionary.h"
 #import "BITPersistence.h"
 #import "BITPersistencePrivate.h"
 
@@ -24,7 +23,7 @@ static char *const BITContextOperationsQueue = "net.hockeyapp.telemetryContextQu
   }
   return self;
 }
-      
+
 - (instancetype)initWithAppIdentifier:(NSString *)appIdentifier persistence:(BITPersistence *)persistence {
   
   if ((self = [self init])) {
@@ -52,7 +51,7 @@ static char *const BITContextOperationsQueue = "net.hockeyapp.telemetryContextQu
       userContext = [self newUser];
       [self saveUser:userContext];
     }
-
+    
     BITSession *sessionContext = [BITSession new];
     
     _application = applicationContext;
@@ -352,8 +351,8 @@ static char *const BITContextOperationsQueue = "net.hockeyapp.telemetryContextQu
 #pragma mark - Custom getter
 #pragma mark - Helper
 
-- (BITOrderedDictionary *)contextDictionary {
-  BITOrderedDictionary *contextDictionary = [BITOrderedDictionary new];
+- (NSDictionary *)contextDictionary {
+  NSMutableDictionary *contextDictionary = [NSMutableDictionary new];
   [contextDictionary addEntriesFromDictionary:self.tags];
   [contextDictionary addEntriesFromDictionary:[self.session serializeToDictionary]];
   [contextDictionary addEntriesFromDictionary:[self.user serializeToDictionary]];
@@ -361,12 +360,13 @@ static char *const BITContextOperationsQueue = "net.hockeyapp.telemetryContextQu
   return contextDictionary;
 }
 
-- (BITOrderedDictionary *)tags {
+- (NSDictionary *)tags {
   if(!_tags){
-    _tags = [self.application serializeToDictionary];
-    [_tags addEntriesFromDictionary:[self.application serializeToDictionary]];
-    [_tags addEntriesFromDictionary:[self.internal serializeToDictionary]];
-    [_tags addEntriesFromDictionary:[self.device serializeToDictionary]];
+    NSMutableDictionary *tags = [self.application serializeToDictionary].mutableCopy;
+    [tags addEntriesFromDictionary:[self.application serializeToDictionary]];
+    [tags addEntriesFromDictionary:[self.internal serializeToDictionary]];
+    [tags addEntriesFromDictionary:[self.device serializeToDictionary]];
+    _tags = tags;
   }
   return _tags;
 }
