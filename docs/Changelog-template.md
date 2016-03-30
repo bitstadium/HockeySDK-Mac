@@ -1,3 +1,7 @@
+## Version 4.0.0-beta.1
+
+- [NEW] User Metrics including users and sessions data is now in public beta
+
 ## Version 4.0.0-alpha.2
 
 - [UPDATE] Add improvements and fixes from 3.2.1

@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name              = 'HockeySDK-Mac'
-  s.version           = '4.0.0-alpha.2'
+  s.version           = '4.0.0-beta.1'
 
   s.summary           = 'Collect live crash reports, get feedback from your users, distribute your betas, and get usage data.'
   s.description       = <<-DESC
-                        HockeyApp is a service to distribute beta apps, collect crash reports and
+                        HockeyApp is a service to distribute beta apps, collect crash reports as well as usage data and
                         communicate with your app's users.
                         
                         It improves the testing process dramatically and can be used for both beta
