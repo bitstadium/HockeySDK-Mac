@@ -45,7 +45,6 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
  *  Saves the bundle to disk.
  *
  *  @param bundle            the bundle, which should be saved to disk
- *  @param completionBlock   a block which is executed after the bundle has been stored
  */
 - (void)persistBundle:(NSData *)bundle;
 
@@ -78,8 +77,6 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
  *  Returns the path for the next item to send. The requested path is reserved as long
  *  as leaveUpRequestedPath: gets called.
  *
- *  @see giveBackRequestedPath:
- *
  *  @return the path of the item, which should be sent next
  */
 - (nullable NSString *)requestNextFilePath;
@@ -87,14 +84,14 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
 /**
  *  Release a requested path. This method should be called after sending a file failed.
  *
- *  @param path the path that should be available for sending again.
+ *  @param filePath the path that should be available for sending again.
  */
 - (void)giveBackRequestedFilePath:(NSString *)filePath;
 
 /**
  *  Return the json data for a given path
  *
- *  @param path the path of the file
+ *  @param filePath the path of the file
  *
  *  @return a data object which contains telemetry data in json representation
  */
@@ -113,7 +110,9 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
 
 /**
  *  Returns a folder path for items of a given type.
- *  @param the type
+ *
+ *  @param type the type of the file
+ *
  *  @return a folder path for items of a given type
  */
 - (NSString *)folderPathForType:(BITPersistenceType)type;
@@ -126,7 +125,7 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
  * Creates the path for a file
  * The filename includes the timestamp.
  *
- * @param the type that you want the fileURL for
+ * @param type that you want the fileURL for
  */
 - (NSString *)fileURLForType:(BITPersistenceType)type;
 
