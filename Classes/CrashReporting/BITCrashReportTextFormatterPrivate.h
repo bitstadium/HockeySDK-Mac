@@ -1,11 +1,3 @@
-//
-//  BITCrashReportTextFormatterPrivate.h
-//  HockeySDK
-//
-//  Created by Lukas Spieß on 27/01/16.
-//
-//
-
 #import "BITCrashReportTextFormatter.h"
 
 #ifndef BITCrashReportTextFormatterPrivate_h
