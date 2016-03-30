@@ -1,8 +1,7 @@
- [![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
+## Version 4.1.0-alpha.1
 
-## Version 4.0.0-alpha.2
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.1.0-alpha.1/docs/docs/Changelog.html)
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.0-alpha.2/docs/docs/Changelog.html)
 
 ## Introduction
 
@@ -12,7 +11,7 @@ The following feature is currently supported:
 
 1. **Collect crash reports:** If you app crashes, a crash log with the same format as from the Apple Crash Reporter is written to the device's storage. If the user starts the app again, he is asked to submit the crash report to HockeyApp. This works for both beta and live apps, i.e. those submitted to the App Store!
 
-2. **Metrics** Get nice statistics about how many users you have and how they are using your app.
+2. **Metrics** Understand user behavior to improve your app. Track usage through custom events or daily and monthly active users. Monitor crash impacted users. Measure customer engagement through session count.
 
 3. **Feedback:** Collect feedback from your users from within your app and communicate directly with them using the HockeyApp backend.
 
@@ -23,12 +22,12 @@ This document contains the following sections:
 1. [Requirements](#requirements)
 2. [Setup](#setup)
 3. [Advanced Setup](#advancedsetup) 
-1. [Setup with CocoaPods](#cocoapods)
-2. [Crash Reporting](#crashreporting)
-3. [Metrics](#metrics)
-4. [Feedback](#feedback)
-5. [Sparkle](#sparkle)
-6. [Debug information](#debug)
+   1. [Setup with CocoaPods](#cocoapods)
+   2. [Crash Reporting](#crashreporting)
+   3. [Metrics](#metrics)
+   4. [Feedback](#feedback)
+   5. [Sparkle](#sparkle)
+   6. [Debug information](#debug)
 4. [Documentation](#documentation)
 5. [Troubleshooting](#troubleshooting)
 6. [Contributing](#contributing)
@@ -67,14 +66,14 @@ From our experience, 3rd-party libraries usually reside inside a subdirectory (l
 3. Drag & drop `HockeySDK.framework` from your window in the `Finder` into your project in Xcode and move it to the desired location in the `Project Navigator` (e.g. into the group called `Vendor`)
 4. A popup will appear. Select `Create groups for any added folders` and set the checkmark for your target. Then click `Finish`.
 5. Now we’ll make sure the framework is copied into your app bundle:
-- Click on your project in the `Project Navigator` (⌘+1).
-- Click your target in the project editor.
-- Click on the `Build Phases` tab.
-- Click the `Add Build Phase` button at the bottom and choose `Add Copy Files`.
-- Click the disclosure triangle next to the new build phase.
-- Choose `Frameworks` from the Destination list.
-- Drag `HockeySDK-Mac` from the Project Navigator left sidebar to the list in the new Copy Files phase.
-
+   - Click on your project in the `Project Navigator` (⌘+1).
+   - Click your target in the project editor.
+   - Click on the `Build Phases` tab.
+   - Click the `Add Build Phase` button at the bottom and choose `Add Copy Files`.
+   - Click the disclosure triangle next to the new build phase.
+   - Choose `Frameworks` from the Destination list.
+   - Drag `HockeySDK-Mac` from the Project Navigator left sidebar to the list in the new Copy Files phase.
+   
 6. Make sure to sign the app, since the SDK will store user related input in the keychain for privacy reasons
 
 <a id="modifycode"></a>
@@ -85,36 +84,36 @@ From our experience, 3rd-party libraries usually reside inside a subdirectory (l
 1. Open your `AppDelegate.m` file.
 2. Add the following line at the top of the file below your own `import` statements:
 
-```objectivec
-@import HockeySDK
-```
+    ```objectivec
+    @import HockeySDK
+    ```
 
 3. Search for the method `applicationDidFinishLaunching:`
 4. Add the following lines to setup and start the Application Insights SDK:
 
-```objectivec
-[[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-// Do some additional configuration if needed here
-[[BITHockeyManager sharedHockeyManager] startManager];
-```
+    ```objectivec
+    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
+    // Do some additional configuration if needed here
+    [[BITHockeyManager sharedHockeyManager] startManager];
+    ```
 
 **Swift**
 
 1. Open your `AppDelegate.swift` file.
 2. Add the following line at the top of the file below your own import statements:
-
-```swift
-import HockeySDK
-```
+    
+    ```swift
+    import HockeySDK
+    ```
 
 3. Search for the method `applicationWillFinishLaunching`
 4. Add the following lines to setup and start the Application Insights SDK:
-
-```swift
-BITHockeyManager.sharedHockeyManager().configureWithIdentifier("APP_IDENTIFIER")
-// Do some additional configuration if needed here
-BITHockeyManager.sharedHockeyManager().startManager()
-```
+    
+    ```swift
+    BITHockeyManager.sharedHockeyManager().configureWithIdentifier("APP_IDENTIFIER")
+    // Do some additional configuration if needed here
+    BITHockeyManager.sharedHockeyManager().startManager()
+    ```
 
 *Note:* In case of document based apps, invoke `startManager` at the end of `applicationDidFinishLaunching`, since otherwise you may lose the Apple events to restore, open untitled document etc.
 
@@ -179,7 +178,6 @@ Sending the reports on startup is done asynchronously (non-blocking). This is th
 On Mac OS X there are three types of crashes that are not reported to a registered `NSUncaughtExceptionHandler`:
 
 1. Custom `NSUncaughtExceptionHandler` don't start working until after `NSApplication` has finished calling all of its delegate methods!
-
 Example:
 
     ```objectivec
@@ -207,7 +205,6 @@ Example:
     ```
 
 3. Any exceptions occurring in IBAction or other GUI does not even reach the NSApplication default UncaughtExceptionHandler.
-
 Example:
 
     ```objective
@@ -255,16 +252,20 @@ Make sure to implement the protocol
 
 and set the delegate:
 
-```objectivec
-[[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-
-[[BITHockeyManager sharedHockeyManager] setDelegate: self];
-
-[[BITHockeyManager sharedHockeyManager] startManager];
-```
+    ```objectivec
+    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
+    
+    [[BITHockeyManager sharedHockeyManager] setDelegate: self];
+    
+    [[BITHockeyManager sharedHockeyManager] startManager];
+    ```
 
 <a name="metrics"></a>
 ### 3.3 Metrics
+
+The metrics feature helps you understanding user behavior to improve your app. You can track usage through custom events or daily and monthly active users. Furthermore, the HockeyApp will monitor crash impacted users and customer engagement through session count.
+
+#### 3.3.1 User metrics
 
 HockeyApp automatically provides you with nice intelligible and informative metrics about how your app is used and by whom.
 
@@ -276,16 +277,39 @@ Just in case you want to opt-out of this feature, there is a way to turn this fu
 [BITHockeyManager sharedHockeyManager].disableMetricsManager = YES;
 
 [[BITHockeyManager sharedHockeyManager] startManager];
-
 ```
 
+#### 3.3.2 Custom metrics
+
+By tracking custom events, you can now get insights about how your customers use your app, understand their behavior and answer important business or experience questions while improving your app.
+
+- Before starting to track events, ask yourself the questions that you want to get answers to. For instance, you might be interested in business, performance/quality or user experience aspects.
+- Name your events in a meaningful way and keep in mind that you will use these names when searching for events in the HockeyApp web portal. It is your reponsibility to not collect personal information as part of the events tracking.
+- Accepted characters for tracking events are: [a-zA-Z0-9_. -]. If you use other than the accepted characters, your events will not show up in the HockeyApp web portal.
+
+**Objective-C**
+
+```objectivec
+BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metricsManager;
+
+[metricsManager trackEventWithName:eventName]
+```
+
+**Swift**
+
+```swift
+let metricsManager = BITHockeyManager.sharedHockeyManager().metricsManager
+
+metricsManager.trackEventWithName(eventName)
+```
+  
 <a name="feedback"></a>
 ### 3.4 Feedback
 
 `BITFeedbackManager` lets your users communicate directly with you via the app and an integrated user interface. It provides a single threaded discussion with a user running your app. This feature is only enabled, if you integrate the actual view controllers into your app.
-
+ 
 You should never create your own instance of `BITFeedbackManager` but use the one provided by the `[BITHockeyManager sharedHockeyManager]`:
-
+ 
 ```objectivec
 [BITHockeyManager sharedHockeyManager].feedbackManager
 ```
@@ -299,7 +323,6 @@ Please check the [documentation](#documentation) of the `BITFeedbachManager` cla
 #### 3.5.1 Setup for beta distribution
 
 1. Install the Sparkle SDK: [http://sparkle-project.org](http://sparkle-project.org)
-
     As of today (01/2016), Sparkle doesn't support Mac sandboxes. If you require this, check out the following discussion https://github.com/sparkle-project/Sparkle/issues/363
   
 2. Set `SUFeedURL` to `https://rink.hockeyapp.net/api/2/apps/<APP_IDENTIFIER>` and replace `<APP_IDENTIFIER>` with the same value used to initialize the HockeySDK
@@ -344,8 +367,8 @@ Please check the [documentation](#documentation) of the `BITFeedbachManager` cla
 ### 3.6 Debug information
 
 To check if data is send properly to HockeyApp and also see some additional SDK debug log data in the console, add the following line before `startManager`:
-
 ```objectivec
+
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
 [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled:YES];
@@ -356,24 +379,24 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.0-alpha.2/index.html).
+Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.1.0-alpha.1/index.html).
 
 <a id="troubleshooting"></a>
 ## 5.Troubleshooting
 
 1. dlyb crash on startup
 
-Make sure that the apps build setting has `LD_RUNPATH_SEARCH_PATHS` set to `@executable_path/../Frameworks`
+    Make sure that the apps build setting has `LD_RUNPATH_SEARCH_PATHS` set to `@executable_path/../Frameworks`
 
 2. Crash on startup with Xcode debugger running
 
-Make sure there is no `All Exceptions` breakpoint active or limit it to `Objective-C` only and exclude `C++`.
+    Make sure there is no `All Exceptions` breakpoint active or limit it to `Objective-C` only and exclude `C++`.
 
 3. Feature are not working as expected
 
-Enable debug output to the console to see additional information from the SDK initializing the modules,  sending and receiving network requests and more by adding the following code before calling `startManager`:
+    Enable debug output to the console to see additional information from the SDK initializing the modules,  sending and receiving network requests and more by adding the following code before calling `startManager`:
 
-[[BITHockeyManager sharedHockeyManager] setDebugLogEnabled: YES];
+        [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled: YES];
 
 <a id="contributing"></a>
 ## 6. Contributing
