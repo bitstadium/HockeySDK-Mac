@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "78739728BC2123AD8D9FDD9B7E34B43BD66C9FB5",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "78739728BC2123AD8D9FDD9B7E34B43BD66C9FB5" : 0,
+    "0CA27A43414FB33F98B16BE18013A983CABB105E" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "4D7EF736-757B-4A90-8BBB-3DE7C9F5AC62",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "78739728BC2123AD8D9FDD9B7E34B43BD66C9FB5" : "HockeySDK-Mac-Private\/",
+    "0CA27A43414FB33F98B16BE18013A983CABB105E" : "HockeySDK-iOSDemo-Private\/Vendor\/HockeySDK\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "HockeySDK",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Support\/HockeySDK.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/bitstadium\/HockeySDK-iOS-Private.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0CA27A43414FB33F98B16BE18013A983CABB105E"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/bitstadium\/HockeySDK-Mac-Private.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "78739728BC2123AD8D9FDD9B7E34B43BD66C9FB5"
+    }
+  ]
+}
