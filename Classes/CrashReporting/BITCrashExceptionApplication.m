@@ -31,9 +31,9 @@
 #import <sys/sysctl.h>
 
 #import "BITHockeyManager.h"
+#import "BITHockeyHelper.h"
 #import "BITCrashManager.h"
 #import "BITCrashManagerPrivate.h"
-
 
 @implementation BITCrashExceptionApplication
 
@@ -47,7 +47,7 @@
   [super reportException: exception];
   
   // Don't invoke the registered UncaughtExceptionHandler if we are currently debugging this app!
-  if (![[BITHockeyManager sharedHockeyManager].crashManager isDebuggerAttached] && exception) {
+  if (!bit_isDebuggerAttached() && exception) {
     // We forward this exception to PLCrashReporters UncaughtExceptionHandler
     // If the developer has implemented their own exception handler and that one is
     // invoked before PLCrashReporters exception handler and the developers

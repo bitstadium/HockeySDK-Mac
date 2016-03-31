@@ -1,6 +1,6 @@
-// 
+//
 //  Author: Andreas Linde <mail@andreaslinde.de>
-// 
+//
 //  Copyright (c) 2012-2014 HockeyApp, Bit Stadium GmbH. All rights reserved.
 //  See LICENSE.txt for author information.
 //
@@ -218,14 +218,14 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
     }
     [_feedbackManager performSelector:@selector(startManager) withObject:nil afterDelay:1.0f];
   }
-
-	// start MetricsManager
-	if (!self.disableMetricsManager) {
-		BITHockeyLog(@"INFO: Start MetricsManager");
-		[_metricsManager startManager];
-		[BITCategoryContainer activateCategory];
-	}
-
+  
+  // start MetricsManager
+  if (!self.disableMetricsManager) {
+    BITHockeyLog(@"INFO: Start MetricsManager");
+    [_metricsManager startManager];
+    [BITCategoryContainer activateCategory];
+  }
+  
   NSString *integrationFlowTime = [self integrationFlowTimeString];
   if (integrationFlowTime && [self integrationFlowStartedWithTimeString:integrationFlowTime]) {
     [self pingServerForIntegrationStartWorkflowWithTimeString:integrationFlowTime];
@@ -253,7 +253,7 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
   
   if (_serverURL != aServerURL) {
     _serverURL = [aServerURL copy];
-
+    
     if (_hockeyAppClient) {
       _hockeyAppClient.baseURL = [NSURL URLWithString:_serverURL ?: kBITHockeySDKURL];
     }
@@ -336,11 +336,11 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
     BITHockeyLog(@"INFO: Setup FeedbackManager");
     _feedbackManager = [[BITFeedbackManager alloc] initWithAppIdentifier:_appIdentifier];
     
-		BITHockeyLog(@"INFO: Setup MetricsManager");
-		NSString *iKey = bit_appIdentifierToGuid(_appIdentifier);
-		_metricsManager = [[BITMetricsManager alloc] initWithAppIdentifier:iKey];
+    BITHockeyLog(@"INFO: Setup MetricsManager");
+    NSString *iKey = bit_appIdentifierToGuid(_appIdentifier);
+    _metricsManager = [[BITMetricsManager alloc] initWithAppIdentifier:iKey];
   }
-	
+  
   if ([self isCrashManagerDisabled])
     _crashManager.crashManagerActivated = NO;
 }

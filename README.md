@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
 
-## Version 4.0.0-alpha.2
+## Version 4.1.0-alpha.1
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.0.0-alpha.2/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.1.0-alpha.1/docs/docs/Changelog.html)
 
 
 ## Introduction
@@ -13,7 +13,7 @@ The following feature is currently supported:
 
 1. **Collect crash reports:** If you app crashes, a crash log with the same format as from the Apple Crash Reporter is written to the device's storage. If the user starts the app again, he is asked to submit the crash report to HockeyApp. This works for both beta and live apps, i.e. those submitted to the App Store!
 
-2. **Metrics** Get nice statistics about how many users you have and how they are using your app.
+2. **Metrics** Understand user behavior to improve your app. Track usage through custom events or daily and monthly active users. Monitor crash impacted users. Measure customer engagement through session count.
 
 3. **Feedback:** Collect feedback from your users from within your app and communicate directly with them using the HockeyApp backend.
 
@@ -135,7 +135,7 @@ If any crash report has been saved from the last time your application ran, `sta
 
 ```ruby
 platform :osx, '10.7'
-pod "HockeySDK-Mac"
+pod 'HockeySDK-Mac', :podspec => 'https://download.hockeyapp.net/preseason/sdk/osx/HockeySDK-Mac.podspec'
 ```
 
 <a name="crashreporting"></a>
@@ -265,6 +265,10 @@ and set the delegate:
 <a name="metrics"></a>
 ### 3.3 Metrics
 
+The metrics feature helps you understanding user behavior to improve your app. You can track usage through custom events or daily and monthly active users. Furthermore, the HockeyApp will monitor crash impacted users and customer engagement through session count.
+
+#### 3.3.1 User metrics
+
 HockeyApp automatically provides you with nice intelligible and informative metrics about how your app is used and by whom.
 
 Just in case you want to opt-out of this feature, there is a way to turn this functionality off:
@@ -277,6 +281,30 @@ Just in case you want to opt-out of this feature, there is a way to turn this fu
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
+#### 3.3.2 Custom metrics
+
+By tracking custom events, you can now get insights about how your customers use your app, understand their behavior and answer important business or experience questions while improving your app.
+
+- Before starting to track events, ask yourself the questions that you want to get answers to. For instance, you might be interested in business, performance/quality or user experience aspects.
+- Name your events in a meaningful way and keep in mind that you will use these names when searching for events in the HockeyApp web portal. It is your reponsibility to not collect personal information as part of the events tracking.
+- Accepted characters for tracking events are: [a-zA-Z0-9_. -]. If you use other than the accepted characters, your events will not show up in the HockeyApp web portal.
+
+**Objective-C**
+
+```objectivec
+BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metricsManager;
+
+[metricsManager trackEventWithName:eventName]
+```
+
+**Swift**
+
+```swift
+let metricsManager = BITHockeyManager.sharedHockeyManager().metricsManager
+
+metricsManager.trackEventWithName(eventName)
+```
+  
 <a name="feedback"></a>
 ### 3.4 Feedback
 
@@ -353,7 +381,7 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.0.0-alpha.2/index.html).
+Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.1.0-alpha.1/index.html).
 
 <a id="troubleshooting"></a>
 ## 5.Troubleshooting

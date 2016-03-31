@@ -4,19 +4,19 @@
 #import "HockeySDKPrivate.h"
 #import "BITHockeyHelper.h"
 
-NSString *const kTelemetry = @"Telemetry";
-NSString *const kMetaData = @"MetaData";
-NSString *const kFileBaseString = @"hockey-app-bundle-";
-NSString *const kFileBaseStringMeta = @"metadata";
-NSString *const kTelemetryDirectoryPath = @"com.microsoft.HockeyApp/Telemetry/";
-NSString *const kMetaDataDirectoryPath = @"com.microsoft.HockeyApp/MetaData/";
-
 NSString *const BITPersistenceSuccessNotification = @"BITHockeyPersistenceSuccessNotification";
-char const *kPersistenceQueueString = "com.microsoft.HockeyApp.persistenceQueue";
-NSUInteger const defaultFileCount = 50;
+
+static NSString *const kBITTelemetry = @"Telemetry";
+static NSString *const kBITMetaData = @"MetaData";
+static NSString *const kBITFileBaseString = @"hockey-app-bundle-";
+static NSString *const kBITFileBaseStringMeta = @"metadata";
+static NSString *const kBITTelemetryDirectoryPath = @"com.microsoft.HockeyApp/Telemetry/";
+static NSString *const kBITMetaDataDirectoryPath = @"com.microsoft.HockeyApp/MetaData/";
+
+static char const *kBITPersistenceQueueString = "com.microsoft.HockeyApp.persistenceQueue";
+static NSUInteger const BITDefaultFileCount = 50;
 
 @implementation BITPersistence {
-  BOOL _maxFileCountReached;
   BOOL _directorySetupComplete;
 }
 
@@ -25,25 +25,14 @@ NSUInteger const defaultFileCount = 50;
 - (instancetype)init {
   self = [super init];
   if (self) {
-    _persistenceQueue = dispatch_queue_create(kPersistenceQueueString, DISPATCH_QUEUE_SERIAL); //TODO several queues?
+    _persistenceQueue = dispatch_queue_create(kBITPersistenceQueueString, DISPATCH_QUEUE_SERIAL); //TODO several queues?
     _requestedBundlePaths = [NSMutableArray new];
-    _maxFileCount = defaultFileCount;
-
+    _maxFileCount = BITDefaultFileCount;
+    
     // Evantually, there will be old files on disk, the flag will be updated before the first event gets created
-
-
-    _maxFileCountReached = YES;
     _directorySetupComplete = NO; //will be set to true in createDirectoryStructureIfNeeded
-
+    
     [self createDirectoryStructureIfNeeded];
-
-    NSString *directoryPath = [self folderPathForType:BITPersistenceTypeTelemetry];
-    NSError *error = nil;
-    NSArray<NSURL *> *fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:directoryPath]
-                                                       includingPropertiesForKeys:@[NSURLNameKey]
-                                                                          options:NSDirectoryEnumerationSkipsHiddenFiles
-                                                                            error:&error];
-    _maxFileCountReached = fileNames.count >= _maxFileCount;
   }
   return self;
 }
@@ -55,7 +44,7 @@ NSUInteger const defaultFileCount = 50;
 - (void)persistBundle:(NSData *)bundle {
   //TODO send out a fail notification?
   NSString *fileURL = [self fileURLForType:BITPersistenceTypeTelemetry];
-
+  
   if (bundle) {
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.persistenceQueue, ^{
@@ -84,7 +73,8 @@ NSUInteger const defaultFileCount = 50;
 }
 
 - (BOOL)isFreeSpaceAvailable {
-  return !_maxFileCountReached;
+  NSArray *files = [self persistedFilesForType:BITPersistenceTypeTelemetry];
+  return files.count < _maxFileCount;
 }
 
 - (NSString *)requestNextFilePath {
@@ -92,9 +82,9 @@ NSUInteger const defaultFileCount = 50;
   __weak typeof(self) weakSelf = self;
   dispatch_sync(self.persistenceQueue, ^() {
     typeof(self) strongSelf = weakSelf;
-
+    
     path = [strongSelf nextURLOfType:BITPersistenceTypeTelemetry];
-
+    
     if (path) {
       [self.requestedBundlePaths addObject:path];
     }
@@ -104,12 +94,12 @@ NSUInteger const defaultFileCount = 50;
 
 - (NSDictionary *)metaData {
   NSString *filePath = [self fileURLForType:BITPersistenceTypeMetaData];
-  NSObject *bundle = [self bundleAtFilePath:filePath withFileBaseString:kFileBaseStringMeta];
+  NSObject *bundle = [self bundleAtFilePath:filePath withFileBaseString:kBITFileBaseStringMeta];
   if ([bundle isMemberOfClass:NSDictionary.class]) {
     return (NSDictionary *) bundle;
   }
   BITHockeyLog(@"INFO: The context meta data file could not be loaded.");
-  return nil;
+  return [NSDictionary dictionary];
 }
 
 - (NSObject *)bundleAtFilePath:(NSString *)filePath withFileBaseString:(NSString *)filebaseString {
@@ -122,7 +112,7 @@ NSUInteger const defaultFileCount = 50;
 
 - (NSData *)dataAtFilePath:(NSString *)path {
   NSData *data = nil;
-  if (path && [path rangeOfString:kFileBaseString].location != NSNotFound) {
+  if (path && [path rangeOfString:kBITFileBaseString].location != NSNotFound) {
     data = [NSData dataWithContentsOfFile:path];
   }
   return data;
@@ -137,7 +127,7 @@ NSUInteger const defaultFileCount = 50;
   __weak typeof(self) weakSelf = self;
   dispatch_sync(self.persistenceQueue, ^() {
     typeof(self) strongSelf = weakSelf;
-    if ([path rangeOfString:kFileBaseString].location != NSNotFound) {
+    if ([path rangeOfString:kBITFileBaseString].location != NSNotFound) {
       NSError *error = nil;
       if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error]) {
         BITHockeyLog(@"Error deleting file at path %@", path);
@@ -150,14 +140,14 @@ NSUInteger const defaultFileCount = 50;
       BITHockeyLog(@"Empty path, nothing to delete");
     }
   });
-
+  
 }
 
 - (void)giveBackRequestedFilePath:(NSString *)filePath {
   __weak typeof(self) weakSelf = self;
   dispatch_async(self.persistenceQueue, ^() {
     typeof(self) strongSelf = weakSelf;
-
+    
     [strongSelf.requestedBundlePaths removeObject:filePath];
   });
 }
@@ -167,26 +157,26 @@ NSUInteger const defaultFileCount = 50;
 - (NSString *)fileURLForType:(BITPersistenceType)type {
   NSArray<NSString *> *searchPaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
   NSString *appSupportPath = searchPaths.lastObject;
-
+  
   NSString *fileName = nil;
   NSString *filePath;
-
+  
   switch (type) {
     case BITPersistenceTypeMetaData: {
-      fileName = kFileBaseStringMeta;
-      filePath = [appSupportPath stringByAppendingPathComponent:kMetaDataDirectoryPath];
+      fileName = kBITFileBaseStringMeta;
+      filePath = [appSupportPath stringByAppendingPathComponent:kBITMetaDataDirectoryPath];
       break;
     };
     default: {
       NSString *uuid = bit_UUID();
-      fileName = [NSString stringWithFormat:@"%@%@", kFileBaseString, uuid];
-      filePath = [appSupportPath stringByAppendingPathComponent:kTelemetryDirectoryPath];
+      fileName = [NSString stringWithFormat:@"%@%@", kBITFileBaseString, uuid];
+      filePath = [appSupportPath stringByAppendingPathComponent:kBITTelemetryDirectoryPath];
       break;
     };
   }
-
+  
   filePath = [filePath stringByAppendingPathComponent:fileName];
-
+  
   return filePath;
 }
 
@@ -200,7 +190,7 @@ NSUInteger const defaultFileCount = 50;
   if (appSupportURL) {
     NSError *error = nil;
     //App Support and Telemetry Directory
-    NSURL *folderURL = [appSupportURL URLByAppendingPathComponent:kTelemetryDirectoryPath];
+    NSURL *folderURL = [appSupportURL URLByAppendingPathComponent:kBITTelemetryDirectoryPath];
     //NOTE: createDirectoryAtURL:withIntermediateDirectories:attributes:error
     //will return YES if the directory already exists and won't override anything.
     //No need to check if the directory already exists.
@@ -208,16 +198,16 @@ NSUInteger const defaultFileCount = 50;
       BITHockeyLog(@"%@", error.localizedDescription);
       return; //TODO we can't use persistence at all in this case, what do we want to do now? Notify the user?
     }
-
+    
     //MetaData Directory
-    folderURL = [appSupportURL URLByAppendingPathComponent:kMetaDataDirectoryPath];
+    folderURL = [appSupportURL URLByAppendingPathComponent:kBITMetaDataDirectoryPath];
     if (![fileManager createDirectoryAtURL:folderURL withIntermediateDirectories:NO attributes:nil error:&error]) {
       BITHockeyLog(@"%@", error.localizedDescription);
       return; //TODO we can't use persistence at all in this case, what do we want to do now? Notify the user?
     }
-
+    
     _directorySetupComplete = YES;
-
+    
     //Exclude from Backup
     if (![appSupportURL setResourceValue:@YES
                                   forKey:NSURLIsExcludedFromBackupKey
@@ -234,18 +224,7 @@ NSUInteger const defaultFileCount = 50;
  * @returns the URL to the next file depending on the specified type. If there's no file, return nil.
  */
 - (NSString *)nextURLOfType:(BITPersistenceType)type {
-  NSString *directoryPath = [self folderPathForType:type];
-  NSError *error = nil;
-  NSArray<NSURL *> *fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:directoryPath]
-                                                              includingPropertiesForKeys:@[NSURLNameKey]
-                                                                                 options:NSDirectoryEnumerationSkipsHiddenFiles
-                                                                                   error:&error];
-  // each track method asks, if space is still available. Getting the file count for each event would be too expensive,
-  // so let's get it here
-  if (type == BITPersistenceTypeTelemetry) {
-    _maxFileCountReached = fileNames.count >= _maxFileCount;
-  }
-
+  NSArray<NSURL *> *fileNames = [self persistedFilesForType:type];
   if (fileNames && fileNames.count > 0) {
     for (NSURL *filename in fileNames) {
       NSString *absolutePath = filename.path;
@@ -257,21 +236,31 @@ NSUInteger const defaultFileCount = 50;
   return nil;
 }
 
+- (NSArray *)persistedFilesForType: (BITPersistenceType)type {
+  NSString *directoryPath = [self folderPathForType:type];
+  NSError *error = nil;
+  NSArray<NSURL *> *fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:directoryPath]
+                                                              includingPropertiesForKeys:@[NSURLNameKey]
+                                                                                 options:NSDirectoryEnumerationSkipsHiddenFiles
+                                                                                   error:&error];
+  return fileNames;
+}
+
 - (NSString *)folderPathForType:(BITPersistenceType)type {
   NSString *path = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
   NSString *subFolder = @"";
   switch (type) {
     case BITPersistenceTypeTelemetry: {
-      subFolder = kTelemetryDirectoryPath;
+      subFolder = kBITTelemetryDirectoryPath;
       break;
     }
     case BITPersistenceTypeMetaData: {
-      subFolder = kMetaDataDirectoryPath;
+      subFolder = kBITMetaDataDirectoryPath;
       break;
     }
   }
   path = [path stringByAppendingPathComponent:subFolder];
-
+  
   return path;
 }
 

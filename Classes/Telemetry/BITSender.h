@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "HockeySDK.h"
 #import "HockeySDKNullability.h"
+
 @class BITPersistence;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -46,12 +47,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  The max number of request that can run at a time.
  */
-@property NSUInteger maxRequestCount;
+@property (nonatomic, assign) NSUInteger maxRequestCount;
 
 /**
  *  The number of requests that are currently running.
  */
-@property NSUInteger runningRequestsCount;
+@property (nonatomic, assign) NSUInteger runningRequestsCount;
 
 /**
  *	BaseURL to which relative paths are appended.
@@ -90,7 +91,6 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param request a request for sending a data object to the telemetry server
  *  @param path path to the file which should be sent
- *  @param isUrlSessionSupported a flag which determines whether to use NSURLConnection or NSURLSession for sending out data
  */
 - (void)sendRequest:(NSURLRequest *)request filePath:(NSString *)path;
 
