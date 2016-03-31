@@ -5,18 +5,6 @@
 
 ## Introduction
 
-HockeySDK-Mac implements support for using HockeyApp in your Mac applications.
-
-The following feature is currently supported:
-
-1. **Collect crash reports:** If you app crashes, a crash log with the same format as from the Apple Crash Reporter is written to the device's storage. If the user starts the app again, he is asked to submit the crash report to HockeyApp. This works for both beta and live apps, i.e. those submitted to the App Store!
-
-2. **Metrics** Understand user behavior to improve your app. Track usage through custom events or daily and monthly active users. Monitor crash impacted users. Measure customer engagement through session count.
-
-3. **Feedback:** Collect feedback from your users from within your app and communicate directly with them using the HockeyApp backend.
-
-4. **Add analytics to Sparkle:** If you are using Sparkle to provide app-updates (HockeyApp also supports Sparkle feeds for beta distribution) the SDK contains helpers to add some analytics data to each Sparkle request. 
-
 This document contains the following sections:
 
 1. [Requirements](#requirements)
@@ -133,7 +121,7 @@ If any crash report has been saved from the last time your application ran, `sta
 
 ```ruby
 platform :osx, '10.7'
-pod "HockeySDK-Mac"
+pod 'HockeySDK-Mac', :podspec => 'https://download.hockeyapp.net/preseason/sdk/osx/HockeySDK-Mac.podspec'
 ```
 
 <a name="crashreporting"></a>

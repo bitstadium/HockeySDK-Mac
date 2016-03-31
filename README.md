@@ -135,7 +135,7 @@ If any crash report has been saved from the last time your application ran, `sta
 
 ```ruby
 platform :osx, '10.7'
-pod "HockeySDK-Mac"
+pod 'HockeySDK-Mac', :podspec => 'https://download.hockeyapp.net/preseason/sdk/osx/HockeySDK-Mac.podspec'
 ```
 
 <a name="crashreporting"></a>
