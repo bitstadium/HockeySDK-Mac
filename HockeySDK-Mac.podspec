@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name              = 'HockeySDK-Mac'
-  s.version           = '3.2.1'
+  s.version           = '4.0.0-beta.1'
 
-  s.summary           = 'Collect crash reports with HockeyApp.'
+  s.summary           = 'Collect live crash reports, get feedback from your users, distribute your betas, and get usage data.'
   s.description       = <<-DESC
-                        HockeyApp is a service to distribute beta apps, collect crash reports and
+                        HockeyApp is a service to distribute beta apps, collect crash reports as well as usage data and
                         communicate with your app's users.
                         
                         It improves the testing process dramatically and can be used for both beta
@@ -12,11 +12,11 @@ Pod::Spec.new do |s|
                         DESC
 
   s.homepage          = 'http://www.hockeyapp.net/'
-  s.documentation_url = 'http://www.hockeyapp.net/help/sdk/mac/3.2.1/'
+  s.documentation_url = 'http://www.hockeyapp.net/help/sdk/mac/#{s.version}/'
 
   s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.txt' }
   s.author            = { 'Microsoft' => 'support@hockeyapp.net' }
-  s.source            = { :http => "http://download.hockeyapp.net/sdk/mac/HockeySDK-Mac-#{s.version}.zip" }
+  s.source = { :http => "https://github.com/bitstadium/HockeySDK-Mac/releases/download/#{s.version}/HockeySDK-Mac-#{s.version}.zip" }
 
   s.platform              = :osx, '10.7'
   s.osx.deployment_target = 10.7
