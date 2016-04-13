@@ -11,8 +11,8 @@ Pod::Spec.new do |s|
                         and App Store builds.
                         DESC
 
-  s.homepage          = 'http://www.hockeyapp.net/'
-  s.documentation_url = 'http://www.hockeyapp.net/help/sdk/mac/#{s.version}/'
+  s.homepage          = 'http://hockeyapp.net/'
+  s.documentation_url = "http://hockeyapp.net/help/sdk/mac/#{s.version}/"
 
   s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.txt' }
   s.author            = { 'Microsoft' => 'support@hockeyapp.net' }
@@ -23,8 +23,7 @@ Pod::Spec.new do |s|
   s.requires_arc          = false
   
   s.vendored_frameworks   = "HockeySDK-Mac/HockeySDK.framework"
-  s.public_header_files   = "HockeySDK-Mac/HockeySDK.framework/Versions/A/Headers/*.h*"
   s.resource              = "HockeySDK-Mac/HockeySDK.framework"
-  s.xcconfig              = { 'LD_RUNPATH_SEARCH_PATHS' => '@executable_path/../Frameworks' }
+  s.pod_target_xcconfig              = { 'LD_RUNPATH_SEARCH_PATHS' => '@executable_path/../Frameworks' }
 
 end
