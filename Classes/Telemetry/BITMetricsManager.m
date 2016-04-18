@@ -171,7 +171,11 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 #pragma mark Sessions
 
 - (void)trackSessionWithState:(BITSessionState)state {
-  if (self.disabled) { return; }
+  if (self.disabled) {
+    BITHockeyLog(@"BITMetricsManager is disabled, therefore this tracking call was ignored.");
+    return;
+  }
+  
   BITSessionStateData *sessionStateData = [BITSessionStateData new];
   sessionStateData.state = state;
   [self.channel enqueueTelemetryItem:sessionStateData];
@@ -181,6 +185,10 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 
 - (void)trackEventWithName:(NSString *)eventName {
   if (!eventName) { return; }
+  if (self.disabled) {
+    BITHockeyLog(@"BITMetricsManager is disabled, therefore this tracking call was ignored.");
+    return;
+  }
   
   __weak typeof(self) weakSelf = self;
   dispatch_async(self.metricsEventQueue, ^{
@@ -194,6 +202,11 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 #pragma mark Track DataItem
 
 - (void)trackDataItem:(BITTelemetryData *)dataItem {
+  if (self.disabled) {
+    BITHockeyLog(@"BITMetricsManager is disabled, therefore this tracking call was ignored.");
+    return;
+  }
+  
   [self.channel enqueueTelemetryItem:dataItem];
 }
 
