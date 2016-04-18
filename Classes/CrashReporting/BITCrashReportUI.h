@@ -49,6 +49,8 @@
                 applicationName:(NSString *)applicationName
                  askUserDetails:(BOOL)askUserDetails;
 
+- (void)runModally;
+
 - (void)askCrashReportDetails;
 
 - (IBAction)cancelReport:(id)sender;

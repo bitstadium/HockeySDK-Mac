@@ -171,7 +171,8 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     
     _crashFiles = [[NSMutableArray alloc] init];
     _crashesDir = nil;
-    
+
+    _submitModally = NO;
     self.delegate = nil;
     
     NSString *testValue = nil;
@@ -780,6 +781,9 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
             [_crashReportUI askCrashReportDetails];
             [_crashReportUI showWindow:self];
             [_crashReportUI.window makeKeyAndOrderFront:self];
+            if (self.submitModally) {
+              [_crashReportUI runModally];
+            }
           } else {
             [self approveLatestCrashReport];
             [self sendNextCrashReport];
