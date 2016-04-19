@@ -2,6 +2,10 @@
 
 - [IMPROVEMENT] Prevent User Metrics from being sent if `BITMetricsManager` has been disabled.
 
+## Version 4.0.0
+
+- [IMPROVEMENT] Prefix GZIP category on NSData to prevent symbol collisions
+
 ## Version 4.1.0-alpha.1
 
 - [NEW] Add ability to track custom events
@@ -16,7 +20,7 @@
 ## Version 4.0.0-beta.1
 
 - [NEW] User Metrics including users and sessions data is now in public beta
-- 
+
 ## Version 4.0.0-alpha.2
 
 - [UPDATE] Add improvements and fixes from 3.2.1

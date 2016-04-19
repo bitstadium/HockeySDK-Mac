@@ -1,5 +1,3 @@
-
-
 #import <Foundation/Foundation.h>
 #import "BITHockeyBaseManager.h"
 #import "HockeySDKNullability.h"

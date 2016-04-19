@@ -135,7 +135,7 @@ If any crash report has been saved from the last time your application ran, `sta
 
 ```ruby
 platform :osx, '10.7'
-pod 'HockeySDK-Mac', :podspec => 'https://download.hockeyapp.net/preseason/sdk/osx/HockeySDK-Mac.podspec'
+pod "HockeySDK-Mac"
 ```
 
 <a name="crashreporting"></a>
@@ -270,6 +270,9 @@ The metrics feature helps you understanding user behavior to improve your app. Y
 #### 3.3.1 User metrics
 
 HockeyApp automatically provides you with nice intelligible and informative metrics about how your app is used and by whom.
+
+- **Sessions**: A new session is tracked by the SDK whenever the containing app is restarted (this refers to a 'cold start', i.e. when the app has not already been in memory prior to being launched) or whenever it becomes active again after having been in the background for 20 seconds or more.
+- **Users**: The SDK anonymously tracks the users of your app by creating a random UUID that is then securely stored in the keychain. Because this anonymous ID is stored in the keychain it persists across reinstallations.
 
 Just in case you want to opt-out of this feature, there is a way to turn this functionality off:
 

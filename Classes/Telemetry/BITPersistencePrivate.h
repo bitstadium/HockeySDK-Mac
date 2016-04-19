@@ -1,3 +1,4 @@
+#import "HockeySDK.h"
 #import "BITPersistence.h"
 #import "HockeySDKNullability.h"
 
