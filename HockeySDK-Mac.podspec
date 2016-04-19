@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name              = 'HockeySDK-Mac'
-  s.version           = '4.1.0-alpha.1'
+  s.version           = '4.1.0-beta.1'
 
   s.summary           = 'Collect live crash reports, get feedback from your users, distribute your betas, and get usage data.'
   s.description       = <<-DESC
@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
   
   s.vendored_frameworks   = "HockeySDK-Mac/HockeySDK.framework"
   s.resource              = "HockeySDK-Mac/HockeySDK.framework"
-  s.pod_target_xcconfig              = { 'LD_RUNPATH_SEARCH_PATHS' => '@executable_path/../Frameworks' }
+  s.pod_target_xcconfig   = { 'LD_RUNPATH_SEARCH_PATHS' => '@executable_path/../Frameworks' }
 
 end
