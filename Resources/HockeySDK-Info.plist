@@ -23,7 +23,7 @@
 	<key>CFBundleVersion</key>
 	<string>${BUILD_NUMBER}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright (c) Microsoft Corporation. All rights reserved.</string>
+	<string>Copyright © Microsoft Corporation. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 </dict>
