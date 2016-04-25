@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //
 //  Author: Andreas Linde <mail@andreaslinde.de>
 //
@@ -22,6 +23,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+=======
+>>>>>>> origin/develop
 #import "HockeySDK.h"
 #import "HockeySDKPrivate.h"
 
