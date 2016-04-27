@@ -16,6 +16,7 @@ NSString *bit_settingsDir(void);
 BOOL bit_addStringValueToKeychain(NSString *stringValue, NSString *key);
 NSString *bit_stringValueFromKeychainForKey(NSString *key);
 BOOL bit_removeKeyFromKeychain(NSString *key);
+BOOL bit_isDebuggerAttached(void);
 
 /* Context helpers */
 NSString *bit_utcDateString(NSDate *date);
