@@ -1,6 +1,6 @@
-## Version 4.0.0-beta.1
+## Version 4.0.0
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.0.0-beta.1/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.0.0/docs/docs/Changelog.html)
 
 ## Introduction
 
@@ -250,7 +250,10 @@ and set the delegate:
 <a name="metrics"></a>
 ### 3.3 Metrics
 
-HockeyApp automatically provides you with nice intelligible and informative metrics about how your app is used and by whom.
+HockeyApp automatically provides you with nice, intelligible, and informative metrics about how your app is used and by whom. 
+
+- **Sessions**: A new session is tracked by the SDK whenever the containing app is restarted (this refers to a 'cold start', i.e. when the app has not already been in memory prior to being launched) or whenever it becomes active again after having been in the background for 20 seconds or more.
+- **Users**: The SDK anonymously tracks the users of your app by creating a random UUID that is then securely stored in the keychain. Because this anonymous ID is stored in the keychain it persists across reinstallations.
 
 Just in case you want to opt-out of this feature, there is a way to turn this functionality off:
 
@@ -338,7 +341,7 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.0.0-beta.1/index.html).
+Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.0.0/index.html).
 
 <a id="troubleshooting"></a>
 ## 5.Troubleshooting

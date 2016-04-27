@@ -380,8 +380,6 @@
 		1BFE841F1C45B9E900DE0B39 /* Contract Files */ = {
 			isa = PBXGroup;
 			children = (
-				1BFE84561C45BE5900DE0B39 /* BITSender.h */,
-				1BFE84571C45BE5900DE0B39 /* BITSender.m */,
 				1BFE84201C45BD5100DE0B39 /* BITApplication.h */,
 				1BFE84211C45BD5100DE0B39 /* BITApplication.m */,
 				1BFE84221C45BD5100DE0B39 /* BITBase.h */,
@@ -542,6 +540,8 @@
 				1BFE83CB1C45B21100DE0B39 /* BITPersistence.h */,
 				1BFE83CC1C45B21100DE0B39 /* BITPersistence.m */,
 				1BFE83CD1C45B21100DE0B39 /* BITPersistencePrivate.h */,
+				1BFE84561C45BE5900DE0B39 /* BITSender.h */,
+				1BFE84571C45BE5900DE0B39 /* BITSender.m */,
 				1BFE83D01C45B21100DE0B39 /* BITTelemetryContext.h */,
 				1BFE83D11C45B21100DE0B39 /* BITTelemetryContext.m */,
 				1BFE83D21C45B21100DE0B39 /* BITTelemetryData.h */,
@@ -844,7 +844,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Sets the target folders and the final framework product.\nFMK_NAME=HockeySDK\n\n# Documentation\nHOCKEYSDK_DOCSET_VERSION_NAME=\"de.bitstadium.${HOCKEYSDK_DOCSET_NAME}-${VERSION_STRING}\"\n\n# Install dir will be the final output to the framework.\n# The following line create it in the root folder of the current project.\nPRODUCTS_DIR=${SRCROOT}/../Products\nZIP_FOLDER=HockeySDK-Mac\nTEMP_DIR=${PRODUCTS_DIR}/${ZIP_FOLDER}\n\n# Working dir will be deleted after the framework creation.\nWRK_DIR=build\n\n# Building the framework.\nxcodebuild -project \"HockeySDK.xcodeproj\" -configuration \"Release\" -target \"${FMK_NAME}\"\n\n# Codesign frameworks\ncodesign --verbose --force --sign \"Developer ID Application: Bit Stadium GmbH\" \"${WRK_DIR}/Release/${FMK_NAME}.framework\"\n\n# Cleaning the oldest.\nif [ -d \"${TEMP_DIR}\" ]\nthen\nrm -rf \"${TEMP_DIR}\"\nfi\n\n# Creates and renews the final product folder.\nmkdir -p \"${TEMP_DIR}\"\n\n# Copy build frameworks into product folder\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework\" \"${TEMP_DIR}\"\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework.dSYM\" \"${TEMP_DIR}\"\n\nrm -r \"${WRK_DIR}\"\n\n# copy license, changelog, documentation, integration json\ncp -f \"${SRCROOT}/../docs/Changelog-template.md\" \"${TEMP_DIR}/CHANGELOG\"\ncp -f \"${SRCROOT}/../docs/Guide-Installation-Setup-template.md\" \"${TEMP_DIR}/README.md\"\ncp -f \"${SRCROOT}/../LICENSE.txt\" \"${TEMP_DIR}\"\nmkdir \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\ncp -R \"${SRCROOT}/../documentation/docset/Contents\" \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\n\n# build zip\ncd \"${PRODUCTS_DIR}\"\nrm -f \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\"\nzip -yr \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\" \"${ZIP_FOLDER}\" -x \\*/.*\n";
+			shellScript = "# Sets the target folders and the final framework product.\nFMK_NAME=HockeySDK\n\n# Documentation\nHOCKEYSDK_DOCSET_VERSION_NAME=\"de.bitstadium.${HOCKEYSDK_DOCSET_NAME}-${VERSION_STRING}\"\n\n# Install dir will be the final output to the framework.\n# The following line create it in the root folder of the current project.\nPRODUCTS_DIR=${SRCROOT}/../Products\nZIP_FOLDER=HockeySDK-Mac\nTEMP_DIR=${PRODUCTS_DIR}/${ZIP_FOLDER}\n\n# Working dir will be deleted after the framework creation.\nWRK_DIR=build\n\n# Building the framework.\nxcodebuild -project \"HockeySDK.xcodeproj\" -configuration \"Release\" -target \"${FMK_NAME}\"\n\n# Codesign frameworks\ncodesign --verbose --force --sign \"Developer ID Application: Bit Stadium GmbH\" \"${WRK_DIR}/Release/${FMK_NAME}.framework\"\n\n# Cleaning the oldest.\nif [ -d \"${TEMP_DIR}\" ]\nthen\nrm -rf \"${TEMP_DIR}\"\nfi\n\n# Creates and renews the final product folder.\nmkdir -p \"${TEMP_DIR}\"\n\n# Copy build frameworks into product folder\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework\" \"${TEMP_DIR}\"\nmv \"${WRK_DIR}/Release/${FMK_NAME}.framework.dSYM\" \"${TEMP_DIR}\"\n\nrm -r \"${WRK_DIR}\"\n\n# copy license, changelog, documentation, integration json\ncp -f \"${SRCROOT}/../docs/Changelog-template.md\" \"${TEMP_DIR}/CHANGELOG\"\ncp -f \"${SRCROOT}/../docs/Guide-Installation-Setup-template.md\" \"${TEMP_DIR}/README.md\"\ncp -f \"${SRCROOT}/../LICENSE.md\" \"${TEMP_DIR}\"\nmkdir \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\ncp -R \"${SRCROOT}/../documentation/docset/Contents\" \"${TEMP_DIR}/${HOCKEYSDK_DOCSET_VERSION_NAME}.docset\"\n\n# build zip\ncd \"${PRODUCTS_DIR}\"\nrm -f \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\"\nzip -yr \"${FMK_NAME}-Mac-${VERSION_STRING}.zip\" \"${ZIP_FOLDER}\" -x \\*/.*\n";
 		};
 		1E7FB96017D3F37100B7E10D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
