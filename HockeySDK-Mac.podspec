@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.homepage          = 'http://hockeyapp.net/'
   s.documentation_url = "http://hockeyapp.net/help/sdk/mac/#{s.version}/"
 
-  s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.txt' }
+  s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.md' }
   s.author            = { 'Microsoft' => 'support@hockeyapp.net' }
   s.source = { :http => "https://github.com/bitstadium/HockeySDK-Mac/releases/download/#{s.version}/HockeySDK-Mac-#{s.version}.zip" }
 
