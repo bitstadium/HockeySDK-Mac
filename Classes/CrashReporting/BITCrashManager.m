@@ -124,8 +124,8 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 
 #pragma mark - Init
 
-- (instancetype)init {
-  if ((self = [super init])) {
+- (instancetype)initWithAppIdentifier:(NSString *)appIdentifier hockeyAppClient:(BITHockeyAppClient *)hockeyAppClient {
+  if ((self = [super initWithAppIdentifier:appIdentifier])) {
     _crashReportUI = nil;
     _fileManager = [[NSFileManager alloc] init];
     _askUserDetails = YES;
@@ -143,7 +143,8 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     _crashFiles = [[NSMutableArray alloc] init];
     _crashesDir = nil;
     
-    self.delegate = nil;
+    _delegate = nil;
+    _hockeyAppClient = hockeyAppClient;
     
     NSString *testValue = nil;
     testValue = [[NSUserDefaults standardUserDefaults] stringForKey:kHockeySDKCrashReportActivated];
@@ -190,6 +191,12 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   
 }
 
+- (void)setServerURL:(NSString *)serverURL {
+  if ([serverURL isEqualToString:super.serverURL]) { return; }
+  
+  super.serverURL = serverURL;
+  self.hockeyAppClient = [[BITHockeyAppClient alloc] initWithBaseURL:[NSURL URLWithString:serverURL]];
+}
 
 #pragma mark - Private
 
