@@ -301,7 +301,7 @@ You should never create your own instance of `BITFeedbackManager` but use the on
 [BITHockeyManager sharedHockeyManager].feedbackManager
 ```
 
-Please check the [documentation](#documentation) of the `BITFeedbachManager` class on more information on how to leverage this feature.
+Please check the [documentation](#documentation) of the `BITFeedbackManager` class on more information on how to leverage this feature.
 
 <a name="sparkle"></a>
 ### 3.5 Sparkle
