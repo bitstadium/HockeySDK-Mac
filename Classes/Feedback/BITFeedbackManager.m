@@ -705,7 +705,7 @@
   
   // build request & send
   NSString *url = [NSString stringWithFormat:@"%@%@", self.serverURL, parameter];
-  BITHockeyLog(@"INFO: sending api request to %@", url);
+  BITHockeyLogDebug(@"INFO: sending api request to %@", url);
   
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:1 timeoutInterval:10.0];
   [request setHTTPMethod:httpMethod];
@@ -826,7 +826,7 @@
       [self performSelector:@selector(fetchMessageUpdates) withObject:nil afterDelay:0.2];
     } else if ([responseData length]) {
       NSString *responseString = [[NSString alloc] initWithBytes:[responseData bytes] length:[responseData length] encoding: NSUTF8StringEncoding];
-      BITHockeyLog(@"INFO: Received API response: %@", responseString);
+      BITHockeyLogDebug(@"INFO: Received API response: %@", responseString);
       
       if (responseString && [responseString dataUsingEncoding:NSUTF8StringEncoding]) {
         NSError *error = NULL;
@@ -841,7 +841,7 @@
                                                 code:BITFeedbackAPIServerReturnedEmptyResponse
                                             userInfo:@{NSLocalizedDescriptionKey: @"Server returned empty response."}]];
         } else {
-          BITHockeyLog(@"INFO: Received API response: %@", responseString);
+          BITHockeyLogDebug(@"INFO: Received API response: %@", responseString);
           NSString *status = [feedDict objectForKey:@"status"];
           if ([status compare:@"success"] != NSOrderedSame) {
             [self reportError:[NSError errorWithDomain:kBITFeedbackErrorDomain

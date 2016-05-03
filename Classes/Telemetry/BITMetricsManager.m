@@ -172,7 +172,7 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 
 - (void)trackSessionWithState:(BITSessionState)state {
   if (self.disabled) {
-    BITHockeyLog(@"BITMetricsManager is disabled, therefore this tracking call was ignored.");
+    BITHockeyLogDebug(@"INFO: BITMetricsManager is disabled, therefore this tracking call was ignored.");
     return;
   }
   
@@ -186,7 +186,7 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 - (void)trackEventWithName:(NSString *)eventName {
   if (!eventName) { return; }
   if (self.disabled) {
-    BITHockeyLog(@"BITMetricsManager is disabled, therefore this tracking call was ignored.");
+    BITHockeyLogDebug(@"INFO: BITMetricsManager is disabled, therefore this tracking call was ignored.");
     return;
   }
   
@@ -203,7 +203,7 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 
 - (void)trackDataItem:(BITTelemetryData *)dataItem {
   if (self.disabled) {
-    BITHockeyLog(@"BITMetricsManager is disabled, therefore this tracking call was ignored.");
+    BITHockeyLogDebug(@"INFO: BITMetricsManager is disabled, therefore this tracking call was ignored.");
     return;
   }
   
