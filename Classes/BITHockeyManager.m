@@ -180,9 +180,6 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
   // start CrashManager
   if (![self isCrashManagerDisabled]) {
     BITHockeyLogDebug(@"INFO: Start CrashManager");
-    if (_serverURL) {
-      [_crashManager setServerURL:_serverURL];
-    }
     [_crashManager startManager];
   }
   
@@ -320,9 +317,9 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
   _startManagerIsInvoked = NO;
   
   BITHockeyLogDebug(@"INFO: Setup CrashManager");
-  _crashManager = [[BITCrashManager alloc] initWithAppIdentifier:_appIdentifier];
+  _crashManager = [[BITCrashManager alloc] initWithAppIdentifier:_appIdentifier
+                                                 hockeyAppClient:[self hockeyAppClient]];
   _crashManager.delegate = self.delegate;
-  _crashManager.hockeyAppClient = [self hockeyAppClient];
   
   // if we don't initialize the BITCrashManager instance, then the delegate will not be invoked
   // leaving the app to never show the window if the developer provided an invalid app identifier
