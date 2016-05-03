@@ -170,6 +170,10 @@
 		6EECFA701CA49ED60090AD57 /* BITChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EECFA6D1CA49ED60090AD57 /* BITChannel.h */; };
 		6EECFA711CA49ED60090AD57 /* BITChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EECFA6E1CA49ED60090AD57 /* BITChannel.m */; };
 		6EECFA721CA49ED60090AD57 /* BITChannelPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EECFA6F1CA49ED60090AD57 /* BITChannelPrivate.h */; };
+		80EF93A31CD9334B006722E1 /* BITHockeyLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 80EF93A01CD9334B006722E1 /* BITHockeyLogger.h */; };
+		80EF93A41CD9334B006722E1 /* BITHockeyLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 80EF93A11CD9334B006722E1 /* BITHockeyLogger.m */; };
+		80EF93A51CD9334B006722E1 /* BITHockeyLoggerPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 80EF93A21CD9334B006722E1 /* BITHockeyLoggerPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		80EF93A71CD94773006722E1 /* HockeySDKEnums.h in Headers */ = {isa = PBXBuildFile; fileRef = 80EF93A61CD94773006722E1 /* HockeySDKEnums.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -359,6 +363,10 @@
 		6EECFA6D1CA49ED60090AD57 /* BITChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITChannel.h; sourceTree = "<group>"; };
 		6EECFA6E1CA49ED60090AD57 /* BITChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITChannel.m; sourceTree = "<group>"; };
 		6EECFA6F1CA49ED60090AD57 /* BITChannelPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITChannelPrivate.h; sourceTree = "<group>"; };
+		80EF93A01CD9334B006722E1 /* BITHockeyLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITHockeyLogger.h; sourceTree = "<group>"; };
+		80EF93A11CD9334B006722E1 /* BITHockeyLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHockeyLogger.m; sourceTree = "<group>"; };
+		80EF93A21CD9334B006722E1 /* BITHockeyLoggerPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITHockeyLoggerPrivate.h; sourceTree = "<group>"; };
+		80EF93A61CD94773006722E1 /* HockeySDKEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HockeySDKEnums.h; path = ../Classes/Helper/HockeySDKEnums.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -442,6 +450,9 @@
 				1E5785E6194647180014D19A /* BITHTTPOperation.m */,
 				1E7E5514187F3EE700F0858E /* BITHockeyHelper.h */,
 				1E7E5515187F3EE700F0858E /* BITHockeyHelper.m */,
+				80EF93A01CD9334B006722E1 /* BITHockeyLogger.h */,
+				80EF93A11CD9334B006722E1 /* BITHockeyLogger.m */,
+				80EF93A21CD9334B006722E1 /* BITHockeyLoggerPrivate.h */,
 				1E5785D919461DF60014D19A /* BITHockeyAttachment.h */,
 				1E5785DA19461DF60014D19A /* BITHockeyAttachment.m */,
 				1E7E5516187F3EE700F0858E /* HockeySDKPrivate.h */,
@@ -559,6 +570,7 @@
 		1EF09D801523574200067A5C = {
 			isa = PBXGroup;
 			children = (
+				80EF93A61CD94773006722E1 /* HockeySDKEnums.h */,
 				1EF09DA81523579100067A5C /* Classes */,
 				1EF09DB71523579A00067A5C /* Resources */,
 				1E7FB96117D3F44100B7E10D /* Support */,
@@ -715,6 +727,7 @@
 				1BFE83DB1C45B21100DE0B39 /* BITGZIP.h in Headers */,
 				1B078E3F1C98847100E2FD59 /* BITEventData.h in Headers */,
 				1E85C5911B343E2100CE2C0D /* PLCrashReportSymbolInfo.h in Headers */,
+				80EF93A31CD9334B006722E1 /* BITHockeyLogger.h in Headers */,
 				1E7E550E187F3ED800F0858E /* BITFeedbackWindowController.h in Headers */,
 				1E5785E7194647180014D19A /* BITHTTPOperation.h in Headers */,
 				1E378B201959D33700451E28 /* BITActivityIndicatorButton.h in Headers */,
@@ -723,6 +736,7 @@
 				1EF09DD5152371DC00067A5C /* BITCrashManager.h in Headers */,
 				1E852AED19509368006E73E0 /* BITFeedbackMessageAttachment.h in Headers */,
 				1EF09DBE1523579A00067A5C /* HockeySDK-Prefix.pch in Headers */,
+				80EF93A71CD94773006722E1 /* HockeySDKEnums.h in Headers */,
 				4DD13AF4162CA7C400BF15E8 /* BITSystemProfile.h in Headers */,
 				1E7E551A187F3EE700F0858E /* BITHockeyBaseManagerPrivate.h in Headers */,
 				1E85C5871B343E2100CE2C0D /* PLCrashReporterConfig.h in Headers */,
@@ -736,6 +750,7 @@
 				1E85C5861B343E2100CE2C0D /* PLCrashReporter.h in Headers */,
 				6EECFA721CA49ED60090AD57 /* BITChannelPrivate.h in Headers */,
 				1EA551FD17B3EB44004A0CB7 /* BITCrashExceptionApplication.h in Headers */,
+				80EF93A51CD9334B006722E1 /* BITHockeyLoggerPrivate.h in Headers */,
 				1BFE83E11C45B21100DE0B39 /* BITTelemetryContext.h in Headers */,
 				1E5785E1194646C00014D19A /* BITHockeyAppClient.h in Headers */,
 				1E5785D819461DDF0014D19A /* BITCrashDetailsPrivate.h in Headers */,
@@ -882,6 +897,7 @@
 				1B078E361C98847100E2FD59 /* BITBase.m in Sources */,
 				1EF09DD6152371DC00067A5C /* BITCrashManager.m in Sources */,
 				1B078E421C98847100E2FD59 /* BITInternal.m in Sources */,
+				80EF93A41CD9334B006722E1 /* BITHockeyLogger.m in Sources */,
 				1EA551FE17B3EB44004A0CB7 /* BITCrashExceptionApplication.m in Sources */,
 				1EF09DD8152371DC00067A5C /* BITCrashReportUI.m in Sources */,
 				1B078E4F1C98851300E2FD59 /* BITSender.m in Sources */,

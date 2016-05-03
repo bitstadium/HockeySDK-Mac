@@ -43,7 +43,7 @@
 #pragma mark - Private
 
 - (void)reportError:(NSError *)error {
-  BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
+  BITHockeyLogError(@"ERROR: %@", [error localizedDescription]);
 }
 
 - (NSString *)encodedAppIdentifier {
@@ -73,7 +73,7 @@
   NSDate *date = nil;
   NSError *error = nil; 
   if (![_rfc3339Formatter getObjectValue:&date forString:dateString range:nil error:&error]) {
-    BITHockeyLog(@"INFO: Invalid date '%@' string: %@", dateString, error);
+    BITHockeyLogDebug(@"INFO: Invalid date '%@' string: %@", dateString, error);
   }
   
   return date;

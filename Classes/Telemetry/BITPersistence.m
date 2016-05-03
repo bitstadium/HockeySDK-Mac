@@ -51,16 +51,16 @@ static NSUInteger const BITDefaultFileCount = 50;
       typeof(self) strongSelf = weakSelf;
       BOOL success = [bundle writeToFile:fileURL atomically:YES];
       if (success) {
-        BITHockeyLog(@"Wrote bundle to %@", fileURL);
+        BITHockeyLogDebug(@"INFO: Wrote bundle to %@", fileURL);
         [strongSelf sendBundleSavedNotification];
       }
       else {
-        BITHockeyLog(@"Error writing bundle to %@", fileURL);
+        BITHockeyLogError(@"ERROR: Error writing bundle to %@", fileURL);
       }
     });
   }
   else {
-    BITHockeyLog(@"Unable to write %@ as provided bundle was null", fileURL);
+    BITHockeyLogDebug(@"INFO: Unable to write %@ as provided bundle was null", fileURL);
   }
 }
 
@@ -98,7 +98,7 @@ static NSUInteger const BITDefaultFileCount = 50;
   if ([bundle isMemberOfClass:NSDictionary.class]) {
     return (NSDictionary *) bundle;
   }
-  BITHockeyLog(@"INFO: The context meta data file could not be loaded.");
+  BITHockeyLogDebug(@"INFO: The context meta data file could not be loaded.");
   return [NSDictionary dictionary];
 }
 
@@ -130,14 +130,14 @@ static NSUInteger const BITDefaultFileCount = 50;
     if ([path rangeOfString:kBITFileBaseString].location != NSNotFound) {
       NSError *error = nil;
       if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error]) {
-        BITHockeyLog(@"Error deleting file at path %@", path);
+        BITHockeyLogError(@"ERROR: Error deleting file at path %@", path);
       }
       else {
-        BITHockeyLog(@"Successfully deleted file at path %@", path);
+        BITHockeyLogDebug(@"INFO: Successfully deleted file at path %@", path);
         [strongSelf.requestedBundlePaths removeObject:path];
       }
     } else {
-      BITHockeyLog(@"Empty path, nothing to delete");
+      BITHockeyLogDebug(@"INFO: Empty path, nothing to delete");
     }
   });
   
@@ -195,14 +195,14 @@ static NSUInteger const BITDefaultFileCount = 50;
     //will return YES if the directory already exists and won't override anything.
     //No need to check if the directory already exists.
     if (![fileManager createDirectoryAtURL:folderURL withIntermediateDirectories:YES attributes:nil error:&error]) {
-      BITHockeyLog(@"%@", error.localizedDescription);
+      BITHockeyLogError(@"ERROR: %@", error.localizedDescription);
       return; //TODO we can't use persistence at all in this case, what do we want to do now? Notify the user?
     }
     
     //MetaData Directory
     folderURL = [appSupportURL URLByAppendingPathComponent:kBITMetaDataDirectoryPath];
     if (![fileManager createDirectoryAtURL:folderURL withIntermediateDirectories:NO attributes:nil error:&error]) {
-      BITHockeyLog(@"%@", error.localizedDescription);
+      BITHockeyLogError(@"ERROR: %@", error.localizedDescription);
       return; //TODO we can't use persistence at all in this case, what do we want to do now? Notify the user?
     }
     
@@ -212,10 +212,10 @@ static NSUInteger const BITDefaultFileCount = 50;
     if (![appSupportURL setResourceValue:@YES
                                   forKey:NSURLIsExcludedFromBackupKey
                                    error:&error]) {
-      BITHockeyLog(@"Error excluding %@ from backup %@", appSupportURL.lastPathComponent, error.localizedDescription);
+      BITHockeyLogError(@"ERROR: Error excluding %@ from backup %@", appSupportURL.lastPathComponent, error.localizedDescription);
     }
     else {
-      BITHockeyLog(@"Exclude %@ from backup", appSupportURL);
+      BITHockeyLogDebug(@"INFO: Exclude %@ from backup", appSupportURL);
     }
   }
 }
