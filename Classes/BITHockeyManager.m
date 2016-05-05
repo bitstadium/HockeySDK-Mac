@@ -175,6 +175,9 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
     return;
   }
   
+  // Fix bug where Application Support folder is excluded from backup
+  [self fixAppSupportDirectory];
+  
   BITHockeyLog(@"INFO: Starting HockeyManager");
   _startManagerIsInvoked = YES;
   
@@ -320,6 +323,23 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 	
   if ([self isCrashManagerDisabled])
     _crashManager.crashManagerActivated = NO;
+}
+
+#pragma mark - Exclude from backup fix
+
+- (void)fixAppSupportDirectory {
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  NSURL *appSupportURL = [[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
+  
+  if(appSupportURL) {
+    NSError *error = nil;
+    NSNumber *appSupportDirExcludedValue;
+    if([appSupportURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&error] && appSupportDirExcludedValue) {
+      if(![self shouldExcludeAppSupportDirFromBackup]) {
+        [appSupportURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&error];
+      }
+    }
+  }
 }
 
 - (BOOL)shouldExcludeAppSupportDirFromBackup {
