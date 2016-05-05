@@ -9,6 +9,7 @@
 #import "BITHockeyHelper.h"
 #import "BITHockeyAppClient.h"
 
+NSString *const kBITExcludeApplicationSupportFromBackup = @"BITExcludeApplicationSupportFromBackup";
 NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 
 @implementation BITHockeyManager {
@@ -319,6 +320,14 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 	
   if ([self isCrashManagerDisabled])
     _crashManager.crashManagerActivated = NO;
+}
+
+- (BOOL)shouldExcludeAppSupportDirFromBackup {
+  NSNumber *excludeFromBackup = [[NSUserDefaults standardUserDefaults] objectForKey:kBITExcludeApplicationSupportFromBackup];
+  if(excludeFromBackup) {
+    return [excludeFromBackup boolValue];
+  }
+  return NO;
 }
 
 @end
