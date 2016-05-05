@@ -8,8 +8,10 @@ NSString *const kTelemetry = @"Telemetry";
 NSString *const kMetaData = @"MetaData";
 NSString *const kFileBaseString = @"hockey-app-bundle-";
 NSString *const kFileBaseStringMeta = @"metadata";
-NSString *const kTelemetryDirectoryPath = @"com.microsoft.HockeyApp/Telemetry/";
-NSString *const kMetaDataDirectoryPath = @"com.microsoft.HockeyApp/MetaData/";
+
+NSString *const kHockeyDirectoryPath = @"com.microsoft.HockeyApp/";
+NSString *const kTelemetryDirectoryPath = @"Telemetry/";
+NSString *const kMetaDataDirectoryPath = @"MetaData/";
 
 NSString *const BITPersistenceSuccessNotification = @"BITHockeyPersistenceSuccessNotification";
 char const *kPersistenceQueueString = "com.microsoft.HockeyApp.persistenceQueue";
@@ -166,7 +168,7 @@ NSUInteger const defaultFileCount = 50;
 
 - (NSString *)fileURLForType:(BITPersistenceType)type {
   NSArray<NSString *> *searchPaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-  NSString *appSupportPath = searchPaths.lastObject;
+  NSString *hockeyDirectoryPath = [NSString stringWithFormat:@"%@/%@", searchPaths.lastObject, kHockeyDirectoryPath];
 
   NSString *fileName = nil;
   NSString *filePath;
@@ -174,13 +176,13 @@ NSUInteger const defaultFileCount = 50;
   switch (type) {
     case BITPersistenceTypeMetaData: {
       fileName = kFileBaseStringMeta;
-      filePath = [appSupportPath stringByAppendingPathComponent:kMetaDataDirectoryPath];
+      filePath = [hockeyDirectoryPath stringByAppendingPathComponent:kMetaDataDirectoryPath];
       break;
     };
     default: {
       NSString *uuid = bit_UUID();
       fileName = [NSString stringWithFormat:@"%@%@", kFileBaseString, uuid];
-      filePath = [appSupportPath stringByAppendingPathComponent:kTelemetryDirectoryPath];
+      filePath = [hockeyDirectoryPath stringByAppendingPathComponent:kTelemetryDirectoryPath];
       break;
     };
   }
@@ -194,26 +196,40 @@ NSUInteger const defaultFileCount = 50;
  * Create directory structure if necessary and exclude it from iCloud backup
  */
 - (void)createDirectoryStructureIfNeeded {
-  //Application Support Dir
+
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSURL *appSupportURL = [[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
-  if (appSupportURL) {
+  if(!appSupportURL) {
+    return;
+  }
+  
+  NSString *hockeyDirectoryPath = [NSString stringWithFormat:@"%@%@", [appSupportURL absoluteString], kHockeyDirectoryPath];
+  NSURL * hockeyDirectoryURL = [NSURL URLWithString:hockeyDirectoryPath];
+  
+  if (hockeyDirectoryURL) {
     NSError *error = nil;
-    //App Support and Telemetry Directory
-    NSURL *folderURL = [appSupportURL URLByAppendingPathComponent:kTelemetryDirectoryPath];
+    
+    // Create HockeySDK folder if needed
+    if (![fileManager createDirectoryAtURL:hockeyDirectoryURL withIntermediateDirectories:YES attributes:nil error:&error]) {
+      BITHockeyLog(@"%@", error.localizedDescription);
+      return;
+    }
+    // Create metadata subfolder
+    NSURL *metaDataURL = [hockeyDirectoryURL URLByAppendingPathComponent:kMetaDataDirectoryPath];
+    if (![fileManager createDirectoryAtURL:metaDataURL withIntermediateDirectories:YES attributes:nil error:&error]) {
+      BITHockeyLog(@"%@", error.localizedDescription);
+      return;
+    }
+    
+    // Create telemetry subfolder
+    
     //NOTE: createDirectoryAtURL:withIntermediateDirectories:attributes:error
     //will return YES if the directory already exists and won't override anything.
     //No need to check if the directory already exists.
-    if (![fileManager createDirectoryAtURL:folderURL withIntermediateDirectories:YES attributes:nil error:&error]) {
+    NSURL *telemetryURL = [hockeyDirectoryURL URLByAppendingPathComponent:kTelemetryDirectoryPath];
+    if (![fileManager createDirectoryAtURL:telemetryURL withIntermediateDirectories:YES attributes:nil error:&error]) {
       BITHockeyLog(@"%@", error.localizedDescription);
-      return; //TODO we can't use persistence at all in this case, what do we want to do now? Notify the user?
-    }
-
-    //MetaData Directory
-    folderURL = [appSupportURL URLByAppendingPathComponent:kMetaDataDirectoryPath];
-    if (![fileManager createDirectoryAtURL:folderURL withIntermediateDirectories:NO attributes:nil error:&error]) {
-      BITHockeyLog(@"%@", error.localizedDescription);
-      return; //TODO we can't use persistence at all in this case, what do we want to do now? Notify the user?
+      return;
     }
 
     _directorySetupComplete = YES;
@@ -259,6 +275,7 @@ NSUInteger const defaultFileCount = 50;
 
 - (NSString *)folderPathForType:(BITPersistenceType)type {
   NSString *path = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
+  NSString *hockeyDirectoryPath = [NSString stringWithFormat:@"%@%@", path, kHockeyDirectoryPath];
   NSString *subFolder = @"";
   switch (type) {
     case BITPersistenceTypeTelemetry: {
@@ -270,9 +287,7 @@ NSUInteger const defaultFileCount = 50;
       break;
     }
   }
-  path = [path stringByAppendingPathComponent:subFolder];
-
-  return path;
+  return [hockeyDirectoryPath stringByAppendingPathComponent:subFolder];
 }
 
 /**
