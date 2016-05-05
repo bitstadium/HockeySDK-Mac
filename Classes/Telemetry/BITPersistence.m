@@ -211,15 +211,6 @@ NSUInteger const defaultFileCount = 50;
       return;
     }
     
-    //Exclude HockeySDK folder from backup
-    if (![appURL setResourceValue:@YES
-                           forKey:NSURLIsExcludedFromBackupKey
-                            error:&error]) {
-      BITHockeyLog(@"Error excluding %@ from backup %@", appURL.lastPathComponent, error.localizedDescription);
-    } else {
-      BITHockeyLog(@"Exclude %@ from backup", appURL);
-    }
-    
     // Create metadata subfolder
     NSURL *metaDataURL = [appURL URLByAppendingPathComponent:kBITMetaDataDirectory];
     if (![fileManager createDirectoryAtURL:metaDataURL withIntermediateDirectories:YES attributes:nil error:&error]) {
@@ -238,6 +229,15 @@ NSUInteger const defaultFileCount = 50;
       return;
     }
 
+    //Exclude HockeySDK folder from backup
+    if (![appURL setResourceValue:@YES
+                           forKey:NSURLIsExcludedFromBackupKey
+                            error:&error]) {
+      BITHockeyLog(@"Error excluding %@ from backup %@", appURL.lastPathComponent, error.localizedDescription);
+    } else {
+      BITHockeyLog(@"Exclude %@ from backup", appURL);
+    }
+    
     _directorySetupComplete = YES;
   }
 }
@@ -298,12 +298,12 @@ NSUInteger const defaultFileCount = 50;
 }
 
 - (NSString *)appHockeySDKDirectoryPath {
-  if(!_appHockeySDKDirectoryPath) {
+  if (!_appHockeySDKDirectoryPath) {
     NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject] stringByStandardizingPath];
     NSString *bundleID = bit_mainBundleIdentifier();
-    if(appSupportPath && bundleID) {
+    if (appSupportPath && bundleID) {
       NSString *hockeySDKPath = [appSupportPath stringByAppendingPathComponent:kBITHockeyDirectory];
-      _appHockeySDKDirectoryPath = [hockeySDKPath stringByAppendingString:bundleID];
+      _appHockeySDKDirectoryPath = [hockeySDKPath stringByAppendingPathComponent:bundleID];
     }
   }
   return _appHockeySDKDirectoryPath;
