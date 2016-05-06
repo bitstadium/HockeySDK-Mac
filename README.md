@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
 
-## Version 4.0.1
+## Version 4.1.0-beta.2
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.0.1/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.1.0-beta.2/docs/docs/Changelog.html)
 
 **NOTE:** With the release of HockeySDK 4.0.0-alpha.1 a bug was introduced which lead to the exclusion of the Application Support folder from iCloud and iTunes backups.
 
@@ -16,7 +16,7 @@ The following feature is currently supported:
 
 1. **Collect crash reports:** If you app crashes, a crash log with the same format as from the Apple Crash Reporter is written to the device's storage. If the user starts the app again, he is asked to submit the crash report to HockeyApp. This works for both beta and live apps, i.e. those submitted to the App Store!
 
-2. **Metrics** Get nice statistics about how many users you have and how they are using your app.
+2. **User Metrics:** Understand user behavior to improve your app. Track usage through daily and monthly active users, monitor crash impacted users, as well as customer engagement through session count. If you are part of [Preseason](hockeyapp.net/preseason), you can now track Custom Events in your app, understand user actions and see the aggregates on the HockeyApp portal.
 
 3. **Feedback:** Collect feedback from your users from within your app and communicate directly with them using the HockeyApp backend.
 
@@ -29,7 +29,7 @@ This document contains the following sections:
 3. [Advanced Setup](#advancedsetup) 
    1. [Setup with CocoaPods](#cocoapods)
    2. [Crash Reporting](#crashreporting)
-   3. [Metrics](#metrics)
+   3. [User Metrics](#user-metrics)
    4. [Feedback](#feedback)
    5. [Sparkle](#sparkle)
    6. [Debug information](#debug)
@@ -265,24 +265,49 @@ and set the delegate:
     [[BITHockeyManager sharedHockeyManager] startManager];
     ```
 
-<a name="metrics"></a>
-### 3.3 Metrics
+<a name="user-metrics"></a>
+### 3.3 User Metrics
 
 HockeyApp automatically provides you with nice, intelligible, and informative metrics about how your app is used and by whom. 
-
 - **Sessions**: A new session is tracked by the SDK whenever the containing app is restarted (this refers to a 'cold start', i.e. when the app has not already been in memory prior to being launched) or whenever it becomes active again after having been in the background for 20 seconds or more.
-- **Users**: The SDK anonymously tracks the users of your app by creating a random UUID that is then securely stored in the keychain. Because this anonymous ID is stored in the keychain it persists across reinstallations.
+- **Users**: The SDK anonymously tracks the users of your app by creating a random UUID that is then securely stored in the iOS keychain. Because this anonymous ID is stored in the keychain it persists across reinstallations.
+- **Custom Events**: If you are part of [Preseason](https://www.hockeyapp.net/preseason/), you can now track Custom Events in your app, understand user actions and see the aggregates on the HockeyApp portal.
 
-Just in case you want to opt-out of this feature, there is a way to turn this functionality off:
+Just in case you want to opt-out of the automatic collection of anonymous users and sessions statistics, there is a way to turn this functionality off at any time:
 
 ```objectivec
-[[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-
 [BITHockeyManager sharedHockeyManager].disableMetricsManager = YES;
-
-[[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
+#### 3.3.1 Custom Events
+
+By tracking custom events, you can now get insight into how your customers use your app, understand their behavior and answer important business or user experience questions while improving your app.
+
+- Before starting to track events, ask yourself the questions that you want to get answers to. For instance, you might be interested in business, performance/quality or user experience aspects.
+- Name your events in a meaningful way and keep in mind that you will use these names when searching for events in the HockeyApp web portal. It is your reponsibility to not collect personal information as part of the events tracking.
+
+**Objective-C**
+
+```objectivec
+BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metricsManager;
+
+[metricsManager trackEventWithName:eventName]
+```
+
+**Swift**
+
+```swift
+let metricsManager = BITHockeyManager.sharedHockeyManager().metricsManager
+
+metricsManager.trackEventWithName(eventName)
+```
+
+**Limitations**
+
+- Accepted characters for tracking events are: [a-zA-Z0-9_. -]. If you use other than the accepted characters, your events will not show up in the HockeyApp web portal.
+- There is currently a limit of 300 unique event names per app per week.
+- There is _no_ limit on the number of times an event can happen.
+  
 <a name="feedback"></a>
 ### 3.4 Feedback
 
@@ -294,7 +319,7 @@ You should never create your own instance of `BITFeedbackManager` but use the on
 [BITHockeyManager sharedHockeyManager].feedbackManager
 ```
 
-Please check the [documentation](#documentation) of the `BITFeedbachManager` class on more information on how to leverage this feature.
+Please check the [documentation](#documentation) of the `BITFeedbackManager` class on more information on how to leverage this feature.
 
 <a name="sparkle"></a>
 ### 3.5 Sparkle
@@ -351,7 +376,7 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
-[[BITHockeyManager sharedHockeyManager] setDebugLogEnabled:YES];
+[BITHockeyManager sharedHockeyManager].logLevel = BITLogLevelDebug;
 
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
@@ -359,7 +384,7 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.0.1/index.html).
+Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.1.0-beta.2/index.html).
 
 <a id="troubleshooting"></a>
 ## 5.Troubleshooting
@@ -376,7 +401,7 @@ Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/
 
     Enable debug output to the console to see additional information from the SDK initializing the modules,  sending and receiving network requests and more by adding the following code before calling `startManager`:
 
-        [[BITHockeyManager sharedHockeyManager] setDebugLogEnabled: YES];
+        [BITHockeyManager sharedHockeyManager].logLevel = BITLogLevelDebug;
 
 <a id="contributing"></a>
 ## 6. Contributing

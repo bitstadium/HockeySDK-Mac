@@ -1,3 +1,5 @@
+#import "BITHockeyLogger.h"
+
 #ifndef HockeySDK_HockeySDKPrivate_h
 #define HockeySDK_HockeySDKPrivate_h
 
@@ -18,8 +20,6 @@ extern NSString *const __attribute__((unused)) kBITFeedbackAttachmentLoadedNotif
 extern NSString *const __attribute__((unused)) kBITFeedbackAttachmentLoadedKey;
 
 #define BITHockeyLocalizedString(key,comment) NSLocalizedStringFromTableInBundle(key, @"HockeySDK", BITHockeyBundle, comment)
-#define BITHockeyLog(fmt, ...) do { if([BITHockeyManager sharedHockeyManager].isDebugLogEnabled) { NSLog((@"[HockeySDK] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__); }} while(0)
-
 
 #define BIT_RGBCOLOR(r,g,b) [NSColor colorWithCalibratedRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
 

@@ -7,10 +7,15 @@
 @class BITPersistence;
 @class BITSender;
 
-@interface BITMetricsManager ()
+#import "HockeySDKNullability.h"
+NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSString *const kBITApplicationWasLaunched;
+
+@interface BITMetricsManager()
 
 /**
- *  Create a new BITMetricsManager instance by passing the channel, the telemetry context, and persistence instance to use 
+ *  Create a new BITMetricsManager instance by passing the channel, the telemetry context, and persistence instance to use
  for processing metrics. This method can be used for dependency injection.
  */
 - (instancetype)initWithChannel:(BITChannel *)channel
@@ -41,7 +46,7 @@
 /**
  *  A concurrent queue which creates and processes telemetry items.
  */
-@property (nonatomic, assign, readonly)dispatch_queue_t metricsEventQueue;
+@property (nonatomic, assign, readonly) dispatch_queue_t metricsEventQueue;
 
 /**
  *  Sender instance to send out telemetry data.
@@ -110,3 +115,6 @@
 - (void)trackSessionWithState:(BITSessionState) state;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

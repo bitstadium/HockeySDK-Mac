@@ -3,6 +3,8 @@
 @class BITMetricsManager;
 @protocol BITHockeyManagerDelegate;
 
+#import "HockeySDK.h"
+
 /**
  The HockeySDK manager. Responsible for setup and management of all components
  
@@ -126,6 +128,8 @@
  *
  * By default this is set to the HockeyApp servers and there rarely should be a
  * need to modify that.
+ * Please be aware that the URL for `BITMetricsManager` needs to be set separately
+ * as this class uses a different endpoint!
  */
 @property (nonatomic, strong) NSString *serverURL;
 
@@ -296,15 +300,49 @@
 ///-----------------------------------------------------------------------------
 
 /**
- * Flag that determines whether additional logging output should be generated
- * by the manager and all modules.
- *
- * This is ignored if the app is running in the App Store and reverts to the
- * default value in that case.
- *
- * *Default*: _NO_
+ This property is used indicate the amount of verboseness and severity for which
+ you want to see log messages in the console.
  */
-@property (nonatomic, assign, getter=isDebugLogEnabled) BOOL debugLogEnabled;
+@property (nonatomic, assign) BITLogLevel logLevel;
+
+/**
+ Flag that determines whether additional logging output should be generated
+ by the manager and all modules.
+ 
+ This is ignored if the app is running in the App Store and reverts to the
+ default value in that case.
+ 
+ @warning This property needs to be set before calling `startManager`
+ 
+ *Default*: _NO_
+ */
+@property (nonatomic, assign, getter=isDebugLogEnabled) BOOL debugLogEnabled DEPRECATED_MSG_ATTRIBUTE("Use logLevel instead!");
+
+/**
+ Set a custom block that handles all the log messages that are emitted from the SDK.
+ 
+ You can use this to reroute the messages that would normally be logged by `NSLog();`
+ to your own custom logging framework.
+ 
+ An example of how to do this with NSLogger:
+ 
+ ```
+ [[BITHockeyManager sharedHockeyManager] setLogHandler:^(BITLogMessageProvider messageProvider, BITLogLevel logLevel, const char *file, const char *function, uint line) {
+ LogMessageRawF(file, (int)line, function, @"HockeySDK", (int)logLevel-1, messageProvider());
+ }];
+ ```
+ 
+ or with CocoaLumberjack:
+ 
+ ```
+ [[BITHockeyManager sharedHockeyManager] setLogHandler:^(BITLogMessageProvider messageProvider, BITLogLevel logLevel, const char *file, const char *function, uint line) {
+ [DDLog log:YES message:messageProvider() level:ddLogLevel flag:(DDLogFlag)(1 << (logLevel-1)) context:<#CocoaLumberjackContext#> file:file function:function line:line tag:nil];
+ }];
+ ```
+ 
+ @param logHandler The block of type BITLogHandler that will process all logged messages.
+ */
+- (void)setLogHandler:(BITLogHandler)logHandler;
 
 
 ///-----------------------------------------------------------------------------

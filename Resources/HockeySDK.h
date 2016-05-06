@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
 
+#import "HockeySDKEnums.h"
+
 #import "BITHockeyManager.h"
 #import "BITHockeyManagerDelegate.h"
 
