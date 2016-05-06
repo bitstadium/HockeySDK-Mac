@@ -174,6 +174,11 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
     return;
   }
   
+  // Fix bug where Application Support directory was encluded from backup
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  NSURL *appSupportURL = [[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
+  bit_fixBackupAttributeForURL(appSupportURL);
+  
   BITHockeyLogDebug(@"INFO: Starting HockeyManager");
   _startManagerIsInvoked = YES;
   

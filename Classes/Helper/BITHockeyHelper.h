@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
 
+FOUNDATION_EXPORT NSString *const kBITExcludeApplicationSupportFromBackup;
+
 /* NSString helpers */
 NSString *bit_URLEncodedString(NSString *inputString);
 NSString *bit_URLDecodedString(NSString *inputString);
@@ -30,3 +32,6 @@ NSString *bit_deviceLanguage(void);
 NSString *bit_screenSize(void);
 NSString *bit_sdkVersion(void);
 NSString *bit_appVersion(void);
+
+/* Fix bug where Application Support was excluded from backup. */
+void bit_fixBackupAttributeForURL(NSURL *directoryURL);

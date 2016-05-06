@@ -5,6 +5,8 @@
 #import <sys/sysctl.h>
 #import <AppKit/AppKit.h>
 
+NSString *const kBITExcludeApplicationSupportFromBackup = @"kBITExcludeApplicationSupportFromBackup";
+
 typedef struct {
   uint8_t       info_version;
   const char    bit_version[16];
@@ -68,6 +70,28 @@ NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB) {
   // Done
   return result;
 }
+
+#pragma mark Exclude from backup fix
+
+void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
+  
+  BOOL shouldExcludeAppSupportDirFromBackup = [[NSUserDefaults standardUserDefaults] boolForKey:kBITExcludeApplicationSupportFromBackup];
+  if (shouldExcludeAppSupportDirFromBackup) {
+    return;
+  }
+  
+  if (directoryURL) {
+    NSError *getResourceError = nil;
+    NSNumber *appSupportDirExcludedValue;
+    
+    if ([directoryURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&getResourceError] && appSupportDirExcludedValue) {
+      NSError *setResourceError = nil;
+      [directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError];
+    }
+  }
+}
+
+#pragma mark Identifiers
 
 NSString *bit_mainBundleIdentifier(void) {
   return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
