@@ -1,3 +1,18 @@
+## Version 4.0.1
+
+- [BUGFIX] Fixes an issue where the whole app's Application Support directory (sandboxed apps) / user’s Application Support directory (non-sandboxed apps) was accidentally excluded from backups.
+This SDK release explicitly includes the Application Support directory into backups. If you want to opt-out of this fix and keep the Application Directory's backup flag untouched, add the following line above the SDK setup code:
+
+  	**Objective-C:**
+   ```objectivec
+   [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"BITExcludeApplicationSupportFromBackup"];
+   ```
+    
+	**Swift:**
+   ```swift
+   NSUserDefaults.standardUserDefaults().setBool(true, forKey: "BITExcludeApplicationSupportFromBackup")
+    ```
+
 ## Version 4.0.0
 
 - [IMPROVEMENT] Prefix GZIP category on NSData to prevent symbol collisions
