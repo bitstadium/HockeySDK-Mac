@@ -5,12 +5,12 @@ This SDK release explicitly includes the Application Support directory into back
 
   	**Objective-C:**
    ```objectivec
-   [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"BITExcludeApplicationSupportFromBackup"];
+   [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kBITExcludeApplicationSupportFromBackup"];
    ```
     
 	**Swift:**
    ```swift
-   NSUserDefaults.standardUserDefaults().setBool(true, forKey: "BITExcludeApplicationSupportFromBackup")
+   NSUserDefaults.standardUserDefaults().setBool(true, forKey: "kBITExcludeApplicationSupportFromBackup")
     ```
 
 ## Version 4.0.0
