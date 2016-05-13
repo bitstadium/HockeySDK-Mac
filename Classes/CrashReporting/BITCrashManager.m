@@ -570,8 +570,6 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 
         [crashData writeToFile:[_crashesDir stringByAppendingPathComponent: cacheFilename] atomically:YES];
         
-        [self storeMetaDataForCrashReportFilename:cacheFilename];
-        
         NSString *incidentIdentifier = @"???";
         if (report.uuidRef != NULL) {
           incidentIdentifier = (NSString *) CFBridgingRelease(CFUUIDCreateString(NULL, report.uuidRef));
@@ -591,6 +589,9 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
                                                                             appVersion:report.applicationInfo.applicationMarketingVersion
                                                                               appBuild:report.applicationInfo.applicationVersion
                                     ];
+        
+        // fetch and store the meta data after setting _lastSessionCrashDetails, so the property can be used in the protocol methods
+        [self storeMetaDataForCrashReportFilename:cacheFilename];
       }
     }
   }
