@@ -74,6 +74,10 @@ NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB) {
 #pragma mark Exclude from backup fix
 
 void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
+  if (&NSURLIsExcludedFromBackupKey == NULL) {
+    BITHockeyLogWarning(@"WARNING: &NSURLIsExcludedBackupKey is NULL, returning");
+    return;
+  }
   
   BOOL shouldExcludeAppSupportDirFromBackup = [[NSUserDefaults standardUserDefaults] boolForKey:kBITExcludeApplicationSupportFromBackup];
   if (shouldExcludeAppSupportDirFromBackup) {

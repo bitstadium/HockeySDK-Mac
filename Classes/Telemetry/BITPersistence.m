@@ -218,13 +218,16 @@ static NSUInteger const BITDefaultFileCount = 50;
       return;
     }
 
-    //Exclude HockeySDK folder from backup
-    if (![appURL setResourceValue:@YES
-                           forKey:NSURLIsExcludedFromBackupKey
-                            error:&error]) {
-      BITHockeyLogError(@"Error excluding %@ from backup %@", appURL.lastPathComponent, error.localizedDescription);
-    } else {
-      BITHockeyLogDebug(@"Exclude %@ from backup", appURL);
+    // Make sure NSURLIsExcludedFromBackupKey is available
+    if (&NSURLIsExcludedFromBackupKey != NULL) {
+      //Exclude HockeySDK folder from backup
+      if (![appURL setResourceValue:@YES
+                             forKey:NSURLIsExcludedFromBackupKey
+                              error:&error]) {
+        BITHockeyLogError(@"ERROR: Error excluding %@ from backup %@", appURL.lastPathComponent, error.localizedDescription);
+      } else {
+        BITHockeyLogDebug(@"INFO: Exclude %@ from backup", appURL);
+      }
     }
     
     _directorySetupComplete = YES;
