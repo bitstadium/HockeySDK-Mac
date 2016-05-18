@@ -1,3 +1,7 @@
+## Version 4.0.2
+
+- [BUGFIX] Restore compatibility with OS X 10.7 by not accessing `NSURLIsExcludedFromBackupKey` if not available
+
 ## Version 4.0.1
 
 - [BUGFIX] Fixes an issue where the whole app's Application Support directory (sandboxed apps) / user’s Application Support directory (non-sandboxed apps) was accidentally excluded from backups.
