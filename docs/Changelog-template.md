@@ -1,3 +1,9 @@
+## 4.1.0-beta.3
+
+- [IMPROVEMENT] Make lastSessionCrashDetails available in delegate methods
+Add a bugfix from version 4.0.2:
+- [BUGFIX] Restore compatibility with OS X 10.7 by not accessing `NSURLIsExcludedFromBackupKey` if not available
+
 ## 4.1.0-beta.2
 
 - [BUGFIX] Fixes an issue where the whole app's Application Support directory (sandboxed apps) / user’s Application Support directory (non-sandboxed apps) was accidentally excluded from backups.
