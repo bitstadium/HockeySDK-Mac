@@ -305,8 +305,7 @@ NSUInteger const defaultFileCount = 50;
     NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject] stringByStandardizingPath];
     NSString *bundleID = [self bundleIdentifier];
     if (appSupportPath && bundleID) {
-      NSString *hockeySDKPath = [appSupportPath stringByAppendingPathComponent:kBITHockeyDirectory];
-      _appHockeySDKDirectoryPath = [hockeySDKPath stringByAppendingPathComponent:bundleID];
+      _appHockeySDKDirectoryPath = [[appSupportPath stringByAppendingPathComponent:bundleID] stringByAppendingPathComponent:kBITHockeyDirectory];
     }
   }
   return _appHockeySDKDirectoryPath;
