@@ -169,8 +169,10 @@
 		4DD13AF4162CA7C400BF15E8 /* BITSystemProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4DD13AF5162CA7C400BF15E8 /* BITSystemProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */; };
 		4DD13AF7162CAA2200BF15E8 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DD13AF6162CAA2200BF15E8 /* IOKit.framework */; };
-		6F53E3081CF509AE00DC1C64 /* HockeySDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F53E3071CF509AE00DC1C64 /* HockeySDKTests.m */; };
 		6F53E30A1CF509AE00DC1C64 /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF09D8C1523574200067A5C /* HockeySDK.framework */; };
+		6F53E3111CF509E000DC1C64 /* BITPersistenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F53E3101CF509E000DC1C64 /* BITPersistenceTests.m */; };
+		6F53E3151CF50DD800DC1C64 /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F53E3141CF50DD800DC1C64 /* OCMock.framework */; };
+		6F53E3171CF50DFF00DC1C64 /* OCMock.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 6F53E3141CF50DD800DC1C64 /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -198,6 +200,17 @@
 			dstSubfolderSpec = 10;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F53E3161CF50DF800DC1C64 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6F53E3171CF50DFF00DC1C64 /* OCMock.framework in Copy Files */,
+			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -367,8 +380,9 @@
 		4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BITSystemProfile.m; path = BetaDistribution/BITSystemProfile.m; sourceTree = "<group>"; };
 		4DD13AF6162CAA2200BF15E8 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		6F53E3051CF509AE00DC1C64 /* HockeySDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HockeySDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F53E3071CF509AE00DC1C64 /* HockeySDKTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HockeySDKTests.m; sourceTree = "<group>"; };
 		6F53E3091CF509AE00DC1C64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6F53E3101CF509E000DC1C64 /* BITPersistenceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BITPersistenceTests.m; path = ../BITPersistenceTests.m; sourceTree = "<group>"; };
+		6F53E3141CF50DD800DC1C64 /* OCMock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMock.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -390,6 +404,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F53E3151CF50DD800DC1C64 /* OCMock.framework in Frameworks */,
 				6F53E30A1CF509AE00DC1C64 /* HockeySDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -599,6 +614,7 @@
 		1EF09D8E1523574200067A5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6F53E3141CF50DD800DC1C64 /* OCMock.framework */,
 				1EB194CA1BA70BDE00793007 /* libz.tbd */,
 				1E378AF8195899B400451E28 /* Quartz.framework */,
 				1E378AF6195899A400451E28 /* QuartzCore.framework */,
@@ -697,7 +713,7 @@
 		6F53E3061CF509AE00DC1C64 /* HockeySDKTests */ = {
 			isa = PBXGroup;
 			children = (
-				6F53E3071CF509AE00DC1C64 /* HockeySDKTests.m */,
+				6F53E3101CF509E000DC1C64 /* BITPersistenceTests.m */,
 				6F53E3091CF509AE00DC1C64 /* Info.plist */,
 			);
 			path = HockeySDKTests;
@@ -823,6 +839,7 @@
 				6F53E3011CF509AE00DC1C64 /* Sources */,
 				6F53E3021CF509AE00DC1C64 /* Frameworks */,
 				6F53E3031CF509AE00DC1C64 /* Resources */,
+				6F53E3161CF50DF800DC1C64 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -980,7 +997,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F53E3081CF509AE00DC1C64 /* HockeySDKTests.m in Sources */,
+				6F53E3111CF509E000DC1C64 /* BITPersistenceTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1187,6 +1204,10 @@
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = HockeySDKTests/Info.plist;
@@ -1210,6 +1231,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = HockeySDKTests/Info.plist;
