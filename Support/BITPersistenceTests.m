@@ -27,7 +27,6 @@
     OCMStub([mock bundleIdentifier]).andReturn(@"com.testapp");
     
     _subject = [_subject init];
-    //OCMVerify([mock bundleIdentifier]);
 }
 
 - (void)tearDown {
@@ -36,7 +35,6 @@
 
 - (void)testAppHockeySDKDirectoryPath {
     NSString *path = [_subject appHockeySDKDirectoryPath];
-    
     
     NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject] stringByStandardizingPath];
     NSString *validPath = [NSString stringWithFormat:@"%@/%@", appSupportPath, @"com.testapp/com.microsoft.HockeyApp"];
