@@ -220,9 +220,9 @@ NSUInteger const defaultFileCount = 50;
     
     // Create telemetry subfolder
     
-    //NOTE: createDirectoryAtURL:withIntermediateDirectories:attributes:error
-    //will return YES if the directory already exists and won't override anything.
-    //No need to check if the directory already exists.
+    // NOTE: createDirectoryAtURL:withIntermediateDirectories:attributes:error
+    // will return YES if the directory already exists and won't override anything.
+    // No need to check if the directory already exists.
     NSURL *telemetryURL = [appURL URLByAppendingPathComponent:kBITTelemetryDirectory];
     if (![fileManager createDirectoryAtURL:telemetryURL withIntermediateDirectories:YES attributes:nil error:&error]) {
       BITHockeyLog(@"%@", error.localizedDescription);
@@ -255,7 +255,8 @@ NSUInteger const defaultFileCount = 50;
                                                               includingPropertiesForKeys:@[NSURLNameKey]
                                                                                  options:NSDirectoryEnumerationSkipsHiddenFiles
                                                                                    error:&error];
-  // each track method asks, if space is still available. Getting the file count for each event would be too expensive,
+  
+  // Each track method asks if space is still available. Getting the file count for each event would be too expensive,
   // so let's get it here
   if (type == BITPersistenceTypeTelemetry) {
     _maxFileCountReached = fileNames.count >= _maxFileCount;
@@ -302,14 +303,24 @@ NSUInteger const defaultFileCount = 50;
 
 - (NSString *)appHockeySDKDirectoryPath {
   if (!_appHockeySDKDirectoryPath) {
+    
+    // Assemble the directory path we use to store our telemetry data in.
+    // We use the current app's bundle identifier for the name of the subfolder within Application Support
+    // as this is one of the few directories a sandboxed app can write to (Compare
+    // https://developer.apple.com/library/mac/documentation/General/Conceptual/MOSXAppProgrammingGuide/AppRuntime/AppRuntime.html#//apple_ref/doc/uid/TP40010543-CH2-SW9 )
+    // and then create our own subfolder within that.
     NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject] stringByStandardizingPath];
-    NSString *bundleID = bit_mainBundleIdentifier();
+    NSString *bundleID = [self bundleIdentifier];
+    
     if (appSupportPath && bundleID) {
-      NSString *hockeySDKPath = [appSupportPath stringByAppendingPathComponent:kBITHockeyDirectory];
-      _appHockeySDKDirectoryPath = [hockeySDKPath stringByAppendingPathComponent:bundleID];
+      _appHockeySDKDirectoryPath = [[appSupportPath stringByAppendingPathComponent:bundleID] stringByAppendingPathComponent:kBITHockeyDirectory];
     }
   }
   return _appHockeySDKDirectoryPath;
+}
+
+- (NSString *)bundleIdentifier {
+  return bit_mainBundleIdentifier();
 }
 
 @end
