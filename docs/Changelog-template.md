@@ -1,3 +1,7 @@
+## Version 4.0.3
+
+- [BUGFIX] Use a directory path for metrics data that's in compliance with Apple's file system guidelines
+
 ## Version 4.0.2
 
 - [BUGFIX] Restore compatibility with OS X 10.7 by not accessing `NSURLIsExcludedFromBackupKey` if not available
