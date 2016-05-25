@@ -141,4 +141,6 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
 */
 - (NSString *)fileURLForType:(BITPersistenceType)type;
 
+- (NSString *)appHockeySDKDirectoryPath;
+
 @end
