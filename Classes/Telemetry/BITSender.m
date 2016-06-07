@@ -16,12 +16,6 @@ static NSUInteger const BITDefaultRequestLimit = 10;
 
 @end
 
-@interface BITSender ()
-
-@property (nonatomic, strong) NSURLSession *session;
-
-@end
-
 @implementation BITSender
 
 @synthesize runningRequestsCount = _runningRequestsCount;
