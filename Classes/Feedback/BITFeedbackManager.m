@@ -427,6 +427,7 @@
   [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger messagesIdx, BOOL *stop) {
     if ([[objMessage messageID] integerValue] != 0) {
       message = objMessage;
+    } else {
       *stop = YES;
     }
   }];
