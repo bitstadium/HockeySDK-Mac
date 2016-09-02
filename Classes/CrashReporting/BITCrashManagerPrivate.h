@@ -50,7 +50,7 @@
 - (void)cleanCrashReports;
 - (NSString *)extractAppUUIDs:(BITPLCrashReport *)report;
 
-- (void)persistAttachment:(BITHockeyAttachment *)attachment withFilename:(NSString *)filename;
+- (BOOL)persistAttachment:(BITHockeyAttachment *)attachment withFilename:(NSString *)filename;
 
 - (BITHockeyAttachment *)attachmentForCrashReport:(NSString *)filename;
 

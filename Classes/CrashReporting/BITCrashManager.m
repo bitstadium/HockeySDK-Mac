@@ -166,11 +166,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     _crashesDir = bit_settingsDir();
     _settingsFile = [_crashesDir stringByAppendingPathComponent:BITHOCKEY_CRASH_SETTINGS];
     _analyzerInProgressFile = [_crashesDir stringByAppendingPathComponent:BITHOCKEY_CRASH_ANALYZER];
-    
-    if ([_fileManager fileExistsAtPath:_analyzerInProgressFile]) {
-      NSError *theError = nil;
-      [_fileManager removeItemAtPath:_analyzerInProgressFile error:&theError];
-    }
+
   }
   return self;
 }
@@ -280,7 +276,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   }
 }
 
-- (void)persistAttachment:(BITHockeyAttachment *)attachment withFilename:(NSString *)filename {
+- (BOOL)persistAttachment:(BITHockeyAttachment *)attachment withFilename:(NSString *)filename {
   NSString *attachmentFilename = [filename stringByAppendingString:@".data"];
   NSMutableData *data = [[NSMutableData alloc] init];
   NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
@@ -289,7 +285,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   
   [archiver finishEncoding];
   
-  [data writeToFile:attachmentFilename atomically:YES];
+  return [data writeToFile:attachmentFilename atomically:YES];
 }
 
 - (void)persistUserProvidedMetaData:(BITCrashMetaData *)userProvidedMetaData {
@@ -460,6 +456,8 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
  *  @param filename the crash reports temp filename
  */
 - (void)storeMetaDataForCrashReportFilename:(NSString *)filename {
+  BITHockeyLogVerbose(@"Storing meta data for crash report with filename %@", filename);
+
   NSError *error = NULL;
   NSMutableDictionary *metaDict = [NSMutableDictionary dictionaryWithCapacity:4];
   NSString *applicationLog = @"";
@@ -476,10 +474,19 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   metaDict[kBITCrashMetaApplicationLog] = applicationLog;
   
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(attachmentForCrashManager:)]) {
+    BITHockeyLogVerbose(@"Processing attachment for crash report with filename %@", filename);
+
     BITHockeyAttachment *attachment = [self.delegate attachmentForCrashManager:self];
     
     if (attachment) {
-      [self persistAttachment:attachment withFilename:[_crashesDir stringByAppendingPathComponent: filename]];
+      BOOL success = [self persistAttachment:attachment withFilename:[_crashesDir stringByAppendingPathComponent: filename]];
+      if (!success) {
+        BITHockeyLogError(@"Persisting the crash attachment failed");
+      } else {
+        BITHockeyLogVerbose(@"Crash attachment successfully persisted.");
+      }
+    } else {
+      BITHockeyLogVerbose(@"Crash attachment was nil");
     }
   }
   
@@ -487,9 +494,12 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
                                                              format:NSPropertyListBinaryFormat_v1_0
                                                    errorDescription:&errorString];
   if (plist) {
-    [plist writeToFile:[_crashesDir stringByAppendingPathComponent: [filename stringByAppendingPathExtension:@"meta"]] atomically:YES];
+    BOOL success = [plist writeToFile:[_crashesDir stringByAppendingPathComponent: [filename stringByAppendingPathExtension:@"meta"]] atomically:YES];
+    if (!success) {
+      BITHockeyLogError(@"Writing crash meta data failed.");
+    }
   } else {
-    BITHockeyLogError(@"ERROR: Writing crash meta data failed. %@", error);
+    BITHockeyLogError(@"Serializing crash meta dict failed. %@", error);
   }
 }
 
@@ -534,12 +544,15 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 
 // Called to handle a pending crash report.
 - (void)handleCrashReport {
+  BITHockeyLogVerbose(@"Handling crash report");
+
   NSError *error = NULL;
 	
   // check if the next call ran successfully the last time
   if (![_fileManager fileExistsAtPath:_analyzerInProgressFile]) {
     // mark the start of the routine
     [_fileManager createFileAtPath:_analyzerInProgressFile contents:nil attributes:nil];
+    BITHockeyLogVerbose(@"AnalyzerInProgress file created");
 
     [self saveSettings];
     
