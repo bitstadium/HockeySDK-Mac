@@ -1,3 +1,8 @@
+## 4.1.0
+
+[NEW] Add ability to track custom events
+[NEW] Additional API to track an event with properties and measurements.
+
 ## 4.1.0-beta.4
 
 Add a bugfix from version 4.0.3:
