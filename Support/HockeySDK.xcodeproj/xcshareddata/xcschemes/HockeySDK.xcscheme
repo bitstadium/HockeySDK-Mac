@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6F53E3041CF509AE00DC1C64"
+               BuildableName = "HockeySDKTests.xctest"
+               BlueprintName = "HockeySDKTests"
+               ReferencedContainer = "container:HockeySDK.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "1EF09D8B1523574200067A5C"
+            BuildableName = "HockeySDK.framework"
+            BlueprintName = "HockeySDK"
+            ReferencedContainer = "container:HockeySDK.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -60,6 +79,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "1EF09D8B1523574200067A5C"
+            BuildableName = "HockeySDK.framework"
+            BlueprintName = "HockeySDK"
+            ReferencedContainer = "container:HockeySDK.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

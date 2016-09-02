@@ -44,10 +44,13 @@
 
 - (void)handleCrashReport;
 - (BOOL)hasPendingCrashReport;
+
+- (instancetype)initWithAppIdentifier:(NSString *)appIdentifier hockeyAppClient:(BITHockeyAppClient *)hockeyAppClient NS_DESIGNATED_INITIALIZER;
+
 - (void)cleanCrashReports;
 - (NSString *)extractAppUUIDs:(BITPLCrashReport *)report;
 
-- (void)persistAttachment:(BITHockeyAttachment *)attachment withFilename:(NSString *)filename;
+- (BOOL)persistAttachment:(BITHockeyAttachment *)attachment withFilename:(NSString *)filename;
 
 - (BITHockeyAttachment *)attachmentForCrashReport:(NSString *)filename;
 

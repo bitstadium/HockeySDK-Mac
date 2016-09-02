@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name              = 'HockeySDK-Mac'
-  s.version           = '4.0.3'
+  s.version           = '4.1.0'
 
   s.summary           = 'Collect live crash reports, get feedback from your users, distribute your betas, and get usage data.'
   s.description       = <<-DESC
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.homepage          = 'http://hockeyapp.net/'
   s.documentation_url = "http://hockeyapp.net/help/sdk/mac/#{s.version}/"
 
-  s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.txt' }
+  s.license           = { :type => 'MIT', :file => 'HockeySDK-Mac/LICENSE.md' }
   s.author            = { 'Microsoft' => 'support@hockeyapp.net' }
   s.source = { :http => "https://github.com/bitstadium/HockeySDK-Mac/releases/download/#{s.version}/HockeySDK-Mac-#{s.version}.zip" }
 
