@@ -1,7 +1,14 @@
+## 4.1.1
+
+- [IMPROVEMENT] Add process id to BITCrashDetails.
+- [IMPROVEMENT] Add app launch timestamp to crash report.
+- [BUGFIX] Fix leak in BITChannel.
+- [BUGFIX] Add safequards to MetricsManager to fix potential crash in BITChannel.
+
 ## 4.1.0
 
-[NEW] Add ability to track custom events
-[NEW] Additional API to track an event with properties and measurements.
+- [NEW] Add ability to track custom events
+- [NEW] Additional API to track an event with properties and measurements.
 
 ## 4.1.0-beta.4
 
