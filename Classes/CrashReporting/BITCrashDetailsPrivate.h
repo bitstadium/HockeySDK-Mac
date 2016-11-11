@@ -14,6 +14,7 @@
                                  osVersion:(NSString *)osVersion
                                    osBuild:(NSString *)osBuild
                                 appVersion:(NSString *)appVersion
-                                  appBuild:(NSString *)appBuild;
+                                  appBuild:(NSString *)appBuild
+                      appProcessIdentifier:(NSUInteger)appProcessIdentifier;
 
 @end
