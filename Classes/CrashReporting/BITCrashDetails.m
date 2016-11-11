@@ -14,6 +14,7 @@
                                    osBuild:(NSString *)osBuild
                                 appVersion:(NSString *)appVersion
                                   appBuild:(NSString *)appBuild
+                      appProcessIdentifier:(NSUInteger)appProcessIdentifier
 {
   if ((self = [super init])) {
     _incidentIdentifier = incidentIdentifier;
@@ -27,6 +28,7 @@
     _osBuild = osBuild;
     _appVersion = appVersion;
     _appBuild = appBuild;
+    _appProcessIdentifier = appProcessIdentifier;
   }
   return self;
 }
