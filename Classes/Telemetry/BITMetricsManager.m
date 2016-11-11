@@ -132,14 +132,16 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
   
   // Check if app was in background longer than the defined session interval time
   double appDidEnterBackgroundTime = [self.userDefaults doubleForKey:kBITApplicationDidEnterBackgroundTime];
+  // Add safeguard in case this returns a negative value
+  if(appDidEnterBackgroundTime < 0) {
+    appDidEnterBackgroundTime = 0;
+    [self.userDefaults setDouble:0 forKey:kBITApplicationDidEnterBackgroundTime];
+    [self.userDefaults synchronize];
+  }
+  
   double timeSinceLastBackground = now - appDidEnterBackgroundTime;
-  if(timeSinceLastBackground > self.appBackgroundTimeBeforeSessionExpires) {
-    
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(_metricsEventQueue, ^{
-      typeof(self) strongSelf = weakSelf;
-      [strongSelf startNewSessionWithId:bit_UUID()];
-    });
+  if (timeSinceLastBackground > self.appBackgroundTimeBeforeSessionExpires) {
+    [self startNewSessionWithId:bit_UUID()];
   }
 }
 
