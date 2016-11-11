@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
+[![Version](https://img.shields.io/cocoapods/v/HockeySDK-Mac.svg)](http://cocoadocs.org/docsets/HockeySDK-Mac)
 
 ## Version 4.1.1
 
