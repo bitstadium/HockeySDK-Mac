@@ -1,3 +1,8 @@
+## 4.1.2
+
+- [IMPROVEMENT] Update to latest PLCrashReporter build (PLCrashReporter 1.3).
+- [BUGFIX] Add check for `nil` in BITChannel.
+
 ## 4.1.1
 
 - [IMPROVEMENT] Add process id to BITCrashDetails.
