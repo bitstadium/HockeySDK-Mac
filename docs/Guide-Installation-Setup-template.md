@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
-[![Version](https://img.shields.io/cocoapods/v/HockeySDK-Mac.svg)](http://cocoadocs.org/docsets/HockeySDK-Mac)
-
 ## Version 4.1.2
 
 - [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.1.2/docs/docs/Changelog.html)
