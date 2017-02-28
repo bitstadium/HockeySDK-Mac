@@ -167,6 +167,51 @@
 		4DD13AF4162CA7C400BF15E8 /* BITSystemProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4DD13AF5162CA7C400BF15E8 /* BITSystemProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */; };
 		4DD13AF7162CAA2200BF15E8 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DD13AF6162CAA2200BF15E8 /* IOKit.framework */; };
+		69EAA67B1E4105DA00DB7393 /* BITHockeyBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5512187F3EE700F0858E /* BITHockeyBaseManager.m */; };
+		69EAA67C1E4105DA00DB7393 /* BITHockeyAppClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785DE194646C00014D19A /* BITHockeyAppClient.m */; };
+		69EAA67D1E4105DA00DB7393 /* BITHTTPOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785E6194647180014D19A /* BITHTTPOperation.m */; };
+		69EAA67E1E4105DA00DB7393 /* BITHockeyHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5515187F3EE700F0858E /* BITHockeyHelper.m */; };
+		69EAA67F1E4105DA00DB7393 /* BITHockeyLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 80EF93A11CD9334B006722E1 /* BITHockeyLogger.m */; };
+		69EAA6801E4105DA00DB7393 /* BITHockeyAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785DA19461DF60014D19A /* BITHockeyAttachment.m */; };
+		69EAA6811E4105DA00DB7393 /* HockeySDKPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5517187F3EE700F0858E /* HockeySDKPrivate.m */; };
+		69EAA6821E4105DA00DB7393 /* BITKeychainItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E260CA517D41E9100C7F9FE /* BITKeychainItem.m */; };
+		69EAA6831E4105DA00DB7393 /* BITSDKColoredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDC050195716F300B5C8A3 /* BITSDKColoredView.m */; };
+		69EAA6841E4105DA00DB7393 /* BITSDKTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2B01957878800C7F49A /* BITSDKTextFieldCell.m */; };
+		69EAA6851E4105DA00DB7393 /* BITSDKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC7152519573CB400F72C19 /* BITSDKTextView.m */; };
+		69EAA6861E4105DE00DB7393 /* BITSystemProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */; };
+		69EAA6871E4105E200DB7393 /* BITCrashManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DCF152371DC00067A5C /* BITCrashManager.m */; };
+		69EAA6891E4105E200DB7393 /* BITCrashCXXExceptionHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1EC2956E1B30572D00CD53B2 /* BITCrashCXXExceptionHandler.mm */; };
+		69EAA68A1E4105E200DB7393 /* BITCrashDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785D419461DDF0014D19A /* BITCrashDetails.m */; };
+		69EAA68B1E4105E200DB7393 /* BITCrashMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785EC194652900014D19A /* BITCrashMetaData.m */; };
+		69EAA68C1E4105E200DB7393 /* BITCrashReportUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD1152371DC00067A5C /* BITCrashReportUI.m */; };
+		69EAA68D1E4105E200DB7393 /* BITCrashReportTextFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DD3152371DC00067A5C /* BITCrashReportTextFormatter.m */; };
+		69EAA68E1E4105E600DB7393 /* BITFeedbackManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E54FE187F3ED800F0858E /* BITFeedbackManager.m */; };
+		69EAA68F1E4105E600DB7393 /* BITFeedbackMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5501187F3ED800F0858E /* BITFeedbackMessage.m */; };
+		69EAA6901E4105E600DB7393 /* BITFeedbackMessageAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E852AEC19509368006E73E0 /* BITFeedbackMessageAttachment.m */; };
+		69EAA6911E4105E600DB7393 /* BITActivityIndicatorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E378B1F1959D33700451E28 /* BITActivityIndicatorButton.m */; };
+		69EAA6921E4105E600DB7393 /* BITFeedbackMessageCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC715321957524B00F72C19 /* BITFeedbackMessageCellView.m */; };
+		69EAA6931E4105E600DB7393 /* BITFeedbackMessageDateValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBDF2AA195780D100C7F49A /* BITFeedbackMessageDateValueTransformer.m */; };
+		69EAA6941E4105E600DB7393 /* BITFeedbackWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5505187F3ED800F0858E /* BITFeedbackWindowController.m */; };
+		69EAA6951E4105EB00DB7393 /* BITApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E1B1C98847100E2FD59 /* BITApplication.m */; };
+		69EAA6961E4105EB00DB7393 /* BITBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E1D1C98847100E2FD59 /* BITBase.m */; };
+		69EAA6971E4105EB00DB7393 /* BITData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E1F1C98847100E2FD59 /* BITData.m */; };
+		69EAA6981E4105EB00DB7393 /* BITDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E211C98847100E2FD59 /* BITDevice.m */; };
+		69EAA6991E4105EB00DB7393 /* BITDomain.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E231C98847100E2FD59 /* BITDomain.m */; };
+		69EAA69A1E4105EB00DB7393 /* BITEnvelope.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E251C98847100E2FD59 /* BITEnvelope.m */; };
+		69EAA69B1E4105EB00DB7393 /* BITEventData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E271C98847100E2FD59 /* BITEventData.m */; };
+		69EAA69C1E4105EB00DB7393 /* BITInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E291C98847100E2FD59 /* BITInternal.m */; };
+		69EAA69D1E4105EB00DB7393 /* BITSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E2B1C98847100E2FD59 /* BITSession.m */; };
+		69EAA69E1E4105EB00DB7393 /* BITSessionStateData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E2E1C98847100E2FD59 /* BITSessionStateData.m */; };
+		69EAA69F1E4105EB00DB7393 /* BITTelemetryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E511C98893600E2FD59 /* BITTelemetryData.m */; };
+		69EAA6A01E4105EB00DB7393 /* BITTelemetryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E301C98847100E2FD59 /* BITTelemetryObject.m */; };
+		69EAA6A11E4105EB00DB7393 /* BITUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E321C98847100E2FD59 /* BITUser.m */; };
+		69EAA6A21E4105F000DB7393 /* BITCategoryContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE83C71C45B21100DE0B39 /* BITCategoryContainer.m */; };
+		69EAA6A31E4105F000DB7393 /* BITChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EECFA6E1CA49ED60090AD57 /* BITChannel.m */; };
+		69EAA6A41E4105F000DB7393 /* BITPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE83CC1C45B21100DE0B39 /* BITPersistence.m */; };
+		69EAA6A51E4105F000DB7393 /* BITSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B078E4D1C98851300E2FD59 /* BITSender.m */; };
+		69EAA6A61E4105F000DB7393 /* BITTelemetryContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE83D11C45B21100DE0B39 /* BITTelemetryContext.m */; };
+		69EAA6A71E4105F000DB7393 /* BITMetricsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE83D51C45B21100DE0B39 /* BITMetricsManager.m */; };
+		69EAA6A81E4105F300DB7393 /* BITHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF09DAF1523579100067A5C /* BITHockeyManager.m */; };
 		6EECFA701CA49ED60090AD57 /* BITChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EECFA6D1CA49ED60090AD57 /* BITChannel.h */; };
 		6EECFA711CA49ED60090AD57 /* BITChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EECFA6E1CA49ED60090AD57 /* BITChannel.m */; };
 		6EECFA721CA49ED60090AD57 /* BITChannelPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EECFA6F1CA49ED60090AD57 /* BITChannelPrivate.h */; };
@@ -382,6 +427,7 @@
 		4DD13AF2162CA7C400BF15E8 /* BITSystemProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BITSystemProfile.h; path = BetaDistribution/BITSystemProfile.h; sourceTree = "<group>"; };
 		4DD13AF3162CA7C400BF15E8 /* BITSystemProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BITSystemProfile.m; path = BetaDistribution/BITSystemProfile.m; sourceTree = "<group>"; };
 		4DD13AF6162CAA2200BF15E8 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		69EAA6771E41054A00DB7393 /* libHockeySDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHockeySDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EECFA6D1CA49ED60090AD57 /* BITChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITChannel.h; sourceTree = "<group>"; };
 		6EECFA6E1CA49ED60090AD57 /* BITChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITChannel.m; sourceTree = "<group>"; };
 		6EECFA6F1CA49ED60090AD57 /* BITChannelPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITChannelPrivate.h; sourceTree = "<group>"; };
@@ -407,6 +453,13 @@
 				4DD13AF7162CAA2200BF15E8 /* IOKit.framework in Frameworks */,
 				1E93591E15238FCF00F51DBD /* Foundation.framework in Frameworks */,
 				1EF09D901523574200067A5C /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69EAA6741E41054A00DB7393 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -622,6 +675,7 @@
 			children = (
 				1EF09D8C1523574200067A5C /* HockeySDK.framework */,
 				6F53E3051CF509AE00DC1C64 /* HockeySDKTests.xctest */,
+				69EAA6771E41054A00DB7393 /* libHockeySDK.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -829,6 +883,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		69EAA6751E41054A00DB7393 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -850,6 +911,23 @@
 			productName = HockeySDK;
 			productReference = 1EF09D8C1523574200067A5C /* HockeySDK.framework */;
 			productType = "com.apple.product-type.framework";
+		};
+		69EAA6761E41054A00DB7393 /* libHockeySDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69EAA67A1E41054A00DB7393 /* Build configuration list for PBXNativeTarget "libHockeySDK" */;
+			buildPhases = (
+				69EAA6731E41054A00DB7393 /* Sources */,
+				69EAA6741E41054A00DB7393 /* Frameworks */,
+				69EAA6751E41054A00DB7393 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libHockeySDK;
+			productName = libHockeySDK;
+			productReference = 69EAA6771E41054A00DB7393 /* libHockeySDK.a */;
+			productType = "com.apple.product-type.library.static";
 		};
 		6F53E3041CF509AE00DC1C64 /* HockeySDKTests */ = {
 			isa = PBXNativeTarget;
@@ -878,6 +956,10 @@
 			attributes = {
 				LastUpgradeCheck = 0810;
 				TargetAttributes = {
+					69EAA6761E41054A00DB7393 = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
 					6F53E3041CF509AE00DC1C64 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -906,6 +988,7 @@
 				1E7FB95C17D3F36B00B7E10D /* HockeySDK Documentation */,
 				1E3B4F6B1996796B00203B89 /* HockeySDK Distribution */,
 				6F53E3041CF509AE00DC1C64 /* HockeySDKTests */,
+				69EAA6761E41054A00DB7393 /* libHockeySDK */,
 			);
 		};
 /* End PBXProject section */
@@ -1010,6 +1093,58 @@
 				1E260CA717D41E9100C7F9FE /* BITKeychainItem.m in Sources */,
 				1E378B211959D33700451E28 /* BITActivityIndicatorButton.m in Sources */,
 				1B078E4B1C98847100E2FD59 /* BITUser.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69EAA6731E41054A00DB7393 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69EAA6A51E4105F000DB7393 /* BITSender.m in Sources */,
+				69EAA67D1E4105DA00DB7393 /* BITHTTPOperation.m in Sources */,
+				69EAA6951E4105EB00DB7393 /* BITApplication.m in Sources */,
+				69EAA6871E4105E200DB7393 /* BITCrashManager.m in Sources */,
+				69EAA68A1E4105E200DB7393 /* BITCrashDetails.m in Sources */,
+				69EAA6921E4105E600DB7393 /* BITFeedbackMessageCellView.m in Sources */,
+				69EAA69A1E4105EB00DB7393 /* BITEnvelope.m in Sources */,
+				69EAA69C1E4105EB00DB7393 /* BITInternal.m in Sources */,
+				69EAA6991E4105EB00DB7393 /* BITDomain.m in Sources */,
+				69EAA69F1E4105EB00DB7393 /* BITTelemetryData.m in Sources */,
+				69EAA6A61E4105F000DB7393 /* BITTelemetryContext.m in Sources */,
+				69EAA67F1E4105DA00DB7393 /* BITHockeyLogger.m in Sources */,
+				69EAA67B1E4105DA00DB7393 /* BITHockeyBaseManager.m in Sources */,
+				69EAA6A01E4105EB00DB7393 /* BITTelemetryObject.m in Sources */,
+				69EAA68F1E4105E600DB7393 /* BITFeedbackMessage.m in Sources */,
+				69EAA6901E4105E600DB7393 /* BITFeedbackMessageAttachment.m in Sources */,
+				69EAA6961E4105EB00DB7393 /* BITBase.m in Sources */,
+				69EAA6971E4105EB00DB7393 /* BITData.m in Sources */,
+				69EAA6801E4105DA00DB7393 /* BITHockeyAttachment.m in Sources */,
+				69EAA6A71E4105F000DB7393 /* BITMetricsManager.m in Sources */,
+				69EAA6911E4105E600DB7393 /* BITActivityIndicatorButton.m in Sources */,
+				69EAA6811E4105DA00DB7393 /* HockeySDKPrivate.m in Sources */,
+				69EAA68B1E4105E200DB7393 /* BITCrashMetaData.m in Sources */,
+				69EAA67E1E4105DA00DB7393 /* BITHockeyHelper.m in Sources */,
+				69EAA6941E4105E600DB7393 /* BITFeedbackWindowController.m in Sources */,
+				69EAA6A41E4105F000DB7393 /* BITPersistence.m in Sources */,
+				69EAA6931E4105E600DB7393 /* BITFeedbackMessageDateValueTransformer.m in Sources */,
+				69EAA6A81E4105F300DB7393 /* BITHockeyManager.m in Sources */,
+				69EAA6861E4105DE00DB7393 /* BITSystemProfile.m in Sources */,
+				69EAA6A21E4105F000DB7393 /* BITCategoryContainer.m in Sources */,
+				69EAA68C1E4105E200DB7393 /* BITCrashReportUI.m in Sources */,
+				69EAA6A31E4105F000DB7393 /* BITChannel.m in Sources */,
+				69EAA6831E4105DA00DB7393 /* BITSDKColoredView.m in Sources */,
+				69EAA6821E4105DA00DB7393 /* BITKeychainItem.m in Sources */,
+				69EAA6891E4105E200DB7393 /* BITCrashCXXExceptionHandler.mm in Sources */,
+				69EAA6841E4105DA00DB7393 /* BITSDKTextFieldCell.m in Sources */,
+				69EAA69D1E4105EB00DB7393 /* BITSession.m in Sources */,
+				69EAA6851E4105DA00DB7393 /* BITSDKTextView.m in Sources */,
+				69EAA69E1E4105EB00DB7393 /* BITSessionStateData.m in Sources */,
+				69EAA67C1E4105DA00DB7393 /* BITHockeyAppClient.m in Sources */,
+				69EAA68E1E4105E600DB7393 /* BITFeedbackManager.m in Sources */,
+				69EAA68D1E4105E200DB7393 /* BITCrashReportTextFormatter.m in Sources */,
+				69EAA69B1E4105EB00DB7393 /* BITEventData.m in Sources */,
+				69EAA6981E4105EB00DB7393 /* BITDevice.m in Sources */,
+				69EAA6A11E4105EB00DB7393 /* BITUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1219,6 +1354,28 @@
 			};
 			name = Release;
 		};
+		69EAA6781E41054A00DB7393 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXECUTABLE_PREFIX = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		69EAA6791E41054A00DB7393 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				EXECUTABLE_PREFIX = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		6F53E30E1CF509AE00DC1C64 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1307,6 +1464,15 @@
 			buildConfigurations = (
 				1EF09DA21523574200067A5C /* Debug */,
 				1EF09DA31523574200067A5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		69EAA67A1E41054A00DB7393 /* Build configuration list for PBXNativeTarget "libHockeySDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69EAA6781E41054A00DB7393 /* Debug */,
+				69EAA6791E41054A00DB7393 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
