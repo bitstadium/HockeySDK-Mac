@@ -3,6 +3,7 @@
 - [IMPROVEMENT] Downgrading to PLCrashReporter 1.2.1 as the upgrade to 1.3 in the last release lead to lowered qualitfy of crash reports for an edge case.
 - [IMPROVEMENT] Additional target to create libHockeySDK.a thanks to Gabriel/MacGritsch.
 - [BUGFIX] Fix a UI glitch where the loading indicator would spin indefinitely when displaying feedback
+- [BUGFIX] Fix a glitch where the crashes UI wasn't always visible when starting the app. Thanks a lot to Tamas Nagy for this.
 
 ## 4.1.2
 
