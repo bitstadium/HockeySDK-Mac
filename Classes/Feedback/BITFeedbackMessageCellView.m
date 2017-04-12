@@ -214,7 +214,7 @@
 
 - (void)clearAllImageViews{
   
-  // Since we are mutating array we need to go backwards
+  // Since we simultaneously loop over and mutate the view's subviews array we need to go backwards
   for (NSView *subview in [self.subviews reverseObjectEnumerator]) {
     if ([subview isKindOfClass:[BITActivityIndicatorButton class]]) {
       [subview removeFromSuperview];
