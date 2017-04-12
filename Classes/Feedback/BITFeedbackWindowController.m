@@ -70,7 +70,7 @@
 @property (nonatomic, strong) BITFeedbackMessageAttachment *previewAttachment;
 @property (nonatomic) NSRect previewThumbnailRect;
 
-@property (unsafe_unretained) IBOutlet NSArrayController *composeAttacchmentsArrayController;
+@property (unsafe_unretained) IBOutlet NSArrayController *composeAttachmentsArrayController;
 
 - (BOOL)canContinueUserDataView;
 - (BOOL)canSendMessage;
@@ -140,7 +140,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
                                                name:BITHockeyFeedbackMessagesLoadingFinished
                                              object:nil];
   
-  [self.composeAttacchmentsArrayController setContent:self.attachments];
+  [self.composeAttachmentsArrayController setContent:self.attachments];
   [self.feedbackAttachmentsTableView setTarget:self];
   [self.feedbackAttachmentsTableView setDoubleAction:@selector(previewAttachment:)];
   [self.feedbackAttachmentsTableView registerForDraggedTypes:[NSArray arrayWithObject:(NSString*)kUTTypeFileURL]];
@@ -208,7 +208,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   NSInteger clickedRow = [self.feedbackAttachmentsTableView clickedRow];
   
   [self.attachments removeObjectAtIndex:clickedRow];
-  [self.composeAttacchmentsArrayController setContent:self.attachments];
+  [self.composeAttachmentsArrayController setContent:self.attachments];
   
   if ([self.attachments count] == 0) {
     [self hideComposeAttachments];
@@ -494,7 +494,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
     attachment.originalFilename = filename;
     
     [self.attachments addObject:attachment];
-    [self.composeAttacchmentsArrayController setContent:self.attachments];
+    [self.composeAttachmentsArrayController setContent:self.attachments];
     [self.feedbackAttachmentsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[self.attachments count] - 1] byExtendingSelection:NO];
     [self.feedbackAttachmentsTableView scrollRowToVisible:[self.attachments count] - 1];
     
