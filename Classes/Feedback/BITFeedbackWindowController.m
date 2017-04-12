@@ -353,7 +353,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 }
 
 - (IBAction)sendMessage:(id)sender {
-  [self.manager submitMessageWithText:[self.messageText string] andAttachments:[[NSArray alloc] initWithArray:self.attachments]];
+  [self.manager submitMessageWithText:[self.messageText string] andAttachments:[NSArray arrayWithArray:self.attachments]];
   self.messageText = nil;
   [self.attachments removeAllObjects];
   [self.composeAttachmentsArrayController setContent:self.attachments];
