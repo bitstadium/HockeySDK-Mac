@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init {
   if (self = [super init]) {
-    bit_resetSafeJsonStream(&BITSafeJsonEventsString);
+    [self bit_resetSafeJsonStream:&BITSafeJsonEventsString];
     _dataItemCount = 0;
     if (bit_isDebuggerAttached()) {
       _maxBatchSize = BITDebugMaxBatchSize;
@@ -83,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)resetQueue {
-  bit_resetSafeJsonStream(&BITSafeJsonEventsString);
+  [self bit_resetSafeJsonStream:&BITSafeJsonEventsString];
   _dataItemCount = 0;
 }
 
@@ -175,18 +175,18 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Since we can't persist every event right away, we write it to a simple C string.
     // This can then be written to disk by a signal handler in case of a crash.
-    bit_appendStringToSafeJsonStream(string, &(BITSafeJsonEventsString));
+    [self bit_appendString:string toSafeJsonStream:&(BITSafeJsonEventsString)];
     _dataItemCount += 1;
   }
 }
 
-void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {
+- (void)bit_appendString:(NSString *)string toSafeJsonStream:(char **)jsonString {
   if (jsonString == NULL) { return; }
   
   if (!string) { return; }
   
   if (*jsonString == NULL || strlen(*jsonString) == 0) {
-    bit_resetSafeJsonStream(jsonString);
+    [self bit_resetSafeJsonStream:jsonString];
   }
 
   if (string.length == 0) { return; }
@@ -198,10 +198,12 @@ void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {
   *jsonString = new_string;
 }
 
-void bit_resetSafeJsonStream(char **string) {
+- (void)bit_resetSafeJsonStream:(char **)string {
   if (!string) { return; }
-  free(*string);
-  *string = strdup("");
+  @synchronized (self) {
+    free(*string);
+    *string = strdup("");
+  }
 }
 
 #pragma mark - Batching
