@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init {
   if (self = [super init]) {
-    [self bit_resetSafeJsonStream:&BITSafeJsonEventsString];
+    bit_resetSafeJsonStream(&BITSafeJsonEventsString);
     _dataItemCount = 0;
     if (bit_isDebuggerAttached()) {
       _maxBatchSize = BITDebugMaxBatchSize;
@@ -83,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)resetQueue {
-  [self bit_resetSafeJsonStream:&BITSafeJsonEventsString];
+  bit_resetSafeJsonStream(&BITSafeJsonEventsString);
   _dataItemCount = 0;
 }
 
@@ -175,34 +175,48 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Since we can't persist every event right away, we write it to a simple C string.
     // This can then be written to disk by a signal handler in case of a crash.
-    [self bit_appendString:string toSafeJsonStream:&(BITSafeJsonEventsString)];
+    bit_appendStringToSafeJsonStream(string, &(BITSafeJsonEventsString));
     _dataItemCount += 1;
   }
 }
 
-- (void)bit_appendString:(NSString *)string toSafeJsonStream:(char **)jsonString {
+void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {
   if (jsonString == NULL) { return; }
   
   if (!string) { return; }
   
   if (*jsonString == NULL || strlen(*jsonString) == 0) {
-    [self bit_resetSafeJsonStream:jsonString];
+    bit_resetSafeJsonStream(jsonString);
   }
 
   if (string.length == 0) { return; }
   
   char *new_string = NULL;
+  char *prev_jsonString = *jsonString;
+
   // Concatenate old string with new JSON string and add a comma.
   asprintf(&new_string, "%s%.*s\n", *jsonString, (int)MIN(string.length, (NSUInteger)INT_MAX), string.UTF8String);
-  free(*jsonString);
-  *jsonString = new_string;
+
+  // Compare prev_jsonString and *jsonString, if they point to one address then function sets *jsonString to new_string
+  if(OSAtomicCompareAndSwapPtr(prev_jsonString,new_string,(void*)jsonString)) {
+
+    // *jsonString has not been changed, we remove a previous value
+    free(prev_jsonString);
+  } else {
+
+    // *jsonString has been changed
+    free(new_string);
+  }
 }
 
-- (void)bit_resetSafeJsonStream:(char **)string {
+void bit_resetSafeJsonStream(char **string) {
   if (!string) { return; }
-  @synchronized (self) {
-    free(*string);
-    *string = strdup("");
+  char *prev_string = *string;
+  char *new_value = strdup("");
+  if(OSAtomicCompareAndSwapPtr(prev_string,new_value,(void*)string)) {
+    free(prev_string);
+  } else {
+    free(new_value);
   }
 }
 
@@ -232,19 +246,19 @@ NS_ASSUME_NONNULL_BEGIN
   if ([self timerIsRunning]) {
     [self invalidateTimer];
   }
-  
+
   self.timerSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.dataItemsOperations);
   dispatch_source_set_timer(self.timerSource, dispatch_walltime(NULL, NSEC_PER_SEC * self.batchInterval), 1ull * NSEC_PER_SEC, 1ull * NSEC_PER_SEC);
   __weak typeof(self) weakSelf = self;
   dispatch_source_set_event_handler(self.timerSource, ^{
     typeof(self) strongSelf = weakSelf;
     if (strongSelf) {
-        if (strongSelf->_dataItemCount > 0) {
-            [strongSelf persistDataItemQueue];
-        } else {
-            strongSelf.channelBlocked = NO;
-        }
-        [strongSelf invalidateTimer];
+      if (strongSelf->_dataItemCount > 0) {
+        [strongSelf persistDataItemQueue];
+      } else {
+        strongSelf.channelBlocked = NO;
+      }
+      [strongSelf invalidateTimer];
     }
   });
   dispatch_resume(self.timerSource);
