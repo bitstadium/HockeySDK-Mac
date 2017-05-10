@@ -6,4 +6,6 @@
 
 - (id)initWithManager:(BITFeedbackManager *)feedbackManager;
 
+- (void)prepareWithItems:(NSArray *)items;
+
 @end

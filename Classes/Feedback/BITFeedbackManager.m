@@ -109,6 +109,17 @@
   [_feedbackWindowController.window makeKeyAndOrderFront:self];
 }
 
+- (void)showFeedbackComposeViewWithPreparedItems:(NSArray *)attachmentItems {
+  if (!_feedbackWindowController) {
+    _feedbackWindowController = [[BITFeedbackWindowController alloc] initWithManager:self];
+  }
+
+  [_feedbackWindowController prepareWithItems:attachmentItems];
+
+  [_feedbackWindowController showWindow:self];
+  [_feedbackWindowController.window makeKeyAndOrderFront:self];
+}
+
 
 #pragma mark - Manager Control
 

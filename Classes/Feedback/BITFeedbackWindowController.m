@@ -478,6 +478,85 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   [self togglePreviewPanel:self];
 }
 
+- (void)prepareWithItems:(NSArray *)items {
+  self.messageText = [[NSAttributedString alloc] init];
+  for (id item in items) {
+
+    if ([item isKindOfClass:[NSString class]]) {
+      NSMutableAttributedString *newString = [self.messageText mutableCopy];
+      [newString appendAttributedString:[[NSAttributedString alloc]
+                                            initWithString:item]];
+      self.messageText = newString;
+    } else if ([item isKindOfClass:[NSURL class]]) {
+      NSMutableAttributedString *newString = [self.messageText mutableCopy];
+      [newString
+          appendAttributedString:[[NSAttributedString alloc]
+                                     initWithString:[(NSURL *)item
+                                                        absoluteString]]];
+      self.messageText = newString;
+    } else if ([item isKindOfClass:[NSImage class]]) {
+      NSImage *image = item;
+
+      NSData *imageData = [image TIFFRepresentation];
+      NSBitmapImageRep *imageRep =
+          [NSBitmapImageRep imageRepWithData:imageData];
+      NSDictionary *imageProps =
+          [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.7]
+                                      forKey:NSImageCompressionFactor];
+      imageData = [imageRep representationUsingType:NSJPEGFileType
+                                         properties:imageProps];
+
+      BITFeedbackMessageAttachment *attachment =
+          [BITFeedbackMessageAttachment attachmentWithData:imageData
+                                               contentType:@"image/jpeg"];
+      attachment.originalFilename =
+          [NSString stringWithFormat:@"Image_%li.jpg",
+                                     (unsigned long)[self.attachments count]];
+      [self.attachments addObject:attachment];
+    } else if ([item isKindOfClass:[NSData class]]) {
+      BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment
+          attachmentWithData:item
+                 contentType:@"application/octet-stream"];
+      attachment.originalFilename =
+          [NSString stringWithFormat:@"Attachment_%li.data",
+                                     (unsigned long)[self.attachments count]];
+      [self.attachments addObject:attachment];
+    } else if ([item isKindOfClass:[BITHockeyAttachment class]]) {
+      BITHockeyAttachment *sourceAttachment = (BITHockeyAttachment *)item;
+
+      if (!sourceAttachment.hockeyAttachmentData) {
+        BITHockeyLog(@"BITHockeyAttachment instance doesn't contain any data.");
+        continue;
+      }
+
+      NSString *filename =
+          [NSString stringWithFormat:@"Attachment_%li.data",
+                                     (unsigned long)[self.attachments count]];
+      if (sourceAttachment.filename) {
+        filename = sourceAttachment.filename;
+      }
+
+      BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment
+          attachmentWithData:sourceAttachment.hockeyAttachmentData
+                 contentType:sourceAttachment.contentType];
+      attachment.originalFilename = filename;
+      [self.attachments addObject:attachment];
+      [self.composeAttacchmentsArrayController setContent:self.attachments];
+      [self.feedbackAttachmentsTableView
+              selectRowIndexes:[NSIndexSet
+                                   indexSetWithIndex:[self.attachments count] -
+                                                     1]
+          byExtendingSelection:NO];
+      [self.feedbackAttachmentsTableView
+          scrollRowToVisible:[self.attachments count] - 1];
+
+      [self showComposeAttachments];
+    } else {
+      BITHockeyLog(@"Unknown item type %@", item);
+    }
+  }
+}
+
 - (void)addAttachmentWithFilename:(NSString *)filename {
   NSError *error = nil;
   NSData *data = [NSData dataWithContentsOfFile:filename options:0 error:&error];
