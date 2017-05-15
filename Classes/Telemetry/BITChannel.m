@@ -71,12 +71,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)persistDataItemQueue {
   [self invalidateTimer];
-  if (!BITSafeJsonEventsString || strlen(BITSafeJsonEventsString) == 0) {
+
+  char* jsonStream = NULL;
+
+  do {
+    jsonStream = BITSafeJsonEventsString;
+    if(OSAtomicCompareAndSwapPtr(jsonStream,NULL,(void*)BITSafeJsonEventsString)) {
+      break;
+    }
+  } while(true);
+
+  if (!jsonStream || strlen(jsonStream) == 0) {
+    free(jsonStream);
     return;
   }
 
-  NSData *bundle = [NSData dataWithBytes:BITSafeJsonEventsString length:strlen(BITSafeJsonEventsString)];
+  NSData *bundle = [NSData dataWithBytes:jsonStream length:strlen(jsonStream)];
   [self.persistence persistBundle:bundle];
+
+  free(jsonStream);
 
   // Reset both, the async-signal-safe and item counter.
   [self resetQueue];
@@ -118,7 +131,7 @@ NS_ASSUME_NONNULL_BEGIN
       // Case 3: Max batch count has been reached, so write queue to disk and delete all items.
       [strongSelf persistDataItemQueue];
     
-    } else if (strongSelf->_dataItemCount == 1) {
+    } else if (strongSelf->_dataItemCount > 0) {
       // Case 4: It is the first item, let's start the timer.
       if (![strongSelf timerIsRunning]) {
         [strongSelf startTimer];
@@ -192,16 +205,39 @@ void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {
   if (string.length == 0) { return; }
   
   char *new_string = NULL;
-  // Concatenate old string with new JSON string and add a comma.
-  asprintf(&new_string, "%s%.*s\n", *jsonString, (int)MIN(string.length, (NSUInteger)INT_MAX), string.UTF8String);
-  free(*jsonString);
-  *jsonString = new_string;
+  char *prev_jsonString = NULL;
+
+  do {
+    prev_jsonString = *jsonString;
+
+    // Concatenate old string with new JSON string and add a comma.
+    asprintf(&new_string, "%s%.*s\n", prev_jsonString, (int)MIN(string.length, (NSUInteger)INT_MAX), string.UTF8String);
+
+    // Compare prev_jsonString and *jsonString, if they point to one address then function sets *jsonString to new_string
+    if(OSAtomicCompareAndSwapPtr(prev_jsonString,new_string,(void*)jsonString)) {
+
+      // *jsonString has not been changed, we remove a previous value
+      free(prev_jsonString);
+      return;
+    } else {
+
+      // *jsonString has been changed
+      free(new_string);
+    }
+  } while (true);
 }
 
 void bit_resetSafeJsonStream(char **string) {
   if (!string) { return; }
-  free(*string);
-  *string = strdup("");
+  char *prev_string = NULL;
+  char *new_value = strdup("");
+  do {
+    prev_string = *string;
+    if(OSAtomicCompareAndSwapPtr(prev_string,new_value,(void*)string)) {
+      free(prev_string);
+      return;
+    }
+  } while(true);
 }
 
 #pragma mark - Batching
@@ -230,19 +266,19 @@ void bit_resetSafeJsonStream(char **string) {
   if ([self timerIsRunning]) {
     [self invalidateTimer];
   }
-  
+
   self.timerSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.dataItemsOperations);
   dispatch_source_set_timer(self.timerSource, dispatch_walltime(NULL, NSEC_PER_SEC * self.batchInterval), 1ull * NSEC_PER_SEC, 1ull * NSEC_PER_SEC);
   __weak typeof(self) weakSelf = self;
   dispatch_source_set_event_handler(self.timerSource, ^{
     typeof(self) strongSelf = weakSelf;
     if (strongSelf) {
-        if (strongSelf->_dataItemCount > 0) {
-            [strongSelf persistDataItemQueue];
-        } else {
-            strongSelf.channelBlocked = NO;
-        }
-        [strongSelf invalidateTimer];
+      if (strongSelf->_dataItemCount > 0) {
+        [strongSelf persistDataItemQueue];
+      } else {
+        strongSelf.channelBlocked = NO;
+      }
+      [strongSelf invalidateTimer];
     }
   });
   dispatch_resume(self.timerSource);
