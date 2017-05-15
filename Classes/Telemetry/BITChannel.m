@@ -118,7 +118,7 @@ NS_ASSUME_NONNULL_BEGIN
       // Case 3: Max batch count has been reached, so write queue to disk and delete all items.
       [strongSelf persistDataItemQueue];
     
-    } else if (strongSelf->_dataItemCount == 1) {
+    } else if (strongSelf->_dataItemCount > 0) {
       // Case 4: It is the first item, let's start the timer.
       if (![strongSelf timerIsRunning]) {
         [strongSelf startTimer];
@@ -194,30 +194,33 @@ void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {
   char *new_string = NULL;
   char *prev_jsonString = *jsonString;
 
-  // Concatenate old string with new JSON string and add a comma.
-  asprintf(&new_string, "%s%.*s\n", *jsonString, (int)MIN(string.length, (NSUInteger)INT_MAX), string.UTF8String);
+  do {
 
-  // Compare prev_jsonString and *jsonString, if they point to one address then function sets *jsonString to new_string
-  if(OSAtomicCompareAndSwapPtr(prev_jsonString,new_string,(void*)jsonString)) {
+    // Concatenate old string with new JSON string and add a comma.
+    asprintf(&new_string, "%s%.*s\n", prev_jsonString, (int)MIN(string.length, (NSUInteger)INT_MAX), string.UTF8String);
 
-    // *jsonString has not been changed, we remove a previous value
-    free(prev_jsonString);
-  } else {
+    // Compare prev_jsonString and *jsonString, if they point to one address then function sets *jsonString to new_string
+    if(OSAtomicCompareAndSwapPtr(prev_jsonString,new_string,(void*)jsonString)) {
 
-    // *jsonString has been changed
-    free(new_string);
-  }
+      // *jsonString has not been changed, we remove a previous value
+      free(prev_jsonString);
+    } else {
+
+      // *jsonString has been changed
+      free(new_string);
+    }
+  } while (true);
 }
 
 void bit_resetSafeJsonStream(char **string) {
   if (!string) { return; }
   char *prev_string = *string;
   char *new_value = strdup("");
-  if(OSAtomicCompareAndSwapPtr(prev_string,new_value,(void*)string)) {
-    free(prev_string);
-  } else {
-    free(new_value);
-  }
+  do {
+    if(OSAtomicCompareAndSwapPtr(prev_string,new_value,(void*)string)) {
+      free(prev_string);
+    }
+  } while(true);
 }
 
 #pragma mark - Batching
