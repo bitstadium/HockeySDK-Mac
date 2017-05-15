@@ -73,24 +73,23 @@ NS_ASSUME_NONNULL_BEGIN
   [self invalidateTimer];
 
   char* jsonStream = NULL;
-  char* prev_jsonString = NULL;
 
   do {
-    prev_jsonString = BITSafeJsonEventsString;
-    if(OSAtomicCompareAndSwapPtr(prev_jsonString,jsonStream,(void*)BITSafeJsonEventsString)) {
-      free(prev_jsonString);
+    jsonStream = BITSafeJsonEventsString;
+    if(OSAtomicCompareAndSwapPtr(jsonStream,NULL,(void*)BITSafeJsonEventsString)) {
       break;
-    } else {
-      free(jsonStream);
     }
   } while(true);
 
   if (!jsonStream || strlen(jsonStream) == 0) {
+    free(jsonStream);
     return;
   }
 
   NSData *bundle = [NSData dataWithBytes:jsonStream length:strlen(jsonStream)];
   [self.persistence persistBundle:bundle];
+
+  free(jsonStream);
 
   // Reset both, the async-signal-safe and item counter.
   [self resetQueue];
@@ -230,9 +229,10 @@ void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {
 
 void bit_resetSafeJsonStream(char **string) {
   if (!string) { return; }
-  char *prev_string = *string;
+  char *prev_string = NULL;
   char *new_value = strdup("");
   do {
+    prev_string = *string;
     if(OSAtomicCompareAndSwapPtr(prev_string,new_value,(void*)string)) {
       free(prev_string);
       return;
