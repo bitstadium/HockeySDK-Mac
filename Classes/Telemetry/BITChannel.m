@@ -71,11 +71,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)persistDataItemQueue {
   [self invalidateTimer];
-  if (!BITSafeJsonEventsString || strlen(BITSafeJsonEventsString) == 0) {
+
+  char* jsonStream = NULL;
+  char* prev_jsonString = NULL;
+
+  do {
+    prev_jsonString = BITSafeJsonEventsString;
+    if(OSAtomicCompareAndSwapPtr(prev_jsonString,jsonStream,(void*)BITSafeJsonEventsString)) {
+      free(prev_jsonString);
+      break;
+    } else {
+      free(jsonStream);
+    }
+  } while(true);
+
+  if (!jsonStream || strlen(jsonStream) == 0) {
     return;
   }
 
-  NSData *bundle = [NSData dataWithBytes:BITSafeJsonEventsString length:strlen(BITSafeJsonEventsString)];
+  NSData *bundle = [NSData dataWithBytes:jsonStream length:strlen(jsonStream)];
   [self.persistence persistBundle:bundle];
 
   // Reset both, the async-signal-safe and item counter.
@@ -192,9 +206,10 @@ void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {
   if (string.length == 0) { return; }
   
   char *new_string = NULL;
-  char *prev_jsonString = *jsonString;
+  char *prev_jsonString = NULL;
 
   do {
+    prev_jsonString = *jsonString;
 
     // Concatenate old string with new JSON string and add a comma.
     asprintf(&new_string, "%s%.*s\n", prev_jsonString, (int)MIN(string.length, (NSUInteger)INT_MAX), string.UTF8String);
@@ -204,6 +219,7 @@ void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {
 
       // *jsonString has not been changed, we remove a previous value
       free(prev_jsonString);
+      return;
     } else {
 
       // *jsonString has been changed
@@ -219,6 +235,7 @@ void bit_resetSafeJsonStream(char **string) {
   do {
     if(OSAtomicCompareAndSwapPtr(prev_string,new_value,(void*)string)) {
       free(prev_string);
+      return;
     }
   } while(true);
 }
