@@ -8,7 +8,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT char *BITSafeJsonEventsString;
+FOUNDATION_EXPORT char *_Nullable BITSafeJsonEventsString;
 
 /**
  *  Items get queued before they are persisted and sent out as a batch. This class managed the queue, and forwards the batch
