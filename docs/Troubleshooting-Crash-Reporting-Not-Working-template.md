@@ -11,7 +11,7 @@ This is a checklist to help find the issue if crashes do not appear in HockeyApp
 
 4. Enable the debug logging option and check the output if the Crash Manager gets `Setup`, `Started`, returns no error message and sending the crash report to the server results in no error:
 
-        [[BITHockeyManager shareHockeyManager] setDebugLogEnabled: YES];
+        [BITHockeyManager sharedHockeyManager].logLevel = BITLogLevelDebug;
     
 
 5. Make sure Xcode debugger is not attached while causing the app to crash

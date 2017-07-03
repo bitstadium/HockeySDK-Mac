@@ -144,7 +144,8 @@
   _attachmentsAdded = 0;
   
   NSArray *previewableAttachments = self.message.previewableAttachments;
-
+  [self clearAllImageViews];
+  
   if (_attachmentsAdded == [previewableAttachments count]) return;
   
   if (previewableAttachments) {
@@ -211,6 +212,15 @@
   [super drawRect:dirtyRect];
 }
 
+- (void)clearAllImageViews{
+  
+  // Since we simultaneously loop over and mutate the view's subviews array we need to go backwards
+  for (NSView *subview in [self.subviews reverseObjectEnumerator]) {
+    if ([subview isKindOfClass:[BITActivityIndicatorButton class]]) {
+      [subview removeFromSuperview];
+    }
+  }
+}
 
 + (NSRect)messageUsedRect:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width {
   CGRect maxMessageHeightFrame = CGRectMake(0, 0, width - FRAME_SIDE_BORDER * 2 - 4, CGFLOAT_MAX);
