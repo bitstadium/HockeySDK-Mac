@@ -1,3 +1,6 @@
+## 4.1.4
+- [FIX] Fix UI glitches in Feedback UI
+
 ## 4.1.3
 
 - [IMPROVEMENT] Downgrading to PLCrashReporter 1.2.1 as the upgrade to 1.3 in the last release lead to lowered qualitfy of crash reports for an edge case.
