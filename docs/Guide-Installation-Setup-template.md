@@ -1,6 +1,9 @@
-## Version 4.1.3
+[![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
+[![Version](https://img.shields.io/cocoapods/v/HockeySDK-Mac.svg)](http://cocoadocs.org/docsets/HockeySDK-Mac)
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.1.3/docs/docs/Changelog.html)
+## Version 4.1.4
+
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.1.4/docs/docs/Changelog.html)
 
 **NOTE:** With the release of HockeySDK 4.0.0-alpha.1 a bug was introduced which lead to the exclusion of the Application Support folder from iCloud and iTunes backups.
 
@@ -24,18 +27,18 @@ This document contains the following sections:
 
 1. [Requirements](#requirements)
 2. [Setup](#setup)
-3. [Advanced Setup](#advancedsetup) 
-1. [Setup with CocoaPods](#cocoapods)
-2. [Crash Reporting](#crashreporting)
-3. [User Metrics](#user-metrics)
-4. [Feedback](#feedback)
-5. [Sparkle](#sparkle)
-6. [Debug information](#debug)
+3. [Advanced Setup](#advancedsetup) 	
+	1. [Setup with CocoaPods](#cocoapods)
+	2. [Crash Reporting](#crashreporting)
+	3. [User Metrics](#user-metrics)
+	4. [Feedback](#feedback)
+	5. [Sparkle](#sparkle)
+	6. [Debug information](#debug)
 4. [Documentation](#documentation)
 5. [Troubleshooting](#troubleshooting)
 6. [Contributing](#contributing)
-1. [Code of Coduct](#codeofconduct)
-2. [Contributor License](#contributorlicense)
+	1. [Code of Coduct](#codeofconduct)
+	2. [Contributor License](#contributorlicense)
 7. [Contact](#contact)
 
 <a id="requirements"></a> 
@@ -70,13 +73,13 @@ From our experience, 3rd-party libraries usually reside inside a subdirectory (l
 3. Drag & drop `HockeySDK.framework` from your window in the `Finder` into your project in Xcode and move it to the desired location in the `Project Navigator` (e.g. into the group called `Vendor`)
 4. A popup will appear. Select `Create groups for any added folders` and set the checkmark for your target. Then click `Finish`.
 5. Now we’ll make sure the framework is copied into your app bundle:
-- Click on your project in the `Project Navigator` (⌘+1).
-- Click your target in the project editor.
-- Click on the `Build Phases` tab.
-- Click the `Add Build Phase` button at the bottom and choose `Add Copy Files`.
-- Click the disclosure triangle next to the new build phase.
-- Choose `Frameworks` from the Destination list.
-- Drag `HockeySDK-Mac` from the Project Navigator left sidebar to the list in the new Copy Files phase.
+	- Click on your project in the `Project Navigator` (⌘+1).
+	- Click your target in the project editor.
+	- Click on the `Build Phases` tab.
+	- Click the `Add Build Phase` button at the bottom and choose `Add Copy Files`.
+	- Click the disclosure triangle next to the new build phase.
+	- Choose `Frameworks` from the Destination list.
+	- Drag `HockeySDK-Mac` from the Project Navigator left sidebar to the list in the new Copy Files phase.
 
 6. Make sure to sign the app, since the SDK will store user related input in the keychain for privacy reasons
 
@@ -88,14 +91,14 @@ From our experience, 3rd-party libraries usually reside inside a subdirectory (l
 1. Open your `AppDelegate.m` file.
 2. Add the following line at the top of the file below your own `import` statements:
 
-```objectivec
+```
 @import HockeySDK;
 ```
 
 3. Search for the method `applicationDidFinishLaunching:`
 4. Add the following lines to setup and start the Application Insights SDK:
 
-```objectivec
+```
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 // Do some additional configuration if needed here
 [[BITHockeyManager sharedHockeyManager] startManager];
@@ -106,14 +109,14 @@ From our experience, 3rd-party libraries usually reside inside a subdirectory (l
 1. Open your `AppDelegate.swift` file.
 2. Add the following line at the top of the file below your own import statements:
 
-```swift
+```
 import HockeySDK
 ```
 
 3. Search for the method `applicationWillFinishLaunching`
 4. Add the following lines to setup and start the Application Insights SDK:
 
-```swift
+```
 BITHockeyManager.sharedHockeyManager().configureWithIdentifier("APP_IDENTIFIER")
 // Do some additional configuration if needed here
 BITHockeyManager.sharedHockeyManager().startManager()
@@ -135,7 +138,7 @@ If any crash report has been saved from the last time your application ran, `sta
 
 **Podfile**
 
-```ruby
+```
 platform :osx, '10.7'
 pod "HockeySDK-Mac"
 ```
@@ -152,7 +155,7 @@ To provide you with the best crash reporting, we are using [PLCrashReporter]("ht
 
 This feature can be disabled as follows:
 
-```objectivec
+```
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
 [[BITHockeyManager sharedHockeyManager] setDisableCrashManager: YES]; //disable crash reporting
@@ -160,11 +163,11 @@ This feature can be disabled as follows:
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
-#### 3.2.2 Autosend crash reports
+#### 3.2.2 Auto send crash reports
 
 Crashes are send the next time the app starts. If `crashManagerStatus` is set to `BITCrashManagerStatusAutoSend`, crashes will be send without any user interaction, otherwise an alert will appear allowing the users to decide whether they want to send the report or not.
 
-```objectivec
+```
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
 [[BITHockeyManager sharedHockeyManager].crashManager setAutoSubmitCrashReport: YES];
@@ -172,7 +175,7 @@ Crashes are send the next time the app starts. If `crashManagerStatus` is set to
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
-The SDK is not sending the reports right when the crash happens deliberately, because if is not safe to implement such a mechanism while being async-safe (any Objective-C code is _NOT_ async-safe!) and not causing more danger like a deadlock of the device, than helping. We found that users do start the app again because most don't know what happened, and you will get by far most of the reports.
+The SDK is not sending the reports right when the crash happens deliberately, because it is not safe to implement such a mechanism, while being async-safe (any Objective-C code is _NOT_ async-safe!) and not causing more danger, like a deadlock of the device. We found that users do start the app again because most don't know what happened, and you will get by far most of the reports.
 
 Sending the reports on startup is done asynchronously (non-blocking). This is the only safe way to ensure that the app won't be possibly killed by the iOS watchdog process, because startup could take too long and the app could not react to any user input when network conditions are bad or connectivity might be very slow.
 
@@ -184,7 +187,7 @@ On Mac OS X there are three types of crashes that are not reported to a register
 1. Custom `NSUncaughtExceptionHandler` don't start working until after `NSApplication` has finished calling all of its delegate methods!
 Example:
 
-```objectivec
+```
 - (void)applicationDidFinishLaunching:(NSNotification *)note {
 ...
 [NSException raise:@"ExceptionAtStartup" format:@"This will not be recognized!"];
@@ -195,7 +198,7 @@ Example:
 2. The default `NSUncaughtExceptionHandler` in `NSApplication` only logs exceptions to the console and ends their processing. Resulting in exceptions that occur in the `NSApplication` "scope" not occurring in a registered custom `NSUncaughtExceptionHandler`. 
 Example:
 
-```objectivec
+```
 - (void)applicationDidFinishLaunching:(NSNotification *)note {
 ...
 [self performSelector:@selector(delayedException) withObject:nil afterDelay:5];
@@ -211,7 +214,7 @@ NSArray *array = [NSArray array];
 3. Any exceptions occurring in IBAction or other GUI does not even reach the NSApplication default UncaughtExceptionHandler.
 Example:
 
-```objective
+```
 - (IBAction)doExceptionCrash:(id)sender {
 NSArray *array = [NSArray array];
 [array objectAtIndex:23];
@@ -248,7 +251,7 @@ Check the following tutorial for an example on how to add CocoaLumberjack log da
 
 Make sure to implement the protocol
 
-```objectivec
+```
 @interface YourAppDelegate () <BITHockeyManagerDelegate> {}
 
 @end
@@ -256,7 +259,7 @@ Make sure to implement the protocol
 
 and set the delegate:
 
-```objectivec
+```
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
 [[BITHockeyManager sharedHockeyManager] setDelegate: self];
@@ -275,7 +278,7 @@ HockeyApp automatically provides you with nice, intelligible, and informative me
 
 Just in case you want to opt-out of the automatic collection of anonymous users and sessions statistics, there is a way to turn this functionality off at any time:
 
-```objectivec
+```
 [BITHockeyManager sharedHockeyManager].disableMetricsManager = YES;
 ```
 
@@ -288,7 +291,7 @@ By tracking custom events, you can now get insight into how your customers use y
 
 **Objective-C**
 
-```objectivec
+```
 BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metricsManager;
 
 [metricsManager trackEventWithName:eventName]
@@ -296,7 +299,7 @@ BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metri
 
 **Swift**
 
-```swift
+```
 let metricsManager = BITHockeyManager.sharedHockeyManager().metricsManager
 
 metricsManager.trackEventWithName(eventName)
@@ -317,7 +320,7 @@ It's possible to attach porperties and/or measurements to a custom event.
 
 **Objective-C**
 
-```objectivec
+```
 BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metricsManager;
 
 NSDictionary *myProperties = @{@"Property 1" : @"Something",
@@ -332,7 +335,7 @@ NSDictionary *myMeasurements = @{@"Measurement 1" : @1,
 
 **Swift**
 
-```swift
+```
 let myProperties = ["Property 1": "Something", "Property 2": "Other thing", "Property 3" : "Totally different thing."]
 let myMeasurements = ["Measurement 1": 1, "Measurement 2": 2.3, "Measurement 3" : 30000]
 
@@ -347,7 +350,7 @@ metricsManager.trackEventWithName(eventName, properties: myProperties, myMeasure
 
 You should never create your own instance of `BITFeedbackManager` but use the one provided by the `[BITHockeyManager sharedHockeyManager]`:
 
-```objectivec
+```
 [BITHockeyManager sharedHockeyManager].feedbackManager
 ```
 
@@ -371,13 +374,13 @@ As of today (01/2016), Sparkle doesn't support Mac sandboxes. If you require thi
 
 1. Set the following additional Sparkle property:
 
-```objectivec
+```
 sparkleUpdater.sendsSystemProfile = YES;
 ```
 
 2. Add the following Sparkle delegate method (don't forget to bind `SUUpdater` to your appDelegate!):
 
-```objectivec
+```
 - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
 sendingSystemProfile:(BOOL)sendingProfile {
 return [[BITSystemProfile sharedSystemProfile] systemUsageData];
@@ -388,7 +391,7 @@ return [[BITSystemProfile sharedSystemProfile] systemUsageData];
 
 One example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
 
-```objectivec
+```
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification
 …      
 NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
@@ -404,8 +407,8 @@ BITSystemProfile *bsp = [BITSystemProfile sharedSystemProfile];
 ### 3.6 Debug information
 
 To check if data is send properly to HockeyApp and also see some additional SDK debug log data in the console, add the following line before `startManager`:
-```objectivec
 
+```
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
 [BITHockeyManager sharedHockeyManager].logLevel = BITLogLevelDebug;
