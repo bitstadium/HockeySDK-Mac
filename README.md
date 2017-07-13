@@ -22,21 +22,13 @@ The following feature is currently supported:
 
 This document contains the following sections:
 
-1. [Requirements](#requirements)
-2. [Setup](#setup)
-3. [Advanced Setup](#advancedsetup) 
-   1. [Setup with CocoaPods](#cocoapods)
-   2. [Crash Reporting](#crashreporting)
-   3. [User Metrics](#user-metrics)
-   4. [Feedback](#feedback)
-   5. [Sparkle](#sparkle)
-   6. [Debug information](#debug)
-4. [Documentation](#documentation)
-5. [Troubleshooting](#troubleshooting)
-6. [Contributing](#contributing)
-  1. [Code of Coduct](#codeofconduct)
-  2. [Contributor License](#contributorlicense)
-7. [Contact](#contact)
+1. [Setup](#Setup)
+2. [Documentation](#Documentation)
+3. [Contributing](#Contributing)
+  3.1 [Development environment](#developmentenvironment)
+  3.2 [Code of Coduct](#codeofconduct)
+  3.3 [Contributor License](#contributorlicense)
+4. [Contact](#contact)
 
 
 ## 1. Setup
