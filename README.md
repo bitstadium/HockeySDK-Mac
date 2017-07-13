@@ -20,17 +20,6 @@ The following feature is currently supported:
 
 4. **Add analytics to Sparkle:** If you are using Sparkle to provide app-updates (HockeyApp also supports Sparkle feeds for beta distribution) the SDK contains helpers to add some analytics data to each Sparkle request. 
 
-This document contains the following sections:
-
-1. [Setup](#Setup)
-2. [Documentation](#Documentation)
-3. [Contributing](#Contributing)
-  3.1 [Development environment](#developmentenvironment)
-  3.2 [Code of Coduct](#codeofconduct)
-  3.3 [Contributor License](#contributorlicense)
-4. [Contact](#contact)
-
-
 ## 1. Setup
 
 It is super easy to use HockeyApp in your iOS app. Have a look at our [documentation](https://www.hockeyapp.net/help/sdk/mac/4.1.4/docs/docs/Guide-Installation-Setup.html) and onboard your app within minutes.
