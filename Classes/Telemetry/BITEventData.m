@@ -26,8 +26,8 @@
   if (self.name != nil) {
     [dict setObject:self.name forKey:@"name"];
   }
-  if (self.properties !=nil) {
-    [dict setObject:self.properties forKey:@"properties"];
+  if (self.properties != nil) {
+    [dict setObject:(NSDictionary *)self.properties forKey:@"properties"];
   }
   if (self.measurements) {
     [dict setObject:self.measurements forKey:@"measurements"];
@@ -43,7 +43,7 @@
   if(self) {
     _envelopeTypeName = [coder decodeObjectForKey:@"self.envelopeTypeName"];
     _dataTypeName = [coder decodeObjectForKey:@"self.dataTypeName"];
-    _version = [coder decodeObjectForKey:@"self.version"];
+    _version = [coder decodeObjectForKey:@"self.version"] ?: @"";
     _properties = [coder decodeObjectForKey:@"self.properties"];
     _measurements = [coder decodeObjectForKey:@"self.measurements"];
   }

@@ -63,7 +63,7 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 }
 
 - (void)startManager {
-  self.sender = [[BITSender alloc] initWithPersistence:self.persistence serverURL:[NSURL URLWithString:self.serverURL]];
+  self.sender = [[BITSender alloc] initWithPersistence:self.persistence serverURL:(NSURL *)[NSURL URLWithString:self.serverURL]];
   [self.sender sendSavedDataAsync];
   _firstSessionCreation = [[NSDate date] timeIntervalSince1970];
   [self startNewSessionWithId:bit_UUID()];

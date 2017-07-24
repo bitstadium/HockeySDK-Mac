@@ -934,7 +934,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     osVersion = report.systemInfo.operatingSystemVersion;
     deviceModel = [BITSystemProfile deviceModel];
     appBinaryUUIDs = [self extractAppUUIDs:report];
-    if ([report.applicationInfo.applicationVersion compare:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
+    if ([report.applicationInfo.applicationVersion compare:(id)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
       _crashIdenticalCurrentVersion = YES;
     }
 
@@ -1037,7 +1037,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
                                                           filename:attachmentFilename]];
     }
     
-    [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:(NSData *)[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     
     return postBody;
 }

@@ -163,7 +163,7 @@ NS_ASSUME_NONNULL_BEGIN
     BITHockeyLogError(@"ERROR: JSONSerialization error: %@", error.localizedDescription);
     return @"{}";
   } else {
-    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] ?: @"";
   }
 }
 

@@ -19,7 +19,7 @@ extern NSString *const kBITHockeySDKURL;
 extern NSString *const kBITFeedbackAttachmentLoadedNotification;
 extern NSString *const kBITFeedbackAttachmentLoadedKey;
 
-#define BITHockeyLocalizedString(key,comment) NSLocalizedStringFromTableInBundle(key, @"HockeySDK", BITHockeyBundle, comment)
+#define BITHockeyLocalizedString(key,comment) (NSLocalizedStringFromTableInBundle(key, @"HockeySDK", BITHockeyBundle, comment) ?: @"")
 
 #define BIT_RGBCOLOR(r,g,b) [NSColor colorWithCalibratedRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
 

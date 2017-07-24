@@ -298,7 +298,7 @@
     self.lastMessageID = [unarchiver decodeObjectForKey:kBITFeedbackLastMessageID];
   
   if ([unarchiver containsValueForKey:kBITFeedbackMessages]) {
-    [self.feedbackList setArray:[unarchiver decodeObjectForKey:kBITFeedbackMessages]];
+    [self.feedbackList setArray:[unarchiver decodeObjectForKey:kBITFeedbackMessages] ?: @[]];
     
     [self sortFeedbackList];
     
@@ -709,7 +709,7 @@
   NSString *url = [NSString stringWithFormat:@"%@%@", self.serverURL, parameter];
   BITHockeyLogDebug(@"INFO: sending api request to %@", url);
   
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:1 timeoutInterval:10.0];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:(NSURL *)[NSURL URLWithString:url] cachePolicy:1 timeoutInterval:10.0];
   [request setHTTPMethod:httpMethod];
   [request setValue:@"Hockey/iOS" forHTTPHeaderField:@"User-Agent"];
   [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
@@ -759,7 +759,7 @@
       attachmentIndex++;
     }
     
-    [postBody appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:(NSData *)[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     
     [request setHTTPBody:postBody];
   }
@@ -833,7 +833,7 @@
       if (responseString && [responseString dataUsingEncoding:NSUTF8StringEncoding]) {
         NSError *error = NULL;
         
-        NSDictionary *feedDict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+        NSDictionary *feedDict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:(NSData *)[responseString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
         
         // server returned empty response?
         if (error) {

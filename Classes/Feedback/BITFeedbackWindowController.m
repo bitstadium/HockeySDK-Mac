@@ -588,7 +588,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   for (BITFeedbackMessageAttachment *attachment in message.attachments) {
     if (attachment.needsLoadingFromURL && !attachment.isLoading){
       attachment.isLoading = YES;
-      NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:attachment.sourceURL]];
+      NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:(NSURL *)[NSURL URLWithString:attachment.sourceURL]];
       __weak typeof (self) weakSelf = self;
       id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
       if (nsurlsessionClass) {
@@ -712,7 +712,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
     __weak QLPreviewPanel* blockPanel = panel;
     
     self.previewAttachment.isLoading = YES;
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.previewAttachment.sourceURL]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:(NSURL *)[NSURL URLWithString:self.previewAttachment.sourceURL]];
     
     __weak typeof (self) weakSelf = self;
     id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");

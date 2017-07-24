@@ -125,7 +125,7 @@
   
   self.messageTextField.stringValue = message.text;
   NSValueTransformer *valueTransformer = [NSValueTransformer valueTransformerForName:@"BITFeedbackMessageDateValueTransformer"];
-  self.dateTextField.stringValue = [valueTransformer transformedValue:message];
+  self.dateTextField.stringValue = [valueTransformer transformedValue:message] ?: @"";
   
   [self setNeedsDisplay:YES];
 }

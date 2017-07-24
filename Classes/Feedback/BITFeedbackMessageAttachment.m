@@ -83,7 +83,7 @@
 }
 
 - (BOOL)needsLoadingFromURL {
-  return (self.sourceURL && ![_fm fileExistsAtPath:[self.localURL path]]);
+  return (self.sourceURL && ![_fm fileExistsAtPath:(NSString *)[self.localURL path]]);
 }
 
 - (BOOL)isImage {

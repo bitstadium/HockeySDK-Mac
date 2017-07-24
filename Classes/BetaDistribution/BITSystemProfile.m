@@ -103,7 +103,7 @@
     if (![[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString]) {
       newVersion = YES;
     } else {
-      if ([(NSString *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString] compare:[bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] != NSOrderedSame) {
+      if ([(NSString *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString] compare:(id)[bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] != NSOrderedSame) {
         newVersion = YES;
       }
     }
