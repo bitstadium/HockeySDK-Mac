@@ -90,7 +90,7 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
   
   __weak typeof(self) weakSelf = self;
   
-  if(nil == _appDidEnterBackgroundObserver) {
+  if(nil == self.appDidEnterBackgroundObserver) {
     self.appDidEnterBackgroundObserver = [nc addObserverForName:NSApplicationDidResignActiveNotification
                                                      object:nil
                                                       queue:NSOperationQueue.mainQueue
@@ -99,7 +99,7 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
                                                    [strongSelf updateDidEnterBackgroundTime];
                                                  }];
   }
-  if(nil == _appWillEnterForegroundObserver) {
+  if(nil == self.appWillEnterForegroundObserver) {
     self.appWillEnterForegroundObserver = [nc addObserverForName:NSApplicationWillBecomeActiveNotification
                                                       object:nil
                                                        queue:NSOperationQueue.mainQueue

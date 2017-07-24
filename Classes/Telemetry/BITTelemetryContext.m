@@ -5,7 +5,7 @@
 #import "BITPersistence.h"
 #import "BITPersistencePrivate.h"
 
-NSString *const kBITUserMetaData = @"BITUserMetaData";
+static NSString *const kBITUserMetaData = @"BITUserMetaData";
 
 static char *const BITContextOperationsQueue = "net.hockeyapp.telemetryContextQueue";
 
@@ -18,7 +18,7 @@ static char *const BITContextOperationsQueue = "net.hockeyapp.telemetryContextQu
 
 -(instancetype)init {
   
-  if(self = [super init]) {
+  if((self = [self init])) {
     _operationsQueue = dispatch_queue_create(BITContextOperationsQueue, DISPATCH_QUEUE_CONCURRENT);
   }
   return self;

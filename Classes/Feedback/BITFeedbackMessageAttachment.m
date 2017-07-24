@@ -11,17 +11,13 @@
 @property (nonatomic, strong) NSData *internalData;
 @property (nonatomic, copy) NSString *filename;
 
+@property (nonatomic, strong) NSString *tempFilename;
+@property (nonatomic, strong) NSString *cachePath;
+@property (nonatomic, strong) NSFileManager *fm;
 
 @end
 
-@implementation BITFeedbackMessageAttachment {
-  NSString *_tempFilename;
-  
-  NSString *_cachePath;
-  
-  NSFileManager *_fm;
-}
-
+@implementation BITFeedbackMessageAttachment
 
 + (BITFeedbackMessageAttachment *)attachmentWithData:(NSData *)data contentType:(NSString *)contentType {
   
@@ -60,13 +56,13 @@
 }
 
 - (void)setData:(NSData *)data {
-  self->_internalData = data;
+  self.internalData = data;
   self.filename = [self possibleFilename];
-  [self->_internalData writeToFile:self.filename atomically:NO];
+  [self.internalData writeToFile:self.filename atomically:NO];
 }
 
 - (NSData *)data {
-  if (!self->_internalData && self.filename) {
+  if (!self.internalData && self.filename) {
     self.internalData = [NSData dataWithContentsOfFile:self.filename];
   }
   
@@ -83,7 +79,7 @@
 }
 
 - (BOOL)needsLoadingFromURL {
-  return (self.sourceURL && ![_fm fileExistsAtPath:(NSString *)[self.localURL path]]);
+  return (self.sourceURL && ![self.fm fileExistsAtPath:(NSString *)[self.localURL path]]);
 }
 
 - (BOOL)isImage {
@@ -91,7 +87,7 @@
 }
 
 - (NSURL *)localURL {
-  if (self.filename && [_fm fileExistsAtPath:self.filename]) {
+  if (self.filename && [self.fm fileExistsAtPath:self.filename]) {
     return [NSURL fileURLWithPath:self.filename];
   }
   
@@ -179,12 +175,12 @@
 #pragma mark - Persistence Helpers
 
 - (NSString *)possibleFilename {
-  if (_tempFilename) {
-    return _tempFilename;
+  if (self.tempFilename) {
+    return self.tempFilename;
   }
   
   NSString *uniqueString = bit_UUID();
-  _tempFilename = [_cachePath stringByAppendingPathComponent:uniqueString];
+  self.tempFilename = [self.cachePath stringByAppendingPathComponent:uniqueString];
   
   // File extension that suits the Content type.
   
@@ -193,7 +189,7 @@
     CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, mimeType, NULL);
     CFStringRef extension = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
     if (extension) {
-      _tempFilename = [_tempFilename stringByAppendingPathExtension:(__bridge NSString *)(extension)];
+      self.tempFilename = [self.tempFilename stringByAppendingPathExtension:(__bridge NSString *)(extension)];
       CFRelease(extension);
     }
     if (uti) {
@@ -201,12 +197,12 @@
     }
   }
   
-  return _tempFilename;
+  return self.tempFilename;
 }
 
 - (void)deleteContents {
   if (self.filename) {
-    [_fm removeItemAtPath:self.filename error:nil];
+    [self.fm removeItemAtPath:self.filename error:nil];
     self.filename = nil;
   }
 }

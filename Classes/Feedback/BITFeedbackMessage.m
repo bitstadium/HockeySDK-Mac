@@ -29,16 +29,16 @@
 - (id)copyWithZone:(NSZone *)zone {
   BITFeedbackMessage *copy = [[[self class] allocWithZone: zone] init];
   
-  [copy setText: _text];
-  [copy setUserID: _userID];
-  [copy setName: _name];
-  [copy setEmail: _email];
-  [copy setDate: _date];
-  [copy setToken: _token];
-  [copy setMessageID: _messageID];
-  [copy setStatus: _status];
-  [copy setUserMessage: _userMessage];
-  [copy setAttachments: _attachments];
+  [copy setText: self.text];
+  [copy setUserID: self.userID];
+  [copy setName: self.name];
+  [copy setEmail: self.email];
+  [copy setDate: self.date];
+  [copy setToken: self.token];
+  [copy setMessageID: self.messageID];
+  [copy setStatus: self.status];
+  [copy setUserMessage: self.userMessage];
+  [copy setAttachments: self.attachments];
   
   return copy;
 }

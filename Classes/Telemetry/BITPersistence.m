@@ -81,7 +81,7 @@ static NSUInteger const BITDefaultFileCount = 50;
 
 - (BOOL)isFreeSpaceAvailable {
   NSArray *files = [self persistedFilesForType:BITPersistenceTypeTelemetry];
-  return files.count < _maxFileCount;
+  return files.count < self.maxFileCount;
 }
 
 - (NSString *)requestNextFilePath {

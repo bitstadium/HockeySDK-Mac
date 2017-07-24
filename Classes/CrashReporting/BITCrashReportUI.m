@@ -15,9 +15,9 @@
 - (void) endCrashReporter;
 @end
 
-const CGFloat kUserHeight = 50;
-const CGFloat kCommentsHeight = 105;
-const CGFloat kDetailsHeight = 285;
+static const CGFloat kUserHeight = 50;
+static const CGFloat kCommentsHeight = 105;
+static const CGFloat kDetailsHeight = 285;
 
 @implementation BITCrashReportUI {
   IBOutlet NSTextField *nameTextField;
