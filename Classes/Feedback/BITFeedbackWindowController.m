@@ -232,8 +232,8 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 
 - (NSImage *)imageToGreyImage:(NSImage *)image {
   // Create image rectangle with current image width/height
-  CGFloat actualWidth = image.size.width;
-  CGFloat actualHeight = image.size.height;
+  size_t actualWidth = (size_t)image.size.width;
+  size_t actualHeight = (size_t)image.size.height;
   
   CGRect imageRect = CGRectMake(0, 0, actualWidth, actualHeight);
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
@@ -282,7 +282,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   return newImage;
 }
 
-- (CGImageRef)newImageRefFromImage:(NSImage*)image; {
+- (CGImageRef)newImageRefFromImage:(NSImage*)image {
   NSData * imageData = [image TIFFRepresentation];
   CGImageRef imageRef;
   if(!imageData) return nil;

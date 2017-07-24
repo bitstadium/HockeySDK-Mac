@@ -1,7 +1,7 @@
+#import <tgmath.h>
+
 #import "BITFeedbackMessageCellView.h"
-
 #import "BITFeedbackMessageCellViewDelegate.h"
-
 #import "BITFeedbackMessage.h"
 #import "BITFeedbackMessageAttachment.h"
 
@@ -143,7 +143,7 @@
     
     NSInteger i = 0;
     
-    CGFloat attachmentsPerRow = floorf(self.frame.size.width / (FRAME_SIDE_BORDER + BIT_ATTACHMENT_THUMBNAIL_LENGTH));
+    CGFloat attachmentsPerRow = floor(self.frame.size.width / (FRAME_SIDE_BORDER + BIT_ATTACHMENT_THUMBNAIL_LENGTH));
     
     for (BITFeedbackMessageAttachment *attachment in self.message.attachments) {
       attachment.identifier = [NSNumber numberWithInteger:i];
@@ -229,7 +229,7 @@
   (void)[layoutManager glyphRangeForTextContainer:textContainer];
   NSRect aRect = [layoutManager usedRectForTextContainer:textContainer];
   
-  CGFloat attachmentsPerRow = floorf(width / (FRAME_SIDE_BORDER + BIT_ATTACHMENT_THUMBNAIL_LENGTH));
+  CGFloat attachmentsPerRow = floor(width / (FRAME_SIDE_BORDER + BIT_ATTACHMENT_THUMBNAIL_LENGTH));
   CGFloat attachmentHeight = BIT_ATTACHMENT_THUMBNAIL_LENGTH * ceil([message previewableAttachments].count / attachmentsPerRow);
   
   if (attachmentHeight > 0) attachmentHeight += 10;

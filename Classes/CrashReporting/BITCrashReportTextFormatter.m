@@ -202,7 +202,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
  */
 + (NSString *)stringValueForCrashReport:(BITPLCrashReport *)report crashReporterKey:(NSString *)crashReporterKey {
 	NSMutableString* text = [NSMutableString string];
-	boolean_t lp64 = true; // quiesce GCC uninitialized value warning
+	BOOL lp64 = true; // quiesce GCC uninitialized value warning
     
 	/* Header */
 	
