@@ -390,7 +390,7 @@
 
 - (BITFeedbackMessage *)messageAtIndex:(NSUInteger)index {
   if ([_feedbackList count] > index) {
-    return _feedbackList[index];
+    return [_feedbackList objectAtIndex:index];
   }
   
   return nil;
@@ -460,7 +460,7 @@
 }
 
 - (BOOL)deleteMessageAtIndex:(NSUInteger)index {
-  if (_feedbackList && [_feedbackList count] > index && _feedbackList[index]) {
+  if (_feedbackList && [_feedbackList count] > index && [_feedbackList objectAtIndex:index]) {
     [_feedbackList removeObjectAtIndex:index];
     
     [self saveMessages];
@@ -557,17 +557,16 @@
     return;
   }
   
-  NSDictionary *feedback = jsonDictionary[@"feedback"];
-  NSString *token = jsonDictionary[@"token"];
-  NSDictionary *feedbackObject = jsonDictionary[@"feedback"];
-  if (feedback && token && feedbackObject) {
+  NSDictionary *feedback = [jsonDictionary objectForKey:@"feedback"];
+  NSString *token = [jsonDictionary objectForKey:@"token"];
+  if (feedback && token) {
     // update the thread token, which is not available until the 1st message was successfully sent
     self.token = token;
     
     self.lastCheck = [NSDate date];
     
     // add all new messages
-    NSArray *feedMessages = feedbackObject[@"messages"];
+    NSArray *feedMessages = [feedback objectForKey:@"messages"];
     
     // get the message that was currently sent if available
     NSArray *messagesSendInProgress = [self messagesWithStatus:BITFeedbackMessageStatusSendInProgress];
@@ -578,9 +577,9 @@
     __block BOOL newMessage = NO;
     NSMutableSet *returnedMessageIDs = [[NSMutableSet alloc] init];
     
-    [feedMessages enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
-      if (((NSDictionary *)objMessage)[@"id"]) {
-        NSNumber *messageID = ((NSDictionary *)objMessage)[@"id"];
+    [feedMessages enumerateObjectsUsingBlock:^(NSDictionary * objMessage, NSUInteger messagesIdx, BOOL *stop) {
+      NSNumber *messageID = [objMessage objectForKey:@"id"];
+      if (messageID) {
         [returnedMessageIDs addObject:messageID];
         
         BITFeedbackMessage *thisMessage = [self messageWithID:messageID];
@@ -591,33 +590,35 @@
           // TODO: match messages in state conflict
           
           [messagesSendInProgress enumerateObjectsUsingBlock:^(id objSendInProgressMessage, NSUInteger messagesSendInProgressIdx, BOOL *stop2) {
-            if ([((NSDictionary *)objMessage)[@"token"] isEqualToString:[(BITFeedbackMessage *)objSendInProgressMessage token]]) {
+            if ([[objMessage objectForKey:@"token"] isEqualToString:[(BITFeedbackMessage *)objSendInProgressMessage token]]) {
               matchingSendInProgressOrInConflictMessage = objSendInProgressMessage;
               *stop2 = YES;
             }
           }];
 
           if (matchingSendInProgressOrInConflictMessage) {
-            matchingSendInProgressOrInConflictMessage.date = [self parseRFC3339Date:((NSDictionary *)objMessage)[@"created_at"]];
+            matchingSendInProgressOrInConflictMessage.date = [self parseRFC3339Date:[objMessage objectForKey:@"created_at"]];
             matchingSendInProgressOrInConflictMessage.messageID = messageID;
             matchingSendInProgressOrInConflictMessage.status = BITFeedbackMessageStatusRead;
           } else {
-            if ([(NSDictionary *)objMessage objectForKey:@"clean_text"] || [(NSDictionary *)objMessage objectForKey:@"text"] || [(NSDictionary *)objMessage objectForKey:@"attachments"]) {
+            if ([objMessage objectForKey:@"clean_text"] ||
+                [objMessage objectForKey:@"text"] ||
+                [objMessage objectForKey:@"attachments"]) {
               BITFeedbackMessage *message = [[BITFeedbackMessage alloc] init];
-              message.text = ((NSDictionary *)objMessage)[@"clean_text"] ?: ((NSDictionary *)objMessage)[@"text"] ?: @"";
-              message.name = ((NSDictionary *)objMessage)[@"name"] ?: @"";
-              message.email = ((NSDictionary *)objMessage)[@"email"] ?: @"";
+              message.text = [objMessage objectForKey:@"clean_text"] ?: [objMessage objectForKey:@"text"] ?: @"";
+              message.name = [objMessage objectForKey:@"name"] ?: @"";
+              message.email = [objMessage objectForKey:@"email"] ?: @"";
               
-              message.date = [self parseRFC3339Date:((NSDictionary *)objMessage)[@"created_at"]] ?: [NSDate date];
-              message.messageID = ((NSDictionary *)objMessage)[@"id"];
+              message.date = [self parseRFC3339Date:[objMessage objectForKey:@"created_at"]] ?: [NSDate date];
+              message.messageID = [objMessage objectForKey:@"id"];
               message.status = BITFeedbackMessageStatusUnread;
               
-              for (NSDictionary *attachmentData in objMessage[@"attachments"]) {
+              for (NSDictionary *attachmentData in [objMessage objectForKey:@"attachments"]) {
                 BITFeedbackMessageAttachment *newAttachment = [BITFeedbackMessageAttachment new];
-                newAttachment.originalFilename = attachmentData[@"file_name"];
-                newAttachment.identifier = attachmentData[@"id"];
-                newAttachment.sourceURL = attachmentData[@"url"];
-                newAttachment.contentType = attachmentData[@"content_type"];
+                newAttachment.originalFilename = [attachmentData objectForKey:@"file_name"];
+                newAttachment.identifier = [attachmentData objectForKey:@"id"];
+                newAttachment.sourceURL = [attachmentData objectForKey:@"url"];
+                newAttachment.contentType = [attachmentData objectForKey:@"content_type"];
                 [message addAttachmentsObject:newAttachment];
               }
               
@@ -722,7 +723,7 @@
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:@"Apple" forKey:@"oem" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[BITSystemProfile systemVersionString] forKey:@"os_version" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[self getDevicePlatform] forKey:@"model" boundary:boundary]];
-    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[[NSBundle mainBundle] preferredLocalizations][0] forKey:@"lang" boundary:boundary]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0] forKey:@"lang" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"bundle_version" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[message text] forKey:@"text" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[message token] forKey:@"message_token" boundary:boundary]];
@@ -890,7 +891,7 @@
 
   if ([pendingMessages count] > 0) {
     // we send one message at a time
-    BITFeedbackMessage *messageToSend = pendingMessages[0];
+    BITFeedbackMessage *messageToSend = [pendingMessages objectAtIndex:0];
     
     [messageToSend setStatus:BITFeedbackMessageStatusSendInProgress];
     if (self.userID)

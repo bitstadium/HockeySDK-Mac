@@ -164,7 +164,7 @@
   [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"app_version", @"App Version", app_version, app_version] forKeys:keys]];
   
   if ([[bundle preferredLocalizations] count] > 0) {
-    NSString *language = [bundle preferredLocalizations][0];
+    NSString *language = [[bundle preferredLocalizations] objectAtIndex:0];
     [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"used_lang", @"Used Language", language, language] forKeys:keys]];
   }
   

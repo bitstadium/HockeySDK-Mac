@@ -417,7 +417,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   NSFont *boldFont = [NSFont boldSystemFontOfSize:11];
 
   NSMutableDictionary *style = [NSMutableDictionary dictionary];
-  style[NSFontAttributeName] = boldFont;
+  [style setObject:boldFont forKey:NSFontAttributeName];
   
   NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
   [attributedText beginEditing];
@@ -470,7 +470,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 - (void)previewAttachment:(id)sender {
   NSInteger clickedRow = self.feedbackAttachmentsTableView.clickedRow;
   
-  self.previewAttachment = self.attachments[clickedRow];
+  self.previewAttachment = [self.attachments objectAtIndex:clickedRow];
   
   NSRect thumbnailRect = [self.feedbackAttachmentsTableView frameOfCellAtColumn:0 row:clickedRow];
   self.previewThumbnailRect = thumbnailRect;
@@ -647,8 +647,8 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 
 - (void)splitView:(NSSplitView *)sender resizeSubviewsWithOldSize:(NSSize)oldSize {
   CGFloat dividerThickness = [sender dividerThickness];
-  NSRect topRect  = [[sender subviews][0] frame];
-  NSRect bottomRect = [[sender subviews][1] frame];
+  NSRect topRect  = [[[sender subviews] objectAtIndex:0] frame];
+  NSRect bottomRect = [[[sender subviews] objectAtIndex:1] frame];
   NSRect newFrame  = [sender frame];
   
   topRect.size.height = newFrame.size.height - bottomRect.size.height - dividerThickness;
@@ -657,8 +657,8 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   bottomRect.size.width = newFrame.size.width;
   bottomRect.origin.y = topRect.size.height + dividerThickness;
   
-  [[sender subviews][0] setFrame:topRect];
-  [[sender subviews][1] setFrame:bottomRect];
+  [[[sender subviews] objectAtIndex:0] setFrame:topRect];
+  [[[sender subviews] objectAtIndex:1] setFrame:bottomRect];
 }
 
 

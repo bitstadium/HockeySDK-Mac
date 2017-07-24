@@ -159,7 +159,7 @@
   
   id<NSCopying> cacheKey = [NSValue valueWithSize:size];
   
-  if (!self.thumbnailRepresentations[cacheKey]) {
+  if (![self.thumbnailRepresentations objectForKey:cacheKey]) {
     NSImage *image = [self imageRepresentationWithSize:size];
     
     if (!image) {
@@ -169,7 +169,7 @@
     [self.thumbnailRepresentations setObject:image forKey:cacheKey];
   }
   
-  return self.thumbnailRepresentations[cacheKey];
+  return [self.thumbnailRepresentations objectForKey:cacheKey];
 }
 
 - (NSImage *)thumbnailRepresentation {

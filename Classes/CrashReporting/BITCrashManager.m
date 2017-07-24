@@ -201,7 +201,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   
   NSMutableDictionary *rootObj = [NSMutableDictionary dictionaryWithCapacity:2];
   if (_approvedCrashReports && [_approvedCrashReports count] > 0)
-    rootObj[kBITCrashApprovedReports] = _approvedCrashReports;
+    [rootObj setObject:_approvedCrashReports forKey:kBITCrashApprovedReports];
   
   NSData *plist = [NSPropertyListSerialization dataFromPropertyList:(id)rootObj
                                                              format:NSPropertyListBinaryFormat_v1_0
@@ -232,8 +232,8 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
                                              format:&format
                                              errorDescription:&errorString];
     
-    if (rootObj[kBITCrashApprovedReports])
-      [_approvedCrashReports setDictionary:rootObj[kBITCrashApprovedReports]];
+    if ([rootObj objectForKey:kBITCrashApprovedReports])
+      [_approvedCrashReports setDictionary:[rootObj objectForKey:kBITCrashApprovedReports]];
   } else {
     BITHockeyLogError(@"ERROR: Reading crash manager settings.");
   }
@@ -272,7 +272,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
  */
 - (void)cleanCrashReports {
   for (NSUInteger i=0; i < [_crashFiles count]; i++) {
-    [self cleanCrashReportWithFilename:_crashFiles[i]];
+    [self cleanCrashReportWithFilename:[_crashFiles objectAtIndex:0]];
   }
 }
 
@@ -351,11 +351,13 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   NSArray *uuidArray = [BITCrashReportTextFormatter arrayOfAppUUIDsForCrashReport:report];
   
   for (NSDictionary *element in uuidArray) {
-    if (element[kBITBinaryImageKeyUUID] && element[kBITBinaryImageKeyArch] && element[kBITBinaryImageKeyUUID]) {
+    if ([element objectForKey:kBITBinaryImageKeyType] &&
+        [element objectForKey:kBITBinaryImageKeyArch] &&
+        [element objectForKey:kBITBinaryImageKeyUUID]) {
       [uuidString appendFormat:@"<uuid type=\"%@\" arch=\"%@\">%@</uuid>",
-       element[kBITBinaryImageKeyType],
-       element[kBITBinaryImageKeyArch],
-       element[kBITBinaryImageKeyUUID]
+       [element objectForKey:kBITBinaryImageKeyType],
+       [element objectForKey:kBITBinaryImageKeyArch],
+       [element objectForKey:kBITBinaryImageKeyUUID]
        ];
     }
   }
@@ -470,8 +472,8 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(applicationLogForCrashManager:)]) {
     applicationLog = [self.delegate applicationLogForCrashManager:self] ?: @"";
   }
-  _dictOfLastSessionCrash[kBITCrashMetaApplicationLog] = applicationLog;
-  metaDict[kBITCrashMetaApplicationLog] = applicationLog;
+  [_dictOfLastSessionCrash setObject:applicationLog forKey:kBITCrashMetaApplicationLog];
+  [metaDict setObject:applicationLog forKey:kBITCrashMetaApplicationLog];
   
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(attachmentForCrashManager:)]) {
     BITHockeyLogVerbose(@"Processing attachment for crash report with filename %@", filename);
@@ -628,13 +630,13 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
  */
 - (NSString *)firstNotApprovedCrashReport {
   if ((!_approvedCrashReports || [_approvedCrashReports count] == 0) && [_crashFiles count] > 0) {
-    return _crashFiles[0];
+    return [_crashFiles objectAtIndex:0];
   }
   
   for (NSUInteger i=0; i < [_crashFiles count]; i++) {
-    NSString *filename = _crashFiles[i];
+    NSString *filename = [_crashFiles objectAtIndex:i];
     
-    if (!_approvedCrashReports[filename]) return filename;
+    if (![_approvedCrashReports objectForKey:filename]) return filename;
   }
   
   return nil;
@@ -656,7 +658,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     
     while ((file = [dirEnum nextObject])) {
       NSDictionary *fileAttributes = [_fileManager attributesOfItemAtPath:[_crashesDir stringByAppendingPathComponent:file] error:&error];
-      if ([fileAttributes[NSFileSize] intValue] > 0 &&
+      if ([[fileAttributes objectForKey:NSFileSize] intValue] > 0 &&
           ![file hasSuffix:@".DS_Store"] &&
           ![file hasSuffix:@".analyzer"] &&
           ![file hasSuffix:@".plist"] &&
@@ -896,7 +898,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   BITHockeyAttachment *attachment = nil;
   
   // we start sending always with the oldest pending one
-  NSString *filename = _crashFiles[0];
+  NSString *filename = [_crashFiles objectAtIndex:0];
   NSData *crashData = [NSData dataWithContentsOfFile:filename];
   if ([crashData length] > 0) {
     BITPLCrashReport *report = nil;
@@ -958,8 +960,8 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
       username = bit_stringValueFromKeychainForKey([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserName]) ?: @"";
       useremail = bit_stringValueFromKeychainForKey([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserEmail]) ?: @"";
       userid = bit_stringValueFromKeychainForKey([NSString stringWithFormat:@"%@.%@", [filename lastPathComponent], kBITCrashMetaUserID]) ?: @"";
-      applicationLog = metaDict[kBITCrashMetaApplicationLog] ?: @"";
-      description = metaDict[kBITCrashMetaDescription] ?: @"";
+      applicationLog = [metaDict objectForKey:kBITCrashMetaApplicationLog] ?: @"";
+      description = [metaDict objectForKey:kBITCrashMetaDescription] ?: @"";
       attachment = [self attachmentForCrashReport:filename];
     } else {
       BITHockeyLogError(@"ERROR: Reading crash meta data. %@", error);

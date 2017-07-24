@@ -116,7 +116,7 @@ NSString *bit_appIdentifierToGuid(NSString *appIdentifier) {
 }
 
 NSString *bit_appName(NSString *placeHolderString) {
-  NSString *appName = [[NSBundle mainBundle] localizedInfoDictionary][@"CFBundleDisplayName"];
+  NSString *appName = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"];
   if (!appName)
     appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] ?: placeHolderString;
   
@@ -180,7 +180,7 @@ NSString *bit_settingsDir(void) {
     
     // temporary directory for crashes grabbed from PLCrashReporter
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDir = paths[0];
+    NSString *cacheDir = [paths objectAtIndex:0];
     settingsDir = [[cacheDir stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:BITHOCKEY_IDENTIFIER];
     
     if (![fileManager fileExistsAtPath:settingsDir]) {
@@ -378,7 +378,7 @@ NSString *bit_deviceLocale(void) {
 }
 
 NSString *bit_deviceLanguage(void) {
-  return [[NSBundle mainBundle] preferredLocalizations][0];
+  return [[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0];
 }
 
 NSString *bit_screenSize(void){
@@ -394,8 +394,8 @@ NSString *bit_sdkVersion(void){
 }
 
 NSString *bit_appVersion(void){
-  NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
-  NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+  NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+  NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
   
   if(version){
     return [NSString stringWithFormat:@"%@ (%@)", version, build];

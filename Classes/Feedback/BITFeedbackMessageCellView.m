@@ -106,7 +106,7 @@
 - (void)updateAttachment:(NSNotification *)notification {
   if (!notification.userInfo) return;
   NSDictionary *dict = notification.userInfo;
-  BITFeedbackMessageAttachment *attachment = dict[kBITFeedbackAttachmentLoadedKey];
+  BITFeedbackMessageAttachment *attachment = [dict objectForKey:kBITFeedbackAttachmentLoadedKey];
   if (!attachment) return;
   
   if (![self.message.attachments containsObject:attachment]) return;
