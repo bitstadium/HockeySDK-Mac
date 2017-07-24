@@ -139,7 +139,7 @@ const CGFloat kDetailsHeight = 285;
 }
 
 
-- (IBAction)showDetails:(id)sender {
+- (IBAction)showDetails:(id) __unused sender {
   NSRect windowFrame = [[self window] frame];
   
   windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height + kDetailsHeight);
@@ -153,7 +153,7 @@ const CGFloat kDetailsHeight = 285;
 }
 
 
-- (IBAction)hideDetails:(id)sender {
+- (IBAction)hideDetails:(id) __unused sender {
   NSRect windowFrame = [[self window] frame];
   
   [self setShowDetails:NO];
@@ -166,13 +166,13 @@ const CGFloat kDetailsHeight = 285;
 }
 
 
-- (IBAction)cancelReport:(id)sender {
+- (IBAction)cancelReport:(id) __unused sender {
   [_crashManager handleUserInput:BITCrashManagerUserInputDontSend withUserProvidedMetaData:nil];
   
   [self endCrashReporter];
 }
 
-- (IBAction)submitReport:(id)sender {
+- (IBAction)submitReport:(id) __unused sender {
   [showButton setEnabled:NO];
   [hideButton setEnabled:NO];
   [cancelButton setEnabled:NO];
@@ -297,7 +297,7 @@ const CGFloat kDetailsHeight = 285;
 
 #pragma mark NSTextField Delegate
 
-- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
+- (BOOL)control:(NSControl *) __unused control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
   BOOL commandHandled = NO;
   
   if (commandSelector == @selector(insertNewline:)) {

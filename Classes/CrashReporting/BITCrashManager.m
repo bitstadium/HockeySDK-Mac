@@ -20,9 +20,6 @@
 #import <sys/sysctl.h>
 #import <objc/runtime.h>
 
-// flags if the crashlog analyzer is started. since this may theoretically crash we need to track it
-#define kHockeySDKAnalyzerStarted @"HockeySDKCrashReportAnalyzerStarted"
-
 // stores the set of crashreports that have been approved but aren't sent yet
 #define kBITCrashApprovedReports @"HockeySDKCrashApprovedReports"
 
@@ -34,7 +31,7 @@
 #define kBITCrashMetaDescription @"BITCrashMetaDescription"
 #define kBITCrashMetaAttachment @"BITCrashMetaAttachment"
 
-NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
+static NSString *const kHockeyErrorDomain = @"HockeyErrorDomain";
 
 
 static BITCrashManagerCallbacks bitCrashCallbacks = {
@@ -43,7 +40,7 @@ static BITCrashManagerCallbacks bitCrashCallbacks = {
 };
 
 // proxy implementation for PLCrashReporter to keep our interface stable while this can change
-static void plcr_post_crash_callback (siginfo_t *info, ucontext_t *uap, void *context) {
+static void plcr_post_crash_callback (siginfo_t * __unused info, ucontext_t * __unused uap, void *context) {
   if (bitCrashCallbacks.handleSignal != NULL)
     bitCrashCallbacks.handleSignal(context);
 }
@@ -94,7 +91,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 
 
 // C++ Exception Handler
-static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInfo *info) {
+ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInfo *info) {
   // This relies on a LOT of sneaky internal knowledge of how PLCR works and should not be considered a long-term solution.
   NSGetUncaughtExceptionHandler()([[BITCrashCXXExceptionWrapperException alloc] initWithCXXExceptionInfo:info]);
   abort();
@@ -334,7 +331,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   @try {
     unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:codedData];
   }
-  @catch (NSException *exception) {
+  @catch (NSException * __unused exception) {
     return nil;
   }
   

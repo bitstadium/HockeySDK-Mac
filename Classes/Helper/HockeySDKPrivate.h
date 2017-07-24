@@ -14,10 +14,10 @@
 
 #define BITHockeyBundle [NSBundle bundleWithIdentifier:BITHOCKEY_IDENTIFIER]
 //#define BITHOCKEYSDK_URL @"https://sdk.hockeyapp.net/"
-extern NSString *const __attribute__((unused)) kBITHockeySDKURL;
+extern NSString *const kBITHockeySDKURL;
 
-extern NSString *const __attribute__((unused)) kBITFeedbackAttachmentLoadedNotification;
-extern NSString *const __attribute__((unused)) kBITFeedbackAttachmentLoadedKey;
+extern NSString *const kBITFeedbackAttachmentLoadedNotification;
+extern NSString *const kBITFeedbackAttachmentLoadedKey;
 
 #define BITHockeyLocalizedString(key,comment) NSLocalizedStringFromTableInBundle(key, @"HockeySDK", BITHockeyBundle, comment)
 

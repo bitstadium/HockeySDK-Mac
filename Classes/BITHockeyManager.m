@@ -125,7 +125,7 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
                                      @"sdk_version": BITHOCKEY_VERSION,
                                      @"bundle_version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]
                                      }
-                        completion:^(BITHTTPOperation *operation, NSData* responseData, NSError *error) {
+                        completion:^(BITHTTPOperation *operation, NSData * __unused responseData, NSError * __unused error) {
                           switch (operation.response.statusCode) {
                             case 400:
                               BITHockeyLogError(@"ERROR: App ID not found");
@@ -161,7 +161,7 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 }
 
 
-- (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *)companyName delegate:(id <BITHockeyManagerDelegate>)delegate {
+- (void)configureWithIdentifier:(NSString *)appIdentifier companyName:(NSString *) __unused companyName delegate:(id <BITHockeyManagerDelegate>)delegate {
   _appIdentifier = [appIdentifier copy];
   
   self.delegate = delegate;

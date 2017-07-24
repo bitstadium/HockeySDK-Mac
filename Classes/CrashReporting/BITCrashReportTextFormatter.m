@@ -65,7 +65,7 @@ typedef NS_ENUM (NSInteger, BITBinaryImageType) {
 /**
  * Sort PLCrashReportBinaryImageInfo instances by their starting address.
  */
-static NSInteger binaryImageSort(id binary1, id binary2, void *context) {
+static NSInteger binaryImageSort(id binary1, id binary2, void * __unused context) {
     uint64_t addr1 = [binary1 imageBaseAddress];
     uint64_t addr2 = [binary2 imageBaseAddress];
     

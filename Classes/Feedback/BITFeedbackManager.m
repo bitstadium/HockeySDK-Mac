@@ -249,7 +249,7 @@
   @try {
     unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:codedData];
   }
-  @catch (NSException *exception) {
+  @catch (NSException * __unused exception) {
     return;
   }
 
@@ -399,7 +399,7 @@
 - (BITFeedbackMessage *)messageWithID:(NSNumber *)messageID {
   __block BITFeedbackMessage *message = nil;
   
-  [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger __unused messagesIdx, BOOL *stop) {
     if ([[objMessage messageID] isEqualToNumber:messageID]) {
       message = objMessage;
       *stop = YES;
@@ -412,7 +412,7 @@
 - (NSArray *)messagesWithStatus:(BITFeedbackMessageStatus)status {
   NSMutableArray *resultMessages = [[NSMutableArray alloc] initWithCapacity:[_feedbackList count]];
   
-  [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
     if ([objMessage status] == status) {
       [resultMessages addObject: objMessage];
     }
@@ -424,7 +424,7 @@
 - (BITFeedbackMessage *)lastMessageHavingID {
   __block BITFeedbackMessage *message = nil;
   
-  [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger __unused messagesIdx, BOOL *stop) {
     if ([[objMessage messageID] integerValue] != 0) {
       message = objMessage;
     } else {
@@ -437,7 +437,7 @@
 
 - (void)markSendInProgressMessagesAsPending {
   // make sure message that may have not been send successfully, get back into the right state to be send again
-  [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
     if ([(BITFeedbackMessage *)objMessage status] == BITFeedbackMessageStatusSendInProgress)
       [(BITFeedbackMessage *)objMessage setStatus:BITFeedbackMessageStatusSendPending];
   }];
@@ -445,7 +445,7 @@
 
 - (void)markSendInProgressMessagesAsInConflict {
   // make sure message that may have not been send successfully, get back into the right state to be send again
-  [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
     if ([(BITFeedbackMessage *)objMessage status] == BITFeedbackMessageStatusSendInProgress)
       [(BITFeedbackMessage *)objMessage setStatus:BITFeedbackMessageStatusInConflict];
   }];
@@ -535,7 +535,7 @@
 
     [self markSendInProgressMessagesAsPending];
     
-    [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
+    [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
       if ([(BITFeedbackMessage *)objMessage status] != BITFeedbackMessageStatusSendPending)
         [(BITFeedbackMessage *)objMessage setStatus:BITFeedbackMessageStatusArchived];
     }];
@@ -577,7 +577,7 @@
     __block BOOL newMessage = NO;
     NSMutableSet *returnedMessageIDs = [[NSMutableSet alloc] init];
     
-    [feedMessages enumerateObjectsUsingBlock:^(NSDictionary * objMessage, NSUInteger messagesIdx, BOOL *stop) {
+    [feedMessages enumerateObjectsUsingBlock:^(NSDictionary * objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
       NSNumber *messageID = [objMessage objectForKey:@"id"];
       if (messageID) {
         [returnedMessageIDs addObject:messageID];
@@ -589,7 +589,7 @@
           
           // TODO: match messages in state conflict
           
-          [messagesSendInProgress enumerateObjectsUsingBlock:^(id objSendInProgressMessage, NSUInteger messagesSendInProgressIdx, BOOL *stop2) {
+          [messagesSendInProgress enumerateObjectsUsingBlock:^(id objSendInProgressMessage, NSUInteger __unused messagesSendInProgressIdx, BOOL *stop2) {
             if ([[objMessage objectForKey:@"token"] isEqualToString:[(BITFeedbackMessage *)objSendInProgressMessage token]]) {
               matchingSendInProgressOrInConflictMessage = objSendInProgressMessage;
               *stop2 = YES;
@@ -811,7 +811,7 @@
         // set the token to the first message token, since this is identical
         __block NSString *token = nil;
         
-        [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
+        [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger __unused messagesIdx, BOOL *stop) {
           if ([(BITFeedbackMessage *)objMessage status] == BITFeedbackMessageStatusSendInProgress) {
             token = [(BITFeedbackMessage *)objMessage token];
             *stop = YES;
@@ -871,7 +871,7 @@
   
   [self sendNetworkRequestWithHTTPMethod:@"GET"
                              withMessage:nil
-                       completionHandler:^(NSError *err){
+                       completionHandler:^(NSError * __unused err){
                          // inform the UI to update its data in case the list is already showing
                          [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
                        }];
