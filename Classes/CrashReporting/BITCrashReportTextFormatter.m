@@ -1,5 +1,3 @@
-#import "CrashReporter.h"
-
 #import "HockeySDK.h"
 #import "HockeySDKPrivate.h"
 
@@ -15,6 +13,7 @@
 #define SEL_NAME_SECT "__cstring"
 #endif
 
+#import "BITCrashManagerPrivate.h"
 #import "BITCrashReportTextFormatterPrivate.h"
 
 /*
@@ -196,7 +195,6 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
  * the formatted result as a string.
  *
  * @param report The report to format.
- * @param textFormat The text format to use.
  *
  * @return Returns the formatted result on success, or nil if an error occurs.
  */
@@ -568,7 +566,6 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
  *
  *  @param regName The name of the register to use for getting the address
  *  @param thread  The crashed thread
- *  @param images  NSArray of binary images
  *
  *  @return The selector as a C string or NULL if no selector was found
  */

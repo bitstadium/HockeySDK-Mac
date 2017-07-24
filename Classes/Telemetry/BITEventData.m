@@ -20,10 +20,7 @@
   return self;
 }
 
-///
-/// Adds all members of this class to a dictionary
-/// @param dictionary to which the members of this class will be added.
-///
+/// Adds all members of this class to a dictionary.
 - (NSDictionary *)serializeToDictionary {
   NSMutableDictionary *dict = [super serializeToDictionary].mutableCopy;
   if (self.name != nil) {

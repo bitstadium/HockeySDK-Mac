@@ -10,12 +10,10 @@
 #import "BITCrashDetailsPrivate.h"
 #import "BITCrashMetaData.h"
 #import "BITCrashCXXExceptionHandler.h"
+#import "BITCrashReportTextFormatter.h"
 
 #import "BITHockeyHelper.h"
 #import "BITHockeyAppClient.h"
-
-#import "BITCrashReportTextFormatter.h"
-#import "CrashReporter.h"
 
 #import <sys/sysctl.h>
 #import <objc/runtime.h>
