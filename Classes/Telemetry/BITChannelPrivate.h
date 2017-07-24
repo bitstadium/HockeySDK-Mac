@@ -57,7 +57,7 @@ FOUNDATION_EXPORT NSString *const BITChannelBlockedNotification;
 /**
  *  An integer value that keeps tracks of the number of data items added to the JSON Stream string.
  */
-@property (nonatomic, assign) NSUInteger dataItemCount;
+@property (assign) NSUInteger dataItemCount;
 
 /**
  *  Indicates that channel is currently in a blocked state.
