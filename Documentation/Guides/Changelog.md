@@ -45,7 +45,7 @@ Add a bugfix from version 4.0.2:
 This SDK release explicitly includes the Application Support directory into backups. If you want to opt-out of this fix and keep the Application Directory's backup flag untouched, add the following line above the SDK setup code:
 
 - Objective-C:
-```objectivec
+```objc
 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"BITExcludeApplicationSupportFromBackup"];
 ```
 
@@ -87,7 +87,7 @@ NSUserDefaults.standardUserDefaults().setBool(true, forKey: "BITExcludeApplicati
 This SDK release explicitly includes the Application Support directory into backups. If you want to opt-out of this fix and keep the Application Directory's backup flag untouched, add the following line above the SDK setup code:
 
   	**Objective-C:**
-   ```objectivec
+   ```objc
    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kBITExcludeApplicationSupportFromBackup"];
    ```
     
