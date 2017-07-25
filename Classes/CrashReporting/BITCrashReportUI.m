@@ -15,6 +15,26 @@
 - (void) askCrashReportDetails;
 - (void) endCrashReporter;
 
+@property (nonatomic, strong) IBOutlet NSTextField *nameTextField;
+@property (nonatomic, strong) IBOutlet NSTextField *emailTextField;
+@property (nonatomic, strong) IBOutlet NSTextField *descriptionTextField;
+@property (nonatomic, strong) IBOutlet NSTextView  *crashLogTextView;
+
+@property (nonatomic, strong) IBOutlet NSTextField *nameTextFieldTitle;
+@property (nonatomic, strong) IBOutlet NSTextField *emailTextFieldTitle;
+
+@property (nonatomic, strong) IBOutlet NSTextField *introductionText;
+@property (nonatomic, strong) IBOutlet NSTextField *commentsTextFieldTitle;
+@property (nonatomic, strong) IBOutlet NSTextField *problemDescriptionTextFieldTitle;
+
+@property (nonatomic, strong) IBOutlet NSTextField *noteText;
+
+@property (nonatomic, strong) IBOutlet NSButton *disclosureButton;
+@property (nonatomic, strong) IBOutlet NSButton *showButton;
+@property (nonatomic, strong) IBOutlet NSButton *hideButton;
+@property (nonatomic, strong) IBOutlet NSButton *cancelButton;
+@property (nonatomic, strong) IBOutlet NSButton *submitButton;
+
 @property (nonatomic, strong) BITCrashManager *crashManager;
 @property (nonatomic, strong) NSString        *applicationName;
 @property (nonatomic, strong) NSMutableString *logContent;
@@ -29,28 +49,7 @@ static const CGFloat kUserHeight = 50;
 static const CGFloat kCommentsHeight = 105;
 static const CGFloat kDetailsHeight = 285;
 
-@implementation BITCrashReportUI {
-  IBOutlet NSTextField *nameTextField;
-  IBOutlet NSTextField *emailTextField;
-  IBOutlet NSTextField *descriptionTextField;
-  IBOutlet NSTextView  *crashLogTextView;
-  
-  IBOutlet NSTextField *nameTextFieldTitle;
-  IBOutlet NSTextField *emailTextFieldTitle;
-  
-  IBOutlet NSTextField *introductionText;
-  IBOutlet NSTextField *commentsTextFieldTitle;
-  IBOutlet NSTextField *problemDescriptionTextFieldTitle;
-  
-  IBOutlet NSTextField *noteText;
-  
-  IBOutlet NSButton *disclosureButton;
-  IBOutlet NSButton *showButton;
-  IBOutlet NSButton *hideButton;
-  IBOutlet NSButton *cancelButton;
-  IBOutlet NSButton *submitButton;
-}
-
+@implementation BITCrashReportUI
 
 - (instancetype)initWithManager:(BITCrashManager *)crashManager crashReport:(NSString *)crashReport logContent:(NSString *)logContent applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
   
@@ -75,17 +74,17 @@ static const CGFloat kDetailsHeight = 285;
       windowFrame.size = NSMakeSize(windowFrame.size.width, windowFrame.size.height - kUserHeight);
       windowFrame.origin.y -= kUserHeight;
       
-      NSRect frame = commentsTextFieldTitle.frame;
+      NSRect frame = _commentsTextFieldTitle.frame;
       frame.origin.y += kUserHeight;
-      commentsTextFieldTitle.frame = frame;
+      _commentsTextFieldTitle.frame = frame;
 
-      frame = disclosureButton.frame;
+      frame = _disclosureButton.frame;
       frame.origin.y += kUserHeight;
-      disclosureButton.frame = frame;
+      _disclosureButton.frame = frame;
 
-      frame = descriptionTextField.frame;
+      frame = _descriptionTextField.frame;
       frame.origin.y += kUserHeight;
-      descriptionTextField.frame = frame;
+      _descriptionTextField.frame = frame;
     }
     
     [[self window] setFrame: windowFrame
@@ -100,9 +99,9 @@ static const CGFloat kDetailsHeight = 285;
 
 - (void)awakeFromNib {
   self.nibDidLoadSuccessfully = YES;
-  [crashLogTextView setEditable:NO];
-  if ([crashLogTextView respondsToSelector:@selector(setAutomaticSpellingCorrectionEnabled:)]) {
-    [crashLogTextView setAutomaticSpellingCorrectionEnabled:NO];
+  [self.crashLogTextView setEditable:NO];
+  if ([self.crashLogTextView respondsToSelector:@selector(setAutomaticSpellingCorrectionEnabled:)]) {
+    [self.crashLogTextView setAutomaticSpellingCorrectionEnabled:NO];
   }
 }
 
@@ -171,19 +170,19 @@ static const CGFloat kDetailsHeight = 285;
 }
 
 - (IBAction)submitReport:(id) __unused sender {
-  [showButton setEnabled:NO];
-  [hideButton setEnabled:NO];
-  [cancelButton setEnabled:NO];
-  [submitButton setEnabled:NO];
+  [self.showButton setEnabled:NO];
+  [self.hideButton setEnabled:NO];
+  [self.cancelButton setEnabled:NO];
+  [self.submitButton setEnabled:NO];
   
   [[self window] makeFirstResponder: nil];
   
   BITCrashMetaData *crashMetaData = [[BITCrashMetaData alloc] init];
-  if (_showUserDetails) {
-    crashMetaData.userName = [nameTextField stringValue];
-    crashMetaData.userEmail = [emailTextField stringValue];
+  if (self.showUserDetails) {
+    crashMetaData.userName = [self.nameTextField stringValue];
+    crashMetaData.userEmail = [self.emailTextField stringValue];
   }
-  crashMetaData.userDescription = [descriptionTextField stringValue];
+  crashMetaData.userDescription = [self.descriptionTextField stringValue];
   
   [self.crashManager handleUserInput:BITCrashManagerUserInputSend withUserProvidedMetaData:crashMetaData];
   
@@ -194,68 +193,68 @@ static const CGFloat kDetailsHeight = 285;
 - (void)askCrashReportDetails {
 #define DISTANCE_BETWEEN_BUTTONS		3
   
-  NSString *title = BITHockeyLocalizedString(@"WindowTitle", @"");
-  [[self window] setTitle:[NSString stringWithFormat:title, self.applicationName]];
+  NSString *title = [NSString stringWithFormat:BITHockeyLocalizedString(@"WindowTitle", @""), self.applicationName];
+  [[self window] setTitle:title];
   
-  [[nameTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"NameTextTitle", @"")];
-  [[nameTextField cell] setTitle:self.userName];
-  if ([[nameTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
-    [[nameTextField cell] setUsesSingleLineMode:YES];
+  [[self.nameTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"NameTextTitle", @"")];
+  [[self.nameTextField cell] setTitle:self.userName];
+  if ([[self.nameTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
+    [[self.nameTextField cell] setUsesSingleLineMode:YES];
   }
   
-  [[emailTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"EmailTextTitle", @"")];
-  [[emailTextField cell] setTitle:self.userEmail];
-  if ([[emailTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
-    [[emailTextField cell] setUsesSingleLineMode:YES];
+  [[self.emailTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"EmailTextTitle", @"")];
+  [[self.emailTextField cell] setTitle:self.userEmail];
+  if ([[self.emailTextField cell] respondsToSelector:@selector(setUsesSingleLineMode:)]) {
+    [[self.emailTextField cell] setUsesSingleLineMode:YES];
   }
 
   title = BITHockeyLocalizedString(@"IntroductionText", @"");
-  [[introductionText cell] setTitle:[NSString stringWithFormat:title, self.applicationName]];
-  [[commentsTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"CommentsDisclosureTitle", @"")];
-  [[problemDescriptionTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"ProblemDetailsTitle", @"")];
+  [[self.introductionText cell] setTitle:title];
+  [[self.commentsTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"CommentsDisclosureTitle", @"")];
+  [[self.problemDescriptionTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"ProblemDetailsTitle", @"")];
 
-  [[descriptionTextField cell] setPlaceholderString:BITHockeyLocalizedString(@"UserDescriptionPlaceholder", @"")];
-  [noteText setStringValue:BITHockeyLocalizedString(@"PrivacyNote", @"")];
+  [[self.descriptionTextField cell] setPlaceholderString:BITHockeyLocalizedString(@"UserDescriptionPlaceholder", @"")];
+  [self.noteText setStringValue:BITHockeyLocalizedString(@"PrivacyNote", @"")];
   
-  [showButton setTitle:BITHockeyLocalizedString(@"ShowDetailsButtonTitle", @"")];
-  [hideButton setTitle:BITHockeyLocalizedString(@"HideDetailsButtonTitle", @"")];
-  [cancelButton setTitle:BITHockeyLocalizedString(@"CancelButtonTitle", @"")];
-  [submitButton setTitle:BITHockeyLocalizedString(@"SendButtonTitle", @"")];
+  [self.showButton setTitle:BITHockeyLocalizedString(@"ShowDetailsButtonTitle", @"")];
+  [self.hideButton setTitle:BITHockeyLocalizedString(@"HideDetailsButtonTitle", @"")];
+  [self.cancelButton setTitle:BITHockeyLocalizedString(@"CancelButtonTitle", @"")];
+  [self.submitButton setTitle:BITHockeyLocalizedString(@"SendButtonTitle", @"")];
   
   // adjust button sizes
-  NSDictionary *attrs = @{NSFontAttributeName: [submitButton font]};
-  NSSize titleSize = [[submitButton title] sizeWithAttributes: attrs];
+  NSDictionary *attrs = @{NSFontAttributeName: [self.submitButton font]};
+  NSSize titleSize = [[self.submitButton title] sizeWithAttributes: attrs];
 	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
-	NSRect submitBtnBox = [submitButton frame];
+	NSRect submitBtnBox = [self.submitButton frame];
 	submitBtnBox.origin.x += submitBtnBox.size.width -titleSize.width;
 	submitBtnBox.size.width = titleSize.width;
-	[submitButton setFrame: submitBtnBox];
+	[self.submitButton setFrame: submitBtnBox];
   
-  titleSize = [[cancelButton title] sizeWithAttributes: attrs];
+  titleSize = [[self.cancelButton title] sizeWithAttributes: attrs];
 	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
-	NSRect cancelBtnBox = [cancelButton frame];
+	NSRect cancelBtnBox = [self.cancelButton frame];
 	cancelBtnBox.origin.x = submitBtnBox.origin.x -DISTANCE_BETWEEN_BUTTONS -titleSize.width;
 	cancelBtnBox.size.width = titleSize.width;
-	[cancelButton setFrame: cancelBtnBox];
+	[self.cancelButton setFrame: cancelBtnBox];
 
-  titleSize = [[showButton title] sizeWithAttributes: attrs];
+  titleSize = [[self.showButton title] sizeWithAttributes: attrs];
 	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
-	NSRect showBtnBox = [showButton frame];
+	NSRect showBtnBox = [self.showButton frame];
 	showBtnBox.size.width = titleSize.width;
-	[showButton setFrame: showBtnBox];
+	[self.showButton setFrame: showBtnBox];
 
-  titleSize = [[hideButton title] sizeWithAttributes: attrs];
+  titleSize = [[self.hideButton title] sizeWithAttributes: attrs];
 	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
-	NSRect hideBtnBox = [hideButton frame];
+	NSRect hideBtnBox = [self.hideButton frame];
 	hideBtnBox.size.width = titleSize.width;
-	[hideButton setFrame: showBtnBox];
+	[self.hideButton setFrame: showBtnBox];
     
   NSString *logTextViewContent = [self.crashLogContent copy];
   
   if (self.logContent)
     logTextViewContent = [NSString stringWithFormat:@"%@\n\n%@", logTextViewContent, self.logContent];
   
-  [crashLogTextView setString:logTextViewContent];
+  [self.crashLogTextView setString:logTextViewContent];
 }
 
 
