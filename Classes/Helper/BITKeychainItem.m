@@ -24,7 +24,7 @@
 
 #import "BITKeychainItem.h"
 
-@interface BITKeychainItem (Private)
+@interface BITKeychainItem ()
 
 @property(nonatomic, strong) NSString *mUsername;
 @property(nonatomic, strong) NSString *mPassword;
@@ -83,9 +83,9 @@ static BOOL _logsErrors;
 {
 	if ((self = [super init]))
 	{
-		self.mCoreKeychainItem = item;
-		self.mUsername = [username copy];
-		self.mPassword = [password copy];
+		_mCoreKeychainItem = item;
+		_mUsername = [username copy];
+		_mPassword = [password copy];
 		
 		return self;
 	}
@@ -143,7 +143,7 @@ static BOOL _logsErrors;
 
 #pragma mark -
 @dynamic username;
-- (NSString *)mUsername
+- (NSString *)username
 {
 	@synchronized (self)
 	{
@@ -151,7 +151,7 @@ static BOOL _logsErrors;
 	}
 }
 
-- (void)setMUsername:(NSString *)newUsername
+- (void)setUsername:(NSString *)newUsername
 {
 	@synchronized (self)
 	{
@@ -209,7 +209,7 @@ static BOOL _logsErrors;
 @end
 
 #pragma mark -
-@interface BITGenericKeychainItem (Private)
+@interface BITGenericKeychainItem ()
 
 @property(nonatomic, strong) NSString *mServiceName;
 
@@ -224,7 +224,7 @@ static BOOL _logsErrors;
 {
 	if ((self = [super _initWithCoreKeychainItem:item username:username password:password]))
 	{
-		self.mServiceName = [serviceName copy];
+		_mServiceName = [serviceName copy];
 		return self;
 	}
 	return nil;
