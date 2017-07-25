@@ -22,6 +22,8 @@
 
 @property (nonatomic, unsafe_unretained) id<BITFeedbackMessageCellViewDelegate> bitDelegate;
 
+@property (nonatomic) NSUInteger attachmentsAdded;
+
 @end
 
 
@@ -30,8 +32,6 @@
   NSDateFormatter *_timeFormatter;
 
   NSInteger _row;
-  
-  NSInteger _attachmentsAdded;
 }
 
 
@@ -131,12 +131,12 @@
 }
 
 - (void)updateAttachmentViews {
-  _attachmentsAdded = 0;
+  self.attachmentsAdded = 0;
   
   NSArray *previewableAttachments = self.message.previewableAttachments;
   [self clearAllImageViews];
   
-  if (_attachmentsAdded == [previewableAttachments count]) return;
+  if (self.attachmentsAdded == [previewableAttachments count]) return;
   
   if (previewableAttachments) {
     CGFloat baseOffsetOfText = CGRectGetMaxY(self.dateTextField.frame) + 10;
@@ -182,7 +182,7 @@
       
       [self addSubview:imageButton];
       
-      _attachmentsAdded++;
+      self.attachmentsAdded++;
       
       i++;
     }

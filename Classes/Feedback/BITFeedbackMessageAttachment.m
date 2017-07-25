@@ -122,7 +122,7 @@
 - (NSImage *)imageRepresentationWithSize:(NSSize)size {
   NSImage *thumbnailImage = nil;
   
-  NSDictionary *dict = @{ ((NSString *)kQLThumbnailOptionIconModeKey): @NO };
+  NSDictionary *dict = @{ ((const NSString *)kQLThumbnailOptionIconModeKey): @NO };
   
   CGImageRef ref = QLThumbnailImageCreate(kCFAllocatorDefault,
                                           (__bridge CFURLRef)self.localURL,

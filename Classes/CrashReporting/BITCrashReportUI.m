@@ -10,9 +10,19 @@
 #import <sys/sysctl.h>
 
 
-@interface BITCrashReportUI(private)
+@interface BITCrashReportUI ()
+
 - (void) askCrashReportDetails;
 - (void) endCrashReporter;
+
+@property (nonatomic, strong) BITCrashManager *crashManager;
+@property (nonatomic, strong) NSString        *applicationName;
+@property (nonatomic, strong) NSMutableString *logContent;
+@property (nonatomic, strong) NSString        *crashLogContent;
+
+// Redeclare BITCrashReportUI properties with readwrite attribute.
+@property (nonatomic, readwrite) BOOL nibDidLoadSuccessfully;
+
 @end
 
 static const CGFloat kUserHeight = 50;
@@ -39,25 +49,13 @@ static const CGFloat kDetailsHeight = 285;
   IBOutlet NSButton *hideButton;
   IBOutlet NSButton *cancelButton;
   IBOutlet NSButton *submitButton;
-
-  BITCrashManager *_crashManager;
-  
-  NSString *_applicationName;
-  
-  NSMutableString *_logContent;
-  NSString        *_crashLogContent;
-  
-  BOOL _showUserDetails;
-  BOOL _showComments;
-  BOOL _showDetails;
 }
 
 
 - (instancetype)initWithManager:(BITCrashManager *)crashManager crashReport:(NSString *)crashReport logContent:(NSString *)logContent applicationName:(NSString *)applicationName askUserDetails:(BOOL)askUserDetails {
   
   self = [super initWithWindowNibName: @"BITCrashReportUI"];
-  
-  if ( self != nil) {
+  if (self != nil) {
     _crashManager = crashManager;
     _crashLogContent = [crashReport copy];
     _logContent = [logContent copy];
@@ -101,7 +99,7 @@ static const CGFloat kDetailsHeight = 285;
 
 
 - (void)awakeFromNib {
-  _nibDidLoadSuccessfully = YES;
+  self.nibDidLoadSuccessfully = YES;
   [crashLogTextView setEditable:NO];
   if ([crashLogTextView respondsToSelector:@selector(setAutomaticSpellingCorrectionEnabled:)]) {
     [crashLogTextView setAutomaticSpellingCorrectionEnabled:NO];
@@ -167,7 +165,7 @@ static const CGFloat kDetailsHeight = 285;
 
 
 - (IBAction)cancelReport:(id) __unused sender {
-  [_crashManager handleUserInput:BITCrashManagerUserInputDontSend withUserProvidedMetaData:nil];
+  [self.crashManager handleUserInput:BITCrashManagerUserInputDontSend withUserProvidedMetaData:nil];
   
   [self endCrashReporter];
 }
@@ -187,7 +185,7 @@ static const CGFloat kDetailsHeight = 285;
   }
   crashMetaData.userDescription = [descriptionTextField stringValue];
   
-  [_crashManager handleUserInput:BITCrashManagerUserInputSend withUserProvidedMetaData:crashMetaData];
+  [self.crashManager handleUserInput:BITCrashManagerUserInputSend withUserProvidedMetaData:crashMetaData];
   
   [self endCrashReporter];
 }
@@ -197,7 +195,7 @@ static const CGFloat kDetailsHeight = 285;
 #define DISTANCE_BETWEEN_BUTTONS		3
   
   NSString *title = BITHockeyLocalizedString(@"WindowTitle", @"");
-  [[self window] setTitle:[NSString stringWithFormat:title, _applicationName]];
+  [[self window] setTitle:[NSString stringWithFormat:title, self.applicationName]];
   
   [[nameTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"NameTextTitle", @"")];
   [[nameTextField cell] setTitle:self.userName];
@@ -212,7 +210,7 @@ static const CGFloat kDetailsHeight = 285;
   }
 
   title = BITHockeyLocalizedString(@"IntroductionText", @"");
-  [[introductionText cell] setTitle:[NSString stringWithFormat:title, _applicationName]];
+  [[introductionText cell] setTitle:[NSString stringWithFormat:title, self.applicationName]];
   [[commentsTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"CommentsDisclosureTitle", @"")];
   [[problemDescriptionTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"ProblemDetailsTitle", @"")];
 
@@ -252,10 +250,10 @@ static const CGFloat kDetailsHeight = 285;
 	hideBtnBox.size.width = titleSize.width;
 	[hideButton setFrame: showBtnBox];
     
-  NSString *logTextViewContent = [_crashLogContent copy];
+  NSString *logTextViewContent = [self.crashLogContent copy];
   
-  if (_logContent)
-    logTextViewContent = [NSString stringWithFormat:@"%@\n\n%@", logTextViewContent, _logContent];
+  if (self.logContent)
+    logTextViewContent = [NSString stringWithFormat:@"%@\n\n%@", logTextViewContent, self.logContent];
   
   [crashLogTextView setString:logTextViewContent];
 }
@@ -265,33 +263,6 @@ static const CGFloat kDetailsHeight = 285;
    _crashLogContent = nil;
    _logContent = nil;
    _applicationName = nil;
-}
-
-
-- (BOOL)showUserDetails {
-  return _showUserDetails;
-}
-
-- (void)setShowUserDetails:(BOOL)value {
-  _showUserDetails = value;
-}
-
-
-- (BOOL)showComments {
-  return _showComments;
-}
-
-- (void)setShowComments:(BOOL)value {
-  _showComments = value;
-}
-
-
-- (BOOL)showDetails {
-  return _showDetails;
-}
-
-- (void)setShowDetails:(BOOL)value {
-  _showDetails = value;
 }
 
 

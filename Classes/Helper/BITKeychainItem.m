@@ -26,13 +26,18 @@
 
 @interface BITKeychainItem (Private)
 
+@property(nonatomic, strong) NSString *mUsername;
+@property(nonatomic, strong) NSString *mPassword;
+@property(nonatomic, strong) NSString *mLabel;
+@property SecKeychainItemRef mCoreKeychainItem;
+
 /*!
  @abstract Modifies the given attribute to be newValue.
  @param attributeTag The attribute's tag.
  @param newValue A pointer to the new value.
  @param newLength The length of the new value.
  */
-- (void)_modifyAttributeWithTag:(SecItemAttr)attributeTag toBeValue:(void *)newValue ofLength:(UInt32)newLength;
+- (void)_modifyAttributeWithTag:(SecItemAttr)attributeTag toBeValue:(const void *)newValue ofLength:(UInt32)newLength;
 
 @end
 
@@ -78,18 +83,18 @@ static BOOL _logsErrors;
 {
 	if ((self = [super init]))
 	{
-		mCoreKeychainItem = item;
-		mUsername = [username copy];
-		mPassword = [password copy];
+		self.mCoreKeychainItem = item;
+		self.mUsername = [username copy];
+		self.mPassword = [password copy];
 		
 		return self;
 	}
 	return nil;
 }
 
-- (void)_modifyAttributeWithTag:(SecItemAttr)attributeTag toBeValue:(void *)newValue ofLength:(UInt32)newLength
+- (void)_modifyAttributeWithTag:(SecItemAttr)attributeTag toBeValue:(const void *)newValue ofLength:(UInt32)newLength
 {
-	NSAssert(mCoreKeychainItem, @"Core keychain item is nil. You cannot modify a keychain item that is not in the keychain.");
+	NSAssert(self.mCoreKeychainItem, @"Core keychain item is nil. You cannot modify a keychain item that is not in the keychain.");
 	
 	SecKeychainAttribute attributes[1];
 	attributes[0].tag = attributeTag;
@@ -100,15 +105,15 @@ static BOOL _logsErrors;
 	attributeList.count = 1;
 	attributeList.attr = attributes;
 	
-	SecKeychainItemModifyAttributesAndData(mCoreKeychainItem, &attributeList, 0, NULL);
+	SecKeychainItemModifyAttributesAndData(self.mCoreKeychainItem, &attributeList, 0, NULL);
 }
 
 - (void)dealloc
 {
 	
-	if (mCoreKeychainItem)
-		CFRelease(mCoreKeychainItem);
-	
+	if (self.mCoreKeychainItem)
+		CFRelease(self.mCoreKeychainItem);
+  
 }
 
 #pragma mark -
@@ -118,7 +123,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [mPassword copy];
+		return [self.mPassword copy];
 	}
 }
 
@@ -126,37 +131,37 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		if (mPassword == newPassword)
+		if (self.mPassword == newPassword)
 			return;
 		
-		mPassword = [newPassword copy];
+		self.mPassword = [newPassword copy];
 		
 		const char *newPasswordCString = [newPassword UTF8String];
-		SecKeychainItemModifyAttributesAndData(mCoreKeychainItem, NULL, (UInt32)strlen(newPasswordCString), (void *)newPasswordCString);
+		SecKeychainItemModifyAttributesAndData(self.mCoreKeychainItem, NULL, (UInt32)strlen(newPasswordCString), (void *)newPasswordCString);
 	}
 }
 
 #pragma mark -
 @dynamic username;
-- (NSString *)username
+- (NSString *)mUsername
 {
 	@synchronized (self)
 	{
-		return [mUsername copy];
+		return [self.mUsername copy];
 	}
 }
 
-- (void)setUsername:(NSString *)newUsername
+- (void)setMUsername:(NSString *)newUsername
 {
 	@synchronized (self)
 	{
-		if (mUsername == newUsername)
+		if (self.mUsername == newUsername)
 			return;
 		
-		mUsername = [newUsername copy];
+		self.mUsername = [newUsername copy];
 		
 		const char *newUsernameCString = [newUsername UTF8String];
-		[self _modifyAttributeWithTag:kSecAccountItemAttr toBeValue:(void *)newUsernameCString ofLength:(UInt32)strlen(newUsernameCString)];
+		[self _modifyAttributeWithTag:kSecAccountItemAttr toBeValue:(const void *)newUsernameCString ofLength:(UInt32)strlen(newUsernameCString)];
 	}
 }
 
@@ -166,7 +171,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [mLabel copy];
+		return [self.mLabel copy];
 	}
 }
 
@@ -174,13 +179,13 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		if (mLabel == newLabel)
+		if (self.mLabel == newLabel)
 			return;
 		
-		mLabel = [newLabel copy];
+		self.mLabel = [newLabel copy];
 		
 		const char *newLabelCString = [newLabel UTF8String];
-		[self _modifyAttributeWithTag:kSecLabelItemAttr toBeValue:(void *)newLabelCString ofLength:(UInt32)strlen(newLabelCString)];
+		[self _modifyAttributeWithTag:kSecLabelItemAttr toBeValue:(const void *)newLabelCString ofLength:(UInt32)strlen(newLabelCString)];
 	}
 }
 
@@ -188,15 +193,15 @@ static BOOL _logsErrors;
 #pragma mark Actions
 - (void)removeFromKeychain
 {
-	NSAssert(mCoreKeychainItem, @"Core keychain item is nil. You cannot remove a keychain item that is not in the keychain already.");
+	NSAssert(self.mCoreKeychainItem, @"Core keychain item is nil. You cannot remove a keychain item that is not in the keychain already.");
 	
-	if (mCoreKeychainItem)
+	if (self.mCoreKeychainItem)
 	{
-		OSStatus resultStatus = SecKeychainItemDelete(mCoreKeychainItem);
+		OSStatus resultStatus = SecKeychainItemDelete(self.mCoreKeychainItem);
 		if (resultStatus == noErr)
 		{
-			CFRelease(mCoreKeychainItem);
-			mCoreKeychainItem = nil;
+			CFRelease(self.mCoreKeychainItem);
+			self.mCoreKeychainItem = nil;
 		}
 	}
 }
@@ -204,6 +209,12 @@ static BOOL _logsErrors;
 @end
 
 #pragma mark -
+@interface BITGenericKeychainItem (Private)
+
+@property(nonatomic, strong) NSString *mServiceName;
+
+@end
+
 @implementation BITGenericKeychainItem
 
 - (id)_initWithCoreKeychainItem:(SecKeychainItemRef)item
@@ -213,7 +224,7 @@ static BOOL _logsErrors;
 {
 	if ((self = [super _initWithCoreKeychainItem:item username:username password:password]))
 	{
-		mServiceName = [serviceName copy];
+		self.mServiceName = [serviceName copy];
 		return self;
 	}
 	return nil;
@@ -290,7 +301,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [mServiceName copy];
+		return [self.mServiceName copy];
 	}
 }
 
@@ -298,13 +309,13 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		if (mServiceName == newServiceName)
+		if (self.mServiceName == newServiceName)
 			return;
 		
-		mServiceName = [newServiceName copy];
+		self.mServiceName = [newServiceName copy];
 		
 		const char *newServiceNameCString = [newServiceName UTF8String];
-		[self _modifyAttributeWithTag:kSecServiceItemAttr toBeValue:(void *)newServiceNameCString ofLength:(UInt32)strlen(newServiceNameCString)];
+		[self _modifyAttributeWithTag:kSecServiceItemAttr toBeValue:(const void *)newServiceNameCString ofLength:(UInt32)strlen(newServiceNameCString)];
 	}
 }
 

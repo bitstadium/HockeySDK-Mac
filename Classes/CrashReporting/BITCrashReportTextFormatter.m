@@ -550,7 +550,7 @@ static const char *findSEL (const char *imageName, NSString *imageUUID, uint64_t
         
         [text appendFormat: fmt,
          imageInfo.imageBaseAddress,
-         imageInfo.imageBaseAddress + (MAX(1, imageInfo.imageSize) - 1), // The Apple format uses an inclusive range
+         imageInfo.imageBaseAddress + (MAX(1ULL, imageInfo.imageSize) - 1), // The Apple format uses an inclusive range
          binaryDesignator,
          [imageInfo.imageName lastPathComponent],
          archName,

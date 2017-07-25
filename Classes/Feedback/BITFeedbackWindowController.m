@@ -81,7 +81,7 @@
 
 @end
 
-NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessageDateValueTransformer";
+static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessageDateValueTransformer";
 
 @implementation BITFeedbackWindowController
 
@@ -143,7 +143,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
   [self.composeAttachmentsArrayController setContent:self.attachments];
   [self.feedbackAttachmentsTableView setTarget:self];
   [self.feedbackAttachmentsTableView setDoubleAction:@selector(previewAttachment:)];
-  [self.feedbackAttachmentsTableView registerForDraggedTypes:[NSArray arrayWithObject:(NSString*)kUTTypeFileURL]];
+  [self.feedbackAttachmentsTableView registerForDraggedTypes:[NSArray arrayWithObject:(const NSString*)kUTTypeFileURL]];
   [self.feedbackAttachmentsTableView setMenu:[self contextMenuComposeAttachments]];
   
   [self.statusBarRefreshButton setHidden:YES];
@@ -361,7 +361,7 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 }
 
 - (void)deleteAllMessages {
-  [_manager deleteAllMessages];
+  [self.manager deleteAllMessages];
   [self reloadTableAndScrollToBottom];
 }
 
@@ -691,13 +691,13 @@ NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedbackMessa
 }
 
 - (void)beginPreviewPanelControl:(QLPreviewPanel *)panel {
-  _previewPanel = panel;
+  self.previewPanel = panel;
   panel.delegate = self;
   panel.dataSource = self;
 }
 
 - (void)endPreviewPanelControl:(QLPreviewPanel *) __unused panel {
-  _previewPanel = nil;
+  self.previewPanel = nil;
 }
 
 

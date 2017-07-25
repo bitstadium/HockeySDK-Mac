@@ -60,7 +60,7 @@ static const NSUInteger ChunkSize = 16384;
     stream.zfree = Z_NULL;
     stream.opaque = Z_NULL;
     stream.avail_in = (uint)[self length];
-    stream.next_in = (Bytef *)[self bytes];
+    stream.next_in = (z_const Bytef *)[self bytes];
     stream.total_out = 0;
     stream.avail_out = 0;
     
@@ -99,7 +99,7 @@ static const NSUInteger ChunkSize = 16384;
     stream.zalloc = Z_NULL;
     stream.zfree = Z_NULL;
     stream.avail_in = (uint)[self length];
-    stream.next_in = (Bytef *)[self bytes];
+    stream.next_in = (z_const Bytef *)[self bytes];
     stream.total_out = 0;
     stream.avail_out = 0;
     

@@ -112,6 +112,11 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   
   @property (nonatomic, strong) NSMutableDictionary *approvedCrashReports;
   @property (nonatomic, strong) NSMutableDictionary *dictOfLastSessionCrash;
+
+  // Redeclare BITCrashManager properties with readwrite attribute
+  @property (nonatomic, readwrite) NSTimeInterval timeintervalCrashInLastSessionOccured;
+  @property (nonatomic, readwrite) BITCrashDetails *lastSessionCrashDetails;
+  @property (nonatomic, readwrite) BOOL didCrashInLastSession;
 @end
 
 @implementation BITCrashManager
@@ -366,11 +371,10 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 
   userID = bit_stringValueFromKeychainForKey(kBITDefaultUserID);
 
-  if ([BITHockeyManager sharedHockeyManager].delegate &&
-      [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userIDForHockeyManager:componentManager:)]) {
-    userID = [[BITHockeyManager sharedHockeyManager].delegate
-              userIDForHockeyManager:[BITHockeyManager sharedHockeyManager]
-              componentManager:self];
+  id<BITHockeyManagerDelegate> delegate = [BITHockeyManager sharedHockeyManager].delegate;
+  if (delegate && [delegate respondsToSelector:@selector(userIDForHockeyManager:componentManager:)]) {
+    userID = [delegate userIDForHockeyManager:[BITHockeyManager sharedHockeyManager]
+                             componentManager:self];
   }
   
   return userID ?: @"";
@@ -383,12 +387,11 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     return self.userName;
   
   userName = bit_stringValueFromKeychainForKey(kBITDefaultUserName);
-
-  if ([BITHockeyManager sharedHockeyManager].delegate &&
-      [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userNameForHockeyManager:componentManager:)]) {
-    userName = [[BITHockeyManager sharedHockeyManager].delegate
-                userNameForHockeyManager:[BITHockeyManager sharedHockeyManager]
-                componentManager:self];
+  
+  id<BITHockeyManagerDelegate> delegate = [BITHockeyManager sharedHockeyManager].delegate;
+  if (delegate && [delegate respondsToSelector:@selector(userNameForHockeyManager:componentManager:)]) {
+    userName = [delegate userNameForHockeyManager:[BITHockeyManager sharedHockeyManager]
+                                 componentManager:self];
   }
   
   return userName ?: @"";
@@ -401,12 +404,11 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     return self.userEmail;
   
   userEmail = bit_stringValueFromKeychainForKey(kBITDefaultUserEmail);
-
-  if ([BITHockeyManager sharedHockeyManager].delegate &&
-      [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userEmailForHockeyManager:componentManager:)]) {
-    userEmail = [[BITHockeyManager sharedHockeyManager].delegate
-                 userEmailForHockeyManager:[BITHockeyManager sharedHockeyManager]
-                 componentManager:self];
+  
+  id<BITHockeyManagerDelegate> delegate = [BITHockeyManager sharedHockeyManager].delegate;
+  if (delegate && [delegate respondsToSelector:@selector(userEmailForHockeyManager:componentManager:)]) {
+    userEmail = [delegate userEmailForHockeyManager:[BITHockeyManager sharedHockeyManager]
+                                   componentManager:self];
   }
   
   return userEmail ?: @"";
@@ -528,11 +530,8 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
       [self approveLatestCrashReport];
       [self sendNextCrashReport];
       return YES;
-      
-    default:
-      return NO;
   }
-  
+  return NO;
 }
 
 
@@ -573,7 +572,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
           if (report.systemInfo.timestamp && report.processInfo.processStartTime) {
             appStartTime = report.processInfo.processStartTime;
             appCrashTime =report.systemInfo.timestamp;
-            _timeintervalCrashInLastSessionOccured = [report.systemInfo.timestamp timeIntervalSinceDate:report.processInfo.processStartTime];
+            self.timeintervalCrashInLastSessionOccured = [report.systemInfo.timestamp timeIntervalSinceDate:report.processInfo.processStartTime];
           }
         }
 
@@ -586,7 +585,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
         
         NSString *reporterKey = [BITSystemProfile deviceIdentifier] ?: @"";
         
-        _lastSessionCrashDetails = [[BITCrashDetails alloc] initWithIncidentIdentifier:incidentIdentifier
+        self.lastSessionCrashDetails = [[BITCrashDetails alloc] initWithIncidentIdentifier:incidentIdentifier
                                                                            reporterKey:reporterKey
                                                                                 signal:report.signalInfo.name
                                                                          exceptionName:report.exceptionInfo.exceptionName
@@ -673,7 +672,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
         [self.delegate crashManagerWillCancelSendingCrashReport:self];
       }
       
-      _didCrashInLastSession = NO;
+      self.didCrashInLastSession = NO;
     }
     
     return NO;
@@ -775,7 +774,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     
     // Check if we previously crashed
     if ([self.plCrashReporter hasPendingCrashReport]) {
-      _didCrashInLastSession = YES;
+      self.didCrashInLastSession = YES;
       [self handleCrashReport];
     }
     
@@ -883,7 +882,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 - (void)sendNextCrashReport {
   NSError *error = NULL;
   
-  _crashIdenticalCurrentVersion = NO;
+  self.crashIdenticalCurrentVersion = NO;
   
   if ([self.crashFiles count] == 0)
     return;
@@ -934,7 +933,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     deviceModel = [BITSystemProfile deviceModel];
     appBinaryUUIDs = [self extractAppUUIDs:report];
     if ([report.applicationInfo.applicationVersion compare:(id)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
-      _crashIdenticalCurrentVersion = YES;
+      self.crashIdenticalCurrentVersion = YES;
     }
 
     NSString *username = @"";

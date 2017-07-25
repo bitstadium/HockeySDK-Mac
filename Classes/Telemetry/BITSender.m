@@ -201,14 +201,14 @@ static NSUInteger const BITDefaultRequestLimit = 10;
 - (NSUInteger)runningRequestsCount {
   __block NSUInteger count;
   dispatch_sync(self.requestsCountQueue, ^{
-    count = self.runningRequestsCount;
+    count = self->_runningRequestsCount;
   });
   return count;
 }
 
 - (void)setRunningRequestsCount:(NSUInteger)runningRequestsCount {
   dispatch_sync(self.requestsCountQueue, ^{
-    self.runningRequestsCount = runningRequestsCount;
+    self->_runningRequestsCount = runningRequestsCount;
   });
 }
 

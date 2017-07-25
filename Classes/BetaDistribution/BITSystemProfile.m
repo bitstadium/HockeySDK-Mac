@@ -2,9 +2,13 @@
 #import "BITSystemProfile.h"
 #import "BITSystemProfilePrivate.h"
 
-@implementation BITSystemProfile
+@interface BITSystemProfile ()
 
-@synthesize usageStartTimestamp = _usageStartTimestamp;
+@property (nonatomic) NSInteger startCounter;
+
+@end
+
+@implementation BITSystemProfile
 
 + (NSString *)deviceIdentifier {
   char buffer[128];
@@ -96,7 +100,7 @@
     if (!self.usageStartTimestamp)
       self.usageStartTimestamp = [NSDate date];
     
-    _startCounter++;
+    self.startCounter++;
     
     BOOL newVersion = NO;
     
@@ -123,12 +127,12 @@
 
 - (void)stopUsage {
   @synchronized(@"startstop") {
-    if (_startCounter > 0)
-      _startCounter--;
+    if (self.startCounter > 0)
+      self.startCounter--;
     
     if (!self.usageStartTimestamp)
       return;
-    if (_startCounter > 0)
+    if (self.startCounter > 0)
       return;
     
     double timeDifference = [[NSDate date] timeIntervalSinceReferenceDate] - [self.usageStartTimestamp timeIntervalSinceReferenceDate];

@@ -28,11 +28,11 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 @property (nonatomic, strong) id<NSObject> appWillEnterForegroundObserver;
 @property (nonatomic, strong) id<NSObject> appDidEnterBackgroundObserver;
 
+@property (nonatomic) NSTimeInterval firstSessionCreation;
+
 @end
 
-@implementation BITMetricsManager {
-  NSTimeInterval _firstSessionCreation;
-}
+@implementation BITMetricsManager
 
 @synthesize channel = _channel;
 @synthesize telemetryContext = _telemetryContext;
@@ -65,7 +65,7 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 - (void)startManager {
   self.sender = [[BITSender alloc] initWithPersistence:self.persistence serverURL:(NSURL *)[NSURL URLWithString:self.serverURL]];
   [self.sender sendSavedDataAsync];
-  _firstSessionCreation = [[NSDate date] timeIntervalSince1970];
+  self.firstSessionCreation = [[NSDate date] timeIntervalSince1970];
   [self startNewSessionWithId:bit_UUID()];
   [self registerObservers];
 }
@@ -125,7 +125,7 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
   
   // Check for duplicate start session: NSApplicationWillBecomeActiveNotification vs. startManager()
   NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-  NSTimeInterval timeSinceFirstSession = now - _firstSessionCreation;
+  NSTimeInterval timeSinceFirstSession = now - self.firstSessionCreation;
   if(timeSinceFirstSession < 0.5){
     return;
   }

@@ -10,7 +10,7 @@
 
 /// Initializes a new instance of the class.
 - (instancetype)init {
-  if (self = [super init]) {
+  if ((self = [super init])) {
     _envelopeTypeName = @"Microsoft.ApplicationInsights.Event";
     _dataTypeName = @"EventData";
     _version = @2;

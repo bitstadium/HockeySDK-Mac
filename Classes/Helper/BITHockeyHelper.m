@@ -13,7 +13,7 @@ typedef struct {
   const char    bit_build[16];
 } msai_info_t;
 
-msai_info_t applicationinsights_library_info __attribute__((section("__TEXT,__bit_osx,regular,no_dead_strip"))) = {
+static msai_info_t applicationinsights_library_info __attribute__((section("__TEXT,__bit_osx,regular,no_dead_strip"))) = {
   .info_version = 1,
   .bit_version = BITHOCKEY_C_VERSION,
   .bit_build = BITHOCKEY_C_BUILD
