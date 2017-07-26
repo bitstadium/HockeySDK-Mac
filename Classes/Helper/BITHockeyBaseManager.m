@@ -47,7 +47,7 @@
 }
 
 - (NSString *)encodedAppIdentifier {
-  return (_appIdentifier ? bit_URLEncodedString(_appIdentifier) : bit_URLEncodedString([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]));
+  return (self.appIdentifier ? bit_URLEncodedString(self.appIdentifier) : bit_URLEncodedString([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]));
 }
 
 - (NSString *)getDevicePlatform {

@@ -49,25 +49,28 @@
           [dateComponent1 year]  == [dateComponent2 year]);
 }
 
--(id)transformedValue:(BITFeedbackMessage *)message {
+-(id)transformedValue:(id)message {
   NSString *result = @"";
+  if (!message || ![message isKindOfClass:[BITFeedbackMessage class]]) {
+    return nil;
+  }
+  BITFeedbackMessage *feedbackMessage = (BITFeedbackMessage *)message;
   
-  if (!message) return nil;
-  
-  if (![message isKindOfClass:[BITFeedbackMessage class]]) return nil;
-  
-  if (message.status == BITFeedbackMessageStatusSendPending || message.status == BITFeedbackMessageStatusSendInProgress) {
+  if (feedbackMessage.status == BITFeedbackMessageStatusSendPending ||
+      feedbackMessage.status == BITFeedbackMessageStatusSendInProgress) {
     result = @"Pending";
-  } else if (message.date) {
-    if ([self isSameDayWithDate1:[NSDate date] date2:message.date]) {
-      result = [[self timeFormatter] stringFromDate:message.date];
+  } else if (feedbackMessage.date) {
+    if ([self isSameDayWithDate1:[NSDate date] date2:feedbackMessage.date]) {
+      result = [[self timeFormatter] stringFromDate:feedbackMessage.date];
     } else {
-      result = [NSString stringWithFormat:@"%@ %@", [[self dateFormatter] stringFromDate:message.date], [[self timeFormatter] stringFromDate:message.date]];
+      result = [NSString stringWithFormat:@"%@ %@",
+                [[self dateFormatter] stringFromDate:feedbackMessage.date],
+                [[self timeFormatter] stringFromDate:feedbackMessage.date]];
     }
   }
   
-  if (!message.userMessage && [message.name length] > 0) {
-    result = [NSString stringWithFormat:@"%@ %@ %@", result, BITHockeyLocalizedString(@"FeedbackFrom", @""),  message.name];
+  if (!feedbackMessage.userMessage && [feedbackMessage.name length] > 0) {
+    result = [NSString stringWithFormat:@"%@ %@ %@", result, BITHockeyLocalizedString(@"FeedbackFrom", @""),  feedbackMessage.name];
   }
   
   return result;

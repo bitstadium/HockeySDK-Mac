@@ -18,10 +18,10 @@
   return returnString;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder {
+- (void)encodeWithCoder:(NSCoder *) __unused coder {
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (instancetype)initWithCoder:(NSCoder *) __unused coder {
   return [super init];
 }
 

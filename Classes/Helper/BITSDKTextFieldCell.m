@@ -7,13 +7,18 @@
 	NSRect newRect = [super drawingRectForBounds:theRect];
   NSSize textSize = [self cellSizeForBounds:theRect];
   
-  float heightDelta = newRect.size.height - textSize.height;
+  CGFloat heightDelta = newRect.size.height - textSize.height;
   if (heightDelta > 0) {
     newRect.size.height -= heightDelta;
     newRect.origin.y += heightDelta / 2;
     if (self.horizontalInset) {
-      newRect.origin.x += [self.horizontalInset floatValue];
-      newRect.size.width -= ([self.horizontalInset floatValue] * 2);
+#if CGFLOAT_IS_DOUBLE
+      CGFloat horizontalInset = [self.horizontalInset doubleValue];
+#else
+      CGFloat horizontalInset = [self.horizontalInset floatValue];
+#endif
+      newRect.origin.x += horizontalInset;
+      newRect.size.width -= (horizontalInset * 2);
     }
   }
 	

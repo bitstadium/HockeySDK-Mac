@@ -1,7 +1,7 @@
+#import <tgmath.h>
+
 #import "BITFeedbackMessageCellView.h"
-
 #import "BITFeedbackMessageCellViewDelegate.h"
-
 #import "BITFeedbackMessage.h"
 #import "BITFeedbackMessageAttachment.h"
 
@@ -9,21 +9,11 @@
 #import "BITSDKColoredView.h"
 #import "BITActivityIndicatorButton.h"
 
-#define BACKGROUNDCOLOR_DEFAULT BIT_RGBCOLOR(245, 245, 245)
-#define BACKGROUNDCOLOR_ALTERNATE BIT_RGBCOLOR(235, 235, 235)
-
-#define TEXTCOLOR_TITLE BIT_RGBCOLOR(75, 75, 75)
-
-#define TEXTCOLOR_DEFAULT BIT_RGBCOLOR(25, 25, 25)
-#define TEXTCOLOR_PENDING BIT_RGBCOLOR(75, 75, 75)
-
 #define TEXT_FONTSIZE 13
-#define DATE_FONTSIZE 11
 
 #define FRAME_SIDE_BORDER 10
 #define FRAME_TOP_BORDER 23
 #define FRAME_BOTTOM_BORDER 23
-#define FRAME_LEFT_RESPONSE_BORDER 20
 
 #define LABEL_TEXT_Y 17
 
@@ -31,6 +21,8 @@
 @interface BITFeedbackMessageCellView()
 
 @property (nonatomic, unsafe_unretained) id<BITFeedbackMessageCellViewDelegate> bitDelegate;
+
+@property (nonatomic) NSUInteger attachmentsAdded;
 
 @end
 
@@ -40,8 +32,6 @@
   NSDateFormatter *_timeFormatter;
 
   NSInteger _row;
-  
-  NSInteger _attachmentsAdded;
 }
 
 
@@ -106,7 +96,7 @@
 - (void)updateAttachment:(NSNotification *)notification {
   if (!notification.userInfo) return;
   NSDictionary *dict = notification.userInfo;
-  BITFeedbackMessageAttachment *attachment = dict[kBITFeedbackAttachmentLoadedKey];
+  BITFeedbackMessageAttachment *attachment = [dict objectForKey:kBITFeedbackAttachmentLoadedKey];
   if (!attachment) return;
   
   if (![self.message.attachments containsObject:attachment]) return;
@@ -135,25 +125,25 @@
   
   self.messageTextField.stringValue = message.text;
   NSValueTransformer *valueTransformer = [NSValueTransformer valueTransformerForName:@"BITFeedbackMessageDateValueTransformer"];
-  self.dateTextField.stringValue = [valueTransformer transformedValue:message];
+  self.dateTextField.stringValue = [valueTransformer transformedValue:message] ?: @"";
   
   [self setNeedsDisplay:YES];
 }
 
 - (void)updateAttachmentViews {
-  _attachmentsAdded = 0;
+  self.attachmentsAdded = 0;
   
   NSArray *previewableAttachments = self.message.previewableAttachments;
   [self clearAllImageViews];
   
-  if (_attachmentsAdded == [previewableAttachments count]) return;
+  if (self.attachmentsAdded == [previewableAttachments count]) return;
   
   if (previewableAttachments) {
     CGFloat baseOffsetOfText = CGRectGetMaxY(self.dateTextField.frame) + 10;
     
     NSInteger i = 0;
     
-    CGFloat attachmentsPerRow = floorf(self.frame.size.width / (FRAME_SIDE_BORDER + BIT_ATTACHMENT_THUMBNAIL_LENGTH));
+    CGFloat attachmentsPerRow = floor(self.frame.size.width / (FRAME_SIDE_BORDER + BIT_ATTACHMENT_THUMBNAIL_LENGTH));
     
     for (BITFeedbackMessageAttachment *attachment in self.message.attachments) {
       attachment.identifier = [NSNumber numberWithInteger:i];
@@ -192,7 +182,7 @@
       
       [self addSubview:imageButton];
       
-      _attachmentsAdded++;
+      self.attachmentsAdded++;
       
       i++;
     }
@@ -239,7 +229,7 @@
   (void)[layoutManager glyphRangeForTextContainer:textContainer];
   NSRect aRect = [layoutManager usedRectForTextContainer:textContainer];
   
-  CGFloat attachmentsPerRow = floorf(width / (FRAME_SIDE_BORDER + BIT_ATTACHMENT_THUMBNAIL_LENGTH));
+  CGFloat attachmentsPerRow = floor(width / (FRAME_SIDE_BORDER + BIT_ATTACHMENT_THUMBNAIL_LENGTH));
   CGFloat attachmentHeight = BIT_ATTACHMENT_THUMBNAIL_LENGTH * ceil([message previewableAttachments].count / attachmentsPerRow);
   
   if (attachmentHeight > 0) attachmentHeight += 10;

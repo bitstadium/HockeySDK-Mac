@@ -81,7 +81,7 @@ static NSUInteger const BITDefaultFileCount = 50;
 
 - (BOOL)isFreeSpaceAvailable {
   NSArray *files = [self persistedFilesForType:BITPersistenceTypeTelemetry];
-  return files.count < _maxFileCount;
+  return files.count < self.maxFileCount;
 }
 
 - (NSString *)requestNextFilePath {
@@ -128,7 +128,7 @@ static NSUInteger const BITDefaultFileCount = 50;
 /**
  * Deletes a file at the given path.
  *
- * @param the path to look for a file and delete it.
+ * @param path to look for a file and delete it.
  */
 - (void)deleteFileAtPath:(NSString *)path {
   __weak typeof(self) weakSelf = self;

@@ -14,10 +14,10 @@
     self.layer.borderWidth = self.viewBorderWidth;
     
     // Convert to CGColorRef
-    NSInteger numberOfComponents = [self.viewBorderColor numberOfComponents];
+    const NSInteger numberOfComponents = [self.viewBorderColor numberOfComponents];
     CGFloat components[numberOfComponents];
-    CGColorSpaceRef colorSpace = [[self.viewBorderColor colorSpace] CGColorSpace];
     [self.viewBorderColor getComponents:(CGFloat *)&components];
+    CGColorSpaceRef colorSpace = [[self.viewBorderColor colorSpace] CGColorSpace];
     CGColorRef orangeCGColor = CGColorCreate(colorSpace, components);
     
     self.layer.borderColor = orangeCGColor;
