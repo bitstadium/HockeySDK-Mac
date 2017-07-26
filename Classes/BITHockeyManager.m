@@ -13,7 +13,7 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
 
 @interface BITHockeyManager ()
 
-@property (nonatomic, strong) NSString *appIdentifier;
+@property (nonatomic, copy) NSString *appIdentifier;
 @property (nonatomic) BOOL validAppIdentifier;
 @property (nonatomic) BOOL startManagerIsInvoked;
 @property (nonatomic, strong) BITHockeyAppClient *hockeyAppClient;

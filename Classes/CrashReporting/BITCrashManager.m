@@ -104,8 +104,8 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   @property (nonatomic) BOOL crashIdenticalCurrentVersion;
   
   @property (nonatomic, strong) NSMutableArray *crashFiles;
-  @property (nonatomic, strong) NSString       *settingsFile;
-  @property (nonatomic, strong) NSString       *analyzerInProgressFile;
+  @property (nonatomic, copy) NSString       *settingsFile;
+  @property (nonatomic, copy) NSString       *analyzerInProgressFile;
   
   @property (nonatomic, strong) BITPLCrashReporter *plCrashReporter;
   @property (nonatomic, strong) BITCrashReportUI *crashReportUI;

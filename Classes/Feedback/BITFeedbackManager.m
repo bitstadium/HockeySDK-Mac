@@ -22,7 +22,7 @@
 @interface BITFeedbackManager ()
 
 @property (nonatomic, strong) NSFileManager *fileManager;
-@property (nonatomic, strong) NSString *settingsFile;
+@property (nonatomic, copy) NSString *settingsFile;
 
 @property (nonatomic, strong) BITFeedbackWindowController *feedbackWindowController;
 
