@@ -1,6 +1,6 @@
 HOCKEYSDK_DOCSET_NAME=HockeySDK-Mac
 GCC_PREPROCESSOR_DEFINITIONS=$(inherited) CONFIGURATION_$(CONFIGURATION)
-WARNING_CFLAGS = -Weverything -Wno-objc-missing-property-synthesis -Wno-float-equal -Wno-pedantic -Wno-padded -Wno-sign-conversion -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-auto-import -Wno-assign-enum -Wno-exit-time-destructors -Wno-global-constructors -Wno-cast-align -Wno-reserved-id-macro -Wno-disabled-macro-expansion -Wno-objc-interface-ivars -Wno-documentation-unknown-command
+WARNING_CFLAGS = -Weverything -Wno-objc-missing-property-synthesis -Wno-float-equal -Wno-pedantic -Wno-padded -Wno-sign-conversion -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-auto-import -Wno-assign-enum -Wno-exit-time-destructors -Wno-global-constructors -Wno-cast-align -Wno-reserved-id-macro -Wno-disabled-macro-expansion -Wno-objc-interface-ivars -Wno-documentation-unknown-command -Wno-switch-enum -Wno-format-nonliteral
 
 // These are all partially (but not completely?) independent of WARNING_CFLAGS
 // and need to be specified explicitly.
