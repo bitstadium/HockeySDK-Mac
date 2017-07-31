@@ -15,7 +15,10 @@
     
     // Convert to CGColorRef
     const NSInteger numberOfComponents = [self.viewBorderColor numberOfComponents];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wvla"
     CGFloat components[numberOfComponents];
+#pragma clang diagnostic pop
     [self.viewBorderColor getComponents:(CGFloat *)&components];
     CGColorSpaceRef colorSpace = [[self.viewBorderColor colorSpace] CGColorSpace];
     CGColorRef orangeCGColor = CGColorCreate(colorSpace, components);

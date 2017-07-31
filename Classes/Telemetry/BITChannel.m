@@ -237,7 +237,7 @@ void bit_resetSafeJsonStream(char **string) {
   dispatch_source_set_event_handler((dispatch_source_t)self.timerSource, ^{
     typeof(self) strongSelf = weakSelf;
     if (strongSelf) {
-        if (strongSelf->_dataItemCount > 0) {
+        if (strongSelf.dataItemCount > 0) {
             [strongSelf persistDataItemQueue];
         } else {
             strongSelf.channelBlocked = NO;
