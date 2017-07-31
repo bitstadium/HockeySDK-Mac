@@ -62,7 +62,7 @@ static const NSUInteger ChunkSize = 16384;
     stream.avail_in = (uint)[self length];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wcast-qual"
-    stream.next_in = (Bytef *)[self bytes];
+    stream.next_in = (z_const Bytef *)[self bytes];
 #pragma clang diagnostic pop
     stream.total_out = 0;
     stream.avail_out = 0;
@@ -104,7 +104,7 @@ static const NSUInteger ChunkSize = 16384;
     stream.avail_in = (uint)[self length];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wcast-qual"
-    stream.next_in = (Bytef *)[self bytes];
+    stream.next_in = (z_const Bytef *)[self bytes];
 #pragma clang diagnostic pop
     stream.total_out = 0;
     stream.avail_out = 0;
