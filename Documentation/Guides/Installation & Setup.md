@@ -45,7 +45,7 @@ This document contains the following sections:
 ## 1. Requirements
 
 1. We assume that you already have a project in Xcode and that this project is opened in Xcode 6 or later.
-2. The SDK supports OS X 10.7 and later.
+2. The SDK supports OS X 10.9 and later.
 
 <a id="setup"></a>
 ## 2. Setup
@@ -139,7 +139,7 @@ If any crash report has been saved from the last time your application ran, `sta
 **Podfile**
 
 ```
-platform :osx, '10.7'
+platform :osx, '10.9'
 pod "HockeySDK-Mac"
 ```
 
