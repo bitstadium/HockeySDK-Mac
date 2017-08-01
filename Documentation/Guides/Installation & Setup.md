@@ -44,7 +44,7 @@ This document contains the following sections:
 <a id="requirements"></a> 
 ## 1. Requirements
 
-1. We assume that you already have a project in Xcode and that this project is opened in Xcode 6 or later.
+1. We assume that you already have a project in Xcode and that this project is opened in Xcode 8 or later.
 2. The SDK supports OS X 10.9 and later.
 
 <a id="setup"></a>
