@@ -48,9 +48,12 @@
 	NSString* version = nil;
   
 	SInt32 major, minor, bugfix;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 	OSErr err1 = Gestalt(gestaltSystemVersionMajor, &major);
 	OSErr err2 = Gestalt(gestaltSystemVersionMinor, &minor);
 	OSErr err3 = Gestalt(gestaltSystemVersionBugFix, &bugfix);
+#pragma clang diagnostic pop
 	if ((!err1) && (!err2) && (!err3)) {
 		version = [NSString stringWithFormat:@"%ld.%ld.%ld", (long)major, (long)minor, (long)bugfix];
 	}
@@ -58,7 +61,6 @@
 	return version;
 }
 
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
 + (BITSystemProfile *)sharedSystemProfile {
   static BITSystemProfile *sharedInstance = nil;
   static dispatch_once_t pred;
@@ -70,17 +72,6 @@
   
   return sharedInstance;
 }
-#else
-+ (BITSystemProfile *)sharedSystemProfile {
-  static BITSystemProfile *sharedInstance = nil;
-  
-  if (sharedInstance == nil) {
-    sharedInstance = [[BITSystemProfile alloc] init];
-  }
-  
-  return sharedInstance;
-}
-#endif
 
 - (instancetype)init {
   if ((self = [super init])) {
