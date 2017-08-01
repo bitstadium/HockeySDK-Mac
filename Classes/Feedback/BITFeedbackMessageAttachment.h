@@ -15,7 +15,7 @@
 @property (nonatomic, copy, readonly) NSData *data;
 
 
-@property (readonly) NSImage *thumbnailRepresentation;
+@property (atomic, readonly) NSImage *thumbnailRepresentation;
 @property (weak, readonly) NSImage *imageRepresentation;
 
 

@@ -24,8 +24,10 @@ static msai_info_t applicationinsights_library_info __attribute__((section("__TE
 NSString *bit_URLEncodedString(NSString *inputString) {
   
   if ([inputString respondsToSelector:@selector(stringByAddingPercentEncodingWithAllowedCharacters:)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
     return [inputString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"!*'();:@&=+$,/?%#[] {}"].invertedSet];
-    
+#pragma clang diagnostic pop
   } else {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -74,11 +76,14 @@ NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB) {
 #pragma mark Exclude from backup fix
 
 void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
   if (&NSURLIsExcludedFromBackupKey == NULL) {
     BITHockeyLogWarning(@"WARNING: &NSURLIsExcludedBackupKey is NULL, returning");
     return;
   }
-  
+#pragma clang diagnostic pop
+
   BOOL shouldExcludeAppSupportDirFromBackup = [[NSUserDefaults standardUserDefaults] boolForKey:kBITExcludeApplicationSupportFromBackup];
   if (shouldExcludeAppSupportDirFromBackup) {
     return;
@@ -87,11 +92,13 @@ void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
   if (directoryURL) {
     NSError *getResourceError = nil;
     NSNumber *appSupportDirExcludedValue;
-    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
     if ([directoryURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&getResourceError] && appSupportDirExcludedValue) {
       NSError *setResourceError = nil;
       [directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError];
     }
+#pragma clang diagnostic pop
   }
 }
 
@@ -348,7 +355,10 @@ NSString *bit_osVersionBuild(void) {
   
 #if __MAC_OS_X_VERSION_MAX_ALLOWED > 1090
   if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
     NSOperatingSystemVersion osSystemVersion = [[NSProcessInfo processInfo] operatingSystemVersion];
+#pragma clang diagnostic pop
     osVersion = [NSString stringWithFormat:@"%ld.%ld.%ld", (long)osSystemVersion.majorVersion, (long)osSystemVersion.minorVersion, (long)osSystemVersion.patchVersion];
   } else {
 #endif

@@ -99,8 +99,11 @@ static BOOL _logsErrors;
 	SecKeychainAttribute attributes[1];
 	attributes[0].tag = attributeTag;
 	attributes[0].length = newLength;
-	attributes[0].data = newValue;
-	
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-qual"
+	attributes[0].data = (void *)newValue;
+#pragma clang diagnostic pop
+
 	SecKeychainAttributeList attributeList;
 	attributeList.count = 1;
 	attributeList.attr = attributes;
@@ -137,7 +140,10 @@ static BOOL _logsErrors;
 		self.mPassword = [newPassword copy];
 		
 		const char *newPasswordCString = [newPassword UTF8String];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-qual"
 		SecKeychainItemModifyAttributesAndData(self.mCoreKeychainItem, NULL, (UInt32)strlen(newPasswordCString), (void *)newPasswordCString);
+#pragma clang diagnostic pop
 	}
 }
 
@@ -260,8 +266,10 @@ static BOOL _logsErrors;
 	if (returnStatus != noErr || !item)
 	{
 		if (_logsErrors)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcstring-format-directive"
 			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
-
+#pragma clang diagnostic pop
         if (password) SecKeychainItemFreeContent(NULL, password);
 		return nil;
 	}
@@ -283,13 +291,19 @@ static BOOL _logsErrors;
 	const char *passwordCString = [password UTF8String];
 	
 	SecKeychainItemRef item = nil;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-qual"
 	OSStatus returnStatus = SecKeychainAddGenericPassword(NULL, (UInt32)strlen(serviceNameCString), serviceNameCString, (UInt32)strlen(usernameCString), usernameCString, (UInt32)strlen(passwordCString), (void *)passwordCString, &item);
+#pragma clang diagnostic pop
 	
 	if (returnStatus != noErr || !item)
 	{
 		if (_logsErrors)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcstring-format-directive"
 			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
-		return nil;
+#pragma clang diagnostic pop
+      return nil;
 	}
 	return [BITGenericKeychainItem _genericKeychainItemWithCoreKeychainItem:item forServiceName:serviceName username:username password:password];
 }

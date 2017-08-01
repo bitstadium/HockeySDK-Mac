@@ -652,11 +652,14 @@
       if (!latestMessageFromUser && self.showAlertOnIncomingMessages) {
         id userNotificationClass = NSClassFromString(@"NSUserNotification");
         if (userNotificationClass) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
           NSUserNotification *notification = [[NSUserNotification alloc] init];
           notification.title = @"A new response to your feedback is available.";
           notification.informativeText = latestMessage.text;
           notification.soundName = NSUserNotificationDefaultSoundName;
           [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+#pragma clang diagnostic pop
         }
       }
     }
