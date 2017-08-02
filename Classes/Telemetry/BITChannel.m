@@ -231,12 +231,12 @@ void bit_resetSafeJsonStream(char **string) {
   }
   
   self.timerSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.dataItemsOperations);
-  dispatch_source_set_timer(self.timerSource, dispatch_walltime(NULL, NSEC_PER_SEC * self.batchInterval), 1ull * NSEC_PER_SEC, 1ull * NSEC_PER_SEC);
+  dispatch_source_set_timer((dispatch_source_t)self.timerSource, dispatch_walltime(NULL, NSEC_PER_SEC * self.batchInterval), 1ull * NSEC_PER_SEC, 1ull * NSEC_PER_SEC);
   __weak typeof(self) weakSelf = self;
-  dispatch_source_set_event_handler(self.timerSource, ^{
+  dispatch_source_set_event_handler((dispatch_source_t)self.timerSource, ^{
     typeof(self) strongSelf = weakSelf;
     if (strongSelf) {
-        if (strongSelf->_dataItemCount > 0) {
+        if (strongSelf.dataItemCount > 0) {
             [strongSelf persistDataItemQueue];
         } else {
             strongSelf.channelBlocked = NO;
@@ -244,7 +244,7 @@ void bit_resetSafeJsonStream(char **string) {
         [strongSelf invalidateTimer];
     }
   });
-  dispatch_resume(self.timerSource);
+  dispatch_resume((dispatch_source_t)self.timerSource);
 }
 
 /**

@@ -818,7 +818,6 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
         // this should never happen, theoretically only if NSSetUncaugtExceptionHandler() has some internal issues
         NSLog(@"[HockeySDK] ERROR: Exception handler could not be set. Make sure there is no other exception handler set up!");
       }
-
       [BITCrashUncaughtCXXExceptionHandlerManager addCXXExceptionHandler:uncaught_cxx_exception_handler];
     } else {
       NSLog(@"[HockeySDK] WARNING: Detecting crashes is NOT enabled due to running the app with a debugger attached.");
@@ -951,7 +950,8 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
         description = [NSString stringWithFormat:@"Log:\n%@", applicationLog];
       }
     }
-    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcstring-format-directive"
     crashXML = [NSString stringWithFormat:@"<crashes><crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><platform>%@</platform><senderversion>%@</senderversion><versionstring>%@</versionstring><version>%@</version><uuid>%@</uuid><log><![CDATA[%@]]></log><userid>%@</userid><username>%@</username><contact>%@</contact><installstring>%@</installstring><description><![CDATA[%@]]></description></crash></crashes>",
                 [[self applicationName] UTF8String],
                 appBinaryUUIDs,
@@ -968,7 +968,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
                 useremail,
                 installString,
                 [description stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,description.length)]];
-    
+#pragma clang diagnostic pop
     BITHockeyLogDebug(@"INFO: Sending crash reports:\n%@", crashXML);
     [self sendCrashReportWithFilename:filename xml:crashXML attachment:attachment];
   } else {
@@ -1142,10 +1142,10 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
         __unsafe_unretained typeof(self) weakSelf = self;
         BITHTTPOperation *operation = [self.hockeyAppClient
                                        operationWithURLRequest:request
-                                       completion:^(BITHTTPOperation *operation, NSData* responseData, NSError *error) {
+                                       completion:^(BITHTTPOperation *innerOperation, NSData* responseData, NSError *error) {
                                            typeof (self) strongSelf = weakSelf;
                                            
-                                           NSInteger statusCode = [operation.response statusCode];
+                                           NSInteger statusCode = [innerOperation.response statusCode];
                                            [strongSelf processUploadResultWithFilename:filename responseData:responseData statusCode:statusCode error:error];
                                        }];
         [self.hockeyAppClient enqeueHTTPOperation:operation];

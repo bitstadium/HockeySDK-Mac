@@ -19,13 +19,12 @@ static NSUInteger const BITDefaultFileCount = 50;
 
 @interface BITPersistence ()
 
-@property (nonatomic, strong) NSString *appHockeySDKDirectoryPath;
+@property (nonatomic, copy) NSString *appHockeySDKDirectoryPath;
+@property(nonatomic) BOOL directorySetupComplete;
 
 @end
 
-@implementation BITPersistence {
-  BOOL _directorySetupComplete;
-}
+@implementation BITPersistence
 
 #pragma mark - Public
 
@@ -219,6 +218,8 @@ static NSUInteger const BITDefaultFileCount = 50;
     }
 
     // Make sure NSURLIsExcludedFromBackupKey is available
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
     if (&NSURLIsExcludedFromBackupKey != NULL) {
       //Exclude HockeySDK folder from backup
       if (![appURL setResourceValue:@YES
@@ -229,8 +230,9 @@ static NSUInteger const BITDefaultFileCount = 50;
         BITHockeyLogDebug(@"INFO: Exclude %@ from backup", appURL);
       }
     }
-    
-    _directorySetupComplete = YES;
+#pragma clang diagnostic pop
+
+    self.directorySetupComplete = YES;
   }
 }
 
