@@ -34,15 +34,6 @@
  @dicussion All keychain items have a username, password, and optionally a label.
  */
 @interface BITKeychainItem : NSObject
-{
-@private
-	NSString *mUsername;
-	NSString *mPassword;
-	NSString *mLabel;
-	
-@protected
-	SecKeychainItemRef mCoreKeychainItem;
-}
 
 /*!
  @abstract Returns whether or not errors are logged.
@@ -60,13 +51,13 @@
 + (void)unlockKeychain;
 
 //! @abstract The keychain item's username.
-@property (readwrite, copy) NSString *username;
+@property (atomic, copy) NSString *username;
 
 //! @abstract The keychain item's password.
-@property (readwrite, copy) NSString *password;
+@property (atomic, copy) NSString *password;
 
 //! @abstract The keychain item's label.
-@property (readwrite, copy) NSString *label;
+@property (atomic, copy) NSString *label;
 
 /*!
  @abstract Removes the receiver from the keychain.
@@ -83,13 +74,9 @@
  @discussion Generic keychain items have a service name in addition to the standard keychain item properties.
  */
 @interface BITGenericKeychainItem : BITKeychainItem
-{
-@private
-	NSString *mServiceName;
-}
 
 //! @abstract The keychain item's service name.
-@property (readwrite, copy) NSString *serviceName;
+@property (atomic, copy) NSString *serviceName;
 
 /*!
  @abstract Returns, if possible, a generic keychain item that corresponds to the given service.

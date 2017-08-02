@@ -9,10 +9,13 @@
 #import <sys/sysctl.h>
 #import <mach-o/ldsyms.h>
 
+@interface BITHockeyBaseManager()
 
-@implementation BITHockeyBaseManager {
-  NSDateFormatter *_rfc3339Formatter;
-}
+@property(nonatomic, strong) NSDateFormatter *rfc3339Formatter;
+
+@end
+
+@implementation BITHockeyBaseManager
 
 - (id)init {
   if ((self = [super init])) {
@@ -47,7 +50,7 @@
 }
 
 - (NSString *)encodedAppIdentifier {
-  return (_appIdentifier ? bit_URLEncodedString(_appIdentifier) : bit_URLEncodedString([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]));
+  return (self.appIdentifier ? bit_URLEncodedString(self.appIdentifier) : bit_URLEncodedString([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]));
 }
 
 - (NSString *)getDevicePlatform {
@@ -72,7 +75,7 @@
 - (NSDate *)parseRFC3339Date:(NSString *)dateString {
   NSDate *date = nil;
   NSError *error = nil; 
-  if (![_rfc3339Formatter getObjectValue:&date forString:dateString range:nil error:&error]) {
+  if (![self.rfc3339Formatter getObjectValue:&date forString:dateString range:nil error:&error]) {
     BITHockeyLogDebug(@"INFO: Invalid date '%@' string: %@", dateString, error);
   }
   
