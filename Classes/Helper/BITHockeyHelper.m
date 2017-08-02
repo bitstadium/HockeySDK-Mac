@@ -97,7 +97,9 @@ void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
 #pragma clang diagnostic ignored "-Wunguarded-availability"
       if ([directoryURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&getResourceError] && appSupportDirExcludedValue) {
         NSError *setResourceError = nil;
-        [directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError];
+        if(![directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError]) {
+          BITHockeyLogError(@"ERROR: Error while setting resource value: %@", setResourceError.localizedDescription);
+        }
       } else {
         BITHockeyLogError(@"ERROR: Error while retrieving resource value: %@", getResourceError.localizedDescription);
       }
