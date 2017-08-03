@@ -90,15 +90,21 @@ void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
   }
   
   if (directoryURL) {
-    NSError *getResourceError = nil;
-    NSNumber *appSupportDirExcludedValue;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      NSError *getResourceError = nil;
+      NSNumber *appSupportDirExcludedValue;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunguarded-availability"
-    if ([directoryURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&getResourceError] && appSupportDirExcludedValue) {
-      NSError *setResourceError = nil;
-      [directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError];
-    }
+      if ([directoryURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&getResourceError] && appSupportDirExcludedValue) {
+        NSError *setResourceError = nil;
+        if(![directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError]) {
+          BITHockeyLogError(@"ERROR: Error while setting resource value: %@", setResourceError.localizedDescription);
+        }
+      } else {
+        BITHockeyLogError(@"ERROR: Error while retrieving resource value: %@", getResourceError.localizedDescription);
+      }
 #pragma clang diagnostic pop
+    });
   }
 }
 
