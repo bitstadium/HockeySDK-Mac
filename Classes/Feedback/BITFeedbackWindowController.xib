@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12121" systemVersion="17A315i" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12121"/>
-        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <deployment version="1070" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="BITFeedbackWindowController">
@@ -65,7 +64,7 @@
                                         <rect key="frame" x="11" y="10" width="378" height="229"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="72">
+                                            <textField verticalHuggingPriority="750" id="72">
                                                 <rect key="frame" x="37" y="126" width="304" height="38"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" placeholderString="Name" drawsBackground="YES" usesSingleLineMode="YES" id="83" customClass="BITSDKTextFieldCell">
@@ -91,7 +90,7 @@
                                                     <outlet property="nextKeyView" destination="88" id="95"/>
                                                 </connections>
                                             </textField>
-                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="88">
+                                            <textField verticalHuggingPriority="750" id="88">
                                                 <rect key="frame" x="37" y="78" width="304" height="38"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" placeholderString="Email" drawsBackground="YES" usesSingleLineMode="YES" id="89" customClass="BITSDKTextFieldCell">
@@ -133,7 +132,7 @@ DQ
                                                     <outlet property="nextKeyView" destination="72" id="86"/>
                                                 </connections>
                                             </button>
-                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="77">
+                                            <textField verticalHuggingPriority="750" id="77">
                                                 <rect key="frame" x="49" y="172" width="281" height="24"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Please provide your contact information" id="78">
@@ -168,7 +167,6 @@ DQ
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="100" rowSizeStyle="automatic" viewBased="YES" id="13">
-                                                            <rect key="frame" x="0.0" y="0.0" width="598" height="441"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <color key="backgroundColor" red="0.92549026012420654" green="0.94117653369903564" blue="0.95294123888015747" alpha="1" colorSpace="deviceRGB"/>
                                                             <color key="gridColor" red="0.82352948188781738" green="0.83921575546264648" blue="0.84705889225006104" alpha="1" colorSpace="deviceRGB"/>
@@ -190,7 +188,7 @@ DQ
                                                                             <rect key="frame" x="0.0" y="0.0" width="598" height="100"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <subviews>
-                                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" id="GEY-bx-dOl" userLabel="Message">
+                                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="GEY-bx-dOl" userLabel="Message">
                                                                                     <rect key="frame" x="10" y="34" width="580" height="46"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Message" id="Vbq-P6-t56">
@@ -205,7 +203,7 @@ DQ
                                                                                         <binding destination="6OJ-A4-zuf" name="value" keyPath="objectValue.text" id="v03-A8-7kg"/>
                                                                                     </connections>
                                                                                 </textField>
-                                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" id="cVx-LJ-IdJ" userLabel="Date &amp; Status">
+                                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="cVx-LJ-IdJ" userLabel="Date &amp; Status">
                                                                                     <rect key="frame" x="10" y="18" width="580" height="17"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Date" id="gva-wA-fwJ">
@@ -245,6 +243,7 @@ DQ
                                                             </connections>
                                                         </tableView>
                                                     </subviews>
+                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </clipView>
                                                 <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="14">
                                                     <rect key="frame" x="-100" y="-100" width="598" height="16"/>
@@ -280,16 +279,18 @@ DQ
                                                         <rect key="frame" x="10" y="10" width="580" height="77"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" id="M3a-n4-XPv">
-                                                            <rect key="frame" x="0.0" y="0.0" width="565" height="77"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="580" height="77"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textView importsGraphics="NO" richText="NO" continuousSpellChecking="YES" allowsUndo="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="159" customClass="BITSDKTextView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="565" height="77"/>
+                                                                <textView importsGraphics="NO" richText="NO" continuousSpellChecking="YES" allowsUndo="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="159" customClass="BITSDKTextView">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="77"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    <size key="minSize" width="565" height="77"/>
+                                                                    <size key="minSize" width="580" height="77"/>
                                                                     <size key="maxSize" width="600" height="10000000"/>
                                                                     <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    <size key="minSize" width="580" height="77"/>
+                                                                    <size key="maxSize" width="600" height="10000000"/>
                                                                     <connections>
                                                                         <binding destination="-2" name="attributedString" keyPath="self.messageText" id="166">
                                                                             <dictionary key="options">
@@ -306,7 +307,7 @@ DQ
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="161">
-                                                            <rect key="frame" x="565" y="0.0" width="15" height="77"/>
+                                                            <rect key="frame" x="564" y="0.0" width="16" height="77"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
@@ -318,12 +319,11 @@ DQ
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="55" rowSizeStyle="automatic" viewBased="YES" id="vi6-mo-5xv">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="70" height="97"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
-                                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                     <tableColumns>
-                                                                        <tableColumn identifier="" editable="NO" width="70" minWidth="40" maxWidth="1000" id="6Xa-8h-UXK">
+                                                                        <tableColumn editable="NO" width="70" minWidth="40" maxWidth="1000" id="6Xa-8h-UXK">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -405,7 +405,7 @@ DQ
                                                 <rect key="frame" x="20" y="23" width="16" height="16"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </progressIndicator>
-                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="44">
+                                            <textField verticalHuggingPriority="750" id="44">
                                                 <rect key="frame" x="95" y="18" width="410" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" id="45">
