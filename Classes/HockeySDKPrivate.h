@@ -1,3 +1,11 @@
+//
+//  HockeySDKPrivate.h
+//  HockeySDK
+//
+//  Created by Andreas Linde on 02.09.13.
+//
+//
+
 #import "BITHockeyLogger.h"
 
 #ifndef HockeySDK_HockeySDKPrivate_h
@@ -13,7 +21,7 @@
 #define BITHOCKEY_INTEGRATIONFLOW_TIMESTAMP @"BITIntegrationFlowStartTimestamp"
 
 #define BITHockeyBundle [NSBundle bundleWithIdentifier:BITHOCKEY_IDENTIFIER]
-//#define BITHOCKEYSDK_URL @"https://sdk.hockeyapp.net/"
+#define BITHOCKEYSDK_URL @"https://sdk.hockeyapp.net/"
 extern NSString *const kBITHockeySDKURL;
 
 extern NSString *const kBITFeedbackAttachmentLoadedNotification;
@@ -26,5 +34,3 @@ extern NSString *const kBITFeedbackAttachmentLoadedKey;
 #define BIT_ATTACHMENT_THUMBNAIL_LENGTH 45
 
 #endif
-
-
