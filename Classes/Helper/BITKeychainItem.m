@@ -268,7 +268,8 @@ static BOOL _logsErrors;
     if (_logsErrors){
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated"
-			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+      NSString *errorString = [NSString  stringWithCString:GetMacOSStatusErrorString(returnStatus) encoding:NSUTF8StringEncoding];
+			NSLog(@"Error (%@) - %@", NSStringFromSelector(_cmd), errorString);
 #pragma clang diagnostic pop
     }
     if (password) {
@@ -304,7 +305,8 @@ static BOOL _logsErrors;
     if (_logsErrors){
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated"
-			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+      NSString *errorString = [NSString  stringWithCString:GetMacOSStatusErrorString(returnStatus) encoding:NSUTF8StringEncoding];
+      NSLog(@"Error (%@) - %@", NSStringFromSelector(_cmd), errorString);
 #pragma clang diagnostic pop
     }
 		return nil;

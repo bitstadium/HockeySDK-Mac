@@ -13,20 +13,18 @@
 
 @interface BITPersistenceTests : XCTestCase
 
+@property (strong) BITPersistence *sut;
+
 @end
 
-@implementation BITPersistenceTests {
-    BITPersistence *_subject;
-}
+@implementation BITPersistenceTests
 
 - (void)setUp {
     [super setUp];
-    _subject = [BITPersistence alloc];
-    id mock = OCMPartialMock(_subject);
+    self.sut = [BITPersistence alloc];
+    id mock = OCMPartialMock(self.sut);
     
-    OCMStub([mock bundleIdentifier]).andReturn(@"com.testapp");
-    
-    _subject = [_subject init];
+    OCMStub([mock bundleIdentifier]).andReturn(@"com.testapp");    
 }
 
 - (void)tearDown {
@@ -34,7 +32,7 @@
 }
 
 - (void)testAppHockeySDKDirectoryPath {
-    NSString *path = [_subject appHockeySDKDirectoryPath];
+    NSString *path = [self.sut appHockeySDKDirectoryPath];
     
     NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject] stringByStandardizingPath];
     NSString *validPath = [NSString stringWithFormat:@"%@/%@", appSupportPath, @"com.testapp/com.microsoft.HockeyApp"];
