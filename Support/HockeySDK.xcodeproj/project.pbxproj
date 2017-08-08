@@ -222,8 +222,7 @@
 		B270E4D81F3A51BC001C1C85 /* HockeySDKPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = B270E4D61F3A51BC001C1C85 /* HockeySDKPrivate.m */; };
 		B270E4D91F3A51CF001C1C85 /* HockeySDKPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = B270E4D51F3A51BC001C1C85 /* HockeySDKPrivate.h */; };
 		B270E4DA1F3A51D8001C1C85 /* HockeySDKPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = B270E4D61F3A51BC001C1C85 /* HockeySDKPrivate.m */; };
-		B270E4DC1F3A52A2001C1C85 /* HockeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = B270E4DB1F3A52A2001C1C85 /* HockeySDK.h */; };
-		B270E4DD1F3A52A2001C1C85 /* HockeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = B270E4DB1F3A52A2001C1C85 /* HockeySDK.h */; };
+		B270E4DC1F3A52A2001C1C85 /* HockeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = B270E4DB1F3A52A2001C1C85 /* HockeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -861,7 +860,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B270E4DD1F3A52A2001C1C85 /* HockeySDK.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
