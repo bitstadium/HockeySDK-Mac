@@ -215,8 +215,7 @@ void bit_resetSafeJsonStream(char **string) {
 
 - (void)invalidateTimer {
   if ([self timerIsRunning]) {
-    dispatch_source_cancel((dispatch_source_t)self.timerSource);
-    dispatch_release((dispatch_source_t)self.timerSource);
+    dispatch_source_cancel(self.timerSource);
     self.timerSource = nil;
   }
 }

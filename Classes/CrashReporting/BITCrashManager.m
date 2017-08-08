@@ -818,32 +818,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
         // this should never happen, theoretically only if NSSetUncaugtExceptionHandler() has some internal issues
         NSLog(@"[HockeySDK] ERROR: Exception handler could not be set. Make sure there is no other exception handler set up!");
       }
-      
-      BOOL osVersionIsMountainLionOrNewer = NO;
-      
-      // Add the C++ uncaught exception handler, which is currently not handled by PLCrashReporter internally
-      if ([[NSProcessInfo class] instancesRespondToSelector:NSSelectorFromString(@"isOperatingSystemAtLeastVersion:")]) {
-        osVersionIsMountainLionOrNewer = [[NSProcessInfo processInfo]
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunguarded-availability"
-        	isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){ 10, 8, 0 }];
-#pragma clang diagnostic pop
-      } else {
-        SInt32 major = 0, minor = 0, patch = 0;
-        OSStatus err = noErr;
-        
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        err = err == noErr ? Gestalt(gestaltSystemVersionMajor, &major) : err;
-        err = err == noErr ? Gestalt(gestaltSystemVersionMinor, &minor) : err;
-        err = err == noErr ? Gestalt(gestaltSystemVersionBugFix, &patch) : err;
-#pragma clang diagnostic pop
-        osVersionIsMountainLionOrNewer = err == noErr && (major > 10 || (major == 10 && minor >= 8));
-      }
-      
-      if (osVersionIsMountainLionOrNewer) {
-        [BITCrashUncaughtCXXExceptionHandlerManager addCXXExceptionHandler:uncaught_cxx_exception_handler];
-      }
+      [BITCrashUncaughtCXXExceptionHandlerManager addCXXExceptionHandler:uncaught_cxx_exception_handler];
     } else {
       NSLog(@"[HockeySDK] WARNING: Detecting crashes is NOT enabled due to running the app with a debugger attached.");
     }

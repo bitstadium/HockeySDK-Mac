@@ -265,12 +265,15 @@ static BOOL _logsErrors;
 	OSStatus returnStatus = SecKeychainFindGenericPassword(NULL, (UInt32)strlen(serviceNameCString), serviceNameCString, (UInt32)strlen(usernameCString), usernameCString, &passwordLength, (void **)&password, &item);
 	if (returnStatus != noErr || !item)
 	{
-		if (_logsErrors)
+    if (_logsErrors){
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wcstring-format-directive"
+#pragma clang diagnostic ignored "-Wdeprecated"
 			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
 #pragma clang diagnostic pop
-        if (password) SecKeychainItemFreeContent(NULL, password);
+    }
+    if (password) {
+      SecKeychainItemFreeContent(NULL, password);
+    }
 		return nil;
 	}
 	NSString *passwordString = [[NSString alloc] initWithData:[NSData dataWithBytes:password length:passwordLength] encoding:NSUTF8StringEncoding];
@@ -298,12 +301,13 @@ static BOOL _logsErrors;
 	
 	if (returnStatus != noErr || !item)
 	{
-		if (_logsErrors)
+    if (_logsErrors){
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wcstring-format-directive"
+#pragma clang diagnostic ignored "-Wdeprecated"
 			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
 #pragma clang diagnostic pop
-      return nil;
+    }
+		return nil;
 	}
 	return [BITGenericKeychainItem _genericKeychainItemWithCoreKeychainItem:item forServiceName:serviceName username:username password:password];
 }
