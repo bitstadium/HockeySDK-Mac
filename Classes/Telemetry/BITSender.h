@@ -27,12 +27,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * We use this queue to keep track of the number of currently running requests
  */
-@property (nonatomic, assign) dispatch_queue_t requestsCountQueue;
+@property (nonatomic, strong) dispatch_queue_t requestsCountQueue;
 
 /**
  *  A queue which is used to handle BITHTTPOperation completion blocks.
  */
-@property (nonatomic, assign) dispatch_queue_t senderTasksQueue;
+@property (nonatomic, strong) dispatch_queue_t senderTasksQueue;
 
 /**
  *  A queue for processing http operations (iOS < 7)

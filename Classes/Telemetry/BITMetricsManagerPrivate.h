@@ -46,7 +46,7 @@ FOUNDATION_EXPORT NSString *const kBITApplicationWasLaunched;
 /**
  *  A concurrent queue which creates and processes telemetry items.
  */
-@property (nonatomic, assign, readonly) dispatch_queue_t metricsEventQueue;
+@property (nonatomic, strong, readonly) dispatch_queue_t metricsEventQueue;
 
 /**
  *  Sender instance to send out telemetry data.

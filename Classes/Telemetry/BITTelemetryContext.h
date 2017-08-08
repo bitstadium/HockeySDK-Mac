@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  A queue which makes array operations thread safe.
  */
-@property (nonatomic, assign) dispatch_queue_t operationsQueue;
+@property (nonatomic, strong) dispatch_queue_t operationsQueue;
 
 /**
  *  The application context.
