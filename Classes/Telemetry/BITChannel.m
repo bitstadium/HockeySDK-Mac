@@ -74,10 +74,10 @@ NS_ASSUME_NONNULL_BEGIN
   if (!BITSafeJsonEventsString || strlen(BITSafeJsonEventsString) == 0) {
     return;
   }
-
+  
   NSData *bundle = [NSData dataWithBytes:BITSafeJsonEventsString length:strlen(BITSafeJsonEventsString)];
   [self.persistence persistBundle:bundle];
-
+  
   // Reset both, the async-signal-safe and item counter.
   [self resetQueue];
 }
@@ -100,7 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
   __weak typeof(self) weakSelf = self;
   dispatch_async(self.dataItemsOperations, ^{
     typeof(self) strongSelf = weakSelf;
-
+    
     if (strongSelf.isQueueBusy) {
       // Case 2: Channel is in blocked state: Trigger sender, start timer to check after again after a while and abort operation.
       BITHockeyLogDebug(@"INFO: The channel is saturated. %@ was dropped.", item.debugDescription);
@@ -113,11 +113,11 @@ NS_ASSUME_NONNULL_BEGIN
     // Enqueue item
     NSDictionary *dict = [self dictionaryForTelemetryData:item];
     [strongSelf appendDictionaryToJsonStream:dict];
-
+    
     if (strongSelf.dataItemCount >= self.maxBatchSize) {
       // Case 3: Max batch count has been reached, so write queue to disk and delete all items.
       [strongSelf persistDataItemQueue];
-    
+      
     } else if (strongSelf.dataItemCount == 1) {
       // Case 4: It is the first item, let's start the timer.
       if (![strongSelf timerIsRunning]) {
@@ -138,19 +138,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BITEnvelope *)envelopeForTelemetryData:(BITTelemetryData *)telemetryData {
   telemetryData.version = @(BITSchemaVersion);
-
+  
   BITData *data = [BITData new];
   data.baseData = telemetryData;
   data.baseType = telemetryData.dataTypeName;
-
+  
   BITEnvelope *envelope = [BITEnvelope new];
   envelope.time = bit_utcDateString([NSDate date]);
   envelope.iKey = self.telemetryContext.appIdentifier;
-
+  
   envelope.tags = self.telemetryContext.contextDictionary;
   envelope.data = data;
   envelope.name = telemetryData.envelopeTypeName;
-
+  
   return envelope;
 }
 
@@ -163,7 +163,7 @@ NS_ASSUME_NONNULL_BEGIN
     BITHockeyLogError(@"ERROR: JSONSerialization error: %@", error.localizedDescription);
     return @"{}";
   } else {
-    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] ?: @"";
+    return (NSString *)[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
   }
 }
 
@@ -172,7 +172,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)appendDictionaryToJsonStream:(NSDictionary *)dictionary {
   if (dictionary) {
     NSString *string = [self serializeDictionaryToJSONString:dictionary];
-
+    
     // Since we can't persist every event right away, we write it to a simple C string.
     // This can then be written to disk by a signal handler in case of a crash.
     bit_appendStringToSafeJsonStream(string, &(BITSafeJsonEventsString));
@@ -188,7 +188,7 @@ void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {
   if (*jsonString == NULL || strlen(*jsonString) == 0) {
     bit_resetSafeJsonStream(jsonString);
   }
-
+  
   if (string.length == 0) { return; }
   
   char *new_string = NULL;
@@ -215,7 +215,7 @@ void bit_resetSafeJsonStream(char **string) {
 
 - (void)invalidateTimer {
   if ([self timerIsRunning]) {
-    dispatch_source_cancel(self.timerSource);
+    dispatch_source_cancel((dispatch_source_t)self.timerSource);
     self.timerSource = nil;
   }
 }
@@ -236,12 +236,12 @@ void bit_resetSafeJsonStream(char **string) {
   dispatch_source_set_event_handler((dispatch_source_t)self.timerSource, ^{
     typeof(self) strongSelf = weakSelf;
     if (strongSelf) {
-        if (strongSelf.dataItemCount > 0) {
-            [strongSelf persistDataItemQueue];
-        } else {
-            strongSelf.channelBlocked = NO;
-        }
-        [strongSelf invalidateTimer];
+      if (strongSelf.dataItemCount > 0) {
+        [strongSelf persistDataItemQueue];
+      } else {
+        strongSelf.channelBlocked = NO;
+      }
+      [strongSelf invalidateTimer];
     }
   });
   dispatch_resume((dispatch_source_t)self.timerSource);

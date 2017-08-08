@@ -76,14 +76,6 @@ NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB) {
 #pragma mark Exclude from backup fix
 
 void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunguarded-availability"
-  if (&NSURLIsExcludedFromBackupKey == NULL) {
-    BITHockeyLogWarning(@"WARNING: &NSURLIsExcludedBackupKey is NULL, returning");
-    return;
-  }
-#pragma clang diagnostic pop
-
   BOOL shouldExcludeAppSupportDirFromBackup = [[NSUserDefaults standardUserDefaults] boolForKey:kBITExcludeApplicationSupportFromBackup];
   if (shouldExcludeAppSupportDirFromBackup) {
     return;
