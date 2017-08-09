@@ -117,9 +117,9 @@ import HockeySDK
 4. Add the following lines to setup and start the Application Insights SDK:
 
 ```
-BITHockeyManager.sharedHockeyManager().configureWithIdentifier("APP_IDENTIFIER")
+BITHockeyManager.shared().configure(withIdentifier: "APP_IDENTIFIER")
 // Do some additional configuration if needed here
-BITHockeyManager.sharedHockeyManager().startManager()
+BITHockeyManager.shared().start()
 ```
 
 *Note:* In case of document based apps, invoke `startManager` at the end of `applicationDidFinishLaunching`, since otherwise you may lose the Apple events to restore, open untitled document etc.
@@ -300,9 +300,9 @@ BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metri
 **Swift**
 
 ```
-let metricsManager = BITHockeyManager.sharedHockeyManager().metricsManager
+let metricsManager = BITHockeyManager.shared().metricsManager
 
-metricsManager.trackEventWithName(eventName)
+metricsManager.trackEvent(withName: eventName)
 ```
 
 **Limitations**
@@ -339,8 +339,8 @@ NSDictionary *myMeasurements = @{@"Measurement 1" : @1,
 let myProperties = ["Property 1": "Something", "Property 2": "Other thing", "Property 3" : "Totally different thing."]
 let myMeasurements = ["Measurement 1": 1, "Measurement 2": 2.3, "Measurement 3" : 30000]
 
-let metricsManager = BITHockeyManager.sharedHockeyManager().metricsManager
-metricsManager.trackEventWithName(eventName, properties: myProperties, myMeasurements: measurements)
+let metricsManager = BITHockeyManager.shared().metricsManager
+metricsManager.trackEvent(withName: eventName, properties: myProperties, measurements: myMeasurements)
 ```
 
 <a name="feedback"></a>
