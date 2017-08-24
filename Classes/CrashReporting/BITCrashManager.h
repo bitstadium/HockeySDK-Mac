@@ -11,6 +11,11 @@
 // or set it on runtime using the `autoSubmitCrashReport property`
 #define kHockeySDKAutomaticallySendCrashReports @"HockeySDKAutomaticallySendCrashReports"
 
+#define kBitCrashBundleIdentifier           @"BitCrashBundleIdentifier"
+#define kBitCrashBundleShortVersionString   @"BitCrashBundleShortVersionString"
+#define kBitCrashBundleMarketingVersion     @"BitCrashBundleMarketingVersion"
+#define kBitCrashBundleVersion              @"BitCrashBundleVersion"
+
 @protocol BITCrashManagerDelegate;
 
 @class BITCrashDetails;

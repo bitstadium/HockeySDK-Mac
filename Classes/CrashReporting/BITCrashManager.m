@@ -950,17 +950,23 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
         description = [NSString stringWithFormat:@"Log:\n%@", applicationLog];
       }
     }
+		
+		NSString* bundleIdentifier          = [[NSUserDefaults standardUserDefaults] stringForKey:kBitCrashBundleIdentifier] ?: appBundleIdentifier;
+		NSString* bundleShortVersionString  = [[NSUserDefaults standardUserDefaults] stringForKey:kBitCrashBundleShortVersionString] ?: [self applicationVersion];
+		NSString* bundleMarketingVersion    = [[NSUserDefaults standardUserDefaults] stringForKey:kBitCrashBundleMarketingVersion] ?: appBundleMarketingVersion;
+		NSString* bundleVersion             = [[NSUserDefaults standardUserDefaults] stringForKey:kBitCrashBundleVersion] ?: appVersion;
+		
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wcstring-format-directive"
     crashXML = [NSString stringWithFormat:@"<crashes><crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><platform>%@</platform><senderversion>%@</senderversion><versionstring>%@</versionstring><version>%@</version><uuid>%@</uuid><log><![CDATA[%@]]></log><userid>%@</userid><username>%@</username><contact>%@</contact><installstring>%@</installstring><description><![CDATA[%@]]></description></crash></crashes>",
                 [[self applicationName] UTF8String],
                 appBinaryUUIDs,
-                appBundleIdentifier,
+                bundleIdentifier,
                 osVersion,
                 deviceModel,
-                [self applicationVersion],
-                appBundleMarketingVersion,
-                appBundleVersion,
+                bundleShortVersionString,
+                bundleMarketingVersion,
+                bundleVersion,
                 crashUUID,
                 [crashLogString stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,crashLogString.length)],
                 userid,
