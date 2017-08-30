@@ -209,7 +209,7 @@ static const CGFloat kDetailsHeight = 285;
   }
 
   title = BITHockeyLocalizedString(@"IntroductionText", @"");
-  [[self.introductionText cell] setTitle:title];
+  [[self.introductionText cell] setTitle:[NSString stringWithFormat:title, self.applicationName]];
   [[self.commentsTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"CommentsDisclosureTitle", @"")];
   [[self.problemDescriptionTextFieldTitle cell] setTitle:BITHockeyLocalizedString(@"ProblemDetailsTitle", @"")];
 
