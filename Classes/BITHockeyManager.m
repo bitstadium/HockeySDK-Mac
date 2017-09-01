@@ -223,6 +223,13 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
   }
 }
 
+- (void)setDisableMetricsManager:(BOOL)disableMetricsManager {
+  if (self.metricsManager) {
+    self.metricsManager.disabled = disableMetricsManager;
+  }
+  _disableMetricsManager = disableMetricsManager;
+}
+
 - (void)setDisableFeedbackManager:(BOOL)disableFeedbackManager {
   if (self.feedbackManager) {
     [self.feedbackManager setDisableFeedbackManager:disableFeedbackManager];
