@@ -36,9 +36,9 @@
 @property (nonatomic, strong) IBOutlet NSButton *submitButton;
 
 @property (nonatomic, strong) BITCrashManager *crashManager;
-@property (nonatomic, strong) NSString        *applicationName;
+@property (nonatomic, copy) NSString        *applicationName;
 @property (nonatomic, strong) NSMutableString *logContent;
-@property (nonatomic, strong) NSString        *crashLogContent;
+@property (nonatomic, copy) NSString        *crashLogContent;
 
 // Redeclare BITCrashReportUI properties with readwrite attribute.
 @property (nonatomic, readwrite) BOOL nibDidLoadSuccessfully;

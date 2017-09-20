@@ -4,7 +4,7 @@
 
 @interface BITHockeyBaseManager ()
 
-@property (nonatomic, strong) NSString *appIdentifier;
+@property (nonatomic, copy) NSString *appIdentifier;
 @property (nonatomic, copy) NSString *userID;
 @property (nonatomic, copy) NSString *userName;
 @property (nonatomic, copy) NSString *userEmail;

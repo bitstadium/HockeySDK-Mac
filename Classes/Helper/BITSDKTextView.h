@@ -4,7 +4,7 @@
 
 @interface BITSDKTextView : NSTextView
 
-@property (nonatomic, strong) NSString *placeHolderString;
+@property (nonatomic, copy) NSString *placeHolderString;
 
 @property (nonatomic, unsafe_unretained) id<BITSDKTextViewDelegate> bitDelegate;
 

@@ -26,9 +26,9 @@
 
 @interface BITKeychainItem ()
 
-@property(nonatomic, strong) NSString *mUsername;
-@property(nonatomic, strong) NSString *mPassword;
-@property(nonatomic, strong) NSString *mLabel;
+@property(nonatomic, copy) NSString *mUsername;
+@property(nonatomic, copy) NSString *mPassword;
+@property(nonatomic, copy) NSString *mLabel;
 @property SecKeychainItemRef mCoreKeychainItem;
 
 /*!
@@ -217,7 +217,7 @@ static BOOL _logsErrors;
 #pragma mark -
 @interface BITGenericKeychainItem ()
 
-@property(nonatomic, strong) NSString *mServiceName;
+@property(nonatomic, copy) NSString *mServiceName;
 
 @end
 

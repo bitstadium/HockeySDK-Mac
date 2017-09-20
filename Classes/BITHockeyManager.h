@@ -131,7 +131,7 @@
  * Please be aware that the URL for `BITMetricsManager` needs to be set separately
  * as this class uses a different endpoint!
  */
-@property (nonatomic, strong) NSString *serverURL;
+@property (nonatomic, copy) NSString *serverURL;
 
 /**
  * Reference to the initialized BITCrashManager module
