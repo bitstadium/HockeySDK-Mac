@@ -91,8 +91,6 @@
 		1E5785DC19461DF60014D19A /* BITHockeyAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785DA19461DF60014D19A /* BITHockeyAttachment.m */; };
 		1E5785E1194646C00014D19A /* BITHockeyAppClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E5785DD194646C00014D19A /* BITHockeyAppClient.h */; };
 		1E5785E2194646C00014D19A /* BITHockeyAppClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785DE194646C00014D19A /* BITHockeyAppClient.m */; };
-		1E5785E7194647180014D19A /* BITHTTPOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E5785E5194647180014D19A /* BITHTTPOperation.h */; };
-		1E5785E8194647180014D19A /* BITHTTPOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785E6194647180014D19A /* BITHTTPOperation.m */; };
 		1E5785ED194652900014D19A /* BITCrashMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E5785EB194652900014D19A /* BITCrashMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E5785EE194652900014D19A /* BITCrashMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785EC194652900014D19A /* BITCrashMetaData.m */; };
 		1E7E5507187F3ED800F0858E /* BITFeedbackManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E7E54FD187F3ED800F0858E /* BITFeedbackManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -166,7 +164,6 @@
 		4DD13AF7162CAA2200BF15E8 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DD13AF6162CAA2200BF15E8 /* IOKit.framework */; };
 		69EAA67B1E4105DA00DB7393 /* BITHockeyBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5512187F3EE700F0858E /* BITHockeyBaseManager.m */; };
 		69EAA67C1E4105DA00DB7393 /* BITHockeyAppClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785DE194646C00014D19A /* BITHockeyAppClient.m */; };
-		69EAA67D1E4105DA00DB7393 /* BITHTTPOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785E6194647180014D19A /* BITHTTPOperation.m */; };
 		69EAA67E1E4105DA00DB7393 /* BITHockeyHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7E5515187F3EE700F0858E /* BITHockeyHelper.m */; };
 		69EAA67F1E4105DA00DB7393 /* BITHockeyLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 80EF93A11CD9334B006722E1 /* BITHockeyLogger.m */; };
 		69EAA6801E4105DA00DB7393 /* BITHockeyAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5785DA19461DF60014D19A /* BITHockeyAttachment.m */; };
@@ -327,8 +324,6 @@
 		1E5785DA19461DF60014D19A /* BITHockeyAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BITHockeyAttachment.m; path = ../CrashReporting/BITHockeyAttachment.m; sourceTree = "<group>"; };
 		1E5785DD194646C00014D19A /* BITHockeyAppClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITHockeyAppClient.h; sourceTree = "<group>"; };
 		1E5785DE194646C00014D19A /* BITHockeyAppClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHockeyAppClient.m; sourceTree = "<group>"; };
-		1E5785E5194647180014D19A /* BITHTTPOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITHTTPOperation.h; sourceTree = "<group>"; };
-		1E5785E6194647180014D19A /* BITHTTPOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHTTPOperation.m; sourceTree = "<group>"; };
 		1E5785EB194652900014D19A /* BITCrashMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITCrashMetaData.h; sourceTree = "<group>"; };
 		1E5785EC194652900014D19A /* BITCrashMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashMetaData.m; sourceTree = "<group>"; };
 		1E66F5E015A1C47700C0816F /* fi */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/HockeySDK.strings; sourceTree = "<group>"; };
@@ -508,8 +503,6 @@
 				1E7E5513187F3EE700F0858E /* BITHockeyBaseManagerPrivate.h */,
 				1E5785DD194646C00014D19A /* BITHockeyAppClient.h */,
 				1E5785DE194646C00014D19A /* BITHockeyAppClient.m */,
-				1E5785E5194647180014D19A /* BITHTTPOperation.h */,
-				1E5785E6194647180014D19A /* BITHTTPOperation.m */,
 				1E7E5514187F3EE700F0858E /* BITHockeyHelper.h */,
 				1E7E5515187F3EE700F0858E /* BITHockeyHelper.m */,
 				80EF93A01CD9334B006722E1 /* BITHockeyLogger.h */,
@@ -801,7 +794,6 @@
 				1E85C5911B343E2100CE2C0D /* PLCrashReportSymbolInfo.h in Headers */,
 				80EF93A31CD9334B006722E1 /* BITHockeyLogger.h in Headers */,
 				1E7E550E187F3ED800F0858E /* BITFeedbackWindowController.h in Headers */,
-				1E5785E7194647180014D19A /* BITHTTPOperation.h in Headers */,
 				1E378B201959D33700451E28 /* BITActivityIndicatorButton.h in Headers */,
 				1EF09DB51523579100067A5C /* BITHockeyManager.h in Headers */,
 				1E85C5901B343E2100CE2C0D /* PLCrashReportStackFrameInfo.h in Headers */,
@@ -1021,7 +1013,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BFE83DD1C45B21100DE0B39 /* BITPersistence.m in Sources */,
-				1E5785E8194647180014D19A /* BITHTTPOperation.m in Sources */,
 				1EF09DB61523579100067A5C /* BITHockeyManager.m in Sources */,
 				1E7E5519187F3EE700F0858E /* BITHockeyBaseManager.m in Sources */,
 				1E5785D719461DDF0014D19A /* BITCrashDetails.m in Sources */,
@@ -1074,7 +1065,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				69EAA6A51E4105F000DB7393 /* BITSender.m in Sources */,
-				69EAA67D1E4105DA00DB7393 /* BITHTTPOperation.m in Sources */,
 				69EAA6951E4105EB00DB7393 /* BITApplication.m in Sources */,
 				69EAA6871E4105E200DB7393 /* BITCrashManager.m in Sources */,
 				69EAA68A1E4105E200DB7393 /* BITCrashDetails.m in Sources */,

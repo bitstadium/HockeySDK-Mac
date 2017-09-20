@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) dispatch_queue_t requestsCountQueue;
 
 /**
- *  A queue which is used to handle BITHTTPOperation completion blocks.
+ *  A queue which is used to handle completion blocks.
  */
 @property (nonatomic, strong) dispatch_queue_t senderTasksQueue;
 
@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSUInteger runningRequestsCount;
 
 /**
- *	BaseURL to which relative paths are appended.
+ *  BaseURL to which relative paths are appended.
  */
 @property (nonatomic, strong, readonly) NSURL *serverURL;
 
@@ -94,16 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)sendRequest:(NSURLRequest *)request filePath:(NSString *)path;
 
-/**
- * Helper method that checks whether the current OS supports NSURLSession
- *
- * @returns YES if NSURLSession is available
- */
-- (BOOL)isURLSessionSupported;
-
 - (void)sendUsingURLSessionWithRequest:(NSURLRequest *)request filePath:(NSString *)filePath;
-
-- (void)sendUsingURLConnectionWithRequest:(NSURLRequest *)request filePath:(NSString *)filePath;
 
 /**
  *  Resumes the given NSURLSessionDataTask instance.
@@ -145,4 +136,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)shouldDeleteDataWithStatusCode:(NSInteger)statusCode;
 
 @end
+
 NS_ASSUME_NONNULL_END
