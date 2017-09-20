@@ -182,9 +182,7 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
   [[NSNotificationCenter defaultCenter] removeObserver:self name:BITHockeyFeedbackMessagesLoadingStarted object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:BITHockeyFeedbackMessagesLoadingFinished object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:self.feedbackTableView];
-  
 }
-
 
 #pragma mark - Context menu for compose attachments
 
