@@ -123,31 +123,44 @@ NSString *const kBITHockeySDKURL = @"https://sdk.hockeyapp.net/";
   }
   
   NSString *integrationPath = [NSString stringWithFormat:@"api/3/apps/%@/integration", [self.appIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-  
+
   BITHockeyLogDebug(@"INFO: Sending integration workflow ping to %@", integrationPath);
   
-  [[self hockeyAppClient] postPath:integrationPath
-                        parameters:@{@"timestamp": timeString,
-                                     @"sdk": BITHOCKEY_NAME,
-                                     @"sdk_version": BITHOCKEY_VERSION,
-                                     @"bundle_version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]
-                                     }
-                        completion:^(BITHTTPOperation *operation, NSData * __unused responseData, NSError * __unused error) {
-                          switch (operation.response.statusCode) {
-                            case 400:
-                              BITHockeyLogError(@"ERROR: App ID not found");
-                              break;
-                            case 201:
-                              BITHockeyLogDebug(@"INFO: Ping accepted.");
-                              break;
-                            case 200:
-                              BITHockeyLogDebug(@"INFO: Ping accepted. Server already knows.");
-                              break;
-                            default:
-                              BITHockeyLogError(@"ERROR: Unknown error");
-                              break;
-                          }
-                        }];
+  NSDictionary *params = @{@"timestamp": timeString,
+                           @"sdk": BITHOCKEY_NAME,
+                           @"sdk_version": BITHOCKEY_VERSION,
+                           @"bundle_version": (id)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]
+                           };
+  
+  NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+  __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+  NSURLRequest *request = [[self hockeyAppClient] requestWithMethod:@"POST" path:integrationPath parameters:params];
+  NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                          completionHandler: ^(NSData * __unused data, NSURLResponse *response, NSError * __unused error) {
+                                            [session finishTasksAndInvalidate];
+                                            
+                                            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*) response;
+                                            [self logPingMessageForStatusCode:httpResponse.statusCode];
+                                          }];
+  [task resume];
+  
+}
+
+- (void)logPingMessageForStatusCode:(NSInteger)statusCode {
+  switch (statusCode) {
+    case 400:
+      BITHockeyLogError(@"ERROR: App ID not found");
+      break;
+    case 201:
+      BITHockeyLogDebug(@"INFO: Ping accepted.");
+      break;
+    case 200:
+      BITHockeyLogDebug(@"INFO: Ping accepted. Server already knows.");
+      break;
+    default:
+      BITHockeyLogError(@"ERROR: Unknown error");
+      break;
+  }
 }
 
 

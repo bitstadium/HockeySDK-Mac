@@ -91,7 +91,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 
 
 // C++ Exception Handler
- __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInfo *info) {
+__attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInfo *info) {
   // This relies on a LOT of sneaky internal knowledge of how PLCR works and should not be considered a long-term solution.
   NSGetUncaughtExceptionHandler()([[BITCrashCXXExceptionWrapperException alloc] initWithCXXExceptionInfo:info]);
   abort();
@@ -99,24 +99,24 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 
 
 @interface BITCrashManager ()
-  @property (nonatomic, strong) NSFileManager *fileManager;
-  @property (nonatomic) BOOL sendingInProgress;
-  @property (nonatomic) BOOL crashIdenticalCurrentVersion;
-  
-  @property (nonatomic, strong) NSMutableArray *crashFiles;
-  @property (nonatomic, copy) NSString       *settingsFile;
-  @property (nonatomic, copy) NSString       *analyzerInProgressFile;
-  
-  @property (nonatomic, strong) BITPLCrashReporter *plCrashReporter;
-  @property (nonatomic, strong) BITCrashReportUI *crashReportUI;
-  
-  @property (nonatomic, strong) NSMutableDictionary *approvedCrashReports;
-  @property (nonatomic, strong) NSMutableDictionary *dictOfLastSessionCrash;
+@property (nonatomic, strong) NSFileManager *fileManager;
+@property (nonatomic) BOOL sendingInProgress;
+@property (nonatomic) BOOL crashIdenticalCurrentVersion;
 
-  // Redeclare BITCrashManager properties with readwrite attribute
-  @property (nonatomic, readwrite) NSTimeInterval timeintervalCrashInLastSessionOccured;
-  @property (nonatomic, readwrite) BITCrashDetails *lastSessionCrashDetails;
-  @property (nonatomic, readwrite) BOOL didCrashInLastSession;
+@property (nonatomic, strong) NSMutableArray *crashFiles;
+@property (nonatomic, copy) NSString       *settingsFile;
+@property (nonatomic, copy) NSString       *analyzerInProgressFile;
+
+@property (nonatomic, strong) BITPLCrashReporter *plCrashReporter;
+@property (nonatomic, strong) BITCrashReportUI *crashReportUI;
+
+@property (nonatomic, strong) NSMutableDictionary *approvedCrashReports;
+@property (nonatomic, strong) NSMutableDictionary *dictOfLastSessionCrash;
+
+// Redeclare BITCrashManager properties with readwrite attribute
+@property (nonatomic, readwrite) NSTimeInterval timeintervalCrashInLastSessionOccured;
+@property (nonatomic, readwrite) BITCrashDetails *lastSessionCrashDetails;
+@property (nonatomic, readwrite) BOOL didCrashInLastSession;
 @end
 
 @implementation BITCrashManager
@@ -134,7 +134,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     _crashIdenticalCurrentVersion = YES;
     
     _timeintervalCrashInLastSessionOccured = -1;
-
+    
     _approvedCrashReports = [[NSMutableDictionary alloc] init];
     _dictOfLastSessionCrash = [[NSMutableDictionary alloc] init];
     _didCrashInLastSession = NO;
@@ -153,7 +153,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
       _crashManagerActivated = YES;
       [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:kHockeySDKCrashReportActivated];
     }
-
+    
     testValue = [[NSUserDefaults standardUserDefaults] stringForKey:kHockeySDKAutomaticallySendCrashReports];
     if (testValue) {
       _autoSubmitCrashReport = [[NSUserDefaults standardUserDefaults] boolForKey:kHockeySDKAutomaticallySendCrashReports];
@@ -165,24 +165,24 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     self.crashesDir = bit_settingsDir();
     _settingsFile = [self.crashesDir stringByAppendingPathComponent:BITHOCKEY_CRASH_SETTINGS];
     _analyzerInProgressFile = [self.crashesDir stringByAppendingPathComponent:BITHOCKEY_CRASH_ANALYZER];
-
+    
   }
   return self;
 }
 
 - (void)dealloc {
   _delegate = nil;
-
-   self.fileManager = nil;
   
-   self.crashFiles = nil;
-   _settingsFile = nil;
-   _analyzerInProgressFile = nil;
+  self.fileManager = nil;
   
-   self.crashReportUI= nil;
+  self.crashFiles = nil;
+  _settingsFile = nil;
+  _analyzerInProgressFile = nil;
   
-   _approvedCrashReports = nil;
-   _dictOfLastSessionCrash = nil;
+  self.crashReportUI= nil;
+  
+  _approvedCrashReports = nil;
+  _dictOfLastSessionCrash = nil;
   
 }
 
@@ -210,7 +210,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   } else {
     BITHockeyLogError(@"ERROR: Writing settings. %@", errorString);
   }
-
+  
 }
 
 - (void)loadSettings {
@@ -368,9 +368,9 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   
   if (self.userID)
     return self.userID;
-
+  
   userID = bit_stringValueFromKeychainForKey(kBITDefaultUserID);
-
+  
   id<BITHockeyManagerDelegate> delegate = [BITHockeyManager sharedHockeyManager].delegate;
   if (delegate && [delegate respondsToSelector:@selector(userIDForHockeyManager:componentManager:)]) {
     userID = [delegate userIDForHockeyManager:[BITHockeyManager sharedHockeyManager]
@@ -455,7 +455,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
  */
 - (void)storeMetaDataForCrashReportFilename:(NSString *)filename {
   BITHockeyLogVerbose(@"Storing meta data for crash report with filename %@", filename);
-
+  
   NSError *error = NULL;
   NSMutableDictionary *metaDict = [NSMutableDictionary dictionaryWithCapacity:4];
   NSString *applicationLog = @"";
@@ -473,7 +473,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   
   if (self.delegate != nil && [self.delegate respondsToSelector:@selector(attachmentForCrashManager:)]) {
     BITHockeyLogVerbose(@"Processing attachment for crash report with filename %@", filename);
-
+    
     BITHockeyAttachment *attachment = [self.delegate attachmentForCrashManager:self];
     
     if (attachment) {
@@ -540,15 +540,15 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 // Called to handle a pending crash report.
 - (void)handleCrashReport {
   BITHockeyLogVerbose(@"Handling crash report");
-
+  
   NSError *error = NULL;
-	
+  
   // check if the next call ran successfully the last time
   if (![self.fileManager fileExistsAtPath:self.analyzerInProgressFile]) {
     // mark the start of the routine
     [self.fileManager createFileAtPath:self.analyzerInProgressFile contents:nil attributes:nil];
     BITHockeyLogVerbose(@"AnalyzerInProgress file created");
-
+    
     [self saveSettings];
     
     // Try loading the crash report
@@ -556,13 +556,13 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     
     NSString *cacheFilename = [NSString stringWithFormat: @"%.0f", [NSDate timeIntervalSinceReferenceDate]];
     self.lastCrashFilename = [cacheFilename copy];
-
+    
     if (crashData == nil) {
       BITHockeyLogWarning(@"WARNING: Could not load crash report: %@", error);
     } else {
       // get the startup timestamp from the crash report, and the file timestamp to calculate the timeinterval when the crash happened after startup
       BITPLCrashReport *report = [[BITPLCrashReport alloc] initWithData:crashData error:&error];
-
+      
       if (report == nil) {
         BITHockeyLogWarning(@"WARNING: Could not parse crash report");
       } else {
@@ -575,7 +575,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
             self.timeintervalCrashInLastSessionOccured = [report.systemInfo.timestamp timeIntervalSinceDate:report.processInfo.processStartTime];
           }
         }
-
+        
         [crashData writeToFile:[self.crashesDir stringByAppendingPathComponent: cacheFilename] atomically:YES];
         
         NSString *incidentIdentifier = @"???";
@@ -586,25 +586,25 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
         NSString *reporterKey = [BITSystemProfile deviceIdentifier] ?: @"";
         
         self.lastSessionCrashDetails = [[BITCrashDetails alloc] initWithIncidentIdentifier:incidentIdentifier
-                                                                           reporterKey:reporterKey
-                                                                                signal:report.signalInfo.name
-                                                                         exceptionName:report.exceptionInfo.exceptionName
-                                                                       exceptionReason:report.exceptionInfo.exceptionReason
-                                                                          appStartTime:appStartTime
-                                                                             crashTime:appCrashTime
-                                                                             osVersion:report.systemInfo.operatingSystemVersion
-                                                                               osBuild:report.systemInfo.operatingSystemBuild
-                                                                            appVersion:report.applicationInfo.applicationMarketingVersion
-                                                                              appBuild:report.applicationInfo.applicationVersion
-                                                                  appProcessIdentifier:report.processInfo.processID
-                                    ];
+                                                                               reporterKey:reporterKey
+                                                                                    signal:report.signalInfo.name
+                                                                             exceptionName:report.exceptionInfo.exceptionName
+                                                                           exceptionReason:report.exceptionInfo.exceptionReason
+                                                                              appStartTime:appStartTime
+                                                                                 crashTime:appCrashTime
+                                                                                 osVersion:report.systemInfo.operatingSystemVersion
+                                                                                   osBuild:report.systemInfo.operatingSystemBuild
+                                                                                appVersion:report.applicationInfo.applicationMarketingVersion
+                                                                                  appBuild:report.applicationInfo.applicationVersion
+                                                                      appProcessIdentifier:report.processInfo.processID
+                                        ];
         
         // fetch and store the meta data after setting _lastSessionCrashDetails, so the property can be used in the protocol methods
         [self storeMetaDataForCrashReportFilename:cacheFilename];
       }
     }
   }
-	
+  
   // Purge the report
   // mark the end of the routine
   if ([self.fileManager fileExistsAtPath:self.analyzerInProgressFile]) {
@@ -642,7 +642,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
  */
 - (BOOL)hasPendingCrashReport {
   if (!self.crashManagerActivated) return NO;
-    
+  
   if ([self.fileManager fileExistsAtPath: self.crashesDir]) {
     NSString *file = nil;
     NSError *error = NULL;
@@ -694,7 +694,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   if (!self.sendingInProgress && [self hasPendingCrashReport]) {
     self.sendingInProgress = YES;
     BITHockeyLogDebug(@"INFO: Pending crash reports found.");
-
+    
     NSString *notApprovedReportFilename = [self firstNotApprovedCrashReport];
     if (!self.autoSubmitCrashReport && notApprovedReportFilename) {
       NSError* error = nil;
@@ -721,10 +721,10 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
           self.crashReportUIHandler(crashReport, log);
         } else {
           self.crashReportUI = [[BITCrashReportUI alloc] initWithManager:self
-                                                         crashReport:crashReport
-                                                          logContent:log
-                                                     applicationName:[self applicationName]
-                                                      askUserDetails:self.askUserDetails];
+                                                             crashReport:crashReport
+                                                              logContent:log
+                                                         applicationName:[self applicationName]
+                                                          askUserDetails:self.askUserDetails];
           
           [self.crashReportUI setUserName:[self userNameForCrashReport]];
           [self.crashReportUI setUserEmail:[self userEmailForCrashReport]];
@@ -830,7 +830,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     [self.delegate showMainApplicationWindowForCrashManager:self];
   }
 #pragma clang diagnostic pop
-
+  
   [self invokeProcessing];
 }
 
@@ -864,7 +864,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
   
   if ([self.crashFiles count] == 0)
     return;
-
+  
   NSString *crashXML = nil;
   BITHockeyAttachment *attachment = nil;
   
@@ -886,7 +886,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     
     NSString *errorString = nil;
     NSPropertyListFormat format;
-
+    
     report = [[BITPLCrashReport alloc] initWithData:crashData error:&error];
     if (report == nil) {
       BITHockeyLogWarning(@"WARNING: Could not parse crash report");
@@ -913,7 +913,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     if ([report.applicationInfo.applicationVersion compare:(id)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NSOrderedSame) {
       self.crashIdenticalCurrentVersion = YES;
     }
-
+    
     NSString *username = @"";
     NSString *useremail = @"";
     NSString *userid = @"";
@@ -937,7 +937,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
     } else {
       BITHockeyLogError(@"ERROR: Reading crash meta data. %@", error);
     }
-
+    
     NSString *descriptionMetaFilePath = [filename stringByAppendingPathExtension:@"desc"];
     if ([self.fileManager fileExistsAtPath:descriptionMetaFilePath]) {
       description = [NSString stringWithContentsOfFile:descriptionMetaFilePath encoding:NSUTF8StringEncoding error:&error] ?: @"";
@@ -981,119 +981,119 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 #pragma mark - Networking
 
 - (NSData *)postBodyWithXML:(NSString *)xml attachment:(BITHockeyAttachment *)attachment boundary:(NSString *)boundary {
-    NSMutableData *postBody =  [NSMutableData data];
-    
-    //  [postBody appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [postBody appendData:[BITHockeyAppClient dataWithPostValue:BITHOCKEY_NAME
-                                                        forKey:@"sdk"
-                                                      boundary:boundary]];
-    
-    [postBody appendData:[BITHockeyAppClient dataWithPostValue:BITHOCKEY_VERSION
-                                                        forKey:@"sdk_version"
-                                                      boundary:boundary]];
-    
-    [postBody appendData:[BITHockeyAppClient dataWithPostValue:@"no"
-                                                        forKey:@"feedbackEnabled"
-                                                      boundary:boundary]];
-    
-    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[xml dataUsingEncoding:NSUTF8StringEncoding]
-                                                        forKey:@"xml"
-                                                   contentType:@"text/xml"
-                                                      boundary:boundary
-                                                      filename:@"crash.xml"]];
-    
-    if (attachment && attachment.hockeyAttachmentData) {
-        NSString *attachmentFilename = attachment.filename;
-        if (!attachmentFilename) {
-            attachmentFilename = @"Attachment_0";
-        }
-        [postBody appendData:[BITHockeyAppClient dataWithPostValue:attachment.hockeyAttachmentData
-                                                            forKey:@"attachment0"
-                                                       contentType:attachment.contentType
-                                                          boundary:boundary
-                                                          filename:attachmentFilename]];
+  NSMutableData *postBody =  [NSMutableData data];
+  
+  //  [postBody appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+  [postBody appendData:[BITHockeyAppClient dataWithPostValue:BITHOCKEY_NAME
+                                                      forKey:@"sdk"
+                                                    boundary:boundary]];
+  
+  [postBody appendData:[BITHockeyAppClient dataWithPostValue:BITHOCKEY_VERSION
+                                                      forKey:@"sdk_version"
+                                                    boundary:boundary]];
+  
+  [postBody appendData:[BITHockeyAppClient dataWithPostValue:@"no"
+                                                      forKey:@"feedbackEnabled"
+                                                    boundary:boundary]];
+  
+  [postBody appendData:[BITHockeyAppClient dataWithPostValue:[xml dataUsingEncoding:NSUTF8StringEncoding]
+                                                      forKey:@"xml"
+                                                 contentType:@"text/xml"
+                                                    boundary:boundary
+                                                    filename:@"crash.xml"]];
+  
+  if (attachment && attachment.hockeyAttachmentData) {
+    NSString *attachmentFilename = attachment.filename;
+    if (!attachmentFilename) {
+      attachmentFilename = @"Attachment_0";
     }
-    
-    [postBody appendData:(NSData *)[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    return postBody;
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:attachment.hockeyAttachmentData
+                                                        forKey:@"attachment0"
+                                                   contentType:attachment.contentType
+                                                      boundary:boundary
+                                                      filename:attachmentFilename]];
+  }
+  
+  [postBody appendData:(NSData *)[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+  
+  return postBody;
 }
 
 - (NSMutableURLRequest *)requestWithBoundary:(NSString *)boundary {
-    NSString *postCrashPath = [NSString stringWithFormat:@"api/2/apps/%@/crashes", self.encodedAppIdentifier];
-    
-    NSMutableURLRequest *request = [self.hockeyAppClient requestWithMethod:@"POST"
-                                                                      path:postCrashPath
-                                                                parameters:nil];
-    
-    [request setCachePolicy: NSURLRequestReloadIgnoringLocalCacheData];
-    [request setValue:@"HockeySDK/iOS" forHTTPHeaderField:@"User-Agent"];
-    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    
-    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-    [request setValue:contentType forHTTPHeaderField:@"Content-type"];
-    
-    return request;
+  NSString *postCrashPath = [NSString stringWithFormat:@"api/2/apps/%@/crashes", self.encodedAppIdentifier];
+  
+  NSMutableURLRequest *request = [self.hockeyAppClient requestWithMethod:@"POST"
+                                                                    path:postCrashPath
+                                                              parameters:nil];
+  
+  [request setCachePolicy: NSURLRequestReloadIgnoringLocalCacheData];
+  [request setValue:@"HockeySDK/iOS" forHTTPHeaderField:@"User-Agent"];
+  [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+  
+  NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+  [request setValue:contentType forHTTPHeaderField:@"Content-type"];
+  
+  return request;
 }
 
 // process upload response
 - (void)processUploadResultWithFilename:(NSString *)filename responseData:(NSData *)responseData statusCode:(NSInteger)statusCode error:(NSError *)error {
-    __block NSError *theError = error;
+  __block NSError *theError = error;
+  
+  dispatch_async(dispatch_get_main_queue(), ^{
+    self.sendingInProgress = NO;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.sendingInProgress = NO;
+    if (nil == theError) {
+      if (nil == responseData || [responseData length] == 0) {
+        theError = [NSError errorWithDomain:kBITCrashErrorDomain
+                                       code:BITCrashAPIReceivedEmptyResponse
+                                   userInfo:@{
+                                              NSLocalizedDescriptionKey: @"Sending failed with an empty response!"
+                                              }
+                    ];
+      } else if (statusCode >= 200 && statusCode < 400) {
+        [self cleanCrashReportWithFilename:filename];
         
-        if (nil == theError) {
-            if (nil == responseData || [responseData length] == 0) {
-                theError = [NSError errorWithDomain:kBITCrashErrorDomain
-                                               code:BITCrashAPIReceivedEmptyResponse
-                                           userInfo:@{
-                                                      NSLocalizedDescriptionKey: @"Sending failed with an empty response!"
-                                                      }
-                            ];
-            } else if (statusCode >= 200 && statusCode < 400) {
-                [self cleanCrashReportWithFilename:filename];
-                
-                // HockeyApp uses PList XML format
-                NSMutableDictionary *response = [NSPropertyListSerialization propertyListWithData:responseData
-                                                                                          options:NSPropertyListMutableContainersAndLeaves
-                                                                                           format:nil
-                                                                                            error:&theError];
-                BITHockeyLogDebug(@"INFO: Received API response: %@", response);
-                
-                if ([self.delegate respondsToSelector:@selector(crashManagerDidFinishSendingCrashReport:)]) {
-                    [self.delegate crashManagerDidFinishSendingCrashReport:self];
-                }
-                
-                // only if sending the crash report went successfully, continue with the next one (if there are more)
-                [self sendNextCrashReport];
-            } else if (statusCode == 400) {
-                [self cleanCrashReportWithFilename:filename];
-                
-                theError = [NSError errorWithDomain:kBITCrashErrorDomain
-                                               code:BITCrashAPIAppVersionRejected
-                                           userInfo:@{
-                                                      NSLocalizedDescriptionKey: @"The server rejected receiving crash reports for this app version!"
-                                                      }
-                            ];
-            } else {
-                theError = [NSError errorWithDomain:kBITCrashErrorDomain
-                                               code:BITCrashAPIErrorWithStatusCode
-                                           userInfo:@{
-                                                      NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Sending failed with status code: %li", (long)statusCode]
-                                                      }
-                            ];
-            }
+        // HockeyApp uses PList XML format
+        NSMutableDictionary *response = [NSPropertyListSerialization propertyListWithData:responseData
+                                                                                  options:NSPropertyListMutableContainersAndLeaves
+                                                                                   format:nil
+                                                                                    error:&theError];
+        BITHockeyLogDebug(@"INFO: Received API response: %@", response);
+        
+        if ([self.delegate respondsToSelector:@selector(crashManagerDidFinishSendingCrashReport:)]) {
+          [self.delegate crashManagerDidFinishSendingCrashReport:self];
         }
         
-        if (theError) {
-            if ([self.delegate respondsToSelector:@selector(crashManager:didFailWithError:)]) {
-                [self.delegate crashManager:self didFailWithError:theError];
-            }
-            
-            BITHockeyLogError(@"ERROR: %@", [theError localizedDescription]);
-        }
-    });
+        // only if sending the crash report went successfully, continue with the next one (if there are more)
+        [self sendNextCrashReport];
+      } else if (statusCode == 400) {
+        [self cleanCrashReportWithFilename:filename];
+        
+        theError = [NSError errorWithDomain:kBITCrashErrorDomain
+                                       code:BITCrashAPIAppVersionRejected
+                                   userInfo:@{
+                                              NSLocalizedDescriptionKey: @"The server rejected receiving crash reports for this app version!"
+                                              }
+                    ];
+      } else {
+        theError = [NSError errorWithDomain:kBITCrashErrorDomain
+                                       code:BITCrashAPIErrorWithStatusCode
+                                   userInfo:@{
+                                              NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Sending failed with status code: %li", (long)statusCode]
+                                              }
+                    ];
+      }
+    }
+    
+    if (theError) {
+      if ([self.delegate respondsToSelector:@selector(crashManager:didFailWithError:)]) {
+        [self.delegate crashManager:self didFailWithError:theError];
+      }
+      
+      BITHockeyLogError(@"ERROR: %@", [theError localizedDescription]);
+    }
+  });
 }
 
 /**
@@ -1104,58 +1104,34 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
  *	@param	xml	The XML data that needs to be send to the server
  */
 - (void)sendCrashReportWithFilename:(NSString *)filename xml:(NSString*)xml attachment:(BITHockeyAttachment *)attachment {
-    BOOL sendingWithURLSession = NO;
+  NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+  __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+  
+  NSURLRequest *request = [self requestWithBoundary:kBITHockeyAppClientBoundary];
+  NSData *data = [self postBodyWithXML:xml attachment:attachment boundary:kBITHockeyAppClientBoundary];
+  
+  if (request && data) {
+    __weak typeof (self) weakSelf = self;
+    NSURLSessionUploadTask *uploadTask = [session uploadTaskWithRequest:request
+                                                               fromData:data
+                                                      completionHandler:^(NSData *responseData, NSURLResponse *response, NSError *error) {
+                                                        typeof (self) strongSelf = weakSelf;
+                                                        
+                                                        [session finishTasksAndInvalidate];
+                                                        
+                                                        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*) response;
+                                                        NSInteger statusCode = [httpResponse statusCode];
+                                                        [strongSelf processUploadResultWithFilename:filename responseData:responseData statusCode:statusCode error:error];
+                                                      }];
     
-    id nsurlsessionClass = NSClassFromString(@"NSURLSessionUploadTask");
-    if (nsurlsessionClass) {
-        NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-        
-        NSURLRequest *request = [self requestWithBoundary:kBITHockeyAppClientBoundary];
-        NSData *data = [self postBodyWithXML:xml attachment:attachment boundary:kBITHockeyAppClientBoundary];
-        
-        if (request && data) {
-            __weak typeof (self) weakSelf = self;
-            NSURLSessionUploadTask *uploadTask = [session uploadTaskWithRequest:request
-                                                                       fromData:data
-                                                              completionHandler:^(NSData *responseData, NSURLResponse *response, NSError *error) {
-                                                                  typeof (self) strongSelf = weakSelf;
-                                                                
-                                                                  [session finishTasksAndInvalidate];
-
-                                                                  NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*) response;
-                                                                  NSInteger statusCode = [httpResponse statusCode];
-                                                                  [strongSelf processUploadResultWithFilename:filename responseData:responseData statusCode:statusCode error:error];
-                                                              }];
-            
-            [uploadTask resume];
-            sendingWithURLSession = YES;
-        }
-    }
-    
-    if (!sendingWithURLSession) {
-        NSMutableURLRequest *request = [self requestWithBoundary:kBITHockeyAppClientBoundary];
-        
-        NSData *postBody = [self postBodyWithXML:xml attachment:attachment boundary:kBITHockeyAppClientBoundary];
-        [request setHTTPBody:postBody];
-        
-        __unsafe_unretained typeof(self) weakSelf = self;
-        BITHTTPOperation *operation = [self.hockeyAppClient
-                                       operationWithURLRequest:request
-                                       completion:^(BITHTTPOperation *innerOperation, NSData* responseData, NSError *error) {
-                                           typeof (self) strongSelf = weakSelf;
-                                           
-                                           NSInteger statusCode = [innerOperation.response statusCode];
-                                           [strongSelf processUploadResultWithFilename:filename responseData:responseData statusCode:statusCode error:error];
-                                       }];
-        [self.hockeyAppClient enqeueHTTPOperation:operation];
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(crashManagerWillSendCrashReport:)]) {
-        [self.delegate crashManagerWillSendCrashReport:self];
-    }
-    
-    BITHockeyLogDebug(@"INFO: Sending crash reports started.");
+    [uploadTask resume];
+  }
+  
+  if ([self.delegate respondsToSelector:@selector(crashManagerWillSendCrashReport:)]) {
+    [self.delegate crashManagerWillSendCrashReport:self];
+  }
+  
+  BITHockeyLogDebug(@"INFO: Sending crash reports started.");
 }
 
 
