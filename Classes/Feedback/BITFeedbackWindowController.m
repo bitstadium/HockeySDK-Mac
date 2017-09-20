@@ -147,7 +147,8 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
   [self.feedbackAttachmentsTableView setMenu:[self contextMenuComposeAttachments]];
   
   [self.statusBarRefreshButton setHidden:YES];
-  [self.messageTextField setTypingAttributes:@{NSFontAttributeName: [NSFont userFixedPitchFontOfSize:13.0]}];
+  NSFont *font = [NSFont userFixedPitchFontOfSize:13.0];
+  [self.messageTextField setTypingAttributes:@{NSFontAttributeName: font}];
   [self.messageTextField setBitDelegate:self];
   [self.messageTextField setPlaceHolderString:@"Your Feedback"];
   
