@@ -5,13 +5,17 @@
 @interface BITCrashReportUI : NSWindowController
 
 // defines the users name or user id
-@property (nonatomic, strong) NSString *userName;
+@property (nonatomic, copy) NSString *userName;
 
 // defines the users email address
-@property (nonatomic, strong) NSString *userEmail;
+@property (nonatomic, copy) NSString *userEmail;
 
 // set if the nib was loaded correctly
 @property (nonatomic, readonly) BOOL nibDidLoadSuccessfully;
+
+@property (nonatomic) BOOL showUserDetails;
+@property (nonatomic) BOOL showComments;
+@property (nonatomic) BOOL showDetails;
 
 - (instancetype)initWithManager:(BITCrashManager *)crashManager
                     crashReport:(NSString *)crashReport
@@ -26,14 +30,5 @@
 - (IBAction)showDetails:(id)sender;
 - (IBAction)hideDetails:(id)sender;
 - (IBAction)showComments:(id)sender;
-
-- (BOOL)showUserDetails;
-- (void)setShowUserDetails:(BOOL)value;
-
-- (BOOL)showComments;
-- (void)setShowComments:(BOOL)value;
-
-- (BOOL)showDetails;
-- (void)setShowDetails:(BOOL)value;
 
 @end

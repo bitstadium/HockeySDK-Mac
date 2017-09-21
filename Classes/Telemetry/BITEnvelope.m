@@ -6,7 +6,7 @@
 
 /// Initializes a new instance of the class.
 - (instancetype)init {
-  if(self = [super init]) {
+  if((self = [super init])) {
     _version = @1;
     _sampleRate = @100.0;
     _tags = [NSDictionary dictionary];
@@ -14,10 +14,7 @@
   return self;
 }
 
-///
-/// Adds all members of this class to a dictionary
-/// @param dictionary to which the members of this class will be added.
-///
+/// Adds all members of this class to a dictionary.
 - (NSDictionary *)serializeToDictionary {
   NSMutableDictionary *dict = [super serializeToDictionary].mutableCopy;
   if(self.version != nil) {

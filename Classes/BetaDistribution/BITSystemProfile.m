@@ -2,9 +2,13 @@
 #import "BITSystemProfile.h"
 #import "BITSystemProfilePrivate.h"
 
-@implementation BITSystemProfile
+@interface BITSystemProfile ()
 
-@synthesize usageStartTimestamp = _usageStartTimestamp;
+@property (nonatomic) NSInteger startCounter;
+
+@end
+
+@implementation BITSystemProfile
 
 + (NSString *)deviceIdentifier {
   char buffer[128];
@@ -44,9 +48,12 @@
 	NSString* version = nil;
   
 	SInt32 major, minor, bugfix;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 	OSErr err1 = Gestalt(gestaltSystemVersionMajor, &major);
 	OSErr err2 = Gestalt(gestaltSystemVersionMinor, &minor);
 	OSErr err3 = Gestalt(gestaltSystemVersionBugFix, &bugfix);
+#pragma clang diagnostic pop
 	if ((!err1) && (!err2) && (!err3)) {
 		version = [NSString stringWithFormat:@"%ld.%ld.%ld", (long)major, (long)minor, (long)bugfix];
 	}
@@ -54,7 +61,6 @@
 	return version;
 }
 
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
 + (BITSystemProfile *)sharedSystemProfile {
   static BITSystemProfile *sharedInstance = nil;
   static dispatch_once_t pred;
@@ -66,17 +72,6 @@
   
   return sharedInstance;
 }
-#else
-+ (BITSystemProfile *)sharedSystemProfile {
-  static BITSystemProfile *sharedInstance = nil;
-  
-  if (sharedInstance == nil) {
-    sharedInstance = [[BITSystemProfile alloc] init];
-  }
-  
-  return sharedInstance;
-}
-#endif
 
 - (instancetype)init {
   if ((self = [super init])) {
@@ -96,14 +91,14 @@
     if (!self.usageStartTimestamp)
       self.usageStartTimestamp = [NSDate date];
     
-    _startCounter++;
+    self.startCounter++;
     
     BOOL newVersion = NO;
     
     if (![[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString]) {
       newVersion = YES;
     } else {
-      if ([(NSString *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString] compare:[bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] != NSOrderedSame) {
+      if ([(NSString *)[[NSUserDefaults standardUserDefaults] valueForKey:kBITUpdateUsageTimeForVersionString] compare:(id)[bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] != NSOrderedSame) {
         newVersion = YES;
       }
     }
@@ -123,12 +118,12 @@
 
 - (void)stopUsage {
   @synchronized(@"startstop") {
-    if (_startCounter > 0)
-      _startCounter--;
+    if (self.startCounter > 0)
+      self.startCounter--;
     
     if (!self.usageStartTimestamp)
       return;
-    if (_startCounter > 0)
+    if (self.startCounter > 0)
       return;
     
     double timeDifference = [[NSDate date] timeIntervalSinceReferenceDate] - [self.usageStartTimestamp timeIntervalSinceReferenceDate];
@@ -164,7 +159,7 @@
   [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"app_version", @"App Version", app_version, app_version] forKeys:keys]];
   
   if ([[bundle preferredLocalizations] count] > 0) {
-    NSString *language = [bundle preferredLocalizations][0];
+    NSString *language = [[bundle preferredLocalizations] objectAtIndex:0];
     [profileArray addObject:[NSDictionary dictionaryWithObjects:@[@"used_lang", @"Used Language", language, language] forKeys:keys]];
   }
   

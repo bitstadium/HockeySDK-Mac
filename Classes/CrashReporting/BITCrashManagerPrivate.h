@@ -1,6 +1,10 @@
 #import <Foundation/Foundation.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
+#pragma clang diagnostic ignored "-Wdocumentation-deprecated-sync"
 #import "CrashReporter.h"
+#pragma clang diagnostic pop
 
 // stores the set of crashreports that have been approved but aren't sent yet
 #define kHockeySDKApprovedCrashReports @"HockeySDKApprovedCrashReports"
@@ -33,11 +37,11 @@
 
 @property (nonatomic) PLCrashReporterCallbacks *crashCallBacks;
 
-@property (nonatomic) NSString *lastCrashFilename;
+@property (nonatomic, copy) NSString *lastCrashFilename;
 
 @property (nonatomic, copy, setter = setCrashReportUIHandler:) BITCustomCrashReportUIHandler crashReportUIHandler;
 
-@property (nonatomic, strong) NSString *crashesDir;
+@property (nonatomic, copy) NSString *crashesDir;
 
 - (NSString *)applicationName;
 - (NSString *)applicationVersion;

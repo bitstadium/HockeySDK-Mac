@@ -1,10 +1,9 @@
-[![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
-[![Version](https://img.shields.io/cocoapods/v/HockeySDK-Mac.svg)](http://cocoadocs.org/docsets/HockeySDK-Mac)
+[![Build Status](https://www.bitrise.io/app/0b9891c6c8a2c030/status.svg?token=CoxYoBkW4sTCga7LG5xe4w&branch=develop)](https://www.bitrise.io/app/0b9891c6c8a2c030)[![Version](https://img.shields.io/cocoapods/v/HockeySDK-Mac.svg)](http://cocoadocs.org/docsets/HockeySDK-Mac)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Slack Status](https://slack.hockeyapp.net/badge.svg)](https://slack.hockeyapp.net)
 
 
-# Version 4.1.4
+# Version 5.0.0
 
 ## Introduction
 
@@ -22,14 +21,13 @@ The following feature is currently supported:
 
 ## 1. Setup
 
-It is super easy to use HockeyApp in your iOS app. Have a look at our [documentation](https://www.hockeyapp.net/help/sdk/mac/4.1.4/docs/docs/Guide-Installation-Setup.html) and onboard your app within minutes.
+It is super easy to use HockeyApp in your macOS app. Have a look at our [documentation](https://www.hockeyapp.net/help/sdk/mac/5.0.0/installation--setup.html) and onboard your app within minutes.
 
 ## 2. Documentation
 
-Please visit [our landing page](http://hockeyapp.net/help/sdk/mac/4.1.4/index.html) as a starting point for all of our documentation.
+Please visit [our landing page](https://www.hockeyapp.net/help/sdk/mac/5.0.0/index.html) as a starting point for all of our documentation.
 
-Please check out our [getting started documentation](https://www.hockeyapp.net/help/sdk/mac/4.1.4/docs/docs/Guide-Installation-Setup.html), [changelog](http://www.hockeyapp.net/help/sdk/mac/4.1.4/docs/docs/Changelog.html), [header docs](https://www.hockeyapp.net/help/sdk/mac/4.1.4/index.html) as well as our [troubleshooting section](https://www.hockeyapp.net/help/sdk/mac/4.1.4/docs/docs/Guide-Installation-Setup.html#troubleshooting).
-
+Please check out our [changelog](http://www.hockeyapp.net/help/sdk/mac/5.0.0/changelog.html), as well as our [troubleshooting section](https://www.hockeyapp.net/help/sdk/mac/5.0.0/installation--setup.html#troubleshooting).
 
 ## 3. Contributing
 
@@ -37,10 +35,11 @@ We're looking forward to your contributions via pull requests.
 
 ### 3.1 Development environment
 
-* A Mac running the latest version of macOS
-* The latest Xcode from the Mac App Store
-* [AppleDoc](https://github.com/tomaz/appledoc) 
-* [Cocoapods](https://cocoapods.org/)
+* A Mac running the latest version of macOS.
+* The latest Xcode from the Mac App Store.
+* [Jazzy](https://github.com/realm/jazzy) to generate documentation.
+* [CocoaPods](https://cocoapods.org/) to test integration with CocoaPods.
+* [Carthage](https://github.com/Carthage/Carthage) to test integration with Carthage.
 
 ### 3.2 Code of Conduct
 
@@ -52,4 +51,4 @@ You must sign a [Contributor License Agreement](https://cla.microsoft.com/) befo
 
 ## 4. Contact
 
-If you have further questions or are running into trouble that cannot be resolved by any of the steps [in our troubleshooting section](https://www.hockeyapp.net/help/sdk/mac/4.1.4/docs/docs/Guide-Installation-Setup.html#troubleshooting), feel free to open an issue here, contact us at [support@hockeyapp.net](mailto:support@hockeyapp.net) or join our [Slack](https://slack.hockeyapp.net).
+If you have further questions or are running into trouble that cannot be resolved by any of the steps [in our troubleshooting section](hhttps://www.hockeyapp.net/help/sdk/mac/5.0.0/installation--setup.html#troubleshooting), feel free to open an issue here, contact us at [support@hockeyapp.net](mailto:support@hockeyapp.net) or join our [Slack](https://slack.hockeyapp.net).

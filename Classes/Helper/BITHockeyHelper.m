@@ -13,7 +13,7 @@ typedef struct {
   const char    bit_build[16];
 } msai_info_t;
 
-msai_info_t applicationinsights_library_info __attribute__((section("__TEXT,__bit_osx,regular,no_dead_strip"))) = {
+static msai_info_t applicationinsights_library_info __attribute__((section("__TEXT,__bit_osx,regular,no_dead_strip"))) = {
   .info_version = 1,
   .bit_version = BITHOCKEY_C_VERSION,
   .bit_build = BITHOCKEY_C_BUILD
@@ -24,8 +24,10 @@ msai_info_t applicationinsights_library_info __attribute__((section("__TEXT,__bi
 NSString *bit_URLEncodedString(NSString *inputString) {
   
   if ([inputString respondsToSelector:@selector(stringByAddingPercentEncodingWithAllowedCharacters:)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
     return [inputString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"!*'();:@&=+$,/?%#[] {}"].invertedSet];
-    
+#pragma clang diagnostic pop
   } else {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -74,24 +76,27 @@ NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB) {
 #pragma mark Exclude from backup fix
 
 void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
-  if (&NSURLIsExcludedFromBackupKey == NULL) {
-    BITHockeyLogWarning(@"WARNING: &NSURLIsExcludedBackupKey is NULL, returning");
-    return;
-  }
-  
   BOOL shouldExcludeAppSupportDirFromBackup = [[NSUserDefaults standardUserDefaults] boolForKey:kBITExcludeApplicationSupportFromBackup];
   if (shouldExcludeAppSupportDirFromBackup) {
     return;
   }
   
   if (directoryURL) {
-    NSError *getResourceError = nil;
-    NSNumber *appSupportDirExcludedValue;
-    
-    if ([directoryURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&getResourceError] && appSupportDirExcludedValue) {
-      NSError *setResourceError = nil;
-      [directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      NSError *getResourceError = nil;
+      NSNumber *appSupportDirExcludedValue;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+      if ([directoryURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&getResourceError] && appSupportDirExcludedValue) {
+        NSError *setResourceError = nil;
+        if(![directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError]) {
+          BITHockeyLogError(@"ERROR: Error while setting resource value: %@", setResourceError.localizedDescription);
+        }
+      } else {
+        BITHockeyLogError(@"ERROR: Error while retrieving resource value: %@", getResourceError.localizedDescription);
+      }
+#pragma clang diagnostic pop
+    });
   }
 }
 
@@ -116,7 +121,7 @@ NSString *bit_appIdentifierToGuid(NSString *appIdentifier) {
 }
 
 NSString *bit_appName(NSString *placeHolderString) {
-  NSString *appName = [[NSBundle mainBundle] localizedInfoDictionary][@"CFBundleDisplayName"];
+  NSString *appName = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"];
   if (!appName)
     appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] ?: placeHolderString;
   
@@ -180,7 +185,7 @@ NSString *bit_settingsDir(void) {
     
     // temporary directory for crashes grabbed from PLCrashReporter
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDir = paths[0];
+    NSString *cacheDir = [paths objectAtIndex:0];
     settingsDir = [[cacheDir stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:BITHOCKEY_IDENTIFIER];
     
     if (![fileManager fileExistsAtPath:settingsDir]) {
@@ -348,7 +353,10 @@ NSString *bit_osVersionBuild(void) {
   
 #if __MAC_OS_X_VERSION_MAX_ALLOWED > 1090
   if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
     NSOperatingSystemVersion osSystemVersion = [[NSProcessInfo processInfo] operatingSystemVersion];
+#pragma clang diagnostic pop
     osVersion = [NSString stringWithFormat:@"%ld.%ld.%ld", (long)osSystemVersion.majorVersion, (long)osSystemVersion.minorVersion, (long)osSystemVersion.patchVersion];
   } else {
 #endif
@@ -378,7 +386,7 @@ NSString *bit_deviceLocale(void) {
 }
 
 NSString *bit_deviceLanguage(void) {
-  return [[NSBundle mainBundle] preferredLocalizations][0];
+  return [[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0];
 }
 
 NSString *bit_screenSize(void){
@@ -394,8 +402,8 @@ NSString *bit_sdkVersion(void){
 }
 
 NSString *bit_appVersion(void){
-  NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
-  NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+  NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+  NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
   
   if(version){
     return [NSString stringWithFormat:@"%@ (%@)", version, build];

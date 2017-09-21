@@ -10,7 +10,7 @@
 
 /// Initializes a new instance of the class.
 - (instancetype)init {
-  if (self = [super init]) {
+  if ((self = [super init])) {
     _envelopeTypeName = @"Microsoft.ApplicationInsights.Event";
     _dataTypeName = @"EventData";
     _version = @2;
@@ -20,17 +20,14 @@
   return self;
 }
 
-///
-/// Adds all members of this class to a dictionary
-/// @param dictionary to which the members of this class will be added.
-///
+/// Adds all members of this class to a dictionary.
 - (NSDictionary *)serializeToDictionary {
   NSMutableDictionary *dict = [super serializeToDictionary].mutableCopy;
   if (self.name != nil) {
     [dict setObject:self.name forKey:@"name"];
   }
-  if (self.properties !=nil) {
-    [dict setObject:self.properties forKey:@"properties"];
+  if (self.properties != nil) {
+    [dict setObject:(NSDictionary *)self.properties forKey:@"properties"];
   }
   if (self.measurements) {
     [dict setObject:self.measurements forKey:@"measurements"];
@@ -46,7 +43,7 @@
   if(self) {
     _envelopeTypeName = [coder decodeObjectForKey:@"self.envelopeTypeName"];
     _dataTypeName = [coder decodeObjectForKey:@"self.dataTypeName"];
-    _version = [coder decodeObjectForKey:@"self.version"];
+    _version = [coder decodeObjectForKey:@"self.version"] ?: @"";
     _properties = [coder decodeObjectForKey:@"self.properties"];
     _measurements = [coder decodeObjectForKey:@"self.measurements"];
   }

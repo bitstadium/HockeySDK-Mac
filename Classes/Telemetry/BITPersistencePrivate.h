@@ -27,7 +27,7 @@ FOUNDATION_EXPORT NSString *const BITPersistenceSuccessNotification;
 /**
  *  A queue which makes file system operations thread safe.
  */
-@property (nonatomic, assign) dispatch_queue_t persistenceQueue;
+@property (nonatomic, strong) dispatch_queue_t persistenceQueue;
 
 /**
  *  Determines how many telemetry files can be on disk at a time.

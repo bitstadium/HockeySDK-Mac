@@ -28,11 +28,11 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 @property (nonatomic, strong) id<NSObject> appWillEnterForegroundObserver;
 @property (nonatomic, strong) id<NSObject> appDidEnterBackgroundObserver;
 
+@property (nonatomic) NSTimeInterval firstSessionCreation;
+
 @end
 
-@implementation BITMetricsManager {
-  NSTimeInterval _firstSessionCreation;
-}
+@implementation BITMetricsManager
 
 @synthesize channel = _channel;
 @synthesize telemetryContext = _telemetryContext;
@@ -63,9 +63,9 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 }
 
 - (void)startManager {
-  self.sender = [[BITSender alloc] initWithPersistence:self.persistence serverURL:[NSURL URLWithString:self.serverURL]];
+  self.sender = [[BITSender alloc] initWithPersistence:self.persistence serverURL:(NSURL *)[NSURL URLWithString:self.serverURL]];
   [self.sender sendSavedDataAsync];
-  _firstSessionCreation = [[NSDate date] timeIntervalSince1970];
+  self.firstSessionCreation = [[NSDate date] timeIntervalSince1970];
   [self startNewSessionWithId:bit_UUID()];
   [self registerObservers];
 }
@@ -74,13 +74,12 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
 
 - (void)setDisabled:(BOOL)disabled {
   if (_disabled == disabled) { return; }
-  
+    _disabled = disabled;
   if (disabled) {
     [self unregisterObservers];
   } else {
-    [self registerObservers];
+    [self startManager];
   }
-  _disabled = disabled;
 }
 
 #pragma mark - Sessions
@@ -90,20 +89,20 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
   
   __weak typeof(self) weakSelf = self;
   
-  if(nil == _appDidEnterBackgroundObserver) {
+  if(nil == self.appDidEnterBackgroundObserver) {
     self.appDidEnterBackgroundObserver = [nc addObserverForName:NSApplicationDidResignActiveNotification
                                                      object:nil
                                                       queue:NSOperationQueue.mainQueue
-                                                 usingBlock:^(NSNotification *note) {
+                                                 usingBlock:^(NSNotification * __unused note) {
                                                    typeof(self) strongSelf = weakSelf;
                                                    [strongSelf updateDidEnterBackgroundTime];
                                                  }];
   }
-  if(nil == _appWillEnterForegroundObserver) {
+  if(nil == self.appWillEnterForegroundObserver) {
     self.appWillEnterForegroundObserver = [nc addObserverForName:NSApplicationWillBecomeActiveNotification
                                                       object:nil
                                                        queue:NSOperationQueue.mainQueue
-                                                  usingBlock:^(NSNotification *note) {
+                                                  usingBlock:^(NSNotification * __unused note) {
                                                     typeof(self) strongSelf = weakSelf;
                                                     [strongSelf startNewSessionIfNeeded];
                                                   }];
@@ -125,7 +124,7 @@ static NSString *const BITMetricsURLPathString = @"v2/track";
   
   // Check for duplicate start session: NSApplicationWillBecomeActiveNotification vs. startManager()
   NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-  NSTimeInterval timeSinceFirstSession = now - _firstSessionCreation;
+  NSTimeInterval timeSinceFirstSession = now - self.firstSessionCreation;
   if(timeSinceFirstSession < 0.5){
     return;
   }

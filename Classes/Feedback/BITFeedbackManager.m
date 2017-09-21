@@ -19,15 +19,19 @@
 #define kBITFeedbackLastMessageID   @"HockeyFeedbackLastMessageID"
 #define kBITFeedbackAppID           @"HockeyFeedbackAppID"
 
+@interface BITFeedbackManager ()
+
+@property (nonatomic, strong) NSFileManager *fileManager;
+@property (nonatomic, copy) NSString *settingsFile;
+
+@property (nonatomic, strong) BITFeedbackWindowController *feedbackWindowController;
+
+@property (nonatomic) BOOL didSetupDidBecomeActiveNotifications;
+@property (nonatomic) BOOL networkRequestInProgress;
+
+@end
 
 @implementation BITFeedbackManager {
-  NSFileManager  *_fileManager;
-  NSString       *_settingsFile;
-  
-  BITFeedbackWindowController *_feedbackWindowController;
-  
-  BOOL _didSetupDidBecomeActiveNotifications;
-  BOOL _networkRequestInProgress;
 }
 
 #pragma mark - Initialization
@@ -50,7 +54,7 @@
     _lastRefreshDate = [NSDate distantPast];
     
     _feedbackList = [[NSMutableArray alloc] init];
-
+    
     _fileManager = [[NSFileManager alloc] init];
     
     _settingsFile = [bit_settingsDir() stringByAppendingPathComponent:BITHOCKEY_FEEDBACK_SETTINGS];
@@ -62,7 +66,7 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self name:BITHockeyNetworkDidBecomeReachableNotification object:nil];
   
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidBecomeActiveNotification object:nil];
-
+  
 }
 
 
@@ -78,11 +82,11 @@
 }
 
 - (void)setupDidBecomeActiveNotifications {
-  if (!_didSetupDidBecomeActiveNotifications) {
+  if (!self.didSetupDidBecomeActiveNotifications) {
     NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
     [dnc addObserver:self selector:@selector(didBecomeActiveActions) name:NSApplicationDidBecomeActiveNotification object:nil];
     [dnc addObserver:self selector:@selector(didBecomeActiveActions) name:BITHockeyNetworkDidBecomeReachableNotification object:nil];
-    _didSetupDidBecomeActiveNotifications = YES;
+    self.didSetupDidBecomeActiveNotifications = YES;
   }
 }
 
@@ -101,30 +105,30 @@
 #pragma mark - UI
 
 - (void)showFeedbackWindow {
-  if (!_feedbackWindowController) {
-    _feedbackWindowController = [[BITFeedbackWindowController alloc] initWithManager:self];
+  if (!self.feedbackWindowController) {
+    self.feedbackWindowController = [[BITFeedbackWindowController alloc] initWithManager:self];
   }
   
-  [_feedbackWindowController showWindow:self];
-  [_feedbackWindowController.window makeKeyAndOrderFront:self];
+  [self.feedbackWindowController showWindow:self];
+  [self.feedbackWindowController.window makeKeyAndOrderFront:self];
 }
 
 
 #pragma mark - Manager Control
 
 - (void)startManager {
-  if ([_feedbackList count] == 0) {
+  if ([self.feedbackList count] == 0) {
     [self loadMessages];
   } else {
     [self updateAppDefinedUserData];
   }
   [self updateMessagesList];
-
+  
   [self setupDidBecomeActiveNotifications];
 }
 
 - (void)updateMessagesList {
-  if (_networkRequestInProgress) return;
+  if (self.networkRequestInProgress) return;
   
   NSArray *pendingMessages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
   if ([pendingMessages count] > 0) {
@@ -136,7 +140,7 @@
 
 - (void)updateMessagesListIfRequired {
   double now = [[NSDate date] timeIntervalSince1970];
-  if ((now - [_lastCheck timeIntervalSince1970] > 30)) {
+  if ((now - [self.lastCheck timeIntervalSince1970] > 30)) {
     [self updateMessagesList];
   }
 }
@@ -161,12 +165,11 @@
   BOOL availableViaDelegate = NO;
   
   NSString *userID = bit_stringValueFromKeychainForKey(kBITDefaultUserID);
-
-  if ([BITHockeyManager sharedHockeyManager].delegate &&
-      [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userIDForHockeyManager:componentManager:)]) {
-    userID = [[BITHockeyManager sharedHockeyManager].delegate
-              userIDForHockeyManager:[BITHockeyManager sharedHockeyManager]
-              componentManager:self] ?: userID;
+  
+  id<BITHockeyManagerDelegate> delegate = [BITHockeyManager sharedHockeyManager].delegate;
+  if (delegate && [delegate respondsToSelector:@selector(userIDForHockeyManager:componentManager:)]) {
+    userID = [delegate userIDForHockeyManager:[BITHockeyManager sharedHockeyManager]
+                             componentManager:self] ?: userID;
   }
   
   if (userID) {
@@ -181,20 +184,19 @@
   BOOL availableViaDelegate = NO;
   
   NSString *userName = bit_stringValueFromKeychainForKey(kBITDefaultUserName);
-
-  if ([BITHockeyManager sharedHockeyManager].delegate &&
-      [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userNameForHockeyManager:componentManager:)]) {
-    userName = [[BITHockeyManager sharedHockeyManager].delegate
-                userNameForHockeyManager:[BITHockeyManager sharedHockeyManager]
-                componentManager:self] ?: userName;
+  
+  id<BITHockeyManagerDelegate> delegate = [BITHockeyManager sharedHockeyManager].delegate;
+  if (delegate && [delegate respondsToSelector:@selector(userNameForHockeyManager:componentManager:)]) {
+    userName = [delegate userNameForHockeyManager:[BITHockeyManager sharedHockeyManager]
+                                 componentManager:self] ?: userName;
   }
-
+  
   if (userName) {
     availableViaDelegate = YES;
     self.userName = userName;
     self.requireUserName = BITFeedbackUserDataElementDontShow;
   }
-
+  
   return availableViaDelegate;
 }
 
@@ -202,20 +204,19 @@
   BOOL availableViaDelegate = NO;
   
   NSString *userEmail = bit_stringValueFromKeychainForKey(kBITDefaultUserEmail);
-
-  if ([BITHockeyManager sharedHockeyManager].delegate &&
-      [[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(userEmailForHockeyManager:componentManager:)]) {
-    userEmail = [[BITHockeyManager sharedHockeyManager].delegate
-                 userEmailForHockeyManager:[BITHockeyManager sharedHockeyManager]
-                 componentManager:self] ?: userEmail;
+  
+  id<BITHockeyManagerDelegate> delegate = [BITHockeyManager sharedHockeyManager].delegate;
+  if (delegate && [delegate respondsToSelector:@selector(userEmailForHockeyManager:componentManager:)]) {
+    userEmail = [delegate userEmailForHockeyManager:[BITHockeyManager sharedHockeyManager]
+                                   componentManager:self] ?: userEmail;
   }
-
+  
   if (userEmail) {
     availableViaDelegate = YES;
     self.userEmail = userEmail;
     self.requireUserEmail = BITFeedbackUserDataElementDontShow;
   }
-
+  
   return availableViaDelegate;
 }
 
@@ -238,10 +239,10 @@
   BOOL userNameViaDelegate = [self updateUserNameUsingDelegate];
   BOOL userEmailViaDelegate = [self updateUserEmailUsingDelegate];
   
-  if (![_fileManager fileExistsAtPath:_settingsFile])
+  if (![self.fileManager fileExistsAtPath:self.settingsFile])
     return;
-
-  NSData *codedData = [[NSData alloc] initWithContentsOfFile:_settingsFile];
+  
+  NSData *codedData = [[NSData alloc] initWithContentsOfFile:self.settingsFile];
   if (codedData == nil) return;
   
   NSKeyedUnarchiver *unarchiver = nil;
@@ -249,10 +250,10 @@
   @try {
     unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:codedData];
   }
-  @catch (NSException *exception) {
+  @catch (NSException * __unused exception) {
     return;
   }
-
+  
   if (!userIDViaDelegate) {
     if (!self.userID) {
       if ([unarchiver containsValueForKey:kBITFeedbackUserID])
@@ -266,7 +267,7 @@
         self.userName = [unarchiver decodeObjectForKey:kBITFeedbackName];
     }
   }
-
+  
   if (!userEmailViaDelegate) {
     if (!self.userEmail) {
       if ([unarchiver containsValueForKey:kBITFeedbackEmail])
@@ -275,14 +276,14 @@
   }
   
   if ([unarchiver containsValueForKey:kBITFeedbackUserDataAsked])
-    _didAskUserData = YES;
+    self.didAskUserData = YES;
   
   if ([unarchiver containsValueForKey:kBITFeedbackToken])
     self.token = [unarchiver decodeObjectForKey:kBITFeedbackToken];
   
   if ([unarchiver containsValueForKey:kBITFeedbackAppID]) {
     NSString *appID = [unarchiver decodeObjectForKey:kBITFeedbackAppID];
-
+    
     // the stored thread is from another application identifier, so clear the token
     // which will cause the new posts to create a new thread on the server for the
     // current app identifier
@@ -298,16 +299,16 @@
     self.lastMessageID = [unarchiver decodeObjectForKey:kBITFeedbackLastMessageID];
   
   if ([unarchiver containsValueForKey:kBITFeedbackMessages]) {
-    [self.feedbackList setArray:[unarchiver decodeObjectForKey:kBITFeedbackMessages]];
+    [self.feedbackList setArray:[unarchiver decodeObjectForKey:kBITFeedbackMessages] ?: @[]];
     
     [self sortFeedbackList];
     
     // inform the UI to update its data in case the list is already showing
     [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
   }
-
+  
   [unarchiver finishDecoding];
-
+  
   if (!self.lastCheck) {
     self.lastCheck = [NSDate distantPast];
   }
@@ -319,8 +320,8 @@
   
   NSMutableData *data = [[NSMutableData alloc] init];
   NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-
-  if (_didAskUserData)
+  
+  if (self.didAskUserData)
     [archiver encodeObject:@YES forKey:kBITFeedbackUserDataAsked];
   
   if (self.token)
@@ -347,13 +348,13 @@
   [archiver encodeObject:self.feedbackList forKey:kBITFeedbackMessages];
   
   [archiver finishEncoding];
-  [data writeToFile:_settingsFile atomically:YES];
+  [data writeToFile:self.settingsFile atomically:YES];
 }
 
 
 - (void)updateDidAskUserData {
-  if (!_didAskUserData) {
-    _didAskUserData = YES;
+  if (!self.didAskUserData) {
+    self.didAskUserData = YES;
     
     [self saveMessages];
   }
@@ -362,7 +363,7 @@
 #pragma mark - Messages
 
 - (void)sortFeedbackList {
-  [_feedbackList sortUsingComparator:^(BITFeedbackMessage *obj1, BITFeedbackMessage *obj2) {
+  [self.feedbackList sortUsingComparator:^(BITFeedbackMessage *obj1, BITFeedbackMessage *obj2) {
     NSDate *date1 = [obj1 date];
     NSDate *date2 = [obj2 date];
     
@@ -385,12 +386,12 @@
 }
 
 - (NSUInteger)numberOfMessages {
-  return [_feedbackList count];
+  return [self.feedbackList count];
 }
 
 - (BITFeedbackMessage *)messageAtIndex:(NSUInteger)index {
-  if ([_feedbackList count] > index) {
-    return _feedbackList[index];
+  if ([self.feedbackList count] > index) {
+    return [self.feedbackList objectAtIndex:index];
   }
   
   return nil;
@@ -399,7 +400,7 @@
 - (BITFeedbackMessage *)messageWithID:(NSNumber *)messageID {
   __block BITFeedbackMessage *message = nil;
   
-  [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [self.feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger __unused messagesIdx, BOOL *stop) {
     if ([[objMessage messageID] isEqualToNumber:messageID]) {
       message = objMessage;
       *stop = YES;
@@ -410,9 +411,9 @@
 }
 
 - (NSArray *)messagesWithStatus:(BITFeedbackMessageStatus)status {
-  NSMutableArray *resultMessages = [[NSMutableArray alloc] initWithCapacity:[_feedbackList count]];
+  NSMutableArray *resultMessages = [[NSMutableArray alloc] initWithCapacity:[self.feedbackList count]];
   
-  [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [self.feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
     if ([objMessage status] == status) {
       [resultMessages addObject: objMessage];
     }
@@ -424,7 +425,7 @@
 - (BITFeedbackMessage *)lastMessageHavingID {
   __block BITFeedbackMessage *message = nil;
   
-  [_feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [self.feedbackList enumerateObjectsUsingBlock:^(BITFeedbackMessage *objMessage, NSUInteger __unused messagesIdx, BOOL *stop) {
     if ([[objMessage messageID] integerValue] != 0) {
       message = objMessage;
     } else {
@@ -437,7 +438,7 @@
 
 - (void)markSendInProgressMessagesAsPending {
   // make sure message that may have not been send successfully, get back into the right state to be send again
-  [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [self.feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
     if ([(BITFeedbackMessage *)objMessage status] == BITFeedbackMessageStatusSendInProgress)
       [(BITFeedbackMessage *)objMessage setStatus:BITFeedbackMessageStatusSendPending];
   }];
@@ -445,7 +446,7 @@
 
 - (void)markSendInProgressMessagesAsInConflict {
   // make sure message that may have not been send successfully, get back into the right state to be send again
-  [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
+  [self.feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
     if ([(BITFeedbackMessage *)objMessage status] == BITFeedbackMessageStatusSendInProgress)
       [(BITFeedbackMessage *)objMessage setStatus:BITFeedbackMessageStatusInConflict];
   }];
@@ -460,8 +461,8 @@
 }
 
 - (BOOL)deleteMessageAtIndex:(NSUInteger)index {
-  if (_feedbackList && [_feedbackList count] > index && _feedbackList[index]) {
-    [_feedbackList removeObjectAtIndex:index];
+  if (self.feedbackList && [self.feedbackList count] > index && [self.feedbackList objectAtIndex:index]) {
+    [self.feedbackList removeObjectAtIndex:index];
     
     [self saveMessages];
     return YES;
@@ -471,7 +472,7 @@
 }
 
 - (void)deleteAllMessages {
-  [_feedbackList removeAllObjects];
+  [self.feedbackList removeAllObjects];
   
   [self saveMessages];
 }
@@ -515,7 +516,7 @@
 
 - (BOOL)isManualUserDataAvailable {
   [self updateAppDefinedUserData];
-
+  
   if ((self.requireUserName != BITFeedbackUserDataElementDontShow && self.userName) ||
       (self.requireUserEmail != BITFeedbackUserDataElementDontShow && self.userEmail))
     return YES;
@@ -529,24 +530,24 @@
 - (void)updateMessageListFromResponse:(NSDictionary *)jsonDictionary {
   if (!jsonDictionary) {
     // nil is used when the server returns 404, so we need to mark all existing threads as archives and delete the discussion token
-
+    
     NSArray *messagesSendInProgress = [self messagesWithStatus:BITFeedbackMessageStatusSendInProgress];
     NSInteger pendingMessagesCount = [messagesSendInProgress count] + [[self messagesWithStatus:BITFeedbackMessageStatusSendPending] count];
-
+    
     [self markSendInProgressMessagesAsPending];
     
-    [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
+    [self.feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
       if ([(BITFeedbackMessage *)objMessage status] != BITFeedbackMessageStatusSendPending)
         [(BITFeedbackMessage *)objMessage setStatus:BITFeedbackMessageStatusArchived];
     }];
-
+    
     if ([self token]) {
       self.token = nil;
     }
     
     NSArray *messages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
     NSInteger pendingMessagesCountAfterProcessing = [messages count];
-
+    
     [self saveMessages];
     
     // check if this request was successful and we have more messages pending and continue if positive
@@ -557,17 +558,16 @@
     return;
   }
   
-  NSDictionary *feedback = jsonDictionary[@"feedback"];
-  NSString *token = jsonDictionary[@"token"];
-  NSDictionary *feedbackObject = jsonDictionary[@"feedback"];
-  if (feedback && token && feedbackObject) {
+  NSDictionary *feedback = [jsonDictionary objectForKey:@"feedback"];
+  NSString *token = [jsonDictionary objectForKey:@"token"];
+  if (feedback && token) {
     // update the thread token, which is not available until the 1st message was successfully sent
     self.token = token;
     
     self.lastCheck = [NSDate date];
     
     // add all new messages
-    NSArray *feedMessages = feedbackObject[@"messages"];
+    NSArray *feedMessages = [feedback objectForKey:@"messages"];
     
     // get the message that was currently sent if available
     NSArray *messagesSendInProgress = [self messagesWithStatus:BITFeedbackMessageStatusSendInProgress];
@@ -578,9 +578,9 @@
     __block BOOL newMessage = NO;
     NSMutableSet *returnedMessageIDs = [[NSMutableSet alloc] init];
     
-    [feedMessages enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
-      if (((NSDictionary *)objMessage)[@"id"]) {
-        NSNumber *messageID = ((NSDictionary *)objMessage)[@"id"];
+    [feedMessages enumerateObjectsUsingBlock:^(NSDictionary * objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
+      NSNumber *messageID = [objMessage objectForKey:@"id"];
+      if (messageID) {
         [returnedMessageIDs addObject:messageID];
         
         BITFeedbackMessage *thisMessage = [self messageWithID:messageID];
@@ -590,38 +590,40 @@
           
           // TODO: match messages in state conflict
           
-          [messagesSendInProgress enumerateObjectsUsingBlock:^(id objSendInProgressMessage, NSUInteger messagesSendInProgressIdx, BOOL *stop2) {
-            if ([((NSDictionary *)objMessage)[@"token"] isEqualToString:[(BITFeedbackMessage *)objSendInProgressMessage token]]) {
+          [messagesSendInProgress enumerateObjectsUsingBlock:^(id objSendInProgressMessage, NSUInteger __unused messagesSendInProgressIdx, BOOL *stop2) {
+            if ([[objMessage objectForKey:@"token"] isEqualToString:[(BITFeedbackMessage *)objSendInProgressMessage token]]) {
               matchingSendInProgressOrInConflictMessage = objSendInProgressMessage;
               *stop2 = YES;
             }
           }];
-
+          
           if (matchingSendInProgressOrInConflictMessage) {
-            matchingSendInProgressOrInConflictMessage.date = [self parseRFC3339Date:((NSDictionary *)objMessage)[@"created_at"]];
+            matchingSendInProgressOrInConflictMessage.date = [self parseRFC3339Date:[objMessage objectForKey:@"created_at"]];
             matchingSendInProgressOrInConflictMessage.messageID = messageID;
             matchingSendInProgressOrInConflictMessage.status = BITFeedbackMessageStatusRead;
           } else {
-            if ([(NSDictionary *)objMessage objectForKey:@"clean_text"] || [(NSDictionary *)objMessage objectForKey:@"text"] || [(NSDictionary *)objMessage objectForKey:@"attachments"]) {
+            if ([objMessage objectForKey:@"clean_text"] ||
+                [objMessage objectForKey:@"text"] ||
+                [objMessage objectForKey:@"attachments"]) {
               BITFeedbackMessage *message = [[BITFeedbackMessage alloc] init];
-              message.text = ((NSDictionary *)objMessage)[@"clean_text"] ?: ((NSDictionary *)objMessage)[@"text"] ?: @"";
-              message.name = ((NSDictionary *)objMessage)[@"name"] ?: @"";
-              message.email = ((NSDictionary *)objMessage)[@"email"] ?: @"";
+              message.text = [objMessage objectForKey:@"clean_text"] ?: [objMessage objectForKey:@"text"] ?: @"";
+              message.name = [objMessage objectForKey:@"name"] ?: @"";
+              message.email = [objMessage objectForKey:@"email"] ?: @"";
               
-              message.date = [self parseRFC3339Date:((NSDictionary *)objMessage)[@"created_at"]] ?: [NSDate date];
-              message.messageID = ((NSDictionary *)objMessage)[@"id"];
+              message.date = [self parseRFC3339Date:[objMessage objectForKey:@"created_at"]] ?: [NSDate date];
+              message.messageID = [objMessage objectForKey:@"id"];
               message.status = BITFeedbackMessageStatusUnread;
               
-              for (NSDictionary *attachmentData in objMessage[@"attachments"]) {
+              for (NSDictionary *attachmentData in [objMessage objectForKey:@"attachments"]) {
                 BITFeedbackMessageAttachment *newAttachment = [BITFeedbackMessageAttachment new];
-                newAttachment.originalFilename = attachmentData[@"file_name"];
-                newAttachment.identifier = attachmentData[@"id"];
-                newAttachment.sourceURL = attachmentData[@"url"];
-                newAttachment.contentType = attachmentData[@"content_type"];
+                newAttachment.originalFilename = [attachmentData objectForKey:@"file_name"];
+                newAttachment.identifier = [attachmentData objectForKey:@"id"];
+                newAttachment.sourceURL = [attachmentData objectForKey:@"url"];
+                newAttachment.contentType = [attachmentData objectForKey:@"content_type"];
                 [message addAttachmentsObject:newAttachment];
               }
               
-              [_feedbackList addObject:message];
+              [self.feedbackList addObject:message];
               
               newMessage = YES;
             }
@@ -637,7 +639,7 @@
     
     [self sortFeedbackList];
     [self updateLastMessageID];
-
+    
     // we got a new incoming message, trigger user notification system
     if (newMessage) {
       // check if the latest message is from the users own email address, then don't show an alert since he answered using his own email
@@ -650,18 +652,21 @@
       if (!latestMessageFromUser && self.showAlertOnIncomingMessages) {
         id userNotificationClass = NSClassFromString(@"NSUserNotification");
         if (userNotificationClass) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
           NSUserNotification *notification = [[NSUserNotification alloc] init];
           notification.title = @"A new response to your feedback is available.";
           notification.informativeText = latestMessage.text;
           notification.soundName = NSUserNotificationDefaultSoundName;
           [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+#pragma clang diagnostic pop
         }
       }
     }
     
     pendingMessages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
     NSInteger pendingMessagesCountAfterProcessing = [pendingMessages count];
-
+    
     // check if this request was successful and we have more messages pending and continue if positive
     if (pendingMessagesCount > pendingMessagesCountAfterProcessing && pendingMessagesCountAfterProcessing > 0) {
       [self performSelector:@selector(submitPendingMessages) withObject:nil afterDelay:0.1];
@@ -672,17 +677,17 @@
   }
   
   [self saveMessages];
-
+  
   return;
 }
 
 - (void)sendNetworkRequestWithHTTPMethod:(NSString *)httpMethod withMessage:(BITFeedbackMessage *)message completionHandler:(void (^)(NSError *err))completionHandler {
   NSString *boundary = @"----FOO";
   
-  _networkRequestInProgress = YES;
+  self.networkRequestInProgress = YES;
   // inform the UI to update its data in case the list is already showing
   [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingStarted object:nil];
-
+  
   NSString *tokenParameter = @"";
   if ([self token]) {
     tokenParameter = [NSString stringWithFormat:@"/%@", [self token]];
@@ -708,7 +713,7 @@
   NSString *url = [NSString stringWithFormat:@"%@%@", self.serverURL, parameter];
   BITHockeyLogDebug(@"INFO: sending api request to %@", url);
   
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:1 timeoutInterval:10.0];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:(NSURL *)[NSURL URLWithString:url] cachePolicy:1 timeoutInterval:10.0];
   [request setHTTPMethod:httpMethod];
   [request setValue:@"Hockey/iOS" forHTTPHeaderField:@"User-Agent"];
   [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
@@ -722,7 +727,7 @@
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:@"Apple" forKey:@"oem" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[BITSystemProfile systemVersionString] forKey:@"os_version" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[self getDevicePlatform] forKey:@"model" boundary:boundary]];
-    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[[NSBundle mainBundle] preferredLocalizations][0] forKey:@"lang" boundary:boundary]];
+    [postBody appendData:[BITHockeyAppClient dataWithPostValue:[[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0] forKey:@"lang" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"bundle_version" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[message text] forKey:@"text" boundary:boundary]];
     [postBody appendData:[BITHockeyAppClient dataWithPostValue:[message token] forKey:@"message_token" boundary:boundary]];
@@ -758,39 +763,27 @@
       attachmentIndex++;
     }
     
-    [postBody appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:(NSData *)[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     
     [request setHTTPBody:postBody];
   }
   __weak typeof (self) weakSelf = self;
-  id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
-  if (nsurlsessionClass) {
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-    
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-                                              typeof (self) strongSelf = weakSelf;
-                                              
-                                              [session finishTasksAndInvalidate];
-
-                                              [strongSelf handleFeedbackMessageResponse:response data:data error:error completion:completionHandler];
-                                            }];
-    [task resume];
-    
-  }else{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
-#pragma clang diagnostic pop
-      typeof (self) strongSelf = weakSelf;
-      [strongSelf handleFeedbackMessageResponse:response data:responseData error:err completion:completionHandler];
-    }];
-  }
+  NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+  __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+  
+  NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                          completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                            typeof (self) strongSelf = weakSelf;
+                                            
+                                            [session finishTasksAndInvalidate];
+                                            
+                                            [strongSelf handleFeedbackMessageResponse:response data:data error:error completion:completionHandler];
+                                          }];
+  [task resume];
 }
 
 - (void)handleFeedbackMessageResponse:(NSURLResponse *)response data:(NSData *)responseData error:(NSError * )err completion:(void (^)(NSError *err))completionHandler{
-  _networkRequestInProgress = NO;
+  self.networkRequestInProgress = NO;
   
   self.lastRefreshDate = [NSDate date];
   
@@ -810,7 +803,7 @@
         // set the token to the first message token, since this is identical
         __block NSString *token = nil;
         
-        [_feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger messagesIdx, BOOL *stop) {
+        [self.feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger __unused messagesIdx, BOOL *stop) {
           if ([(BITFeedbackMessage *)objMessage status] == BITFeedbackMessageStatusSendInProgress) {
             token = [(BITFeedbackMessage *)objMessage token];
             *stop = YES;
@@ -832,7 +825,7 @@
       if (responseString && [responseString dataUsingEncoding:NSUTF8StringEncoding]) {
         NSError *error = NULL;
         
-        NSDictionary *feedDict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+        NSDictionary *feedDict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:(NSData *)[responseString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
         
         // server returned empty response?
         if (error) {
@@ -870,15 +863,15 @@
   
   [self sendNetworkRequestWithHTTPMethod:@"GET"
                              withMessage:nil
-                       completionHandler:^(NSError *err){
+                       completionHandler:^(NSError * __unused err){
                          // inform the UI to update its data in case the list is already showing
                          [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
                        }];
 }
 
 - (void)submitPendingMessages {
-  if (_networkRequestInProgress) {
-    [self performSelector:@selector(submitPendingMessages) withObject:nil afterDelay:2.0f];
+  if (self.networkRequestInProgress) {
+    [self performSelector:@selector(submitPendingMessages) withObject:nil afterDelay:2.0];
     return;
   }
   
@@ -887,10 +880,10 @@
   [self saveMessages];
   
   NSArray *pendingMessages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
-
+  
   if ([pendingMessages count] > 0) {
     // we send one message at a time
-    BITFeedbackMessage *messageToSend = pendingMessages[0];
+    BITFeedbackMessage *messageToSend = [pendingMessages objectAtIndex:0];
     
     [messageToSend setStatus:BITFeedbackMessageStatusSendInProgress];
     if (self.userID)
@@ -928,7 +921,7 @@
   [message setAttachments:attachments];
   [message setUserMessage:YES];
   
-  [_feedbackList addObject:message];
+  [self.feedbackList addObject:message];
   
   [self submitPendingMessages];
 }

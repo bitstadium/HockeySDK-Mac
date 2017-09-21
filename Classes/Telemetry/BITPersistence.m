@@ -19,13 +19,12 @@ static NSUInteger const BITDefaultFileCount = 50;
 
 @interface BITPersistence ()
 
-@property (nonatomic, strong) NSString *appHockeySDKDirectoryPath;
+@property (nonatomic, copy) NSString *appHockeySDKDirectoryPath;
+@property(nonatomic) BOOL directorySetupComplete;
 
 @end
 
-@implementation BITPersistence {
-  BOOL _directorySetupComplete;
-}
+@implementation BITPersistence
 
 #pragma mark - Public
 
@@ -58,16 +57,16 @@ static NSUInteger const BITDefaultFileCount = 50;
       typeof(self) strongSelf = weakSelf;
       BOOL success = [bundle writeToFile:fileURL atomically:YES];
       if (success) {
-        BITHockeyLogDebug(@"INFO: Wrote bundle to %@", fileURL);
+        BITHockeyLogDebug(@"Wrote bundle to %@", fileURL);
         [strongSelf sendBundleSavedNotification];
       }
       else {
-        BITHockeyLogError(@"ERROR: Error writing bundle to %@", fileURL);
+        BITHockeyLogError(@"Error writing bundle to %@", fileURL);
       }
     });
   }
   else {
-    BITHockeyLogDebug(@"INFO: Unable to write %@ as provided bundle was null", fileURL);
+    BITHockeyLogDebug(@"WARNING: Unable to write %@ as provided bundle was null", fileURL);
   }
 }
 
@@ -81,7 +80,7 @@ static NSUInteger const BITDefaultFileCount = 50;
 
 - (BOOL)isFreeSpaceAvailable {
   NSArray *files = [self persistedFilesForType:BITPersistenceTypeTelemetry];
-  return files.count < _maxFileCount;
+  return files.count < self.maxFileCount;
 }
 
 - (NSString *)requestNextFilePath {
@@ -128,7 +127,7 @@ static NSUInteger const BITDefaultFileCount = 50;
 /**
  * Deletes a file at the given path.
  *
- * @param the path to look for a file and delete it.
+ * @param path The path to look for a file and delete it.
  */
 - (void)deleteFileAtPath:(NSString *)path {
   __weak typeof(self) weakSelf = self;
@@ -137,7 +136,7 @@ static NSUInteger const BITDefaultFileCount = 50;
     if ([path rangeOfString:kBITFileBaseString].location != NSNotFound) {
       NSError *error = nil;
       if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error]) {
-        BITHockeyLogError(@"ERROR: Error deleting file at path %@", path);
+        BITHockeyLogError(@"Error deleting file at path %@", path);
       }
       else {
         BITHockeyLogDebug(@"INFO: Successfully deleted file at path %@", path);
@@ -172,7 +171,7 @@ static NSUInteger const BITDefaultFileCount = 50;
       filePath = [self.appHockeySDKDirectoryPath stringByAppendingPathComponent:kBITMetaDataDirectory];
       break;
     };
-    default: {
+    case BITPersistenceTypeTelemetry: {
       NSString *uuid = bit_UUID();
       fileName = [NSString stringWithFormat:@"%@%@", kBITFileBaseString, uuid];
       filePath = [self.appHockeySDKDirectoryPath stringByAppendingPathComponent:kBITTelemetryDirectory];
@@ -189,11 +188,13 @@ static NSUInteger const BITDefaultFileCount = 50;
  * Create directory structure if necessary and exclude it from iCloud backup
  */
 - (void)createDirectoryStructureIfNeeded {
-  
-  NSURL *appURL = [NSURL fileURLWithPath:self.appHockeySDKDirectoryPath];
+  // Using the local variable looks unnecessary but it actually silences a static analyzer warning.
+  NSString *appHockeySDKDirectoryPath = [self appHockeySDKDirectoryPath];
+  NSURL *appURL = [NSURL fileURLWithPath:appHockeySDKDirectoryPath];
   NSFileManager *fileManager = [NSFileManager defaultManager];
   if (appURL) {
     NSError *error = nil;
+    
     // Create HockeySDK folder if needed
     if (![fileManager createDirectoryAtURL:appURL withIntermediateDirectories:YES attributes:nil error:&error]) {
       BITHockeyLogError(@"%@", error.localizedDescription);
@@ -219,18 +220,19 @@ static NSUInteger const BITDefaultFileCount = 50;
     }
 
     // Make sure NSURLIsExcludedFromBackupKey is available
-    if (&NSURLIsExcludedFromBackupKey != NULL) {
-      //Exclude HockeySDK folder from backup
-      if (![appURL setResourceValue:@YES
-                             forKey:NSURLIsExcludedFromBackupKey
-                              error:&error]) {
-        BITHockeyLogError(@"ERROR: Error excluding %@ from backup %@", appURL.lastPathComponent, error.localizedDescription);
-      } else {
-        BITHockeyLogDebug(@"INFO: Exclude %@ from backup", appURL);
-      }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+    //Exclude HockeySDK folder from backup
+    if (![appURL setResourceValue:@YES
+                           forKey:NSURLIsExcludedFromBackupKey
+                            error:&error]) {
+      BITHockeyLogError(@"ERROR: Error excluding %@ from backup %@", appURL.lastPathComponent, error.localizedDescription);
+    } else {
+      BITHockeyLogDebug(@"INFO: Exclude %@ from backup", appURL);
     }
-    
-    _directorySetupComplete = YES;
+#pragma clang diagnostic pop
+
+    self.directorySetupComplete = YES;
   }
 }
 

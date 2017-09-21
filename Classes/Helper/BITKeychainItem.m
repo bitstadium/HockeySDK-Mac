@@ -24,7 +24,12 @@
 
 #import "BITKeychainItem.h"
 
-@interface BITKeychainItem (Private)
+@interface BITKeychainItem ()
+
+@property(nonatomic, copy) NSString *mUsername;
+@property(nonatomic, copy) NSString *mPassword;
+@property(nonatomic, copy) NSString *mLabel;
+@property SecKeychainItemRef mCoreKeychainItem;
 
 /*!
  @abstract Modifies the given attribute to be newValue.
@@ -32,7 +37,7 @@
  @param newValue A pointer to the new value.
  @param newLength The length of the new value.
  */
-- (void)_modifyAttributeWithTag:(SecItemAttr)attributeTag toBeValue:(void *)newValue ofLength:(UInt32)newLength;
+- (void)_modifyAttributeWithTag:(SecItemAttr)attributeTag toBeValue:(const void *)newValue ofLength:(UInt32)newLength;
 
 @end
 
@@ -78,37 +83,40 @@ static BOOL _logsErrors;
 {
 	if ((self = [super init]))
 	{
-		mCoreKeychainItem = item;
-		mUsername = [username copy];
-		mPassword = [password copy];
+		_mCoreKeychainItem = item;
+		_mUsername = [username copy];
+		_mPassword = [password copy];
 		
 		return self;
 	}
 	return nil;
 }
 
-- (void)_modifyAttributeWithTag:(SecItemAttr)attributeTag toBeValue:(void *)newValue ofLength:(UInt32)newLength
+- (void)_modifyAttributeWithTag:(SecItemAttr)attributeTag toBeValue:(const void *)newValue ofLength:(UInt32)newLength
 {
-	NSAssert(mCoreKeychainItem, @"Core keychain item is nil. You cannot modify a keychain item that is not in the keychain.");
+	NSAssert(self.mCoreKeychainItem, @"Core keychain item is nil. You cannot modify a keychain item that is not in the keychain.");
 	
 	SecKeychainAttribute attributes[1];
 	attributes[0].tag = attributeTag;
 	attributes[0].length = newLength;
-	attributes[0].data = newValue;
-	
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-qual"
+	attributes[0].data = (void *)newValue;
+#pragma clang diagnostic pop
+
 	SecKeychainAttributeList attributeList;
 	attributeList.count = 1;
 	attributeList.attr = attributes;
 	
-	SecKeychainItemModifyAttributesAndData(mCoreKeychainItem, &attributeList, 0, NULL);
+	SecKeychainItemModifyAttributesAndData(self.mCoreKeychainItem, &attributeList, 0, NULL);
 }
 
 - (void)dealloc
 {
 	
-	if (mCoreKeychainItem)
-		CFRelease(mCoreKeychainItem);
-	
+	if (self.mCoreKeychainItem)
+		CFRelease(self.mCoreKeychainItem);
+  
 }
 
 #pragma mark -
@@ -118,7 +126,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [mPassword copy];
+		return [self.mPassword copy];
 	}
 }
 
@@ -126,13 +134,16 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		if (mPassword == newPassword)
+		if (self.mPassword == newPassword)
 			return;
 		
-		mPassword = [newPassword copy];
+		self.mPassword = [newPassword copy];
 		
 		const char *newPasswordCString = [newPassword UTF8String];
-		SecKeychainItemModifyAttributesAndData(mCoreKeychainItem, NULL, (UInt32)strlen(newPasswordCString), (void *)newPasswordCString);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-qual"
+		SecKeychainItemModifyAttributesAndData(self.mCoreKeychainItem, NULL, (UInt32)strlen(newPasswordCString), (void *)newPasswordCString);
+#pragma clang diagnostic pop
 	}
 }
 
@@ -142,7 +153,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [mUsername copy];
+		return [self.mUsername copy];
 	}
 }
 
@@ -150,13 +161,13 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		if (mUsername == newUsername)
+		if (self.mUsername == newUsername)
 			return;
 		
-		mUsername = [newUsername copy];
+		self.mUsername = [newUsername copy];
 		
 		const char *newUsernameCString = [newUsername UTF8String];
-		[self _modifyAttributeWithTag:kSecAccountItemAttr toBeValue:(void *)newUsernameCString ofLength:(UInt32)strlen(newUsernameCString)];
+		[self _modifyAttributeWithTag:kSecAccountItemAttr toBeValue:(const void *)newUsernameCString ofLength:(UInt32)strlen(newUsernameCString)];
 	}
 }
 
@@ -166,7 +177,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [mLabel copy];
+		return [self.mLabel copy];
 	}
 }
 
@@ -174,13 +185,13 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		if (mLabel == newLabel)
+		if (self.mLabel == newLabel)
 			return;
 		
-		mLabel = [newLabel copy];
+		self.mLabel = [newLabel copy];
 		
 		const char *newLabelCString = [newLabel UTF8String];
-		[self _modifyAttributeWithTag:kSecLabelItemAttr toBeValue:(void *)newLabelCString ofLength:(UInt32)strlen(newLabelCString)];
+		[self _modifyAttributeWithTag:kSecLabelItemAttr toBeValue:(const void *)newLabelCString ofLength:(UInt32)strlen(newLabelCString)];
 	}
 }
 
@@ -188,15 +199,15 @@ static BOOL _logsErrors;
 #pragma mark Actions
 - (void)removeFromKeychain
 {
-	NSAssert(mCoreKeychainItem, @"Core keychain item is nil. You cannot remove a keychain item that is not in the keychain already.");
+	NSAssert(self.mCoreKeychainItem, @"Core keychain item is nil. You cannot remove a keychain item that is not in the keychain already.");
 	
-	if (mCoreKeychainItem)
+	if (self.mCoreKeychainItem)
 	{
-		OSStatus resultStatus = SecKeychainItemDelete(mCoreKeychainItem);
+		OSStatus resultStatus = SecKeychainItemDelete(self.mCoreKeychainItem);
 		if (resultStatus == noErr)
 		{
-			CFRelease(mCoreKeychainItem);
-			mCoreKeychainItem = nil;
+			CFRelease(self.mCoreKeychainItem);
+			self.mCoreKeychainItem = nil;
 		}
 	}
 }
@@ -204,6 +215,12 @@ static BOOL _logsErrors;
 @end
 
 #pragma mark -
+@interface BITGenericKeychainItem ()
+
+@property(nonatomic, copy) NSString *mServiceName;
+
+@end
+
 @implementation BITGenericKeychainItem
 
 - (id)_initWithCoreKeychainItem:(SecKeychainItemRef)item
@@ -213,7 +230,7 @@ static BOOL _logsErrors;
 {
 	if ((self = [super _initWithCoreKeychainItem:item username:username password:password]))
 	{
-		mServiceName = [serviceName copy];
+		_mServiceName = [serviceName copy];
 		return self;
 	}
 	return nil;
@@ -248,10 +265,16 @@ static BOOL _logsErrors;
 	OSStatus returnStatus = SecKeychainFindGenericPassword(NULL, (UInt32)strlen(serviceNameCString), serviceNameCString, (UInt32)strlen(usernameCString), usernameCString, &passwordLength, (void **)&password, &item);
 	if (returnStatus != noErr || !item)
 	{
-		if (_logsErrors)
-			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
-
-        if (password) SecKeychainItemFreeContent(NULL, password);
+    if (_logsErrors){
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+      NSString *errorString = [NSString  stringWithCString:GetMacOSStatusErrorString(returnStatus) encoding:NSUTF8StringEncoding];
+			NSLog(@"Error (%@) - %@", NSStringFromSelector(_cmd), errorString);
+#pragma clang diagnostic pop
+    }
+    if (password) {
+      SecKeychainItemFreeContent(NULL, password);
+    }
 		return nil;
 	}
 	NSString *passwordString = [[NSString alloc] initWithData:[NSData dataWithBytes:password length:passwordLength] encoding:NSUTF8StringEncoding];
@@ -272,12 +295,20 @@ static BOOL _logsErrors;
 	const char *passwordCString = [password UTF8String];
 	
 	SecKeychainItemRef item = nil;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-qual"
 	OSStatus returnStatus = SecKeychainAddGenericPassword(NULL, (UInt32)strlen(serviceNameCString), serviceNameCString, (UInt32)strlen(usernameCString), usernameCString, (UInt32)strlen(passwordCString), (void *)passwordCString, &item);
+#pragma clang diagnostic pop
 	
 	if (returnStatus != noErr || !item)
 	{
-		if (_logsErrors)
-			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+    if (_logsErrors){
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+      NSString *errorString = [NSString  stringWithCString:GetMacOSStatusErrorString(returnStatus) encoding:NSUTF8StringEncoding];
+      NSLog(@"Error (%@) - %@", NSStringFromSelector(_cmd), errorString);
+#pragma clang diagnostic pop
+    }
 		return nil;
 	}
 	return [BITGenericKeychainItem _genericKeychainItemWithCoreKeychainItem:item forServiceName:serviceName username:username password:password];
@@ -290,7 +321,7 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		return [mServiceName copy];
+		return [self.mServiceName copy];
 	}
 }
 
@@ -298,13 +329,13 @@ static BOOL _logsErrors;
 {
 	@synchronized (self)
 	{
-		if (mServiceName == newServiceName)
+		if (self.mServiceName == newServiceName)
 			return;
 		
-		mServiceName = [newServiceName copy];
+		self.mServiceName = [newServiceName copy];
 		
 		const char *newServiceNameCString = [newServiceName UTF8String];
-		[self _modifyAttributeWithTag:kSecServiceItemAttr toBeValue:(void *)newServiceNameCString ofLength:(UInt32)strlen(newServiceNameCString)];
+		[self _modifyAttributeWithTag:kSecServiceItemAttr toBeValue:(const void *)newServiceNameCString ofLength:(UInt32)strlen(newServiceNameCString)];
 	}
 }
 
