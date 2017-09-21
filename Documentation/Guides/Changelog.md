@@ -1,3 +1,8 @@
+## 5.0.0
+
+- [IMPROVEMENT] Metrics can be enabled after they have been disabled. [#124](https://github.com/bitstadium/HockeySDK-Mac/pull/124)
+- [BUGFIX] The app name is now displayed correctly in the user confirmation dialog. [#126](https://github.com/bitstadium/HockeySDK-Mac/pull/126)
+
 ## 5.0.0-beta.1
 
 The version of drops support for OS X 10.7 and 10.8.
@@ -374,6 +379,5 @@ This SDK release explicitly includes the Application Support directory into back
 
 - Added Mac Sandbox support:
   - Supports 32 and 64 bit Intel X86 architecture
-  - Uses brand new PLCrashReporter version instead of crash logs from Libary directories
+  - Uses brand new PLCrashReporter version instead of crash logs from Library directories
 - Fixed sending crash reports to the HockeyApp servers
-
