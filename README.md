@@ -27,7 +27,7 @@ It is super easy to use HockeyApp in your macOS app. Have a look at our [documen
 
 Please visit [our landing page](https://www.hockeyapp.net/help/sdk/mac/5.0.0/index.html) as a starting point for all of our documentation.
 
-Please check out our [changelog](http://www.hockeyapp.net/help/sdk/mac//changelog.html), as well as our [troubleshooting section](https://www.hockeyapp.net/help/sdk/mac/5.0.0/installation--setup.html#troubleshooting).
+Please check out our [changelog](http://www.hockeyapp.net/help/sdk/mac/5.0.0/changelog.html), as well as our [troubleshooting section](https://www.hockeyapp.net/help/sdk/mac/5.0.0/installation--setup.html#troubleshooting).
 
 ## 3. Contributing
 
