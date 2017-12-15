@@ -399,12 +399,8 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
 }
 
 - (void)stopLoadingIndicator {
-  
-  // We need to update the UI on the main thread to make sure it updates right away.
-  dispatch_async( dispatch_get_main_queue(), ^{
-    [self.statusBarLoadingIndicator stopAnimation:self];
-    [self.statusBarLoadingIndicator setHidden:YES];
-  });
+  [self.statusBarLoadingIndicator stopAnimation:self];
+  [self.statusBarLoadingIndicator setHidden:YES];
   [self updateLastUpdate];
 }
 
