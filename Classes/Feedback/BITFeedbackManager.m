@@ -865,7 +865,9 @@
                              withMessage:nil
                        completionHandler:^(NSError * __unused err){
                          // inform the UI to update its data in case the list is already showing
-                         [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
+                         dispatch_async(dispatch_get_main_queue(),^{
+                           [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
+                         });
                        }];
 }
 
@@ -908,7 +910,9 @@
                            }
                            
                            // inform the UI to update its data in case the list is already showing
-                           [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
+                           dispatch_async(dispatch_get_main_queue(),^{
+                             [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
+                           });
                          }];
   }
 }
