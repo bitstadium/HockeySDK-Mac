@@ -1,3 +1,10 @@
+## 5.1.0
+
+This version contains improvements around concurrency.
+
+- [BUGFIX/IMPROVEMENT] Improve concurrency for HockeyApp Metrics. [#134](https://github.com/bitstadium/HockeySDK-Mac/pull/134) [#135](https://github.com/bitstadium/HockeySDK-Mac/pull/135)
+- [IMPROVEMENT] Always update the feedback UI on the main thread. [#136](https://github.com/bitstadium/HockeySDK-Mac/pull/136) 
+
 ## 5.0.0
 
 - [IMPROVEMENT] Metrics can be enabled after they have been disabled. [#124](https://github.com/bitstadium/HockeySDK-Mac/pull/124)
