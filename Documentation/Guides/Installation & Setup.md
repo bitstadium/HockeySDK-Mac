@@ -2,9 +2,9 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Slack Status](https://slack.hockeyapp.net/badge.svg)](https://slack.hockeyapp.net)
 
-## Version 5.0.0
+## Version 5.1.0
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/5.0.0/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/5.1.0/docs/docs/Changelog.html)
 
 **NOTE:** With the release of HockeySDK 4.0.0-alpha.1 a bug was introduced which lead to the exclusion of the Application Support folder from iCloud and iTunes backups.
 
@@ -534,7 +534,7 @@ BITHockeyManager.shared().start()
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](https://www.hockeyapp.net/help/sdk/mac/5.0.0/index.html).
+Our documentation can be found on [HockeyApp](https://www.hockeyapp.net/help/sdk/mac/5.1.0/index.html).
 
 <a id="troubleshooting"></a>
 ## 5.Troubleshooting
@@ -547,7 +547,7 @@ Make sure that the apps build setting has `LD_RUNPATH_SEARCH_PATHS` set to `@exe
 
 Make sure there is no `All Exceptions` breakpoint active or limit it to `Objective-C` only and exclude `C++`.
 
-3. Feature are not working as expected
+3. Features are not working as expected
 
 Enable debug output to the console to see additional information from the SDK initializing the modules,  sending and receiving network requests and more by adding the following code before calling `startManager`:
 
