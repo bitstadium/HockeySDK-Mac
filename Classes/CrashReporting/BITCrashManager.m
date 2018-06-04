@@ -238,6 +238,34 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
 }
 
 /**
+ * Mailbutler-only: Save the crash report to the logs directory
+ */
+- (void)saveCrashReportToMailLogsDirectory:(NSString *)crashReport {
+  NSString *userLibraryDirectory = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+  if (userLibraryDirectory) {
+    NSString *logsDirectory = [userLibraryDirectory stringByAppendingPathComponent:@"Logs/Mail"];
+    NSError *mailbutlerLogDirError = nil;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:logsDirectory
+                                   withIntermediateDirectories:YES
+                                                    attributes:nil
+                                                         error:&mailbutlerLogDirError]) {
+      NSLog(@"Unable to create logs directory %@, error: %@", logsDirectory, mailbutlerLogDirError);
+    } else {
+      NSString *crashFile = [[logsDirectory stringByAppendingPathComponent:self.lastCrashFilename] stringByAppendingPathExtension:@"crash"];
+      NSError *mailbutlerLogWriteError = nil;
+      if (![crashReport writeToFile:crashFile
+                         atomically:YES
+                           encoding:NSUTF8StringEncoding
+                              error:&mailbutlerLogWriteError]) {
+        NSLog(@"Unable to save crash log file for Mailbutler to: %@, error: %@", crashFile, mailbutlerLogWriteError);
+      } else {
+        NSLog(@"Successfully saved crash log file for Mailbutler to: %@", crashFile);
+      }
+    }
+  }
+}
+
+/**
  * Remove a cached crash report
  *
  *  @param filename The base filename of the crash report
@@ -711,6 +739,7 @@ static PLCrashReporterCallbacks plCrashCallbacks = {
       crashReport = [BITCrashReportTextFormatter stringValueForCrashReport:report crashReporterKey:installString];
       
       if (crashReport && !error) {
+        [self saveCrashReportToMailLogsDirectory:crashReport]; // Mailbutler
         NSString *log = [self.dictOfLastSessionCrash valueForKey:kBITCrashMetaApplicationLog] ?: @"";
         
         if (self.delegate != nil && [self.delegate respondsToSelector:@selector(crashManagerWillShowSubmitCrashReportAlert:)]) {
