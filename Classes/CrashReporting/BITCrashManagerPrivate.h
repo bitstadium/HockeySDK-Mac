@@ -37,11 +37,11 @@
 
 @property (nonatomic) PLCrashReporterCallbacks *crashCallBacks;
 
-@property (nonatomic) NSString *lastCrashFilename;
+@property (nonatomic, copy) NSString *lastCrashFilename;
 
 @property (nonatomic, copy, setter = setCrashReportUIHandler:) BITCustomCrashReportUIHandler crashReportUIHandler;
 
-@property (nonatomic, strong) NSString *crashesDir;
+@property (nonatomic, copy) NSString *crashesDir;
 
 - (NSString *)applicationName;
 - (NSString *)applicationVersion;

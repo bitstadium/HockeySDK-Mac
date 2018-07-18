@@ -54,7 +54,7 @@
     _lastRefreshDate = [NSDate distantPast];
     
     _feedbackList = [[NSMutableArray alloc] init];
-
+    
     _fileManager = [[NSFileManager alloc] init];
     
     _settingsFile = [bit_settingsDir() stringByAppendingPathComponent:BITHOCKEY_FEEDBACK_SETTINGS];
@@ -66,7 +66,7 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self name:BITHockeyNetworkDidBecomeReachableNotification object:nil];
   
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidBecomeActiveNotification object:nil];
-
+  
 }
 
 
@@ -123,7 +123,7 @@
     [self updateAppDefinedUserData];
   }
   [self updateMessagesList];
-
+  
   [self setupDidBecomeActiveNotifications];
 }
 
@@ -190,13 +190,13 @@
     userName = [delegate userNameForHockeyManager:[BITHockeyManager sharedHockeyManager]
                                  componentManager:self] ?: userName;
   }
-
+  
   if (userName) {
     availableViaDelegate = YES;
     self.userName = userName;
     self.requireUserName = BITFeedbackUserDataElementDontShow;
   }
-
+  
   return availableViaDelegate;
 }
 
@@ -210,13 +210,13 @@
     userEmail = [delegate userEmailForHockeyManager:[BITHockeyManager sharedHockeyManager]
                                    componentManager:self] ?: userEmail;
   }
-
+  
   if (userEmail) {
     availableViaDelegate = YES;
     self.userEmail = userEmail;
     self.requireUserEmail = BITFeedbackUserDataElementDontShow;
   }
-
+  
   return availableViaDelegate;
 }
 
@@ -241,7 +241,7 @@
   
   if (![self.fileManager fileExistsAtPath:self.settingsFile])
     return;
-
+  
   NSData *codedData = [[NSData alloc] initWithContentsOfFile:self.settingsFile];
   if (codedData == nil) return;
   
@@ -253,7 +253,7 @@
   @catch (NSException * __unused exception) {
     return;
   }
-
+  
   if (!userIDViaDelegate) {
     if (!self.userID) {
       if ([unarchiver containsValueForKey:kBITFeedbackUserID])
@@ -267,7 +267,7 @@
         self.userName = [unarchiver decodeObjectForKey:kBITFeedbackName];
     }
   }
-
+  
   if (!userEmailViaDelegate) {
     if (!self.userEmail) {
       if ([unarchiver containsValueForKey:kBITFeedbackEmail])
@@ -283,7 +283,7 @@
   
   if ([unarchiver containsValueForKey:kBITFeedbackAppID]) {
     NSString *appID = [unarchiver decodeObjectForKey:kBITFeedbackAppID];
-
+    
     // the stored thread is from another application identifier, so clear the token
     // which will cause the new posts to create a new thread on the server for the
     // current app identifier
@@ -306,9 +306,9 @@
     // inform the UI to update its data in case the list is already showing
     [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
   }
-
+  
   [unarchiver finishDecoding];
-
+  
   if (!self.lastCheck) {
     self.lastCheck = [NSDate distantPast];
   }
@@ -320,7 +320,7 @@
   
   NSMutableData *data = [[NSMutableData alloc] init];
   NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-
+  
   if (self.didAskUserData)
     [archiver encodeObject:@YES forKey:kBITFeedbackUserDataAsked];
   
@@ -516,7 +516,7 @@
 
 - (BOOL)isManualUserDataAvailable {
   [self updateAppDefinedUserData];
-
+  
   if ((self.requireUserName != BITFeedbackUserDataElementDontShow && self.userName) ||
       (self.requireUserEmail != BITFeedbackUserDataElementDontShow && self.userEmail))
     return YES;
@@ -530,24 +530,24 @@
 - (void)updateMessageListFromResponse:(NSDictionary *)jsonDictionary {
   if (!jsonDictionary) {
     // nil is used when the server returns 404, so we need to mark all existing threads as archives and delete the discussion token
-
+    
     NSArray *messagesSendInProgress = [self messagesWithStatus:BITFeedbackMessageStatusSendInProgress];
     NSInteger pendingMessagesCount = [messagesSendInProgress count] + [[self messagesWithStatus:BITFeedbackMessageStatusSendPending] count];
-
+    
     [self markSendInProgressMessagesAsPending];
     
     [self.feedbackList enumerateObjectsUsingBlock:^(id objMessage, NSUInteger __unused messagesIdx, BOOL * __unused stop) {
       if ([(BITFeedbackMessage *)objMessage status] != BITFeedbackMessageStatusSendPending)
         [(BITFeedbackMessage *)objMessage setStatus:BITFeedbackMessageStatusArchived];
     }];
-
+    
     if ([self token]) {
       self.token = nil;
     }
     
     NSArray *messages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
     NSInteger pendingMessagesCountAfterProcessing = [messages count];
-
+    
     [self saveMessages];
     
     // check if this request was successful and we have more messages pending and continue if positive
@@ -596,7 +596,7 @@
               *stop2 = YES;
             }
           }];
-
+          
           if (matchingSendInProgressOrInConflictMessage) {
             matchingSendInProgressOrInConflictMessage.date = [self parseRFC3339Date:[objMessage objectForKey:@"created_at"]];
             matchingSendInProgressOrInConflictMessage.messageID = messageID;
@@ -639,7 +639,7 @@
     
     [self sortFeedbackList];
     [self updateLastMessageID];
-
+    
     // we got a new incoming message, trigger user notification system
     if (newMessage) {
       // check if the latest message is from the users own email address, then don't show an alert since he answered using his own email
@@ -666,7 +666,7 @@
     
     pendingMessages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
     NSInteger pendingMessagesCountAfterProcessing = [pendingMessages count];
-
+    
     // check if this request was successful and we have more messages pending and continue if positive
     if (pendingMessagesCount > pendingMessagesCountAfterProcessing && pendingMessagesCountAfterProcessing > 0) {
       [self performSelector:@selector(submitPendingMessages) withObject:nil afterDelay:0.1];
@@ -677,7 +677,7 @@
   }
   
   [self saveMessages];
-
+  
   return;
 }
 
@@ -687,7 +687,7 @@
   self.networkRequestInProgress = YES;
   // inform the UI to update its data in case the list is already showing
   [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingStarted object:nil];
-
+  
   NSString *tokenParameter = @"";
   if ([self token]) {
     tokenParameter = [NSString stringWithFormat:@"/%@", [self token]];
@@ -768,30 +768,18 @@
     [request setHTTPBody:postBody];
   }
   __weak typeof (self) weakSelf = self;
-  id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
-  if (nsurlsessionClass) {
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-    
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-                                              typeof (self) strongSelf = weakSelf;
-                                              
-                                              [session finishTasksAndInvalidate];
-
-                                              [strongSelf handleFeedbackMessageResponse:response data:data error:error completion:completionHandler];
-                                            }];
-    [task resume];
-    
-  }else{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
-#pragma clang diagnostic pop
-      typeof (self) strongSelf = weakSelf;
-      [strongSelf handleFeedbackMessageResponse:response data:responseData error:err completion:completionHandler];
-    }];
-  }
+  NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+  __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+  
+  NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                          completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                            typeof (self) strongSelf = weakSelf;
+                                            
+                                            [session finishTasksAndInvalidate];
+                                            
+                                            [strongSelf handleFeedbackMessageResponse:response data:data error:error completion:completionHandler];
+                                          }];
+  [task resume];
 }
 
 - (void)handleFeedbackMessageResponse:(NSURLResponse *)response data:(NSData *)responseData error:(NSError * )err completion:(void (^)(NSError *err))completionHandler{
@@ -877,7 +865,9 @@
                              withMessage:nil
                        completionHandler:^(NSError * __unused err){
                          // inform the UI to update its data in case the list is already showing
-                         [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
+                         dispatch_async(dispatch_get_main_queue(),^{
+                           [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
+                         });
                        }];
 }
 
@@ -892,7 +882,7 @@
   [self saveMessages];
   
   NSArray *pendingMessages = [self messagesWithStatus:BITFeedbackMessageStatusSendPending];
-
+  
   if ([pendingMessages count] > 0) {
     // we send one message at a time
     BITFeedbackMessage *messageToSend = [pendingMessages objectAtIndex:0];
@@ -920,7 +910,9 @@
                            }
                            
                            // inform the UI to update its data in case the list is already showing
-                           [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
+                           dispatch_async(dispatch_get_main_queue(),^{
+                             [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingFinished object:nil];
+                           });
                          }];
   }
 }

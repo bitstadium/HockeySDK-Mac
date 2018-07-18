@@ -36,9 +36,9 @@
 @property (nonatomic, strong) IBOutlet NSButton *submitButton;
 
 @property (nonatomic, strong) BITCrashManager *crashManager;
-@property (nonatomic, strong) NSString        *applicationName;
+@property (nonatomic, copy) NSString        *applicationName;
 @property (nonatomic, strong) NSMutableString *logContent;
-@property (nonatomic, strong) NSString        *crashLogContent;
+@property (nonatomic, copy) NSString        *crashLogContent;
 
 // Redeclare BITCrashReportUI properties with readwrite attribute.
 @property (nonatomic, readwrite) BOOL nibDidLoadSuccessfully;
@@ -222,7 +222,8 @@ static const CGFloat kDetailsHeight = 285;
   [self.submitButton setTitle:BITHockeyLocalizedString(@"SendButtonTitle", @"")];
   
   // adjust button sizes
-  NSDictionary *attrs = @{NSFontAttributeName: [self.submitButton font]};
+  NSFont *font = [self.submitButton font];
+  NSDictionary *attrs = @{NSFontAttributeName: font};
   NSSize titleSize = [[self.submitButton title] sizeWithAttributes: attrs];
 	titleSize.width += (16 + 8) * 2;	// 16 px for the end caps plus 8 px padding at each end
 	NSRect submitBtnBox = [self.submitButton frame];

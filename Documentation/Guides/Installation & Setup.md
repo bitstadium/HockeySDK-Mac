@@ -1,9 +1,10 @@
-[![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=develop)](https://travis-ci.org/bitstadium/HockeySDK-Mac)
-[![Version](https://img.shields.io/cocoapods/v/HockeySDK-Mac.svg)](http://cocoadocs.org/docsets/HockeySDK-Mac)
+[![Build Status](https://www.bitrise.io/app/0b9891c6c8a2c030/status.svg?token=CoxYoBkW4sTCga7LG5xe4w&branch=develop)](https://www.bitrise.io/app/0b9891c6c8a2c030)[![Version](https://img.shields.io/cocoapods/v/HockeySDK-Mac.svg)](http://cocoadocs.org/docsets/HockeySDK-Mac)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Slack Status](https://slack.hockeyapp.net/badge.svg)](https://slack.hockeyapp.net)
 
-## Version 4.1.4
+## Version 5.1.0
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/mac/4.1.4/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/mac/5.1.0/docs/docs/Changelog.html)
 
 **NOTE:** With the release of HockeySDK 4.0.0-alpha.1 a bug was introduced which lead to the exclusion of the Application Support folder from iCloud and iTunes backups.
 
@@ -91,32 +92,32 @@ From our experience, 3rd-party libraries usually reside inside a subdirectory (l
 1. Open your `AppDelegate.m` file.
 2. Add the following line at the top of the file below your own `import` statements:
 
-```
+```objc
 @import HockeySDK;
 ```
 
 3. Search for the method `applicationDidFinishLaunching:`
 4. Add the following lines to setup and start the Application Insights SDK:
 
-```
+```objc
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 // Do some additional configuration if needed here
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
-**Swift 3**
+**Swift**
 
 1. Open your `AppDelegate.swift` file.
 2. Add the following line at the top of the file below your own import statements:
 
-```
+```swift
 import HockeySDK
 ```
 
 3. Search for the method `applicationWillFinishLaunching`
 4. Add the following lines to setup and start the Application Insights SDK:
 
-```
+```swift
 BITHockeyManager.shared().configure(withIdentifier: "APP_IDENTIFIER")
 // Do some additional configuration if needed here
 BITHockeyManager.shared().start()
@@ -157,7 +158,7 @@ This feature can be disabled as follows:
 
 **Objective-C**
 
-```
+```objc
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
 [[BITHockeyManager sharedHockeyManager] setDisableCrashManager: YES]; //disable crash reporting
@@ -165,9 +166,9 @@ This feature can be disabled as follows:
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
-**Swift 3**
+**Swift**
 
-```
+```swift
 BITHockeyManager.shared().configure(withIdentifier: "APP_IDENTIFIER")
 
 BITHockeyManager.shared().isCrashManagerDisabled = true
@@ -181,7 +182,7 @@ Crashes are send the next time the app starts. If `crashManagerStatus` is set to
 
 **Objective-C**
 
-```
+```objc
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
 [[BITHockeyManager sharedHockeyManager].crashManager setAutoSubmitCrashReport: YES];
@@ -189,9 +190,9 @@ Crashes are send the next time the app starts. If `crashManagerStatus` is set to
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
-**Swift 3**
+**Swift**
 
-```
+```swift
 BITHockeyManager.shared().configure(withIdentifier: "APP_IDENTIFIER")
 
 BITHockeyManager.shared().crashManager.isAutoSubmitCrashReport = true
@@ -211,7 +212,7 @@ On Mac OS X there are three types of crashes that are not reported to a register
 1. Custom `NSUncaughtExceptionHandler` don't start working until after `NSApplication` has finished calling all of its delegate methods!
 Example:
 
-```
+```objc
 - (void)applicationDidFinishLaunching:(NSNotification *)note {
 ...
 [NSException raise:@"ExceptionAtStartup" format:@"This will not be recognized!"];
@@ -222,7 +223,7 @@ Example:
 2. The default `NSUncaughtExceptionHandler` in `NSApplication` only logs exceptions to the console and ends their processing. Resulting in exceptions that occur in the `NSApplication` "scope" not occurring in a registered custom `NSUncaughtExceptionHandler`. 
 Example:
 
-```
+```objc
 - (void)applicationDidFinishLaunching:(NSNotification *)note {
 ...
 [self performSelector:@selector(delayedException) withObject:nil afterDelay:5];
@@ -238,7 +239,7 @@ NSArray *array = [NSArray array];
 3. Any exceptions occurring in IBAction or other GUI does not even reach the NSApplication default UncaughtExceptionHandler.
 Example:
 
-```
+```objc
 - (IBAction)doExceptionCrash:(id)sender {
 NSArray *array = [NSArray array];
 [array objectAtIndex:23];
@@ -261,31 +262,73 @@ Alternatively, if you have your own NSApplication subclass, change it to be a su
 
 The `BITHockeyManagerDelegate` protocol provides methods to add additional data to a crash report:
 
-1. UserID: `- (NSString *)userIDForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;`
-2. UserName: `- (NSString *)userNameForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;`
-3. UserEmail: `- (NSString *)userEmailForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;`
+1. UserID:
+
+**Objective-C**
+
+`- (NSString *)userIDForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;`
+
+**Swift**
+
+`optional public func userID(for hockeyManager: BITHockeyManager!, componentManager: BITHockeyBaseManager!) -> String!`
+
+2. UserName:
+
+**Objective-C**
+
+`- (NSString *)userNameForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;`
+
+**Swift**
+
+`optional public func userName(for hockeyManager: BITHockeyManager!, componentManager: BITHockeyBaseManager!) -> String!`
+
+3. UserEmail:
+
+**Objective-C**
+
+`- (NSString *)userEmailForHockeyManager:(BITHockeyManager *)hockeyManager componentManager:(BITHockeyBaseManager *)componentManager;`
+
+**Swift**
+
+`optional public func userEmail(for hockeyManager: BITHockeyManager!, componentManager: BITHockeyBaseManager!) -> String!`
 
 The `BITCrashManagerDelegate` protocol (which is automatically included in `BITHockeyManagerDelegate`) provides methods to add more crash specific data to a crash report:
 
-1. Text attachments: `-(NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager`
+1. Text attachments: 
+
+**Objective-C**
+
+`-(NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager`
+
+**Swift**
+
+`optional public func applicationLog(for crashManager: BITCrashManager!) -> String!`
 
 Check the following tutorial for an example on how to add CocoaLumberjack log data: [How to Add Application Specific Log Data on iOS or OS X](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/how-to-add-application-specific-log-data-on-ios-or-os-x)
 
-2. Binary attachments: `-(BITHockeyAttachment *)attachmentForCrashManager:(BITCrashManager *)crashManager`
+2. Binary attachments: 
+
+**Objective-C**
+
+`-(BITHockeyAttachment *)attachmentForCrashManager:(BITCrashManager *)crashManager`
+
+**Swift**
+
+`optional public func attachment(for crashManager: BITCrashManager!) -> BITHockeyAttachment!`
 
 Make sure to implement the protocol
 
 **Objective-C**
 
-```
+```objc
 @interface YourAppDelegate () <BITHockeyManagerDelegate> {}
 
 @end
 ```
 
-**Swift 3**
+**Swift**
 
-```
+```swift
 class YourAppDelegate: NSObject, BITHockeyManagerDelegate {
 
 }
@@ -295,7 +338,7 @@ and set the delegate:
 
 **Objective-C**
 
-```
+```objc
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
 [[BITHockeyManager sharedHockeyManager] setDelegate: self];
@@ -303,9 +346,9 @@ and set the delegate:
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
-**Swift 3**
+**Swift**
 
-```
+```swift
 BITHockeyManager.shared().configure(withIdentifier: "APP_IDENTIFIER")
 
 BITHockeyManager.shared().delegate = self
@@ -326,13 +369,13 @@ Just in case you want to opt-out of the automatic collection of anonymous users 
 
 **Objective-C**
 
-```
+```objc
 [BITHockeyManager sharedHockeyManager].disableMetricsManager = YES;
 ```
 
-**Swift 3**
+**Swift**
 
-```
+```swift
 BITHockeyManager.shared().isMetricsManagerDisabled = true
 ```
 
@@ -345,15 +388,15 @@ By tracking custom events, you can now get insight into how your customers use y
 
 **Objective-C**
 
-```
+```objc
 BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metricsManager;
 
 [metricsManager trackEventWithName:eventName]
 ```
 
-**Swift 3**
+**Swift**
 
-```
+```swift
 let metricsManager = BITHockeyManager.shared().metricsManager
 
 metricsManager.trackEvent(withName: eventName)
@@ -374,7 +417,7 @@ It's possible to attach porperties and/or measurements to a custom event.
 
 **Objective-C**
 
-```
+```objc
 BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metricsManager;
 
 NSDictionary *myProperties = @{@"Property 1" : @"Something",
@@ -387,9 +430,9 @@ NSDictionary *myMeasurements = @{@"Measurement 1" : @1,
 [metricsManager trackEventWithName:eventName properties:myProperties measurements:myMeasurements]
 ```
 
-**Swift 3**
+**Swift**
 
-```
+```swift
 let myProperties = ["Property 1": "Something", "Property 2": "Other thing", "Property 3" : "Totally different thing."]
 let myMeasurements = ["Measurement 1": 1, "Measurement 2": 2.3, "Measurement 3" : 30000]
 
@@ -406,13 +449,13 @@ You should never create your own instance of `BITFeedbackManager` but use the on
 
 **Objective-C**
 
-```
+```objc
 [BITHockeyManager sharedHockeyManager].feedbackManager
 ```
 
-**Swift 3**
+**Swift**
 
-```
+```swift
 BITHockeyManager.shared().feedbackManager
 ```
 
@@ -442,7 +485,7 @@ sparkleUpdater.sendsSystemProfile = YES;
 
 2. Add the following Sparkle delegate method (don't forget to bind `SUUpdater` to your appDelegate!):
 
-```
+```objc
 - (NSArray *)feedParametersForUpdater:(SUUpdater *)updater
 sendingSystemProfile:(BOOL)sendingProfile {
 return [[BITSystemProfile sharedSystemProfile] systemUsageData];
@@ -453,7 +496,7 @@ return [[BITSystemProfile sharedSystemProfile] systemUsageData];
 
 One example scenario is when the app is started or comes to foreground and when it goes to background or is terminated:
 
-```
+```objc
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification
 …      
 NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
@@ -470,7 +513,9 @@ BITSystemProfile *bsp = [BITSystemProfile sharedSystemProfile];
 
 To check if data is send properly to HockeyApp and also see some additional SDK debug log data in the console, add the following line before `startManager`:
 
-```
+**Objective-C**
+
+```objc
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
 [BITHockeyManager sharedHockeyManager].logLevel = BITLogLevelDebug;
@@ -478,10 +523,18 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
+**Swift**
+
+```swift
+BITHockeyManager.shared().configure(withIdentifier: "APP_IDENTIFIER")
+BITHockeyManager.shared().logLevel = BITLogLevel.debug
+BITHockeyManager.shared().start()
+```
+
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/mac/4.1.3/index.html).
+Our documentation can be found on [HockeyApp](https://www.hockeyapp.net/help/sdk/mac/5.1.0/index.html).
 
 <a id="troubleshooting"></a>
 ## 5.Troubleshooting
@@ -494,7 +547,7 @@ Make sure that the apps build setting has `LD_RUNPATH_SEARCH_PATHS` set to `@exe
 
 Make sure there is no `All Exceptions` breakpoint active or limit it to `Objective-C` only and exclude `C++`.
 
-3. Feature are not working as expected
+3. Features are not working as expected
 
 Enable debug output to the console to see additional information from the SDK initializing the modules,  sending and receiving network requests and more by adding the following code before calling `startManager`:
 
@@ -507,7 +560,7 @@ We're looking forward to your contributions via pull requests.
 
 **Development environment**
 
-* Mac running the latest version of OS X
+* A Mac running the latest version of macOS
 * Get the latest Xcode from the Mac App Store
 * [AppleDoc](https://github.com/tomaz/appledoc) 
 * [Cocoapods](https://cocoapods.org/)

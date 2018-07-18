@@ -1,9 +1,9 @@
 #import "BITSender.h"
+
 #import "BITPersistencePrivate.h"
 #import "BITChannelPrivate.h"
 #import "BITGZIP.h"
 #import "HockeySDKPrivate.h"
-#import "BITHTTPOperation.h"
 #import "BITHockeyHelper.h"
 
 static char const *kBITSenderTasksQueueString = "net.hockeyapp.sender.tasksQueue";
@@ -44,7 +44,7 @@ static NSUInteger const BITDefaultRequestLimit = 10;
   [center addObserverForName:BITPersistenceSuccessNotification
                       object:nil
                        queue:nil
-                  usingBlock:^(NSNotification * __unused notification) {
+                  usingBlock:^(NSNotification __unused *notification) {
                     typeof(self) strongSelf = weakSelf;
                     [strongSelf sendSavedDataAsync];
                   }];
@@ -52,7 +52,7 @@ static NSUInteger const BITDefaultRequestLimit = 10;
   [center addObserverForName:BITChannelBlockedNotification
                       object:nil
                        queue:nil
-                  usingBlock:^(NSNotification * __unused notification) {
+                  usingBlock:^(NSNotification __unused *notification) {
                     typeof(self) strongSelf = weakSelf;
                     [strongSelf sendSavedDataAsync];
                   }];
@@ -97,28 +97,7 @@ static NSUInteger const BITDefaultRequestLimit = 10;
 
 - (void)sendRequest:(nonnull NSURLRequest *) request filePath:(nonnull NSString *) path {
   if (!path || !request) {return;}
-  
-  if ([self isURLSessionSupported]) {
-    [self sendUsingURLSessionWithRequest:request filePath:path];
-  } else {
-    [self sendUsingURLConnectionWithRequest:request filePath:path];
-  }
-}
-
-- (BOOL)isURLSessionSupported {
-  id nsurlsessionClass = NSClassFromString(@"NSURLSessionUploadTask");
-  BOOL isUrlSessionSupported = (nsurlsessionClass != nil);
-  return isUrlSessionSupported;
-}
-
-- (void)sendUsingURLConnectionWithRequest:(nonnull NSURLRequest *)request filePath:(nonnull NSString *)filePath {
-  BITHTTPOperation *operation = [BITHTTPOperation operationWithRequest:request];
-  [operation setCompletion:^(BITHTTPOperation *innerOperation, NSData *responseData, NSError *error) {
-    NSInteger statusCode = [innerOperation.response statusCode];
-    [self handleResponseWithStatusCode:statusCode responseData:responseData filePath:filePath error:error];
-  }];
-  
-  [self.operationQueue addOperation:operation];
+  [self sendUsingURLSessionWithRequest:request filePath:path];
 }
 
 - (void)sendUsingURLSessionWithRequest:(nonnull NSURLRequest *)request filePath:(nonnull NSString *)filePath {
@@ -143,7 +122,7 @@ static NSUInteger const BITDefaultRequestLimit = 10;
   if (responseData && (responseData.length > 0) && [self shouldDeleteDataWithStatusCode:statusCode]) {
     //we delete data that was either sent successfully or if we have a non-recoverable error
     BITHockeyLogDebug(@"INFO: Sent data with status code: %ld", (long) statusCode);
-    BITHockeyLogDebug(@"Response data:\n%@", [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil]);
+    BITHockeyLogDebug(@"INFO: Response data:\n%@", [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil]);
     [self.persistence deleteFileAtPath:filePath];
     [self sendSavedData];
   } else {
@@ -213,4 +192,3 @@ static NSUInteger const BITDefaultRequestLimit = 10;
 }
 
 @end
-

@@ -97,9 +97,9 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
     [NSValueTransformer setValueTransformer:[[BITFeedbackMessageDateValueTransformer alloc] init] forName:BITFeedbackMessageDateValueTransformerName];
     
     self.lastUpdateDateFormatter = [[NSDateFormatter alloc] init];
-		[self.lastUpdateDateFormatter setDateStyle:NSDateFormatterShortStyle];
-		[self.lastUpdateDateFormatter setTimeStyle:NSDateFormatterShortStyle];
-		self.lastUpdateDateFormatter.locale = [NSLocale currentLocale];
+    [self.lastUpdateDateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [self.lastUpdateDateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    self.lastUpdateDateFormatter.locale = [NSLocale currentLocale];
   }
   
   return self;
@@ -147,7 +147,8 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
   [self.feedbackAttachmentsTableView setMenu:[self contextMenuComposeAttachments]];
   
   [self.statusBarRefreshButton setHidden:YES];
-  [self.messageTextField setTypingAttributes:@{NSFontAttributeName: [NSFont userFixedPitchFontOfSize:13.0]}];
+  NSFont *font = [NSFont userFixedPitchFontOfSize:13.0];
+  [self.messageTextField setTypingAttributes:@{NSFontAttributeName: font}];
   [self.messageTextField setBitDelegate:self];
   [self.messageTextField setPlaceHolderString:@"Your Feedback"];
   
@@ -181,9 +182,7 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
   [[NSNotificationCenter defaultCenter] removeObserver:self name:BITHockeyFeedbackMessagesLoadingStarted object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:BITHockeyFeedbackMessagesLoadingFinished object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:self.feedbackTableView];
-
 }
-
 
 #pragma mark - Context menu for compose attachments
 
@@ -400,12 +399,8 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
 }
 
 - (void)stopLoadingIndicator {
-  
-  // We need to update the UI on the main thread to make sure it updates right away.
-  dispatch_async( dispatch_get_main_queue(), ^{
-    [self.statusBarLoadingIndicator stopAnimation:self];
-    [self.statusBarLoadingIndicator setHidden:YES];
-  });
+  [self.statusBarLoadingIndicator stopAnimation:self];
+  [self.statusBarLoadingIndicator setHidden:YES];
   [self updateLastUpdate];
 }
 
@@ -415,21 +410,21 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
                     [self.manager lastCheck] ? [self.lastUpdateDateFormatter stringFromDate:[self.manager lastCheck]] : BITHockeyLocalizedString(@"FeedbackLastUpdateNever", @"")];
   
   NSFont *boldFont = [NSFont boldSystemFontOfSize:11];
-
+  
   NSMutableDictionary *style = [NSMutableDictionary dictionary];
   [style setObject:boldFont forKey:NSFontAttributeName];
   
   NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
   [attributedText beginEditing];
   [attributedText addAttribute:NSFontAttributeName
-                 value:boldFont
-                 range:NSMakeRange(0, 12)];
+                         value:boldFont
+                         range:NSMakeRange(0, 12)];
   [attributedText endEditing];
   
   NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
   [paraStyle setAlignment:NSCenterTextAlignment];
   [attributedText addAttributes:@{NSParagraphStyleAttributeName: paraStyle} range:NSMakeRange(0, [attributedText length])];
-
+  
   self.statusBarTextField.attributedStringValue = attributedText;
 }
 
@@ -484,7 +479,7 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
   if (!error && data) {
     CFStringRef fileExtension = (__bridge CFStringRef)[filename pathExtension];
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
-
+    
     NSString *mimeTypeString = nil;
     if (UTI) {
       CFStringRef mimeType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
@@ -584,35 +579,24 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
   
   result.message = message;
   [result updateAttachmentViews];
-
+  
   for (BITFeedbackMessageAttachment *attachment in message.attachments) {
     if (attachment.needsLoadingFromURL && !attachment.isLoading){
       attachment.isLoading = YES;
       NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:(NSURL *)[NSURL URLWithString:attachment.sourceURL]];
       __weak typeof (self) weakSelf = self;
-      id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
-      if (nsurlsessionClass) {
-        NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-        
-        NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                                completionHandler: ^(NSData *data, NSURLResponse * __unused response, NSError *error) {
-                                                  typeof (self) strongSelf = weakSelf;
-                                                  
-                                                  [session finishTasksAndInvalidate];
-                                                  
-                                                  [strongSelf handleResponseForAttachment:attachment responseData:data error:error];
-                                                }];
-        [task resume];
-      }else{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        [NSURLConnection sendAsynchronousRequest:request queue:self.thumbnailQueue completionHandler:^(NSURLResponse * __unused response, NSData *responseData, NSError *err) {
-#pragma clang diagnostic pop
-          typeof (self) strongSelf = weakSelf;
-          [strongSelf handleResponseForAttachment:attachment responseData:responseData error:err];
-        }];
-      }
+      NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+      __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+      
+      NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                              completionHandler: ^(NSData *data, NSURLResponse * __unused response, NSError *error) {
+                                                typeof (self) strongSelf = weakSelf;
+                                                
+                                                [session finishTasksAndInvalidate];
+                                                
+                                                [strongSelf handleResponseForAttachment:attachment responseData:data error:error];
+                                              }];
+      [task resume];
     }
   }
   
@@ -665,7 +649,7 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
 
 - (void)messageCellView:(BITFeedbackMessageCellView *)messaggeCellView clickOnButton:(NSButton *)button withAttachment:(BITFeedbackMessageAttachment *)attachment {
   self.previewAttachment = attachment;
-
+  
   NSInteger index = [self.feedbackTableView rowForView:messaggeCellView];
   NSRect thumbnailRect = [self.feedbackTableView frameOfCellAtColumn:0 row:index];
   thumbnailRect.origin.x += button.frame.origin.x;
@@ -715,8 +699,6 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:(NSURL *)[NSURL URLWithString:self.previewAttachment.sourceURL]];
     
     __weak typeof (self) weakSelf = self;
-    id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
-    if (nsurlsessionClass) {
       NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
       __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
       
@@ -726,20 +708,11 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
                                                   typeof (self) strongSelf = weakSelf;
                                                   
                                                   [session finishTasksAndInvalidate];
-
+                                                  
                                                   [strongSelf previewPanel:blockPanel updateAttachment:strongSelf.previewAttachment data:data];
                                                 });
                                               }];
       [task resume];
-    }else{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-      [NSURLConnection sendAsynchronousRequest:request queue:self.thumbnailQueue completionHandler:^(NSURLResponse * __unused response, NSData *responseData, NSError * __unused err) {
-#pragma clang diagnostic pop
-        typeof (self) strongSelf = weakSelf;
-        [strongSelf previewPanel:blockPanel updateAttachment:strongSelf.previewAttachment data:responseData];
-      }];
-    }
   }
   
   return self.previewAttachment;
@@ -774,7 +747,7 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
   NSTableView *relevantTableView = (memberOfComposeAttachments) ? self.feedbackAttachmentsTableView : self.feedbackTableView;
   
   NSRect visibleRect = [relevantTableView visibleRect];
-
+  
   if (!NSIntersectsRect(visibleRect, self.previewThumbnailRect)) {
     return NSZeroRect;
   }

@@ -1,11 +1,35 @@
+/*
+ * Author: Stephan Diederich
+ *
+ * Copyright (c) 2013-2014 HockeyApp, Bit Stadium GmbH.
+ * All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
 #import "BITHockeyAppClient.h"
 
 NSString * const kBITHockeyAppClientBoundary = @"----FOO";
 
 @implementation BITHockeyAppClient
-- (void)dealloc {
-  [self cancelOperationsWithPath:nil method:nil];
-}
 
 - (instancetype)initWithBaseURL:(NSURL *)baseURL {
   self = [super init];
@@ -33,7 +57,9 @@ NSString * const kBITHockeyAppClientBoundary = @"----FOO";
     if ([method isEqualToString:@"GET"]) {
       NSString *absoluteURLString = [endpoint absoluteString];
       //either path already has parameters, or not
-      endpoint = [NSURL URLWithString:[absoluteURLString stringByAppendingFormat:[path rangeOfString:@"?"].location == NSNotFound ? @"?%@" : @"&%@",
+      NSString *appenderFormat = [path rangeOfString:@"?"].location == NSNotFound ? @"?%@" : @"&%@";
+      
+      endpoint = [NSURL URLWithString:[absoluteURLString stringByAppendingFormat:appenderFormat,
                                        [self.class queryStringFromParameters:params withEncoding:NSUTF8StringEncoding]]];
       [request setURL:endpoint];
     } else {
@@ -43,7 +69,7 @@ NSString * const kBITHockeyAppClientBoundary = @"----FOO";
       [request setValue:contentType forHTTPHeaderField:@"Content-type"];
       
       NSMutableData *postBody = [NSMutableData data];
-      [params enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * __unused stop) {
+      [params enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL __unused *stop) {
         [postBody appendData:[[self class] dataWithPostValue:value forKey:key boundary:kBITHockeyAppClientBoundary]];
       }];
       
@@ -65,7 +91,7 @@ NSString * const kBITHockeyAppClientBoundary = @"----FOO";
   
   [postBody appendData:(NSData *)[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   
-  // There's certainly a better way to check if we are supposed to send binary data here. 
+  // There's certainly a better way to check if we are supposed to send binary data here.
   if (filename){
     [postBody appendData:(NSData *)[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", key, filename] dataUsingEncoding:NSUTF8StringEncoding]];
     [postBody appendData:(NSData *)[[NSString stringWithFormat:@"Content-Type: %@\r\n", contentType] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -84,66 +110,13 @@ NSString * const kBITHockeyAppClientBoundary = @"----FOO";
 
 + (NSString *) queryStringFromParameters:(NSDictionary *) params withEncoding:(NSStringEncoding) __unused encoding {
   NSMutableString *queryString = [NSMutableString new];
-  [params enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSString* value, BOOL * __unused stop) {
+  [params enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSString* value, BOOL __unused *stop) {
     NSAssert([key isKindOfClass:[NSString class]], @"Query parameters can only be string-string pairs");
     NSAssert([value isKindOfClass:[NSString class]], @"Query parameters can only be string-string pairs");
     
     [queryString appendFormat:queryString.length ? @"&%@=%@" : @"%@=%@", key, value];
   }];
   return queryString;
-}
-
-- (BITHTTPOperation*) operationWithURLRequest:(NSURLRequest*) request
-                                   completion:(BITNetworkCompletionBlock) completion {
-  BITHTTPOperation *operation = [BITHTTPOperation operationWithRequest:request
-                                 ];
-  [operation setCompletion:completion];
-  
-  return operation;
-}
-
-- (void)getPath:(NSString *)path parameters:(NSDictionary *)params completion:(BITNetworkCompletionBlock)completion {
-  NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters:params];
-  BITHTTPOperation *op = [self operationWithURLRequest:request
-                                            completion:completion];
-  [self enqeueHTTPOperation:op];
-}
-
-- (void)postPath:(NSString *)path parameters:(NSDictionary *)params completion:(BITNetworkCompletionBlock)completion {
-  NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters:params];
-  BITHTTPOperation *op = [self operationWithURLRequest:request
-                                            completion:completion];
-  [self enqeueHTTPOperation:op];
-}
-
-- (void) enqeueHTTPOperation:(BITHTTPOperation *) operation {
-  [self.operationQueue addOperation:operation];
-}
-
-- (NSUInteger) cancelOperationsWithPath:(NSString*) path
-                                 method:(NSString*) method {
-  NSUInteger cancelledOperations = 0;
-  for(BITHTTPOperation *operation in self.operationQueue.operations) {
-    NSURLRequest *request = operation.URLRequest;
-    
-    BOOL matchedMethod = YES;
-    if(method && ![request.HTTPMethod isEqualToString:method]) {
-      matchedMethod = NO;
-    }
-    
-    BOOL matchedPath = YES;
-    if(path) {
-      //method is not interesting here, we' just creating it to get the URL
-      NSURL *url = [self requestWithMethod:@"GET" path:path parameters:nil].URL;
-      matchedPath = [request.URL isEqual:url];
-    }
-    
-    if(matchedPath && matchedMethod) {
-      ++cancelledOperations;
-      [operation cancel];
-    }
-  }
-  return cancelledOperations;
 }
 
 - (NSOperationQueue *)operationQueue {
@@ -155,3 +128,4 @@ NSString * const kBITHockeyAppClientBoundary = @"----FOO";
 }
 
 @end
+
