@@ -111,15 +111,10 @@ static NSString * const BITFeedbackMessageDateValueTransformerName = @"BITFeedba
   appIcon = [self imageWithReducedAlpha:0.5 fromImage:appIcon];
   [self.feedbackEmptyAppImageView setImage:appIcon];
   
-  [self.feedbackListBackgroundView setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.91 green:0.92 blue:0.93 alpha:1.0]];
-  [self.feedbackComposeBackgroundView setViewBackgroundColor:[NSColor whiteColor]];
-  [self.horizontalLine setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.79 green:0.82 blue:0.83 alpha:1.0]];
-  [self.statusBar setViewBackgroundColor:[NSColor whiteColor]];
-  [self.mainBackgroundView setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.91 green:0.92 blue:0.93 alpha:1.0]];
-  [self.userDataBoxView setViewBackgroundColor:[NSColor colorWithCalibratedRed:0.88 green:0.89 blue:0.90 alpha:1.0]];
   [self.userDataBoxView setViewBorderWidth:1.0];
-  [self.userDataBoxView setViewBorderColor:[NSColor colorWithCalibratedRed:0.82 green:0.85 blue:0.86 alpha:1.0]];
-  
+  [self.feedbackComposeBackgroundView setViewBackgroundColor:[NSColor whiteColor]];
+  [self.messageTextField setBackgroundColor:[NSColor whiteColor]];
+    
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(tableViewFrameChanged:)
                                                name:NSViewFrameDidChangeNotification
