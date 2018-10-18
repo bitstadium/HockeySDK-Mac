@@ -2,7 +2,7 @@
 [![Slack Status](https://slack.hockeyapp.net/badge.svg)](https://slack.hockeyapp.net)
 
 
-# Version 5.1.0
+# Version 5.1.1
 
 ## Introduction
 

@@ -1,3 +1,10 @@
+## 5.1.1
+
+This version contains improvements around concurrency.
+
+- [BUGFIX/IMPROVEMENT] On MacOS Mojave the feedback form can't be rendered properly with dark theme.
+Buttons and some other controls are invisible with dark theme which is fixed wiht this release. [#148] https://github.com/bitstadium/HockeySDK-Mac/pull/148 
+
 ## 5.1.0
 
 This version contains improvements around concurrency.
