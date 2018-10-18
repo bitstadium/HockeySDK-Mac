@@ -1,9 +1,8 @@
-[![Build Status](https://app.bitrise.io/app/0b9891c6c8a2c030/status.svg?token=CoxYoBkW4sTCga7LG5xe4w&branch=develop)](https://app.bitrise.io/app/0b9891c6c8a2c030)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Slack Status](https://slack.hockeyapp.net/badge.svg)](https://slack.hockeyapp.net)
 
 
-# Version 5.1.0
+# Version 5.1.1
 
 ## Introduction
 
