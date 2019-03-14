@@ -20,5 +20,5 @@ This is a checklist to help find the issue if crashes do not appear in HockeyApp
 
 7. Remove or at least disable any other exception handler or crash reporting framework.
 
-8. If it still does not work, please [contact us](http://support.hockeyapp.net/discussion/new).
+8. If it still does not work, please [contact us](https://support.hockeyapp.net/discussion/new).
 
